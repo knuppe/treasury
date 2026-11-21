@@ -1,0 +1,510 @@
+{
+ "version": "2026-10",
+ "note": "IPVA 2026 por UF, consolidado de dois levantamentos (17/10/2026). ipva_car = automóvel de passeio flex típico (1.0 aspirado) quando a alíquota varia por potência, cilindrada ou valor; ipva_motorcycle = alíquota geral de motos (várias UFs isentam motos pequenas). age_exempt_years = isenção por idade de fabricação na lei estadual (a EC 137/2025 garante 20 anos em todo o país a partir de 2026).",
+ "sources": [
+  {
+   "id": "ec_137_2025",
+   "publisher": "Câmara dos Deputados (Legin)",
+   "title": "Emenda Constitucional nº 137, de 9 de dezembro de 2025",
+   "url": "https://www2.camara.leg.br/legin/fed/emecon/2025/emendaconstitucional-137-9-dezembro-2025-798457-publicacaooriginal-177326-pl.html",
+   "published": "2025-12-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ac",
+   "publisher": "Governo do Acre (LEGIS)",
+   "title": "Lei Complementar nº 483, de 17 de dezembro de 2024",
+   "url": "https://legis.ac.gov.br/detalhar/6246",
+   "published": "2024-12-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_al",
+   "publisher": "SEFAZ-AL",
+   "title": "IPVA — 3. Cálculo e alíquotas",
+   "url": "https://www.sefaz.al.gov.br/nise/faq/ipva/473-3-calculo-e-aliquotas",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_al_idade",
+   "publisher": "SEFAZ-AL",
+   "title": "Veículos com data de fabricação até o ano de 2010 são isentos do IPVA em Alagoas",
+   "url": "https://www.sefaz.al.gov.br/noticias/item/3865-veiculos-com-data-de-fabricacao-ate-o-ano-de-2010-sao-isentos-do-ipva-em-alagoas",
+   "published": "2026-02-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ap",
+   "publisher": "NormasBrasil (texto da lei)",
+   "title": "Lei nº 3.152, de 20/12/2024 (AP)",
+   "url": "https://www.normasbrasil.com.br/norma/lei-3152-2024-ap_470893.html",
+   "published": "2024-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_am",
+   "publisher": "SEFAZ-AM (Diário Oficial Eletrônico)",
+   "title": "Resolução nº 0034/2025-GSEFAZ",
+   "url": "https://online.sefaz.am.gov.br/doe/toPdf.asp?idPublicacao=2784",
+   "published": "2025-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ba",
+   "publisher": "SEFAZ-BA (DITRI)",
+   "title": "Lei nº 6.348, de 17 de dezembro de 1991 (consolidada)",
+   "url": "http://mbusca.sefaz.ba.gov.br/DITRI/leis/leis_estaduais/legest_1991_6348_lei_ipva.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ce",
+   "publisher": "Assembleia Legislativa do Ceará",
+   "title": "Lei nº 12.023/1992 (compilada)",
+   "url": "https://www2.al.ce.gov.br/legislativo/legislacao5/leis92/12023.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_df",
+   "publisher": "SINJ-DF",
+   "title": "Lei nº 6.445/2019",
+   "url": "https://www.sinj.df.gov.br/sinj/Norma/a797f1b9fe984552902fde78c5abddfe/Lei_6445_2019.html",
+   "published": "2019-12-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_es",
+   "publisher": "SEFAZ-ES",
+   "title": "Lei 6.999 — Atualizada",
+   "url": "https://sefaz.es.gov.br/media/Receita%20Estadual/Legislacao/Lei%206.999%20-%20Atualizada.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_go",
+   "publisher": "Secretaria da Economia de Goiás",
+   "title": "Perguntas e Respostas do IPVA",
+   "url": "https://goias.gov.br/economia/perguntas-e-respostas-6/",
+   "published": "2026-08-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ma",
+   "publisher": "O Imparcial (imprensa)",
+   "title": "IPVA Maranhão 2026: veja datas de pagamento, descontos e como pagar o imposto",
+   "url": "https://oimparcial.com.br/noticias/2026/02/ipva-maranhao-2026-veja-datas-de-pagamento-descontos-e-como-pagar-o-imposto/",
+   "published": "2026-02-09",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_mt",
+   "publisher": "SEFAZ-MT",
+   "title": "Portaria nº 196/2025-SEFAZ",
+   "url": "http://app1.sefaz.mt.gov.br/sistema/legislacao/legislacaotribut.nsf/173e6c0d2202fdcb03258b1700659f1e/d8fcadea198ff27603258d6f00518320?OpenDocument=",
+   "published": "2025-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ms",
+   "publisher": "SEFAZ-MS",
+   "title": "IPVA (Referência 2026)",
+   "url": "https://www.sefaz.ms.gov.br/ipva/",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_mg",
+   "publisher": "SEF-MG",
+   "title": "Lei nº 14.937/2003 (consolidada)",
+   "url": "https://www.fazenda.mg.gov.br/empresas/legislacao_tributaria/leis/l14937_2003.html",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pa",
+   "publisher": "Assembleia Legislativa do Pará",
+   "title": "Lei nº 6.017/1996 (consolidada)",
+   "url": "https://bancodeleis.alepa.pa.gov.br/arquivos/lei6017_1996_68315.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pb",
+   "publisher": "SEFAZ-PB",
+   "title": "SEFAZ-PB publica calendário de pagamento do IPVA 2026 com manutenção das regras",
+   "url": "https://www.sefaz.pb.gov.br/announcements/17102-sefaz-pb-publica-calendario-de-pagamento-do-ipva-2026-e-mantem-regras",
+   "published": "2025-12-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pr",
+   "publisher": "Governo do Paraná",
+   "title": "Lei nº 22.645, de 23 de setembro de 2025",
+   "url": "https://www.parana.pr.gov.br/sites/default/arquivos_restritos/files/documento/2025-09/pl690.2025lei22.645_2_ass.pdf",
+   "published": "2025-09-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pe",
+   "publisher": "SEFAZ-PE",
+   "title": "Lei nº 10.849/1992 (texto atualizado)",
+   "url": "https://www.sefaz.pe.gov.br/Legislacao/Tributaria/Documents/legislacao/Leis_Tributarias/1992/Lei10849_92.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pi",
+   "publisher": "Governo do Piauí",
+   "title": "Governo divulga prazos do IPVA 2026",
+   "url": "https://www.pi.gov.br/governo-divulga-prazos-do-ipva-2026-com-descontos-de-ate-15-para-quem-pagar-em-cota-unica-confira-as-datas-de-pagamentos/",
+   "published": "2025-11-25",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rj",
+   "publisher": "ALERJ",
+   "title": "Lei nº 7.068, de 01/10/2015",
+   "url": "https://alerjln1.alerj.rj.gov.br/CONTLEI.NSF/c8aa0900025feef6032564ec0060dfff/fdadc03404aed04483257ed600606c2f?OpenDocument=",
+   "published": "2015-10-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rn",
+   "publisher": "Assembleia Legislativa do RN",
+   "title": "Lei nº 12.026, de 27 de dezembro de 2024",
+   "url": "https://www.al.rn.leg.br/storage/legislacao/2025/0v7xxbbydx15hpw1fa1bk4c2hvdtl1.pdf",
+   "published": "2024-12-28",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rn_lei",
+   "publisher": "NormasBrasil (texto da lei)",
+   "title": "Lei nº 6.967, de 30/12/1996 (RN)",
+   "url": "https://www.normasbrasil.com.br/norma/lei-6967-1996-rn_151865.html",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rs",
+   "publisher": "SEFAZ-RS",
+   "title": "IPVA 2026: pagamento inicia na terça-feira (16/12)",
+   "url": "https://fazenda.rs.gov.br/ipva-2026-pagamento-inicia-na-terca-feira-16-12-com-desconto-maximo-para-quase-1-milhao-de-veiculos",
+   "published": "2025-12-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ro",
+   "publisher": "SEFIN-RO",
+   "title": "Lei nº 950/2000 (consolidada)",
+   "url": "https://www.sefin.ro.gov.br/portalsefin/anexos/L00-950-IPVA---Consolid.-ate-L21_4952.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_sc",
+   "publisher": "SEF-SC",
+   "title": "Lei nº 7.543/1988",
+   "url": "https://legislacao.sef.sc.gov.br/html/leis/1988/lei_88_7543.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_sp",
+   "publisher": "SEFAZ-SP",
+   "title": "Lei 13.296, de 23-12-2008 (consolidada)",
+   "url": "https://legislacao.fazenda.sp.gov.br/Paginas/lei13296.aspx",
+   "published": "2026-01-14",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_se",
+   "publisher": "Governo de Sergipe (Agência)",
+   "title": "Condutores sergipanos já podem consultar os valores do IPVA 2026",
+   "url": "https://www.se.gov.br/agencia/noticias/governo/condutores_sergipanos_ja_podem_consultar_os_valores_do_ipva_2026_",
+   "published": "2026-01-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_to",
+   "publisher": "Assembleia Legislativa do Tocantins",
+   "title": "Lei nº 3.036/2015",
+   "url": "https://al.to.leg.br/arquivo/38755",
+   "published": "2015-11-17",
+   "accessed": "2026-10-17"
+  }
+ ],
+ "regions": [
+  {
+   "code": "AC",
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 20,
+   "source_ids": [
+    "ipva_ac"
+   ],
+   "notes": "Motos até 170 cc de pessoa com um só veículo: 0%."
+  },
+  {
+   "code": "AL",
+   "ipva_car": 2.75,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_al",
+    "ipva_al_idade"
+   ],
+   "notes": "Carros até 80 HP (1.0 aspirado típico): 2,75%; 80–160 HP: 3%; acima: 3,25%. Motos até 150 cc: 2%."
+  },
+  {
+   "code": "AP",
+   "ipva_car": 1.5,
+   "ipva_motorcycle": 1.5,
+   "age_exempt_years": 10,
+   "source_ids": [
+    "ipva_ap"
+   ],
+   "notes": "Código novo (Lei 3.152/2024, a partir de 2025): automóvel até 1000 cc 1,5%, demais 3%; motos até 170 cc isentas. Texto visto em reprodução (NormasBrasil); a consolidação da Assembleia ainda mostra a lei antiga (Lei 400/1997, 3%)."
+  },
+  {
+   "code": "AM",
+   "ipva_car": 1.5,
+   "ipva_motorcycle": 1.5,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_am"
+   ],
+   "notes": "Até 1000 cc: 1,5%; acima: 2% (carros e motos), desde 2026."
+  },
+  {
+   "code": "BA",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_ba"
+   ],
+   "notes": "Carro a diesel: 3%."
+  },
+  {
+   "code": "CE",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_ce"
+   ],
+   "notes": "Carros até 100 cv: 2,5%; 100–180 cv: 3%; acima: 3,5%. Motos até 125 cc: 2%."
+  },
+  {
+   "code": "DF",
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_df"
+   ],
+   "notes": "Elétricos e híbridos isentos (com condições)."
+  },
+  {
+   "code": "ES",
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_es"
+   ],
+   "notes": ""
+  },
+  {
+   "code": "GO",
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 3.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_go"
+   ],
+   "notes": "Carros até 100 cv: 3%; acima: 3,75%."
+  },
+  {
+   "code": "MA",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_ma"
+   ],
+   "notes": "Carros até R$ 150 mil: 2,5%; acima: 3%. Motos até R$ 10 mil: 1%; acima: 2%. Texto da lei não conferido em fonte oficial."
+  },
+  {
+   "code": "MT",
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 18,
+   "source_ids": [
+    "ipva_mt"
+   ],
+   "notes": "Automóvel até 1000 cc: 2%; demais: 3%. Motos até 180 cc: 1%."
+  },
+  {
+   "code": "MS",
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_ms"
+   ],
+   "notes": "5% com redução de 40% (3% efetivos) para usados."
+  },
+  {
+   "code": "MG",
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_mg"
+   ],
+   "notes": ""
+  },
+  {
+   "code": "PA",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_pa"
+   ],
+   "notes": ""
+  },
+  {
+   "code": "PB",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.5,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_pb"
+   ],
+   "notes": "Motos até 170 cc isentas; elétricos isentos."
+  },
+  {
+   "code": "PR",
+   "ipva_car": 1.9,
+   "ipva_motorcycle": 1.9,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_pr"
+   ],
+   "notes": "1,9% desde 2026 (3,5% em 2025). Motos até 170 cc isentas."
+  },
+  {
+   "code": "PE",
+   "ipva_car": 2.4,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_pe"
+   ],
+   "notes": "Elétricos isentos."
+  },
+  {
+   "code": "PI",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_pi"
+   ],
+   "notes": "Carros até R$ 150 mil: 2,5%; acima: 3%. Motos até 170 cc sem IPVA em 2026."
+  },
+  {
+   "code": "RJ",
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_rj"
+   ],
+   "notes": "Álcool: 2%; GNV/híbrido: 1,5%; elétrico: 0,5%."
+  },
+  {
+   "code": "RN",
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_rn_lei",
+    "ipva_rn"
+   ],
+   "notes": "Motos até 200 cc: 2%. Texto do art. 4º visto em reprodução (NormasBrasil)."
+  },
+  {
+   "code": "RS",
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 20,
+   "source_ids": [
+    "ipva_rs"
+   ],
+   "notes": ""
+  },
+  {
+   "code": "RO",
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_ro"
+   ],
+   "notes": "Automóvel até 1000 cc: 2%; demais: 3%. Motos até 170 cc: 0%."
+  },
+  {
+   "code": "RR",
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "age_exempt_years": null,
+   "source_ids": [],
+   "notes": "Não conferido em fonte oficial: IPVA não estimado."
+  },
+  {
+   "code": "SC",
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "age_exempt_years": 20,
+   "source_ids": [
+    "ipva_sc"
+   ],
+   "notes": "Motos até 200 cc isentas sem infração no ano anterior."
+  },
+  {
+   "code": "SP",
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 20,
+   "source_ids": [
+    "ipva_sp"
+   ],
+   "notes": "Motos de pessoa física até 180 cc isentas desde 2026."
+  },
+  {
+   "code": "SE",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "age_exempt_years": 15,
+   "source_ids": [
+    "ipva_se"
+   ],
+   "notes": "Carros abaixo de R$ 120 mil: 2,5%; acima: 3%."
+  },
+  {
+   "code": "TO",
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.5,
+   "age_exempt_years": null,
+   "source_ids": [
+    "ipva_to"
+   ],
+   "notes": "Carros até 100 HP: 2,5%; acima: 3,5%. Motos até 180 cc: 2,5%."
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+# Atualizações de dependências (docs/distribution.md): uma rodada por semana, agrupada, para
+# não virar uma enxurrada de PRs. Os commits seguem a regra em inglês (`build(deps): …`). Um
+# crate ou pacote npm novo na árvore faz o deps-check do CI falhar: entra só com a aprovação do
+# mantenedor (docs/development.md, "Dependencies").
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
+    groups:
+      actions:
+        patterns: ['*']
+
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 5
+    groups:
+      cargo-minor:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /apps/desktop
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor:
+        update-types: [minor, patch]

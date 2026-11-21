@@ -1,0 +1,204 @@
+/*
+ * Treasury · movimento
+ *
+ * Animações leves dos temas: a marca animada,
+ * a chegada dos cards e o esmaecimento na troca de tema. Só opacidade, transform e o
+ * traço do SVG (nada que mexa no layout), e nenhuma anima números. Com movimento
+ * reduzido (fim do arquivo), nada se move. `motion.test.tsx` verifica.
+ */
+
+/*
+ * A malha do Vidro fica parada: com os painéis desfocados por cima, cada quadro da malha
+ * em movimento obrigava o WebKit a refazer todos os desfoques (custo contínuo de GPU,
+ * mesmo com o app parado).
+ */
+
+/*
+ * Marca animada (Brand.tsx): o sinal medido é traçado ao abrir o cofre e ao passar
+ * o mouse; um feixe de leitura cruza a moldura e o ponto final "respira" como um
+ * indicador ao vivo. Só opacidade, transform e o traço do SVG. Fora das telas de espera
+ * (`loop`), o feixe e a respiração param depois de algumas voltas: animação de SVG não
+ * vai para a GPU no WebKit, e as duas, sem fim, eram quase toda a CPU do app parado.
+ */
+@layer components {
+  .brand-mark .brand-signal {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .brand-mark .brand-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: brand-breathe 3.2s ease-in-out 1.2s 3;
+  }
+  .brand-mark .brand-scan {
+    opacity: 0;
+    animation: brand-scan 9s var(--ease-out) 2s 2;
+  }
+  .brand-mark[data-motion='reveal'] .brand-frame {
+    animation: brand-frame-in 640ms var(--ease-out) both;
+  }
+  .brand-mark[data-motion='reveal'] .brand-signal {
+    animation: brand-trace 1100ms var(--ease-emphasis) 160ms both;
+  }
+  .brand-mark[data-motion='reveal'] .brand-dot {
+    animation:
+      brand-dot-in 360ms var(--ease-emphasis) 1000ms both,
+      brand-breathe 3.2s ease-in-out 1.6s 3;
+  }
+  .brand-mark[data-motion='loop'] .brand-signal {
+    animation: brand-loop 2.4s var(--ease-emphasis) infinite;
+  }
+  .brand:hover .brand-mark .brand-signal,
+  .brand-mark:hover .brand-signal {
+    animation: brand-retrace 900ms var(--ease-emphasis) both;
+  }
+  .brand:hover .brand-mark .brand-frame,
+  .brand-mark:hover .brand-frame {
+    stroke: var(--accent);
+  }
+  .brand-mark .brand-frame {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: stroke var(--duration-slow) var(--ease-out);
+  }
+
+  @keyframes brand-trace {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes brand-retrace {
+    0% {
+      stroke-dashoffset: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes brand-loop {
+    0% {
+      stroke-dashoffset: 1;
+    }
+    55%,
+    80% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0.35;
+    }
+  }
+  @keyframes brand-frame-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes brand-dot-in {
+    from {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes brand-breathe {
+    0%,
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+    50% {
+      opacity: 0.45;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes brand-scan {
+    0% {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    3% {
+      opacity: 0.9;
+    }
+    14% {
+      opacity: 0.9;
+    }
+    17%,
+    100% {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+  }
+
+  /* Cards chegam em sequência curta (só opacidade e deslocamento). */
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .card-arrive {
+    animation: card-in var(--duration-arrive) var(--ease-emphasis) both;
+  }
+  .card-arrive:nth-child(2) {
+    animation-delay: 40ms;
+  }
+  .card-arrive:nth-child(3) {
+    animation-delay: 80ms;
+  }
+  .card-arrive:nth-child(4) {
+    animation-delay: 120ms;
+  }
+  .card-arrive:nth-child(n + 5) {
+    animation-delay: 160ms;
+  }
+}
+
+/* Troca de tema: um esmaecimento curto (View Transitions) ou, sem a API, cores em transição. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-out);
+}
+:root.theme-switching,
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition:
+    background-color 260ms var(--ease-out),
+    border-color 260ms var(--ease-out),
+    color 260ms var(--ease-out),
+    fill 260ms var(--ease-out),
+    stroke 260ms var(--ease-out) !important;
+}
+
+/* Movimento reduzido: a marca aparece já desenhada, sem esmaecer. */
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark *,
+  .card-arrive {
+    animation: none !important;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+  :root.theme-switching,
+  :root.theme-switching * {
+    transition: none !important;
+  }
+}

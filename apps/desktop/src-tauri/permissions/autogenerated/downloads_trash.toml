@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-downloads-trash"
+description = "Enables the downloads_trash command without any pre-configured scope."
+commands.allow = ["downloads_trash"]
+
+[[permission]]
+identifier = "deny-downloads-trash"
+description = "Denies the downloads_trash command without any pre-configured scope."
+commands.deny = ["downloads_trash"]

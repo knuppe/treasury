@@ -1,0 +1,1847 @@
+{
+ "country": "BR",
+ "name": "Brasil",
+ "currency": "BRL",
+ "version": "2026-11",
+ "updated": "2026-11-18",
+ "coverage": "completo",
+ "sources": [
+  {
+   "id": "ibge_scn_tru_2021",
+   "publisher": "IBGE (Instituto Brasileiro de Geografia e Estatística)",
+   "title": "Sistema de Contas Nacionais: Tabelas de Recursos e Usos de 2021, nível de 68 atividades e 128 produtos (impostos sobre produtos e consumo das famílias)",
+   "url": "https://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2021/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2021_xls.zip",
+   "published": "2023-11-09",
+   "accessed": "2026-11-18"
+  },
+  {
+   "id": "tesouro_cofog_2024",
+   "publisher": "Tesouro Nacional e Secretaria de Orçamento Federal",
+   "title": "Despesa por Função do Governo Geral: resultados de 2024 (classificação COFOG), Tabela 1",
+   "url": "https://www.tesourotransparente.gov.br/publicacoes/cofog-despesas-por-funcao-do-governo-geral/2024/114?ano_selecionado=2024",
+   "published": "2025-12-12",
+   "accessed": "2026-11-18"
+  },
+  {
+   "id": "lei_12741_2012",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 12.741, de 8 de dezembro de 2012",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
+   "published": "2012-12-10 (DOU)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "petrobras_gasolina_br",
+   "publisher": "Petrobras",
+   "title": "Composição de preços ao consumidor – Gasolina (Brasil)",
+   "url": "https://precos.petrobras.com.br/w/gasolina/br",
+   "published": "coleta 2026-10-04 a 2026-10-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "petrobras_diesel_br",
+   "publisher": "Petrobras",
+   "title": "Composição de preços ao consumidor – Diesel (Brasil)",
+   "url": "https://precos.petrobras.com.br/w/diesel/br",
+   "published": "coleta 2026-10-04 a 2026-10-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "petrobras_glp_br",
+   "publisher": "Petrobras",
+   "title": "Composição de preços ao consumidor – GLP 13 kg (Brasil)",
+   "url": "https://precos.petrobras.com.br/w/glp/br",
+   "published": "coleta 2026-10-04 a 2026-10-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_13134_2026",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 13.134, de 9 de outubro de 2026",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13134.htm",
+   "published": "2026-10-09 (DOU edição extra)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lc_235_2026",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei Complementar nº 235, de 27 de agosto de 2026",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/Lcp235.htm",
+   "published": "2026-08-27",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lc_194_2022",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei Complementar nº 194, de 23 de junho de 2022",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp194.htm",
+   "published": "2022-06-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_9715_1998",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 9.715, de 25 de novembro de 1998 (art. 8º, I)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9715.htm",
+   "published": "1998-11-26",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_10684_2003",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 10.684, de 30 de maio de 2003 (art. 18)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/2003/l10.684.htm",
+   "published": "2003-05-31",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lc_116_2003",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei Complementar nº 116, de 31 de julho de 2003 (arts. 8º e 8º-A)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp116.htm",
+   "published": "2003-08-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_6306_2007_consolidado",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 6.306, de 14 de dezembro de 2007 – Regulamento do IOF (texto compilado)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/decreto/d6306.htm",
+   "published": "texto compilado consultado em 2026-10-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_12466_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 12.466, de 22 de maio de 2025",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12466.htm",
+   "published": "2025-05-22 (DOU edição extra)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_12467_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 12.467, de 23 de maio de 2025",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12467.htm",
+   "published": "2025-05-23 (DOU edição extra)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_12499_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 12.499, de 11 de junho de 2025",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12499.htm",
+   "published": "2025-06-11 (DOU edição extra)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "stf_2025_07_04",
+   "publisher": "Supremo Tribunal Federal",
+   "title": "STF suspende decretos sobre IOF e marca audiência de conciliação",
+   "url": "https://noticias.stf.jus.br/postsnoticias/stf-suspende-decretos-sobre-iof-e-marca-audiencia-de-conciliacao/",
+   "published": "2025-07-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "stf_2025_07_16",
+   "publisher": "Supremo Tribunal Federal",
+   "title": "STF restabelece parcialmente decreto que eleva alíquotas do IOF",
+   "url": "https://noticias.stf.jus.br/postsnoticias/stf-restabelece-parcialmente-decreto-que-eleva-aliquotas-do-iof/",
+   "published": "2025-07-16",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "stf_2025_07_18",
+   "publisher": "Supremo Tribunal Federal",
+   "title": "Decisão que restabeleceu aumento do IOF não alcança período de suspensão, esclarece STF",
+   "url": "https://noticias.stf.jus.br/postsnoticias/decisao-que-restabeleceu-aumento-do-iof-nao-alcanca-periodo-de-suspensao-esclarece-stf/",
+   "published": "2025-07-18",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rfb_tabelas_2026",
+   "publisher": "Receita Federal do Brasil",
+   "title": "Tabelas 2026 (IRPF)",
+   "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026",
+   "published": "atualizado 2026-04-27",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rfb_tabelas_2025",
+   "publisher": "Receita Federal do Brasil",
+   "title": "Tabelas 2025 (IRPF)",
+   "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2025",
+   "published": "não informado",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_15270_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 15.270, de 26 de novembro de 2025",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15270.htm",
+   "published": "2025-11-27 (DOU)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_8134_1990",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 8.134, de 27 de dezembro de 1990 (art. 16)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8134.htm",
+   "published": "1990-12-28",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_7713_1988",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 7.713, de 22 de dezembro de 1988 (art. 26)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l7713.htm",
+   "published": "1988-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rfb_quem_deve_declarar",
+   "publisher": "Receita Federal do Brasil",
+   "title": "Quem deve declarar (exercício 2026, ano-calendário 2025)",
+   "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/quem",
+   "published": "2026 (IN RFB 2.312/2026)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "inss_tabela_2026",
+   "publisher": "Instituto Nacional do Seguro Social (gov.br/inss)",
+   "title": "Tabela de contribuição mensal",
+   "url": "https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal",
+   "published": "vigência competência jan/2026 (Portaria Interministerial MPS/MF nº 13, de 09/01/2026)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "portaria_mps_mf_6_2025",
+   "publisher": "Ministério da Previdência Social / Ministério da Fazenda",
+   "title": "Portaria Interministerial MPS/MF nº 6, de 10 de janeiro de 2025 (DOU 13/01/2025; revogada pela Portaria MPS/MF nº 13/2026)",
+   "url": "https://www.gov.br/previdencia/pt-br/assuntos/rpps/legislacao-dos-rpps/2025/PortariaInterministerialMPSMFn6de10jan2025Revogada.pdf",
+   "published": "2025-01-13 (DOU)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_12342_2024",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 12.342, de 30 de dezembro de 2024",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/decreto/D12342.htm",
+   "published": "2024-12-31 (DOU)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "decreto_12797_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Decreto nº 12.797, de 23 de dezembro de 2025",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12797.htm",
+   "published": "2025-12-24 (DOU)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_8212_1991",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 8.212, de 24 de julho de 1991 (art. 22, I) – texto compilado",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm",
+   "published": "texto compilado",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_8036_1990",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei nº 8.036, de 11 de maio de 1990 (art. 15) – texto compilado",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8036consol.htm",
+   "published": "texto compilado",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tesouro_ctb_2025",
+   "publisher": "Tesouro Nacional (STN)",
+   "title": "Carga tributária bruta do Governo Geral atinge 32,40% do PIB em 2025",
+   "url": "https://www.gov.br/tesouronacional/pt-br/noticias/carga-tributaria-bruta-do-governo-geral-atinge-32-40-do-pib-em-2025",
+   "published": "2026-04-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rfb_ctb_2024",
+   "publisher": "Receita Federal do Brasil",
+   "title": "Carga Tributária no Brasil 2024",
+   "url": "https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/estudos/carga-tributaria/carga-tributaria-no-brasil-2024/@@download/file",
+   "published": "2025-12-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lc_214_2025",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei Complementar nº 214, de 16 de janeiro de 2025 (arts. 343, 346 e 348)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+   "published": "2025-01-16",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ec_137_2025",
+   "publisher": "Câmara dos Deputados (Legin)",
+   "title": "Emenda Constitucional nº 137, de 9 de dezembro de 2025",
+   "url": "https://www2.camara.leg.br/legin/fed/emecon/2025/emendaconstitucional-137-9-dezembro-2025-798457-publicacaooriginal-177326-pl.html",
+   "published": "2025-12-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ac",
+   "publisher": "Governo do Acre (LEGIS)",
+   "title": "Lei Complementar nº 483, de 17 de dezembro de 2024",
+   "url": "https://legis.ac.gov.br/detalhar/6246",
+   "published": "2024-12-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_al",
+   "publisher": "SEFAZ-AL",
+   "title": "IPVA — 3. Cálculo e alíquotas",
+   "url": "https://www.sefaz.al.gov.br/nise/faq/ipva/473-3-calculo-e-aliquotas",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_al_idade",
+   "publisher": "SEFAZ-AL",
+   "title": "Veículos com data de fabricação até o ano de 2010 são isentos do IPVA em Alagoas",
+   "url": "https://www.sefaz.al.gov.br/noticias/item/3865-veiculos-com-data-de-fabricacao-ate-o-ano-de-2010-sao-isentos-do-ipva-em-alagoas",
+   "published": "2026-02-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ap",
+   "publisher": "NormasBrasil (texto da lei)",
+   "title": "Lei nº 3.152, de 20/12/2024 (AP)",
+   "url": "https://www.normasbrasil.com.br/norma/lei-3152-2024-ap_470893.html",
+   "published": "2024-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_am",
+   "publisher": "SEFAZ-AM (Diário Oficial Eletrônico)",
+   "title": "Resolução nº 0034/2025-GSEFAZ",
+   "url": "https://online.sefaz.am.gov.br/doe/toPdf.asp?idPublicacao=2784",
+   "published": "2025-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ba",
+   "publisher": "SEFAZ-BA (DITRI)",
+   "title": "Lei nº 6.348, de 17 de dezembro de 1991 (consolidada)",
+   "url": "http://mbusca.sefaz.ba.gov.br/DITRI/leis/leis_estaduais/legest_1991_6348_lei_ipva.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ce",
+   "publisher": "Assembleia Legislativa do Ceará",
+   "title": "Lei nº 12.023/1992 (compilada)",
+   "url": "https://www2.al.ce.gov.br/legislativo/legislacao5/leis92/12023.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_df",
+   "publisher": "SINJ-DF",
+   "title": "Lei nº 6.445/2019",
+   "url": "https://www.sinj.df.gov.br/sinj/Norma/a797f1b9fe984552902fde78c5abddfe/Lei_6445_2019.html",
+   "published": "2019-12-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_es",
+   "publisher": "SEFAZ-ES",
+   "title": "Lei 6.999 — Atualizada",
+   "url": "https://sefaz.es.gov.br/media/Receita%20Estadual/Legislacao/Lei%206.999%20-%20Atualizada.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_go",
+   "publisher": "Secretaria da Economia de Goiás",
+   "title": "Perguntas e Respostas do IPVA",
+   "url": "https://goias.gov.br/economia/perguntas-e-respostas-6/",
+   "published": "2026-08-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ma",
+   "publisher": "O Imparcial (imprensa)",
+   "title": "IPVA Maranhão 2026: veja datas de pagamento, descontos e como pagar o imposto",
+   "url": "https://oimparcial.com.br/noticias/2026/02/ipva-maranhao-2026-veja-datas-de-pagamento-descontos-e-como-pagar-o-imposto/",
+   "published": "2026-02-09",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_mt",
+   "publisher": "SEFAZ-MT",
+   "title": "Portaria nº 196/2025-SEFAZ",
+   "url": "http://app1.sefaz.mt.gov.br/sistema/legislacao/legislacaotribut.nsf/173e6c0d2202fdcb03258b1700659f1e/d8fcadea198ff27603258d6f00518320?OpenDocument=",
+   "published": "2025-12-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ms",
+   "publisher": "SEFAZ-MS",
+   "title": "IPVA (Referência 2026)",
+   "url": "https://www.sefaz.ms.gov.br/ipva/",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_mg",
+   "publisher": "SEF-MG",
+   "title": "Lei nº 14.937/2003 (consolidada)",
+   "url": "https://www.fazenda.mg.gov.br/empresas/legislacao_tributaria/leis/l14937_2003.html",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pa",
+   "publisher": "Assembleia Legislativa do Pará",
+   "title": "Lei nº 6.017/1996 (consolidada)",
+   "url": "https://bancodeleis.alepa.pa.gov.br/arquivos/lei6017_1996_68315.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pb",
+   "publisher": "SEFAZ-PB",
+   "title": "SEFAZ-PB publica calendário de pagamento do IPVA 2026 com manutenção das regras",
+   "url": "https://www.sefaz.pb.gov.br/announcements/17102-sefaz-pb-publica-calendario-de-pagamento-do-ipva-2026-e-mantem-regras",
+   "published": "2025-12-04",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pr",
+   "publisher": "Governo do Paraná",
+   "title": "Lei nº 22.645, de 23 de setembro de 2025",
+   "url": "https://www.parana.pr.gov.br/sites/default/arquivos_restritos/files/documento/2025-09/pl690.2025lei22.645_2_ass.pdf",
+   "published": "2025-09-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pe",
+   "publisher": "SEFAZ-PE",
+   "title": "Lei nº 10.849/1992 (texto atualizado)",
+   "url": "https://www.sefaz.pe.gov.br/Legislacao/Tributaria/Documents/legislacao/Leis_Tributarias/1992/Lei10849_92.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_pi",
+   "publisher": "Governo do Piauí",
+   "title": "Governo divulga prazos do IPVA 2026",
+   "url": "https://www.pi.gov.br/governo-divulga-prazos-do-ipva-2026-com-descontos-de-ate-15-para-quem-pagar-em-cota-unica-confira-as-datas-de-pagamentos/",
+   "published": "2025-11-25",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rj",
+   "publisher": "ALERJ",
+   "title": "Lei nº 7.068, de 01/10/2015",
+   "url": "https://alerjln1.alerj.rj.gov.br/CONTLEI.NSF/c8aa0900025feef6032564ec0060dfff/fdadc03404aed04483257ed600606c2f?OpenDocument=",
+   "published": "2015-10-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rn",
+   "publisher": "Assembleia Legislativa do RN",
+   "title": "Lei nº 12.026, de 27 de dezembro de 2024",
+   "url": "https://www.al.rn.leg.br/storage/legislacao/2025/0v7xxbbydx15hpw1fa1bk4c2hvdtl1.pdf",
+   "published": "2024-12-28",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rn_lei",
+   "publisher": "NormasBrasil (texto da lei)",
+   "title": "Lei nº 6.967, de 30/12/1996 (RN)",
+   "url": "https://www.normasbrasil.com.br/norma/lei-6967-1996-rn_151865.html",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_rs",
+   "publisher": "SEFAZ-RS",
+   "title": "IPVA 2026: pagamento inicia na terça-feira (16/12)",
+   "url": "https://fazenda.rs.gov.br/ipva-2026-pagamento-inicia-na-terca-feira-16-12-com-desconto-maximo-para-quase-1-milhao-de-veiculos",
+   "published": "2025-12-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_ro",
+   "publisher": "SEFIN-RO",
+   "title": "Lei nº 950/2000 (consolidada)",
+   "url": "https://www.sefin.ro.gov.br/portalsefin/anexos/L00-950-IPVA---Consolid.-ate-L21_4952.pdf",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_sc",
+   "publisher": "SEF-SC",
+   "title": "Lei nº 7.543/1988",
+   "url": "https://legislacao.sef.sc.gov.br/html/leis/1988/lei_88_7543.htm",
+   "published": null,
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_sp",
+   "publisher": "SEFAZ-SP",
+   "title": "Lei 13.296, de 23-12-2008 (consolidada)",
+   "url": "https://legislacao.fazenda.sp.gov.br/Paginas/lei13296.aspx",
+   "published": "2026-01-14",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_se",
+   "publisher": "Governo de Sergipe (Agência)",
+   "title": "Condutores sergipanos já podem consultar os valores do IPVA 2026",
+   "url": "https://www.se.gov.br/agencia/noticias/governo/condutores_sergipanos_ja_podem_consultar_os_valores_do_ipva_2026_",
+   "published": "2026-01-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ipva_to",
+   "publisher": "Assembleia Legislativa do Tocantins",
+   "title": "Lei nº 3.036/2015",
+   "url": "https://al.to.leg.br/arquivo/38755",
+   "published": "2015-11-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "lei_12741",
+   "publisher": "Presidência da República (Planalto)",
+   "title": "Lei 12.741/2012: valor aproximado dos tributos no documento fiscal ao consumidor",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
+   "published": "2012-12-08",
+   "accessed": "2026-10-19"
+  }
+ ],
+ "consumption": [
+  {
+   "key": "alimentos_basicos",
+   "label": "Alimentos básicos",
+   "low": 5.25,
+   "central": 5.25,
+   "high": 5.25,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Arroz, trigo e outros cereais 1,23%; Outros produtos e serviços da lavoura temporária 2,43%; Laranja 1,06%; Outros produtos da lavoura permanente 3,93%; Aves e ovos 3,23%; Pesca e aquicultura (peixe, crustáceos e moluscos) 6,51%; Carne de bovinos e outros prod. de carne 6,16%; Carne de suíno 3,88%; Carne de aves 5,42%; Leite resfriado, esterilizado e pasteurizado 8,99%; Açúcar 2,23%; Óleos e gorduras vegetais e animais 4,47%; Café beneficiado 10,73%; Arroz beneficiado e produtos derivados do arroz 6,51%; Produtos derivados do trigo, mandioca ou milho 5,56%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "alimentos_industrializados",
+   "label": "Alimentos industrializados",
+   "low": 11.13,
+   "central": 11.13,
+   "high": 11.13,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Pescado industrializado 11,02%; Outros produtos do laticínio 12,84%; Conservas de frutas, legumes, outros vegetais e sucos de frutas 11,50%; Outros produtos alimentares 10,28%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_nao_alcoolicas",
+   "label": "Bebidas não alcoólicas",
+   "low": 18.36,
+   "central": 18.36,
+   "high": 18.36,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Bebidas 18,36%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_alcoolicas",
+   "label": "Bebidas alcoólicas",
+   "low": 18.36,
+   "central": 18.36,
+   "high": 18.36,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Bebidas 18,36%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "restaurantes",
+   "label": "Restaurantes, bares e delivery",
+   "low": 9.56,
+   "central": 9.56,
+   "high": 9.56,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Serviços de alimentação 9,56%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "gasolina",
+   "label": "Gasolina comum (gasolina C)",
+   "low": 24.0,
+   "central": 27.7,
+   "high": 34.16,
+   "basis": "Conservador = só ICMS (24,0%), situação com PIS/Cofins e Cide zerados pelo Decreto 13.134 (10/10 a 09/11/2026); Provável = tributos federais (3,7%) + ICMS (24,0%) da composição Petrobras da semana 04-10/10/2026; Elevado = ICMS R$ 1,57/l + tributos federais nas alíquotas cheias informadas na nota 1 da Petrobras (Cide+PIS/Cofins gasolina A R$ 0,8925/l x 70% + PIS/Cofins etanol anidro R$ 0,1309/l x 30%) sobre o preço médio de R$ 6,54/l (cálculo derivado). Data de referência: coleta 2026-10-04 a 2026-10-10. Em 2026 os tributos federais sobre a gasolina foram reduzidos temporariamente (LC 235/2026; Decreto 13.134/2026: PIS/Cofins R$ 160,00/m³ de 10/09 a 09/10/2026 e zero de 10/10 a 09/11/2026; Cide zero no mesmo período).",
+   "source_ids": [
+    "petrobras_gasolina_br",
+    "decreto_13134_2026",
+    "lc_235_2026"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "diesel",
+   "label": "Óleo diesel (diesel B)",
+   "low": 20.2,
+   "central": 20.2,
+   "high": 20.2,
+   "basis": "Os três cenários usam a composição Petrobras: tributos federais 4,3% + ICMS 15,9% (preço médio R$ 7,36/l). Data de referência: coleta 2026-10-04 a 2026-10-10.",
+   "source_ids": [
+    "petrobras_diesel_br"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "etanol",
+   "label": "Etanol hidratado",
+   "low": 12.96,
+   "central": 12.96,
+   "high": 12.96,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Etanol e outros biocombustíveis 12,96%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "gnv",
+   "label": "Gás natural veicular (GNV)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. As Contas Nacionais juntam o gás natural à eletricidade e a outras utilidades.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "glp",
+   "label": "Gás de cozinha (GLP, botijão 13 kg)",
+   "low": 16.7,
+   "central": 16.7,
+   "high": 16.7,
+   "basis": "Os três cenários usam o ICMS de 16,7% da composição de preço da Petrobras (tributos federais zerados). Data de referência: coleta 2026-10-04 a 2026-10-10. A Petrobras informa que CIDE, PIS/Pasep e Cofins do GLP estão zerados.",
+   "source_ids": [
+    "petrobras_glp_br"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "energia_eletrica",
+   "label": "Energia elétrica (conta de luz residencial)",
+   "low": 15.66,
+   "central": 15.66,
+   "high": 15.66,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Eletricidade, gás e outras utilidades 15,66%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "agua_esgoto",
+   "label": "Água e esgoto",
+   "low": 3.57,
+   "central": 3.57,
+   "high": 3.57,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Água, esgoto, reciclagem e gestão de resíduos 3,57%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "telefonia_internet",
+   "label": "Telefonia e internet",
+   "low": 21.07,
+   "central": 21.07,
+   "high": 21.07,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Telecomunicações, TV por assinatura e outros serv. relacionados 21,07%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "tv_assinatura_streaming",
+   "label": "TV por assinatura e streaming",
+   "low": 21.07,
+   "central": 21.07,
+   "high": 21.07,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Telecomunicações, TV por assinatura e outros serv. relacionados 21,07%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_nacionais",
+   "label": "Eletrônicos (fabricação nacional ou sem distinção)",
+   "low": 13.88,
+   "central": 13.88,
+   "high": 13.88,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Máquinas para escritório e equip. de informática 13,58%; Material eletrônico e equip. de comunicações 14,01%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_importados",
+   "label": "Eletrônicos importados",
+   "low": 13.88,
+   "central": 13.88,
+   "high": 13.88,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Máquinas para escritório e equip. de informática 13,58%; Material eletrônico e equip. de comunicações 14,01%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletrodomesticos",
+   "label": "Eletrodomésticos",
+   "low": 18.1,
+   "central": 18.1,
+   "high": 18.1,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Eletrodomésticos 18,10%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "moveis",
+   "label": "Móveis e colchões",
+   "low": 9.77,
+   "central": 9.77,
+   "high": 9.77,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Móveis 9,77%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "vestuario",
+   "label": "Vestuário",
+   "low": 14.7,
+   "central": 14.7,
+   "high": 14.7,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Artigos do vestuário e acessórios 14,70%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "calcados",
+   "label": "Calçados",
+   "low": 13.88,
+   "central": 13.88,
+   "high": 13.88,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Calçados e artefatos de couro 13,88%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "medicamentos",
+   "label": "Medicamentos de uso humano",
+   "low": 13.72,
+   "central": 13.72,
+   "high": 13.72,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Produtos farmacêuticos 13,72%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "higiene_pessoal",
+   "label": "Higiene pessoal",
+   "low": 20.08,
+   "central": 20.08,
+   "high": 20.08,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Perfumaria, sabões e artigos de limpeza 20,08%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cosmeticos_perfumes",
+   "label": "Cosméticos e perfumes",
+   "low": 20.08,
+   "central": 20.08,
+   "high": 20.08,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Perfumaria, sabões e artigos de limpeza 20,08%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_pessoais",
+   "label": "Serviços pessoais (salão, academia/clube)",
+   "low": 1.39,
+   "central": 1.39,
+   "high": 1.39,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Serviços pessoais 1,39%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_mensalidade",
+   "label": "Educação – mensalidade escolar",
+   "low": 1.84,
+   "central": 1.84,
+   "high": 1.84,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Educação privada 1,84%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_livros",
+   "label": "Educação – livros",
+   "low": 1.8,
+   "central": 1.8,
+   "high": 1.8,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Livros, jornais e revistas 1,80%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "saude_plano_consulta",
+   "label": "Saúde – plano de saúde e consultas",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. Plano de saúde e consultas caem em produtos diferentes das Contas Nacionais.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_publico",
+   "label": "Transporte público",
+   "low": 7.36,
+   "central": 7.36,
+   "high": 7.36,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Transporte terrestre de passageiros 7,36%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_aplicativo",
+   "label": "Transporte por aplicativo",
+   "low": 7.36,
+   "central": 7.36,
+   "high": 7.36,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Transporte terrestre de passageiros 7,36%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "passagens_aereas",
+   "label": "Passagens aéreas",
+   "low": 2.75,
+   "central": 2.75,
+   "high": 2.75,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Transporte aéreo 2,75%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "hotel_turismo",
+   "label": "Hotel e turismo",
+   "low": 8.81,
+   "central": 8.81,
+   "high": 8.81,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Serviços de alojamento em hotéis e similares 8,81%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "automovel_novo",
+   "label": "Automóvel novo",
+   "low": 14.54,
+   "central": 14.54,
+   "high": 14.54,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Automóveis, camionetas e utilitários 14,54%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "motocicleta",
+   "label": "Motocicleta",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. As Contas Nacionais juntam motocicletas a aeronaves e embarcações.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "pecas_manutencao_veiculo",
+   "label": "Peças e manutenção de veículo",
+   "low": 2.08,
+   "central": 2.08,
+   "high": 2.08,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Peças e acessórios para veículos automotores 5,35%; Comércio e reparação de veículos 2,08%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "seguros",
+   "label": "Seguros (IOF sobre o prêmio)",
+   "low": 0.38,
+   "central": 6.87,
+   "high": 6.87,
+   "basis": "Somente IOF, alíquota legal sobre o prêmio: vida e acidentes pessoais 0,38%; seguro-saúde 2,38%; demais (automóvel, residencial etc.) 7,38%. Conservador = seguro de vida; Provável e Elevado = automóvel/residencial. Data de referência: texto vigente em 2026. Percentual sobre o prêmio (como parcela do total pago: alíquota/(1+alíquota), ex. 7,38% -> 6,87%). Tributos pagos pela seguradora (PIS/Cofins, IRPJ/CSLL) não estão incluídos por falta de fonte. Convertido para fração do valor pago: IOF / (100 + IOF).",
+   "source_ids": [
+    "decreto_6306_2007_consolidado"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "tarifas_bancarias",
+   "label": "Tarifas bancárias",
+   "low": 6.65,
+   "central": 8.15,
+   "high": 9.65,
+   "basis": "PIS 0,65% + Cofins 4% (bancos, regime cumulativo) + ISS municipal entre 2% (mínimo) e 5% (máximo). Conservador = ISS 2%; Elevado = ISS 5%; Provável = ponto médio (ISS 3,5%, cálculo derivado). Data de referência: legislação vigente. Tributos sobre a receita do banco (por dentro). IOF não incide sobre tarifas. A alíquota de ISS efetiva de cada município não foi levantada.",
+   "source_ids": [
+    "lei_9715_1998",
+    "lei_10684_2003",
+    "lc_116_2003"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "brinquedos",
+   "label": "Brinquedos",
+   "low": 14.56,
+   "central": 14.56,
+   "high": 14.56,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Produtos de industrias diversas 14,56%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "pet",
+   "label": "Pet (ração, remédio, veterinário)",
+   "low": 5.5,
+   "central": 5.5,
+   "high": 5.5,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Rações balanceadas para animais 5,50%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "materiais_construcao",
+   "label": "Materiais de construção",
+   "low": 8.4,
+   "central": 8.4,
+   "high": 8.4,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Tintas, vernizes, esmaltes e lacas 11,00%; Cimento 7,25%; Artefatos de cimento, gesso e semelhantes 9,15%; Vidros, cerâmicos e outros prod. de minerais não-metálicos 8,15%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cigarros",
+   "label": "Cigarros",
+   "low": 30.4,
+   "central": 30.4,
+   "high": 30.4,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Produtos do fumo 30,40%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "mercado",
+   "label": "Mercado (cesta mista)",
+   "low": 7.42,
+   "central": 7.42,
+   "high": 7.42,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Arroz, trigo e outros cereais 1,23%; Outros produtos e serviços da lavoura temporária 2,43%; Laranja 1,06%; Outros produtos da lavoura permanente 3,93%; Aves e ovos 3,23%; Pesca e aquicultura (peixe, crustáceos e moluscos) 6,51%; Carne de bovinos e outros prod. de carne 6,16%; Carne de suíno 3,88%; Carne de aves 5,42%; Leite resfriado, esterilizado e pasteurizado 8,99%; Açúcar 2,23%; Óleos e gorduras vegetais e animais 4,47%; Café beneficiado 10,73%; Arroz beneficiado e produtos derivados do arroz 6,51%; Produtos derivados do trigo, mandioca ou milho 5,56%; Pescado industrializado 11,02%; Outros produtos do laticínio 12,84%; Conservas de frutas, legumes, outros vegetais e sucos de frutas 11,50%; Outros produtos alimentares 10,28%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "aluguel",
+   "label": "Aluguel residencial",
+   "low": 0.41,
+   "central": 0.41,
+   "high": 0.41,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Aluguel efetivo e serviços imobiliários 0,41%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "condominio",
+   "label": "Condomínio",
+   "low": 1.92,
+   "central": 1.92,
+   "high": 1.92,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Condomínios e serviços para edifícios 1,92%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_domesticos",
+   "label": "Serviços domésticos (diarista, babá)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. Não há imposto sobre o produto; os encargos da folha não entram nesta estimativa.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "estacionamento",
+   "label": "Estacionamento",
+   "low": 4.64,
+   "central": 4.64,
+   "high": 4.64,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Armazenamento e serviços auxiliares aos transportes 4,64%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "optica",
+   "label": "Óculos e lentes",
+   "low": 14.56,
+   "central": 14.56,
+   "high": 14.56,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Produtos de industrias diversas 14,56%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "material_escolar",
+   "label": "Material escolar",
+   "low": 12.92,
+   "central": 12.92,
+   "high": 12.92,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Papel, papelão, embalagens e artefatos de papel 8,72%; Produtos de industrias diversas 14,56%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "lazer",
+   "label": "Lazer (passeios, ingressos, festas)",
+   "low": 19.17,
+   "central": 19.17,
+   "high": 19.17,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Serviços cinematográficos, música, rádio e televisão 3,01%; Serviços de artes, cultura, esporte e recreação 19,74%. Média ponderada pelo consumo das famílias. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "presentes",
+   "label": "Presentes (itens variados)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. Itens variados, sem um produto das Contas Nacionais que os represente.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "compras_diversas",
+   "label": "Compras diversas (sem detalhe)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. Compras sem detalhe, sem um produto das Contas Nacionais que as represente.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "contas_diversas",
+   "label": "Contas e boletos (sem detalhe)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado oficial para o grupo: o gasto aparece na tela, mas não entra na estimativa. Contas sem detalhe, sem um produto das Contas Nacionais que as represente.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "limpeza",
+   "label": "Material de limpeza",
+   "low": 20.08,
+   "central": 20.08,
+   "high": 20.08,
+   "basis": "Contas Nacionais do IBGE, 2021, impostos sobre o produto ÷ oferta a preço de consumidor: Perfumaria, sabões e artigos de limpeza 20,08%. O mesmo valor nos três cenários.",
+   "source_ids": [
+    "ibge_scn_tru_2021"
+   ],
+   "icms_modal": false
+  }
+ ],
+ "regions": [
+  {
+   "code": "AC",
+   "name": "Acre",
+   "icms_modal": null,
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 20,
+   "ipva_notes": "Motos até 170 cc de pessoa com um só veículo: 0%.",
+   "source_ids": [
+    "ipva_ac"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "AL",
+   "name": "Alagoas",
+   "icms_modal": null,
+   "ipva_car": 2.75,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carros até 80 HP (1.0 aspirado típico): 2,75%; 80–160 HP: 3%; acima: 3,25%. Motos até 150 cc: 2%.",
+   "source_ids": [
+    "ipva_al",
+    "ipva_al_idade"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "AP",
+   "name": "Amapá",
+   "icms_modal": null,
+   "ipva_car": 1.5,
+   "ipva_motorcycle": 1.5,
+   "ipva_age_exempt_years": 10,
+   "ipva_notes": "Código novo (Lei 3.152/2024, a partir de 2025): automóvel até 1000 cc 1,5%, demais 3%; motos até 170 cc isentas. Texto visto em reprodução (NormasBrasil); a consolidação da Assembleia ainda mostra a lei antiga (Lei 400/1997, 3%).",
+   "source_ids": [
+    "ipva_ap"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "AM",
+   "name": "Amazonas",
+   "icms_modal": null,
+   "ipva_car": 1.5,
+   "ipva_motorcycle": 1.5,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Até 1000 cc: 1,5%; acima: 2% (carros e motos), desde 2026.",
+   "source_ids": [
+    "ipva_am"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "BA",
+   "name": "Bahia",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carro a diesel: 3%.",
+   "source_ids": [
+    "ipva_ba"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "CE",
+   "name": "Ceará",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carros até 100 cv: 2,5%; 100–180 cv: 3%; acima: 3,5%. Motos até 125 cc: 2%.",
+   "source_ids": [
+    "ipva_ce"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "DF",
+   "name": "Distrito Federal",
+   "icms_modal": null,
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Elétricos e híbridos isentos (com condições).",
+   "source_ids": [
+    "ipva_df"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "ES",
+   "name": "Espírito Santo",
+   "icms_modal": null,
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": null,
+   "source_ids": [
+    "ipva_es"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "GO",
+   "name": "Goiás",
+   "icms_modal": null,
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 3.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carros até 100 cv: 3%; acima: 3,75%.",
+   "source_ids": [
+    "ipva_go"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "MA",
+   "name": "Maranhão",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Carros até R$ 150 mil: 2,5%; acima: 3%. Motos até R$ 10 mil: 1%; acima: 2%. Texto da lei não conferido em fonte oficial.",
+   "source_ids": [
+    "ipva_ma"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "MT",
+   "name": "Mato Grosso",
+   "icms_modal": null,
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 18,
+   "ipva_notes": "Automóvel até 1000 cc: 2%; demais: 3%. Motos até 180 cc: 1%.",
+   "source_ids": [
+    "ipva_mt"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "MS",
+   "name": "Mato Grosso do Sul",
+   "icms_modal": null,
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "5% com redução de 40% (3% efetivos) para usados.",
+   "source_ids": [
+    "ipva_ms"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "MG",
+   "name": "Minas Gerais",
+   "icms_modal": null,
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": null,
+   "source_ids": [
+    "ipva_mg"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "PA",
+   "name": "Pará",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": null,
+   "source_ids": [
+    "ipva_pa"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "PB",
+   "name": "Paraíba",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.5,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Motos até 170 cc isentas; elétricos isentos.",
+   "source_ids": [
+    "ipva_pb"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "PR",
+   "name": "Paraná",
+   "icms_modal": null,
+   "ipva_car": 1.9,
+   "ipva_motorcycle": 1.9,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "1,9% desde 2026 (3,5% em 2025). Motos até 170 cc isentas.",
+   "source_ids": [
+    "ipva_pr"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "PE",
+   "name": "Pernambuco",
+   "icms_modal": null,
+   "ipva_car": 2.4,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Elétricos isentos.",
+   "source_ids": [
+    "ipva_pe"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "PI",
+   "name": "Piauí",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carros até R$ 150 mil: 2,5%; acima: 3%. Motos até 170 cc sem IPVA em 2026.",
+   "source_ids": [
+    "ipva_pi"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "RJ",
+   "name": "Rio de Janeiro",
+   "icms_modal": null,
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Álcool: 2%; GNV/híbrido: 1,5%; elétrico: 0,5%.",
+   "source_ids": [
+    "ipva_rj"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "RN",
+   "name": "Rio Grande do Norte",
+   "icms_modal": null,
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Motos até 200 cc: 2%. Texto do art. 4º visto em reprodução (NormasBrasil).",
+   "source_ids": [
+    "ipva_rn",
+    "ipva_rn_lei"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "RS",
+   "name": "Rio Grande do Sul",
+   "icms_modal": null,
+   "ipva_car": 3.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 20,
+   "ipva_notes": null,
+   "source_ids": [
+    "ipva_rs"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "RO",
+   "name": "Rondônia",
+   "icms_modal": null,
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Automóvel até 1000 cc: 2%; demais: 3%. Motos até 170 cc: 0%.",
+   "source_ids": [
+    "ipva_ro"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "RR",
+   "name": "Roraima",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Não conferido em fonte oficial: IPVA não estimado.",
+   "source_ids": [],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "SC",
+   "name": "Santa Catarina",
+   "icms_modal": null,
+   "ipva_car": 2.0,
+   "ipva_motorcycle": 1.0,
+   "ipva_age_exempt_years": 20,
+   "ipva_notes": "Motos até 200 cc isentas sem infração no ano anterior.",
+   "source_ids": [
+    "ipva_sc"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "SP",
+   "name": "São Paulo",
+   "icms_modal": null,
+   "ipva_car": 4.0,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 20,
+   "ipva_notes": "Motos de pessoa física até 180 cc isentas desde 2026.",
+   "source_ids": [
+    "ipva_sp"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "SE",
+   "name": "Sergipe",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.0,
+   "ipva_age_exempt_years": 15,
+   "ipva_notes": "Carros abaixo de R$ 120 mil: 2,5%; acima: 3%.",
+   "source_ids": [
+    "ipva_se"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  },
+  {
+   "code": "TO",
+   "name": "Tocantins",
+   "icms_modal": null,
+   "ipva_car": 2.5,
+   "ipva_motorcycle": 2.5,
+   "ipva_age_exempt_years": null,
+   "ipva_notes": "Carros até 100 HP: 2,5%; acima: 3,5%. Motos até 180 cc: 2,5%.",
+   "source_ids": [
+    "ipva_to"
+   ],
+   "sales_tax": null,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null
+  }
+ ],
+ "reference_icms": null,
+ "payroll": [
+  {
+   "from": "2025-01",
+   "legal_basis": "Lei 14.848/2024 · INSS: Portaria Interministerial MPS/MF nº 6/2025, Anexo II",
+   "ir_monthly": [
+    {
+     "up_to": 225920,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 282665,
+     "rate": 7.5,
+     "deduction": 16944
+    },
+    {
+     "up_to": 375105,
+     "rate": 15.0,
+     "deduction": 38144
+    },
+    {
+     "up_to": 466468,
+     "rate": 22.5,
+     "deduction": 66277
+    },
+    {
+     "up_to": null,
+     "rate": 27.5,
+     "deduction": 89600
+    }
+   ],
+   "dependent_deduction": 18959,
+   "simplified_discount": 56480,
+   "inss_bands": [
+    {
+     "up_to": 151800,
+     "rate": 7.5
+    },
+    {
+     "up_to": 279388,
+     "rate": 9.0
+    },
+    {
+     "up_to": 419083,
+     "rate": 12.0
+    },
+    {
+     "up_to": 815741,
+     "rate": 14.0
+    }
+   ],
+   "source_ids": [
+    "rfb_tabelas_2025",
+    "portaria_mps_mf_6_2025"
+   ]
+  },
+  {
+   "from": "2025-05",
+   "legal_basis": "Lei 15.191/2025 · INSS: Portaria Interministerial MPS/MF nº 6/2025, Anexo II",
+   "ir_monthly": [
+    {
+     "up_to": 242880,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 282665,
+     "rate": 7.5,
+     "deduction": 18216
+    },
+    {
+     "up_to": 375105,
+     "rate": 15.0,
+     "deduction": 39416
+    },
+    {
+     "up_to": 466468,
+     "rate": 22.5,
+     "deduction": 67549
+    },
+    {
+     "up_to": null,
+     "rate": 27.5,
+     "deduction": 90873
+    }
+   ],
+   "dependent_deduction": 18959,
+   "simplified_discount": 60720,
+   "inss_bands": [
+    {
+     "up_to": 151800,
+     "rate": 7.5
+    },
+    {
+     "up_to": 279388,
+     "rate": 9.0
+    },
+    {
+     "up_to": 419083,
+     "rate": 12.0
+    },
+    {
+     "up_to": 815741,
+     "rate": 14.0
+    }
+   ],
+   "source_ids": [
+    "rfb_tabelas_2025",
+    "portaria_mps_mf_6_2025"
+   ]
+  },
+  {
+   "from": "2026-01",
+   "legal_basis": "Lei 15.191/2025 (tabela) + Lei 15.270/2025 (redução) · INSS: Portaria Interministerial MPS/MF nº 13/2026",
+   "ir_monthly": [
+    {
+     "up_to": 242880,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 282665,
+     "rate": 7.5,
+     "deduction": 18216
+    },
+    {
+     "up_to": 375105,
+     "rate": 15.0,
+     "deduction": 39416
+    },
+    {
+     "up_to": 466468,
+     "rate": 22.5,
+     "deduction": 67549
+    },
+    {
+     "up_to": null,
+     "rate": 27.5,
+     "deduction": 90873
+    }
+   ],
+   "dependent_deduction": 18959,
+   "simplified_discount": 60720,
+   "inss_bands": [
+    {
+     "up_to": 162100,
+     "rate": 7.5
+    },
+    {
+     "up_to": 290284,
+     "rate": 9.0
+    },
+    {
+     "up_to": 435427,
+     "rate": 12.0
+    },
+    {
+     "up_to": 847555,
+     "rate": 14.0
+    }
+   ],
+   "source_ids": [
+    "rfb_tabelas_2026",
+    "lei_15270_2025",
+    "inss_tabela_2026"
+   ],
+   "reducer": {
+    "exempt_up_to": 500000,
+    "max_reduction": 31289,
+    "phase_out_up_to": 735000,
+    "a": 97862,
+    "b": 0.133145
+   }
+  }
+ ],
+ "context": {
+  "label": "Carga tributária bruta do Brasil (% do PIB)",
+  "value": 32.4,
+  "year": 2025,
+  "source_ids": [
+   "tesouro_ctb_2025"
+  ]
+ },
+ "methodology": [
+  "Consumo: o gasto de cada categoria vezes a fração do preço que é imposto sobre o produto. Os percentuais vêm das Contas Nacionais do IBGE (Tabelas de Recursos e Usos de 2021, o último ano publicado com 128 produtos): impostos sobre o produto (imposto de importação, IPI, ICMS e outros impostos menos subsídios) divididos pela oferta a preço de consumidor. Para gasolina, diesel e gás de cozinha vale a composição de preço publicada pela Petrobras; para seguros e tarifas bancárias, a alíquota da lei.",
+  "Cenários: os grupos calculados pelas Contas Nacionais têm o mesmo valor nos três cenários. Quando um grupo junta vários produtos, o valor é a média ponderada pelo consumo das famílias. Os cenários só diferem onde a fonte dá uma faixa (combustíveis, seguros e tarifas bancárias).",
+  "Estado: os percentuais de consumo são médias nacionais e não mudam com o estado escolhido. O estado entra no IPVA.",
+  "Renda do trabalho: com o informe de rendimentos, valem os valores dele. Sem informe, o bruto de cada mês é estimado a partir do salário líquido recebido, pelas tabelas do IRPF e do INSS vigentes no mês (sem dependentes, salvo ajuste, e sem outros descontos); o 13º é tributado à parte (Lei 8.134/1990, art. 16).",
+  "Impostos pagos direto (IR, IOF, IPTU, IPVA e outros tributos lançados nas categorias deles) entram pelo valor lançado. O IPVA é estimado pelo valor de cada veículo e a alíquota do estado (automóvel flex típico; motos pela alíquota geral) só quando nenhum IPVA foi lançado no ano. Veículos com idade de fabricação na isenção do estado, ou com 20 anos ou mais a partir de 2026 (EC 137/2025), não pagam.",
+  "IR retido em proventos (JCP, dividendos do exterior) vem dos registros da carteira.",
+  "O que o número do IBGE mede: só os impostos cobrados sobre o produto. Impostos pagos antes na cadeia e não recuperados, encargos sobre a folha e o imposto de renda das empresas não entram. Por isso os percentuais são menores que os de estimativas que somam esses tributos, e o resultado deve ser lido como um piso.",
+  "Não entram: encargos pagos pelo empregador (INSS patronal, FGTS), grupos sem dado oficial (plano de saúde, serviços domésticos, gás veicular, motocicletas, compras sem detalhe) e o teste da reforma tributária de 2026 (CBS 0,9% e IBS 0,1%, compensados com PIS/Cofins).",
+  "Atualização: as Contas Nacionais com esse detalhe saem com cerca de dois anos de atraso. Mudanças de alíquota depois de 2021, como o teto do ICMS de energia e telecomunicações de 2022, só aparecem quando o IBGE publicar o ano correspondente."
+ ],
+ "disclaimer": "Esta é uma estimativa baseada em médias nacionais de imposto por categoria de consumo e nas regras de imposto de renda vigentes. Os valores reais variam conforme o produto, o estado, o regime tributário das empresas e benefícios fiscais específicos. Fontes: IBGE (Contas Nacionais), Receita Federal, Previdência Social, Tesouro Nacional e Petrobras.",
+ "work_days": {
+  "year": 2025,
+  "days": 118,
+  "until": "2025-04-28",
+  "share": 32.4,
+  "label": "Carga tributária bruta do Brasil em dias do ano (Tesouro Nacional)",
+  "source_ids": [
+   "tesouro_ctb_2025"
+  ]
+ },
+ "spending": {
+  "year": 2024,
+  "label": "Despesa do governo geral por função (União, estados e municípios)",
+  "functions": [
+   {
+    "key": "servicos_publicos_gerais",
+    "label": "Serviços públicos gerais (inclui juros da dívida)",
+    "share": 24.2,
+    "gdp_share": 11.08
+   },
+   {
+    "key": "defesa",
+    "label": "Defesa",
+    "share": 1.1,
+    "gdp_share": 0.51
+   },
+   {
+    "key": "ordem_publica_seguranca",
+    "label": "Ordem pública e segurança",
+    "share": 6.45,
+    "gdp_share": 2.95
+   },
+   {
+    "key": "assuntos_economicos",
+    "label": "Assuntos econômicos",
+    "share": 4.94,
+    "gdp_share": 2.26
+   },
+   {
+    "key": "protecao_ambiental",
+    "label": "Proteção ambiental",
+    "share": 1.21,
+    "gdp_share": 0.56
+   },
+   {
+    "key": "habitacao_servicos_comunitarios",
+    "label": "Habitação e serviços comunitários",
+    "share": 2.97,
+    "gdp_share": 1.36
+   },
+   {
+    "key": "saude",
+    "label": "Saúde",
+    "share": 10.99,
+    "gdp_share": 5.03
+   },
+   {
+    "key": "lazer_cultura_religiao",
+    "label": "Lazer, cultura e religião",
+    "share": 0.88,
+    "gdp_share": 0.4
+   },
+   {
+    "key": "educacao",
+    "label": "Educação",
+    "share": 11.14,
+    "gdp_share": 5.1
+   },
+   {
+    "key": "protecao_social",
+    "label": "Proteção social (previdência e assistência)",
+    "share": 36.11,
+    "gdp_share": 16.53
+   }
+  ],
+  "source_ids": [
+   "tesouro_cofog_2024"
+  ]
+ }
+}

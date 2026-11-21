@@ -1,0 +1,19 @@
+#PESSOAL
+Extrato por período
+Cliente  FULANA DE TAL
+Conta  0001 / 3701.000012345678-9
+Data  15/03/2025 - 09:30
+Mês  Março
+Período dos lançamentos  01/03/2025 até 15/03/2025
+SALDO ANTERIOR  R$ 1.250,00 C
+Lançamentos  Nr. Doc  Histórico/Complemento  Favorecido  CPF/CNPJ  Valor  Saldo
+12/03/2025 - 00:00:00  000000  SALDO DIA  0,00 C  150,40 D
+12/03/2025 - 09:00:00  000000  DEBITO PRESTACAO HAB  3.200,00 D  150,40 D
+07/03/2025 - 00:00:00  000000  SALDO DIA  0,00 C  3.049,60 C
+07/03/2025 - 18:40:00  004417  COMPRA ELO  Loja Exemplo Ltda  **12.345/0***  79,90 D  3.049,60 C
+07/03/2025 - 10:02:11  120333  PAG BOLETO  Empresa Ficticia S  120,50 D  3.049,60 C
+05/03/2025 - 00:00:00  000000  SALDO DIA  0,00 C  3.250,00 C
+05/03/2025 - 08:14:02  011926  CRED PIX CHAVE  Fulano Beltrano Si  ***.123.456***  2.000,00 C  3.250,00 C
+Alô CAIXA  4004 0104 (capitais e regiões metropolitanas)  0800 104 0104 (demais regiões)
+SAC CAIXA  0800 726 0101
+Ouvidoria: 0800 725 7474

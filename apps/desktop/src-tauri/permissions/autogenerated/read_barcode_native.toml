@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-read-barcode-native"
+description = "Enables the read_barcode_native command without any pre-configured scope."
+commands.allow = ["read_barcode_native"]
+
+[[permission]]
+identifier = "deny-read-barcode-native"
+description = "Denies the read_barcode_native command without any pre-configured scope."
+commands.deny = ["read_barcode_native"]

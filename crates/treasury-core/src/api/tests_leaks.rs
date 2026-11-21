@@ -1,0 +1,199 @@
+//! Segredos e dados fora do cofre (docs/local-security.md, item 13): roda os fluxos de
+//! senha, PIN, kit de recuperação, partes de Shamir, backup e troca de senha com dados
+//! inventados e procura a senha, o PIN, a chave em hex, o código, as partes, uma descrição e
+//! um valor nos logs, nos arquivos do app, nos temporários recentes, nas mensagens de erro e
+//! no histórico de alterações.
+
+use std::fmt::Write as _;
+use std::path::Path;
+use std::sync::{Arc, Mutex};
+use std::time::SystemTime;
+
+use serde_json::{Value, json};
+
+use super::*;
+
+/// Junta o texto de todo evento e span de `tracing` desta thread.
+struct Capture(Arc<Mutex<String>>);
+
+struct Fields<'a>(&'a mut String);
+
+impl tracing::field::Visit for Fields<'_> {
+    fn record_debug(&mut self, field: &tracing::field::Field, value: &dyn std::fmt::Debug) {
+        let _ = write!(self.0, " {}={:?}", field.name(), value);
+    }
+}
+
+impl tracing::Subscriber for Capture {
+    fn enabled(&self, _: &tracing::Metadata<'_>) -> bool {
+        true
+    }
+    fn new_span(&self, span: &tracing::span::Attributes<'_>) -> tracing::span::Id {
+        span.record(&mut Fields(&mut self.0.lock().unwrap()));
+        tracing::span::Id::from_u64(1)
+    }
+    fn record(&self, _: &tracing::span::Id, values: &tracing::span::Record<'_>) {
+        values.record(&mut Fields(&mut self.0.lock().unwrap()));
+    }
+    fn record_follows_from(&self, _: &tracing::span::Id, _: &tracing::span::Id) {}
+    fn event(&self, event: &tracing::Event<'_>) {
+        let mut out = self.0.lock().unwrap();
+        out.push('\n');
+        event.record(&mut Fields(&mut out));
+    }
+    fn enter(&self, _: &tracing::span::Id) {}
+    fn exit(&self, _: &tracing::span::Id) {}
+}
+
+/// Conteúdo dos arquivos sob `dir` (até `depth` níveis) mudados desde `since`.
+fn files_text(dir: &Path, depth: usize, since: SystemTime, out: &mut Vec<(String, Vec<u8>)>) {
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for e in entries.flatten() {
+        let path = e.path();
+        let Ok(meta) = e.metadata() else { continue };
+        if meta.is_dir() {
+            if depth > 0 {
+                files_text(&path, depth - 1, since, out);
+            }
+        } else if meta.len() < 8 * 1024 * 1024
+            && meta.modified().is_ok_and(|m| m >= since)
+            && let Ok(bytes) = std::fs::read(&path)
+        {
+            out.push((path.display().to_string(), bytes));
+        }
+    }
+}
+
+fn contains(hay: &[u8], needle: &str) -> bool {
+    !needle.is_empty() && hay.windows(needle.len()).any(|w| w == needle.as_bytes())
+}
+
+#[test]
+fn secrets_and_values_stay_out_of_logs_files_and_errors() {
+    let start = SystemTime::now() - std::time::Duration::from_secs(2);
+    // Valores únicos por execução: nada de outro teste ou de outro arquivo bate por acaso.
+    let tag: String = crate::ids::new_id()
+        .chars()
+        .filter(char::is_ascii_alphanumeric)
+        .take(12)
+        .collect();
+    let password = format!("senha-vazamento-{tag}");
+    let new_password = format!("outra-senha-vazamento-{tag}");
+    let wrong = format!("errada-vazamento-{tag}");
+    let pin = "730518";
+    let description = format!("Padaria Inventada {tag}");
+    let amount: i64 = -987_654_321;
+
+    let dir = tempfile::tempdir().unwrap();
+    let paths = TreasuryPaths::with_root(dir.path().join(".treasury")).unwrap();
+    let api = Api::new(paths).unwrap();
+    let logs = Arc::new(Mutex::new(String::new()));
+    let mut errors = Vec::new();
+    let mut secrets: Vec<String> = vec![password.clone(), new_password.clone(), pin.into()];
+
+    tracing::subscriber::with_default(Capture(logs.clone()), || {
+        tracing::info!("captura ligada");
+        api.call(
+            "vault.create",
+            json!({"password": password, "household_name": "Casa Inventada", "members": ["Pessoa"]}),
+        )
+        .unwrap();
+        let key = api
+            .with_session(|s, _| Ok(hex::encode(s.db.key().key_bytes())))
+            .unwrap();
+        secrets.push(key.to_uppercase());
+        secrets.push(key);
+
+        let acc = api
+            .call(
+                "accounts.create",
+                json!({"name": "Conta", "kind": "checking"}),
+            )
+            .unwrap();
+        api.call(
+            "transactions.create",
+            json!({"account_id": acc["id"], "date": "2026-03-02", "amount": amount, "description": description}),
+        )
+        .unwrap();
+
+        api.call(
+            "vault.pin_enable",
+            json!({"password": password, "pin": pin}),
+        )
+        .unwrap();
+        let kit = api
+            .call("vault.recovery_kit", json!({"password": password}))
+            .unwrap();
+        secrets.push(kit["code"].as_str().unwrap().to_string());
+        let shares = api
+            .call(
+                "vault.recovery_shares_create",
+                json!({"password": password}),
+            )
+            .unwrap();
+        for s in shares["shares"].as_array().unwrap() {
+            secrets.push(s.as_str().unwrap().to_string());
+        }
+        api.call("backup.create", Value::Null).unwrap();
+        api.call(
+            "vault.change_password",
+            json!({"current": password, "new": new_password}),
+        )
+        .unwrap();
+
+        // Erros com o segredo errado e com argumentos ruins não repetem o que veio.
+        for (cmd, args) in [
+            ("vault.recovery_kit", json!({"password": wrong})),
+            ("vault.change_password", json!({"current": wrong, "new": 1})),
+            ("vault.pin_enable", json!({"password": wrong, "pin": wrong})),
+        ] {
+            errors.push(api.call(cmd, args).unwrap_err().to_string());
+        }
+        api.call("vault.lock", Value::Null).unwrap();
+        for (cmd, args) in [
+            ("vault.unlock", json!({"password": wrong})),
+            ("vault.unlock_pin", json!({"pin": "000000"})),
+        ] {
+            errors.push(api.call(cmd, args).unwrap_err().to_string());
+        }
+        api.call("vault.unlock_pin", json!({"pin": pin})).unwrap();
+        errors.push(
+            serde_json::to_string(&api.call("changes.list", json!({"limit": 200})).unwrap())
+                .unwrap(),
+        );
+        api.call("vault.lock", Value::Null).unwrap();
+    });
+    secrets.push(wrong.clone());
+
+    let logs = logs.lock().unwrap().clone();
+    assert!(
+        logs.contains("captura ligada"),
+        "a captura de logs não funcionou"
+    );
+    let mut files = Vec::new();
+    files_text(dir.path(), 8, start, &mut files);
+    assert!(
+        files.iter().any(|(p, _)| p.ends_with(".db")),
+        "o cofre não foi lido"
+    );
+    files_text(&std::env::temp_dir(), 2, start, &mut files);
+
+    let plain = [
+        description.clone(),
+        (-amount).to_string(),
+        "9876543.21".into(),
+    ];
+    for needle in secrets.iter().chain(plain.iter()) {
+        assert!(!logs.contains(needle.as_str()), "{needle} nos logs");
+        for (path, bytes) in &files {
+            assert!(!contains(bytes, needle), "{needle} em {path}");
+        }
+    }
+    for needle in &secrets {
+        for e in &errors {
+            assert!(!e.contains(needle.as_str()), "{needle} em {e}");
+        }
+    }
+}

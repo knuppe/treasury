@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-secure-input"
+description = "Enables the secure_input command without any pre-configured scope."
+commands.allow = ["secure_input"]
+
+[[permission]]
+identifier = "deny-secure-input"
+description = "Denies the secure_input command without any pre-configured scope."
+commands.deny = ["secure_input"]

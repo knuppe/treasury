@@ -1,0 +1,522 @@
+@import 'tailwindcss';
+@import './design/fonts.css';
+@import './design/tokens.css';
+@import './design/motion.css';
+@import './design/scanner.css';
+@import './design/cinema.css';
+@import './design/activity.css';
+@import './design/phosphor.css';
+
+/*
+ * Só os tokens do Treasury viram utilitários de cor: nada de paleta padrão do
+ * Tailwind, para que toda cor da interface venha de tokens.css e mude com o tema.
+ */
+@theme {
+  --color-*: initial;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface-fill);
+  --color-surface-2: var(--surface-2-fill);
+  --color-surface-solid: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-panel: var(--panel-border);
+  --color-fg: var(--text);
+  --color-dim: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-warning: var(--warning);
+  --color-demo: var(--demo);
+  --color-demo-ink: var(--demo-ink);
+  --color-overlay: var(--overlay);
+
+  --font-sans: var(--font-text);
+  --font-mono: var(--font-numeric);
+
+  --radius-card: var(--radius);
+  --radius-control: var(--radius-sm);
+  --radius-chip: var(--radius-xs);
+
+  --shadow-popover: var(--shadow-pop);
+  --shadow-panel: var(--shadow-card);
+
+  --ease-instrument: var(--ease-out);
+
+  --animate-arrive: arrive var(--duration) var(--ease-out);
+  --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
+  --animate-fade-in: fade-in var(--duration) var(--ease-out);
+  --animate-pop-in: pop-in var(--duration) var(--ease-out);
+  --animate-slide-in: slide-in var(--duration-slow) var(--ease-out);
+
+  @keyframes arrive {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Rótulo técnico: 11px, caixa alta, espaçado, cor --text-dim. */
+@utility label-caps {
+  font-family: var(--font-numeric);
+  font-size: var(--label-size);
+  line-height: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--label-tracking);
+  color: var(--text-dim);
+}
+
+/* Números: mono com algarismos tabulares, para alinhar em colunas. */
+@utility num {
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings:
+    'tnum' 1,
+    'zero' 0;
+}
+
+/*
+ * Materiais das superfícies (tokens.css). `panel`: cards e painéis; `pop-surface`:
+ * popovers, diálogos, menus e notificações; `chrome`: barra lateral e superior.
+ * A borda fica com o utilitário de cor `border-panel` (para `border-l-*` poder mudar
+ * um lado só).
+ * Nos temas opacos são a cor sólida com brilho e sombra; no Vidro, vidro fosco.
+ */
+@utility panel {
+  position: relative;
+  background-color: var(--surface-fill);
+  background-image: var(--panel-sheen);
+  box-shadow: var(--highlight), var(--shadow-card);
+  -webkit-backdrop-filter: var(--panel-backdrop);
+  backdrop-filter: var(--panel-backdrop);
+  /* Com backdrop-filter o card vira contexto de empilhamento: o que abre dentro
+     dele (popovers de filtro) precisa ficar acima dos cards vizinhos. */
+  &:focus-within {
+    z-index: 1;
+  }
+}
+
+@utility pop-surface {
+  background-color: var(--pop-fill);
+  box-shadow: var(--shadow-pop);
+  -webkit-backdrop-filter: var(--pop-backdrop);
+  backdrop-filter: var(--pop-backdrop);
+}
+
+/* Cabeçalho fixo de tabela: no Vidro, as linhas que passam por baixo ficam desfocadas. */
+@utility sticky-surface {
+  background-color: var(--sticky-fill);
+  -webkit-backdrop-filter: var(--pop-backdrop);
+  backdrop-filter: var(--pop-backdrop);
+}
+
+@utility chrome {
+  background-color: var(--chrome-fill);
+  -webkit-backdrop-filter: var(--chrome-backdrop);
+  backdrop-filter: var(--chrome-backdrop);
+}
+
+@utility topbar {
+  background-color: var(--topbar-fill);
+  -webkit-backdrop-filter: var(--chrome-backdrop);
+  backdrop-filter: var(--chrome-backdrop);
+}
+
+@utility sr-only-focusable {
+  &:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-text);
+    font-size: 14px;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11' 1;
+  }
+
+  /*
+   * O documento nunca rola: quem rola são as áreas do app (conteúdo, painel do agente,
+   * diálogos). Sem isso, um `scrollIntoView` ou um popover perto da borda podiam rolar a
+   * janela inteira e deixar o app deslocado, sem como voltar.
+   */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  /*
+   * O <body> fica transparente: o fundo é o do <html> (--bg) mais a arte do tema
+   * (--canvas-art) num pseudo-elemento fixo atrás de tudo. No Vidro essa arte é a
+   * malha de cor (parada) sob as superfícies foscas.
+   */
+  body {
+    background: transparent;
+    color: var(--text);
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--canvas-art);
+  }
+  /* Brilho leve nos números e títulos dos temas que pedem (none nos outros). */
+  .num,
+  h1,
+  h2,
+  h3 {
+    text-shadow: var(--glow);
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  table,
+  code,
+  kbd,
+  samp,
+  pre,
+  output {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Foco sempre visível, sempre no tom de destaque. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 32%, transparent);
+    color: var(--text);
+  }
+
+  ::placeholder {
+    color: color-mix(in srgb, var(--text-dim) 70%, transparent);
+    opacity: 1;
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--accent);
+  }
+
+  /* Barras de rolagem discretas (WebKitGTK no Linux mostra as clássicas). */
+  * {
+    scrollbar-color: var(--line) transparent;
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--line-strong);
+    background-clip: padding-box;
+  }
+}
+
+/*
+ * Cabeçalho que acompanha a rolagem da página (`useStickyHeader`): as células descem com
+ * `translateY` e ganham o fundo fosco e a linha de baixo enquanto estão fora do lugar.
+ */
+@layer components {
+  thead[data-floating] > tr > th {
+    position: relative;
+    z-index: 2;
+    background-color: var(--sticky-fill);
+    -webkit-backdrop-filter: var(--pop-backdrop);
+    backdrop-filter: var(--pop-backdrop);
+    box-shadow: inset 0 -1px 0 var(--line);
+  }
+  /* Capa opaca para cima: cobre o vão quando a rolagem anda antes do cabeçalho. Fica
+     fora da área visível (cortada pela área que rola) quando o cabeçalho está no lugar. */
+  thead[data-floating=''] > tr > th::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: 240px;
+    background-color: var(--sticky-fill);
+    pointer-events: none;
+  }
+}
+
+/*
+ * Tabela técnica: a linha selecionada ganha borda --accent (sombras internas
+ * nas células, que funcionam em qualquer WebView e não mexem no layout). Com
+ * seleção de várias linhas (`aria-multiselectable`), a borda fica só na linha do
+ * cursor (`data-cursor`) e as selecionadas ganham fundo e a barra à esquerda.
+ */
+@layer components {
+  .tech-row > td {
+    --ring-y: 0px;
+    --ring-l: 0px;
+    --ring-r: 0px;
+    box-shadow:
+      inset 0 var(--ring-y) 0 var(--accent),
+      inset 0 calc(-1 * var(--ring-y)) 0 var(--accent),
+      inset var(--ring-l) 0 0 var(--accent),
+      inset calc(-1 * var(--ring-r)) 0 0 var(--accent);
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+  .tech-row:hover > td {
+    background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  }
+  .tech-row[aria-selected='true'] > td,
+  .tech-row[data-cursor] > td {
+    background: var(--accent-faint);
+  }
+  .tech-row[data-cursor] > td {
+    --ring-y: 1px;
+  }
+  .tech-row[data-cursor] > td:first-child {
+    --ring-l: 2px;
+  }
+  .tech-row[data-cursor] > td:last-child {
+    --ring-r: 1px;
+  }
+  :where([aria-multiselectable='true']) .tech-row[aria-selected='true'] > td {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+  :where([aria-multiselectable='true']) .tech-row[aria-selected='true'] > td:first-child {
+    --ring-l: 2px;
+  }
+  .tech-row:focus-visible > td {
+    --ring-y: 2px;
+  }
+  .tech-row:focus-visible > td:first-child {
+    --ring-l: 3px;
+  }
+  .tech-row:focus-visible > td:last-child {
+    --ring-r: 2px;
+  }
+}
+
+/* Movimento reduzido: o app continua completo, só sem animação. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Aparência de app nativo: o texto da interface não é selecionável nem arrastável, como
+ * num app de sistema. Campos de formulário e textos marcados com `data-selectable`
+ * (respostas do agente, valores para copiar) continuam selecionáveis.
+ */
+@layer base {
+  html {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    cursor: default;
+  }
+  img,
+  a {
+    -webkit-user-drag: none;
+  }
+  input,
+  textarea,
+  select,
+  [contenteditable='true'],
+  [contenteditable=''],
+  [data-selectable],
+  [data-selectable] * {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/*
+ * Barra de progresso sem total conhecido (tarefas em segundo plano, docs/background-tasks.md):
+ * uma faixa que corre só com transform, no compositor, e só enquanto a tarefa roda. Com
+ * movimento reduzido, fica parada no meio.
+ */
+@keyframes task-indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+.task-indeterminate {
+  animation: task-indeterminate 1.4s var(--ease-out, ease-out) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .task-indeterminate {
+    animation: none !important;
+    transform: translateX(100%);
+  }
+}
+
+/*
+ * Abas e chips (docs/design.md, "Abas e chips"): o mesmo desenho em todas as telas e em todos os
+ * temas, pelos tokens --tab-* (tokens.css), derivados do texto e do destaque de cada tema.
+ * - Abas de seção (`.tab-list` + `.tab-trigger`): trilha com borda e fundo; a aba ativa tem o
+ *   fundo do destaque, o texto no destaque e uma barra embaixo.
+ * - Chips (`.chip`): atalhos e filtros que se escolhe um ou vários; arredondados, com borda.
+ */
+.tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 3px;
+  border: 1px solid var(--tab-border);
+  border-radius: var(--radius-sm);
+  background: var(--tab-track);
+}
+.tab-trigger {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-numeric);
+  font-size: var(--label-size);
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--tab-text);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+.tab-trigger:hover {
+  background: var(--tab-hover);
+  color: var(--text);
+}
+.tab-trigger:focus-visible {
+  outline-offset: -2px;
+}
+.tab-trigger:disabled {
+  opacity: 0.4;
+}
+.tab-trigger[data-state='active'] {
+  background: var(--tab-active);
+  color: var(--accent);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--tab-border);
+  border-radius: 999px;
+  background: var(--tab-track);
+  font-size: 12.5px;
+  white-space: nowrap;
+  color: var(--tab-text);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.chip:disabled {
+  opacity: 0.45;
+}
+.chip[aria-pressed='true'],
+.chip[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--tab-active);
+  color: var(--accent);
+  font-weight: 500;
+}

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-read-payment-codes-native"
+description = "Enables the read_payment_codes_native command without any pre-configured scope."
+commands.allow = ["read_payment_codes_native"]
+
+[[permission]]
+identifier = "deny-read-payment-codes-native"
+description = "Denies the read_payment_codes_native command without any pre-configured scope."
+commands.deny = ["read_payment_codes_native"]

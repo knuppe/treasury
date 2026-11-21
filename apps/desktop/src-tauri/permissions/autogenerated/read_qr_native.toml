@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-read-qr-native"
+description = "Enables the read_qr_native command without any pre-configured scope."
+commands.allow = ["read_qr_native"]
+
+[[permission]]
+identifier = "deny-read-qr-native"
+description = "Denies the read_qr_native command without any pre-configured scope."
+commands.deny = ["read_qr_native"]

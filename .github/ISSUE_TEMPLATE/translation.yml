@@ -1,0 +1,41 @@
+name: Translation · Tradução
+description: Wrong, awkward or missing text in a language, or a new language. · Texto errado, estranho ou faltando num idioma, ou um idioma novo.
+labels: [translation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Texts live in `locales/<language>/*.ftl`; the rules and tone for each language are in [locales/GUIDE.md](https://github.com/knuppe/treasury/blob/main/locales/GUIDE.md). Screenshots from the demo vault only.
+        Os textos ficam em `locales/<idioma>/*.ftl`; as regras e o tom de cada idioma estão em [locales/GUIDE.md](https://github.com/knuppe/treasury/blob/main/locales/GUIDE.md). Prints só do cofre de demonstração.
+  - type: dropdown
+    id: idioma
+    attributes:
+      label: Language · Idioma
+      options:
+        - English (en)
+        - Español (es)
+        - Português do Brasil (pt-BR)
+        - Português de Portugal (pt-PT)
+        - New language · Idioma novo
+    validations:
+      required: true
+  - type: input
+    id: onde
+    attributes:
+      label: Where it appears · Onde aparece
+      description: Screen and field, or the catalog key if you know it. · Tela e campo, ou a chave do catálogo se você souber.
+      placeholder: "Budget › Expenses by category / orcamento-despesas-categoria"
+    validations:
+      required: true
+  - type: textarea
+    id: atual
+    attributes:
+      label: Current text · Texto atual
+    validations:
+      required: true
+  - type: textarea
+    id: sugestao
+    attributes:
+      label: Suggested text · Texto sugerido
+    validations:
+      required: true

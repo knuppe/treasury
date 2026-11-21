@@ -1,0 +1,1674 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Ações no exterior (SEC EDGAR), REITs dos EUA e BDRs (herdam o subjacente). Mesmas métricas das ações BR, com âncoras de mercado americano (custo de capital menor) e sem a dimensão de governança (sem fonte estruturada: o peso foi redistribuído). Segmento pelo SIC do cadastro da SEC.",
+  "dimensions": {},
+  "metrics": {},
+  "profiles": {
+    "equity_intl/default": {
+      "label": "Ações no exterior: empresas não financeiras",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 23,
+          "metrics": {
+            "roic": 3,
+            "roe": 3,
+            "gross_profitability": 2,
+            "ebit_margin": 1.5,
+            "net_margin": 1.5
+          }
+        },
+        "solvencia": {
+          "weight": 20,
+          "metrics": {
+            "net_debt_ebitda": 3,
+            "interest_coverage": 3,
+            "altman_z2": 2,
+            "current_ratio": 1.5,
+            "cash_to_st_debt": 1
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 14,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 2,
+            "accruals": 2,
+            "piotroski": 2
+          }
+        },
+        "crescimento": {
+          "weight": 10,
+          "metrics": {
+            "revenue_cagr_5y_real": 3,
+            "eps_cagr_5y": 2,
+            "revenue_cagr_3y_real": 1,
+            "asset_growth": 1
+          }
+        },
+        "eficiencia": {
+          "weight": 5,
+          "metrics": {
+            "asset_turnover": 2,
+            "cash_cycle_days": 1
+          }
+        },
+        "valuation": {
+          "weight": 12,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 9,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 4,
+          "metrics": {
+            "payout": 2,
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        },
+        "momentum": {
+          "weight": 3,
+          "metrics": {
+            "momentum_12_1": 1
+          }
+        }
+      }
+    },
+    "equity_intl/tech": {
+      "label": "Ações no exterior: tecnologia",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 14,
+          "metrics": {
+            "roic": 3,
+            "roe": 3,
+            "gross_profitability": 2,
+            "ebit_margin": 1.5,
+            "net_margin": 1.5
+          }
+        },
+        "solvencia": {
+          "weight": 12,
+          "metrics": {
+            "net_debt_ebitda": 2,
+            "interest_coverage": 1,
+            "current_ratio": 2,
+            "cash_to_st_debt": 2
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 12,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 2,
+            "accruals": 2
+          }
+        },
+        "crescimento": {
+          "weight": 30,
+          "metrics": {
+            "rule_of_40": 3,
+            "revenue_cagr_3y_real": 3,
+            "revenue_cagr_5y_real": 2,
+            "eps_cagr_5y": 1
+          }
+        },
+        "eficiencia": {
+          "weight": 10,
+          "metrics": {
+            "asset_turnover": 1,
+            "dilution": 1
+          }
+        },
+        "valuation": {
+          "weight": 13,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 4,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "momentum": {
+          "weight": 5,
+          "metrics": {
+            "momentum_12_1": 1
+          }
+        }
+      }
+    },
+    "equity_intl/cyclicals": {
+      "label": "Ações no exterior: commodities e cíclicas",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda_norm",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 17,
+          "metrics": {
+            "roic_norm": 3,
+            "roic": 1,
+            "roe": 2,
+            "gross_profitability": 1,
+            "ebit_margin": 1,
+            "net_margin": 1
+          }
+        },
+        "solvencia": {
+          "weight": 24,
+          "metrics": {
+            "net_debt_ebitda_norm": 3,
+            "net_debt_ebitda": 1,
+            "interest_coverage": 3,
+            "altman_z2": 2,
+            "current_ratio": 1,
+            "cash_to_st_debt": 1
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 12,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 2,
+            "accruals": 2,
+            "piotroski": 2
+          }
+        },
+        "crescimento": {
+          "weight": 5,
+          "metrics": {
+            "revenue_cagr_5y_real": 2,
+            "eps_cagr_5y": 1,
+            "asset_growth": 1
+          }
+        },
+        "eficiencia": {
+          "weight": 15,
+          "metrics": {
+            "asset_turnover": 1,
+            "ebit_margin": 2,
+            "cash_cycle_days": 1
+          }
+        },
+        "valuation": {
+          "weight": 13,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 9,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 3,
+          "metrics": {
+            "payout": 2,
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        },
+        "momentum": {
+          "weight": 2,
+          "metrics": {
+            "momentum_12_1": 1
+          }
+        }
+      }
+    },
+    "equity_intl/utilities": {
+      "label": "Ações no exterior: utilities",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 14,
+          "metrics": {
+            "roic": 3,
+            "roe": 3,
+            "ebit_margin": 1.5,
+            "net_margin": 1.5
+          }
+        },
+        "solvencia": {
+          "weight": 21,
+          "metrics": {
+            "net_debt_ebitda": 3,
+            "interest_coverage": 3,
+            "altman_z2": 1,
+            "current_ratio": 1,
+            "cash_to_st_debt": 1
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 12,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 2,
+            "accruals": 2,
+            "piotroski": 2
+          }
+        },
+        "crescimento": {
+          "weight": 5,
+          "metrics": {
+            "revenue_cagr_5y_real": 3,
+            "eps_cagr_5y": 2
+          }
+        },
+        "eficiencia": {
+          "weight": 8,
+          "metrics": {
+            "asset_turnover": 1,
+            "ebit_margin": 1
+          }
+        },
+        "valuation": {
+          "weight": 12,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 17,
+          "metrics": {
+            "roe_stability": 3,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 11,
+          "metrics": {
+            "payout": 2,
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        }
+      }
+    },
+    "equity_intl/retail": {
+      "label": "Ações no exterior: varejo e consumo",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 20,
+          "metrics": {
+            "roic": 3,
+            "roe": 3,
+            "gross_profitability": 2,
+            "ebit_margin": 1.5,
+            "net_margin": 1.5
+          }
+        },
+        "solvencia": {
+          "weight": 20,
+          "metrics": {
+            "net_debt_ebitda": 3,
+            "interest_coverage": 3,
+            "altman_z2": 2,
+            "current_ratio": 1.5,
+            "cash_to_st_debt": 1
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 16,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 3,
+            "accruals": 2,
+            "piotroski": 1
+          }
+        },
+        "crescimento": {
+          "weight": 12,
+          "metrics": {
+            "revenue_cagr_5y_real": 3,
+            "eps_cagr_5y": 2,
+            "revenue_cagr_3y_real": 1,
+            "asset_growth": 1
+          }
+        },
+        "eficiencia": {
+          "weight": 12,
+          "metrics": {
+            "cash_cycle_days": 3,
+            "asset_turnover": 2
+          }
+        },
+        "valuation": {
+          "weight": 10,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 6,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 2,
+          "metrics": {
+            "payout": 2,
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        },
+        "momentum": {
+          "weight": 2,
+          "metrics": {
+            "momentum_12_1": 1
+          }
+        }
+      }
+    },
+    "equity_intl/health": {
+      "label": "Ações no exterior: saúde",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "net_margin",
+        "net_debt_ebitda",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roic": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.06,
+            45
+          ],
+          [
+            0.1,
+            70
+          ],
+          [
+            0.2,
+            100
+          ]
+        ],
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.06,
+            65
+          ],
+          [
+            0.09,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "fcf_yield": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            20
+          ],
+          [
+            0.02,
+            45
+          ],
+          [
+            0.05,
+            75
+          ],
+          [
+            0.08,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 20,
+          "metrics": {
+            "roic": 3,
+            "roe": 3,
+            "gross_profitability": 2,
+            "ebit_margin": 1.5,
+            "net_margin": 1.5
+          }
+        },
+        "solvencia": {
+          "weight": 20,
+          "metrics": {
+            "net_debt_ebitda": 3,
+            "interest_coverage": 3,
+            "altman_z2": 2,
+            "current_ratio": 1.5,
+            "cash_to_st_debt": 1
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 14,
+          "metrics": {
+            "fcf_margin": 3,
+            "fcf_to_net_income": 2,
+            "accruals": 2,
+            "piotroski": 2
+          }
+        },
+        "crescimento": {
+          "weight": 12,
+          "metrics": {
+            "revenue_cagr_5y_real": 3,
+            "eps_cagr_5y": 2,
+            "revenue_cagr_3y_real": 1,
+            "asset_growth": 1
+          }
+        },
+        "eficiencia": {
+          "weight": 10,
+          "metrics": {
+            "asset_turnover": 2,
+            "cash_cycle_days": 1
+          }
+        },
+        "valuation": {
+          "weight": 12,
+          "metrics": {
+            "earnings_yield": 3,
+            "fcf_yield": 2,
+            "earnings_to_price": 1,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 9,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 2,
+          "metrics": {
+            "payout": 2,
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        },
+        "momentum": {
+          "weight": 1,
+          "metrics": {
+            "momentum_12_1": 1
+          }
+        }
+      }
+    },
+    "equity_intl/financial": {
+      "label": "Ações no exterior: bancos e seguradoras",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "roe",
+        "loss_years_10y"
+      ],
+      "anchors": {
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "earnings_to_price": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0.03,
+            35
+          ],
+          [
+            0.05,
+            60
+          ],
+          [
+            0.08,
+            85
+          ],
+          [
+            0.12,
+            100
+          ]
+        ],
+        "dy": [
+          [
+            0,
+            0
+          ],
+          [
+            0.01,
+            30
+          ],
+          [
+            0.03,
+            65
+          ],
+          [
+            0.05,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 30,
+          "metrics": {
+            "roe": 3,
+            "roa": 1
+          }
+        },
+        "solvencia": {
+          "weight": 15,
+          "metrics": {
+            "equity_to_assets": 1
+          }
+        },
+        "crescimento": {
+          "weight": 10,
+          "metrics": {
+            "eps_cagr_5y": 2,
+            "net_income_growth": 1
+          }
+        },
+        "valuation": {
+          "weight": 20,
+          "metrics": {
+            "earnings_to_price": 2,
+            "pb": 1,
+            "dy": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 15,
+          "metrics": {
+            "roe_stability": 2,
+            "loss_years_10y": 2,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 10,
+          "metrics": {
+            "payout": 2,
+            "dilution": 1
+          }
+        }
+      }
+    },
+    "equity_intl/reit": {
+      "label": "REITs (EUA)",
+      "attractiveness": [
+        "valuation",
+        "momentum"
+      ],
+      "critical": [
+        "net_debt_ebitda",
+        "interest_coverage"
+      ],
+      "anchors": {
+        "roe": [
+          [
+            -0.05,
+            0
+          ],
+          [
+            0,
+            15
+          ],
+          [
+            0.08,
+            45
+          ],
+          [
+            0.12,
+            65
+          ],
+          [
+            0.18,
+            85
+          ],
+          [
+            0.25,
+            100
+          ]
+        ],
+        "dy": [
+          [
+            0,
+            0
+          ],
+          [
+            0.01,
+            30
+          ],
+          [
+            0.03,
+            65
+          ],
+          [
+            0.05,
+            100
+          ]
+        ],
+        "net_debt_ebitda": [
+          [
+            0,
+            100
+          ],
+          [
+            4,
+            85
+          ],
+          [
+            5.5,
+            60
+          ],
+          [
+            7,
+            30
+          ],
+          [
+            9,
+            0
+          ]
+        ],
+        "interest_coverage": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            40
+          ],
+          [
+            3,
+            70
+          ],
+          [
+            5,
+            100
+          ]
+        ]
+      },
+      "dimensions": {
+        "rentabilidade": {
+          "weight": 15,
+          "metrics": {
+            "roe": 1,
+            "ebit_margin": 1
+          }
+        },
+        "solvencia": {
+          "weight": 30,
+          "metrics": {
+            "net_debt_ebitda": 3,
+            "interest_coverage": 3
+          }
+        },
+        "qualidade_lucros": {
+          "weight": 10,
+          "metrics": {
+            "fcf_margin": 1,
+            "fcf_to_net_income": 1
+          }
+        },
+        "valuation": {
+          "weight": 15,
+          "metrics": {
+            "dy": 2,
+            "pb": 1,
+            "ev_ebitda": 1
+          }
+        },
+        "estabilidade": {
+          "weight": 15,
+          "metrics": {
+            "roe_stability": 1,
+            "loss_years_10y": 1,
+            "volatility_1y": 1
+          }
+        },
+        "remuneracao": {
+          "weight": 15,
+          "metrics": {
+            "dividend_fcf_coverage": 2,
+            "dilution": 1
+          }
+        }
+      }
+    }
+  },
+  "flags": {},
+  "segments": {
+    "equity_intl": {
+      "default_segment": "default",
+      "segments": {
+        "default": {
+          "label": "Não financeiras (geral)",
+          "profile": "equity_intl/default"
+        },
+        "tech": {
+          "label": "Tecnologia",
+          "profile": "equity_intl/tech"
+        },
+        "cyclicals": {
+          "label": "Commodities e cíclicas",
+          "profile": "equity_intl/cyclicals"
+        },
+        "utilities": {
+          "label": "Utilities",
+          "profile": "equity_intl/utilities"
+        },
+        "retail": {
+          "label": "Varejo e consumo",
+          "profile": "equity_intl/retail"
+        },
+        "health": {
+          "label": "Saúde",
+          "profile": "equity_intl/health"
+        },
+        "financial": {
+          "label": "Bancos e seguradoras",
+          "profile": "equity_intl/financial"
+        },
+        "reit": {
+          "label": "REITs",
+          "profile": "equity_intl/reit"
+        }
+      }
+    }
+  },
+  "aliases": {
+    "sic_segment": {
+      "6020-6036": "financial",
+      "6111-6199": "financial",
+      "6211-6289": "financial",
+      "6311-6411": "financial",
+      "6798-6798": "reit",
+      "7370-7379": "tech",
+      "3570-3579": "tech",
+      "3661-3679": "tech",
+      "4810-4899": "tech",
+      "4900-4991": "utilities",
+      "1000-1499": "cyclicals",
+      "2911-2911": "cyclicals",
+      "3310-3399": "cyclicals",
+      "2600-2699": "cyclicals",
+      "5200-5999": "retail",
+      "2000-2099": "retail",
+      "2830-2836": "health",
+      "3841-3851": "health",
+      "8000-8099": "health"
+    },
+    "bdr_underlying": {
+      "GOGL34": "GOOGL",
+      "GOGL35": "GOOG",
+      "AMZO34": "AMZN",
+      "FBOK34": "META",
+      "M1TA34": "META",
+      "BERK34": "BRK-B",
+      "COCA34": "KO",
+      "PEPB34": "PEP",
+      "DISB34": "DIS",
+      "JPMC34": "JPM",
+      "BOAC34": "BAC",
+      "EXXO34": "XOM",
+      "CHVX34": "CVX",
+      "MCDC34": "MCD",
+      "NIKE34": "NKE",
+      "PGCO34": "PG",
+      "JNJB34": "JNJ",
+      "WALM34": "WMT",
+      "HOME34": "HD",
+      "MSCD34": "MA",
+      "VISA34": "V",
+      "NFLX34": "NFLX",
+      "TSLA34": "TSLA",
+      "NVDC34": "NVDA",
+      "AAPL34": "AAPL",
+      "MSFT34": "MSFT",
+      "ITLC34": "INTC",
+      "CSCO34": "CSCO",
+      "ORCL34": "ORCL",
+      "ABBV34": "ABBV",
+      "PFIZ34": "PFE",
+      "MRCK34": "MRK",
+      "COWC34": "COST",
+      "SBUB34": "SBUX",
+      "BABA34": "BABA",
+      "TSMC34": "TSM",
+      "A1MD34": "AMD",
+      "AVGO34": "AVGO",
+      "UNHH34": "UNH",
+      "GSGI34": "GS",
+      "MSBR34": "MS",
+      "CTGP34": "C",
+      "WFCO34": "WFC",
+      "BOEI34": "BA",
+      "CATP34": "CAT",
+      "GEOO34": "GE",
+      "IBMB34": "IBM",
+      "QCOM34": "QCOM",
+      "ADBE34": "ADBE",
+      "SSFO34": "CRM",
+      "PYPL34": "PYPL"
+    }
+  }
+}

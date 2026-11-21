@@ -1,0 +1,18 @@
+# Caminhos que decidem o que o app aceita como atualização e como uma release é feita
+# (docs/trust.md). Com a revisão do dono exigida no ruleset do main, nada muda aqui sem o
+# mantenedor aprovar.
+/.github/                                   @knuppe
+/scripts/release.sh                         @knuppe
+/scripts/sign-release.sh                    @knuppe
+/scripts/checksums.sh                       @knuppe
+/deny.toml                                  @knuppe
+/scripts/deps-check.py                      @knuppe
+/scripts/deps-approved.txt                  @knuppe
+/apps/desktop/src-tauri/tauri.conf.json     @knuppe
+/apps/desktop/src-tauri/update-keys.pub     @knuppe
+/apps/desktop/src-tauri/update-minisign.pub @knuppe
+/apps/desktop/src-tauri/src/updater/        @knuppe
+/apps/desktop/src-tauri/src/update_sig.rs   @knuppe
+/apps/desktop/src-tauri/src/integrity.rs    @knuppe
+/apps/desktop/src-tauri/release.entitlements @knuppe
+/apps/desktop/src-tauri/capabilities/       @knuppe

@@ -1,0 +1,127 @@
+/*
+ * Treasury · arte animada dos temas de cinema e do Lo-fi
+ *
+ * A arte parada (estrelas, O buraco negro, neon e névoa) fica em --canvas-art (tokens.css,
+ * body::before), e por isso aparece também nas miniaturas do seletor. Aqui fica só o
+ * que se move, num segundo pseudo-elemento fixo atrás de tudo (body::after):
+ *
+ * - Órbita: o disco de acreção do buraco negro girando devagar, achatado em
+ *   perspectiva sobre o desenho parado do disco.
+ * - Neon: a chuva caindo em diagonal, em três camadas de gotas com o mesmo
+ *   período vertical (o deslocamento de um período fecha o ciclo sem emenda), e o
+ *   neon rosa na borda da barra superior.
+ * - Lo-fi: folhas de bordo e de ginkgo descendo na diagonal, levadas pelo vento, num
+ *   ladrilho de 320×360 que anda um ladrilho inteiro por ciclo (sem emenda).
+ *
+ * Como em motion.css, só transform se move; com movimento reduzido (fim do arquivo),
+ * o disco, a chuva e as folhas ficam parados. `cinema.test.ts` verifica.
+ */
+
+:root[data-theme='interstellar'] body::after,
+:root[data-theme='bladerunner'] body::after,
+:root[data-theme='lofi'] body::after {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ── Órbita: o disco girando em volta da sombra do buraco negro ── */
+:root[data-theme='interstellar'] body::after {
+  top: calc(11vh - 18vw);
+  left: calc(88vw - 18vw);
+  width: 36vw;
+  height: 36vw;
+  border-radius: 50%;
+  opacity: 0.55;
+  background: conic-gradient(
+    from 0deg,
+    rgb(255 214 150 / 0.9),
+    rgb(240 150 60 / 0.25) 12%,
+    rgb(255 230 190 / 0.7) 24%,
+    rgb(200 110 40 / 0.2) 38%,
+    rgb(255 200 130 / 0.8) 52%,
+    rgb(240 160 70 / 0.3) 66%,
+    rgb(255 236 200 / 0.75) 80%,
+    rgb(220 130 50 / 0.25) 92%,
+    rgb(255 214 150 / 0.9)
+  );
+  -webkit-mask-image: radial-gradient(closest-side, transparent 30%, #000 40% 72%, transparent);
+  mask-image: radial-gradient(closest-side, transparent 30%, #000 40% 72%, transparent);
+  animation: gargantua-spin 90s linear infinite;
+}
+@keyframes gargantua-spin {
+  from {
+    transform: scaleY(0.09) rotate(0deg);
+  }
+  to {
+    transform: scaleY(0.09) rotate(360deg);
+  }
+}
+
+/* ── Neon: chuva em diagonal, gotas finas e longas ── */
+:root[data-theme='bladerunner'] body::after {
+  inset: -40% -30%;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(0.6px 15px at 50% 50%, rgb(190 220 255 / 0.55), transparent),
+    radial-gradient(0.5px 11px at 50% 50%, rgb(255 170 220 / 0.4), transparent),
+    radial-gradient(0.7px 19px at 50% 50%, rgb(170 230 255 / 0.45), transparent);
+  background-size:
+    83px 210px,
+    59px 210px,
+    127px 210px;
+  background-position:
+    0 0,
+    31px 97px,
+    71px 43px;
+  animation: rain-fall 0.9s linear infinite;
+}
+@keyframes rain-fall {
+  from {
+    transform: rotate(9deg) translateY(0);
+  }
+  to {
+    transform: rotate(9deg) translateY(210px);
+  }
+}
+
+/* ── Lo-fi: folhas de bordo e de ginkgo levadas pelo vento ── */
+:root[data-theme='lofi'] body::after {
+  inset: -360px -320px 0 0;
+  opacity: 0.45;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='360' viewBox='0 0 320 360'%3E%3Cg transform='translate(40 50) rotate(30) scale(1)' opacity='.9'%3E%3Cpath d='M0 -10C6 -4 6 4 0 10C-6 4 -6 -4 0 -10Z' fill='%23d0643a'/%3E%3Cpath d='M0 -9V11' stroke='%23a9472a' stroke-width='.8' fill='none'/%3E%3C/g%3E%3Cg transform='translate(150 30) rotate(-50) scale(1.1)' opacity='.9'%3E%3Cpath d='M0 7L-8 -4Q0 -10 8 -4Z' fill='%23e0b04a'/%3E%3Cpath d='M0 7V12' stroke='%23e0b04a' stroke-width='1' fill='none'/%3E%3C/g%3E%3Cg transform='translate(260 90) rotate(70) scale(0.9)' opacity='.9'%3E%3Cpath d='M0 -10C6 -4 6 4 0 10C-6 4 -6 -4 0 -10Z' fill='%23c9514a'/%3E%3Cpath d='M0 -9V11' stroke='%239a3a30' stroke-width='.8' fill='none'/%3E%3C/g%3E%3Cg transform='translate(90 170) rotate(120) scale(0.9)' opacity='.9'%3E%3Cpath d='M0 7L-8 -4Q0 -10 8 -4Z' fill='%23d8a03a'/%3E%3Cpath d='M0 7V12' stroke='%23d8a03a' stroke-width='1' fill='none'/%3E%3C/g%3E%3Cg transform='translate(210 210) rotate(-20) scale(1)' opacity='.9'%3E%3Cpath d='M0 -10C6 -4 6 4 0 10C-6 4 -6 -4 0 -10Z' fill='%23d98a9a'/%3E%3Cpath d='M0 -9V11' stroke='%23b86a7a' stroke-width='.8' fill='none'/%3E%3C/g%3E%3Cg transform='translate(30 290) rotate(60) scale(0.8)' opacity='.9'%3E%3Cpath d='M0 -10C6 -4 6 4 0 10C-6 4 -6 -4 0 -10Z' fill='%23c8743a'/%3E%3Cpath d='M0 -9V11' stroke='%23a05a2a' stroke-width='.8' fill='none'/%3E%3C/g%3E%3Cg transform='translate(180 320) rotate(160) scale(1)' opacity='.9'%3E%3Cpath d='M0 7L-8 -4Q0 -10 8 -4Z' fill='%23e2b85a'/%3E%3Cpath d='M0 7V12' stroke='%23e2b85a' stroke-width='1' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 320px 360px;
+  animation: leaves-drift 48s linear infinite;
+}
+@keyframes leaves-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(320px, 360px);
+  }
+}
+
+/* Neon: a borda da barra superior é um tubo de neon rosa (parado). */
+:root[data-theme='bladerunner'] .topbar {
+  box-shadow:
+    0 1px 0 rgb(255 79 176 / 0.55),
+    0 8px 22px -10px rgb(255 79 176 / 0.55);
+}
+
+/* Movimento reduzido: o disco, a chuva e as folhas ficam parados. */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme='interstellar'] body::after,
+  :root[data-theme='bladerunner'] body::after,
+  :root[data-theme='lofi'] body::after {
+    animation: none !important;
+  }
+  :root[data-theme='interstellar'] body::after {
+    transform: scaleY(0.09);
+  }
+  :root[data-theme='bladerunner'] body::after {
+    transform: rotate(9deg);
+  }
+}

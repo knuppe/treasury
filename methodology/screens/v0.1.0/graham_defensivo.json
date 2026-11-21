@@ -1,0 +1,17 @@
+{
+  "key": "graham_defensivo",
+  "version": "0.1.0",
+  "classes": ["stock_br"],
+  "exclude_sectors": ["banc", "segur", "intermedia", "financ", "previd"],
+  "hygiene": { "min_liquidity": 1000000 },
+  "criteria": [
+    { "id": "tamanho", "field": "market_cap", "op": "percentile_gte", "value": 0.6667 },
+    { "id": "liquidez_corrente", "field": "current_ratio", "op": "gte", "value": 2 },
+    { "id": "sem_prejuizo", "field": "loss_years_10y", "op": "eq", "value": 0 },
+    { "id": "proventos", "field": "dividend_years", "op": "gte", "value": 10, "adapted": true },
+    { "id": "crescimento_lucro", "field": "eps_growth_10y", "op": "gte", "value": 0.3333 },
+    { "id": "pl", "field": "pl", "op": "between", "value": [0, 15] },
+    { "id": "pl_pvp", "fields": ["pl", "pvp"], "op": "product_lte", "value": 22.5 }
+  ],
+  "order": { "field": "graham_upside", "dir": "desc" }
+}

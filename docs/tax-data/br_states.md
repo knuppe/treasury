@@ -1,0 +1,1065 @@
+# Brazil state taxes: ICMS modal rate, IPVA, ITCMD (2025–2026)
+
+Version 2026-10. Accessed 2026-10-17. Machine-readable twins: `research/br_icms.json` and `research/br_ipva.json`.
+
+These numbers feed a tax **estimate**. Each row cites official sources: state laws on SEFAZ, Assembly or official-gazette sites, SEFAZ pages, state news agencies and the Portal Nacional da NF-e. Secondary compilations were used only as checklists and are labelled SECONDARY. Anything not read in an official page is in the *Unverified* section at the end.
+
+Conventions: `n/v` = not verified (do not use without review). `fcp` = poverty-fund points added to the **general** rate. `0` = verified that the fund is limited to listed goods or does not exist. `n/v` = scope not checked.
+
+## A. ICMS: general (modal) internal rate
+
+- **AC**
+  - **2025:** 19%
+  - **2026:** 19%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** LC 55/1997 art. 18, I = 19% since 01/04/2023 (LC 422/2022). No FCP in AC (NF-e table).
+  - **Sources:** S-AC-LC55, S-NFE-FCP
+  - **Verified:** yes
+- **AL**
+  - **2025:** 19%
+  - **2026:** 20,5%
+  - **FCP on general rate:** 1%
+  - **Changes / notes:** Changes: 2023-04-01 → 19%; 2026-04-01 → 20,5%. Lei 5.900/1996 art. 17, I, b: 19% from 01/04/2023 (Lei 8.779/2022); 20,5% from 01/04/2026 (Lei 9.776/2025), so 19% in Jan-Mar 2026. FECOEP (Lei 6.558/2004): art. 2º-A (Lei 7.742/2015, effects 11/01/2016) adds a GENERAL 1pp on goods/services not in the 2% list (art. 2º, I), applying to all internal operations, with exclusions (food service, intermunicipal passenger transport, residential power <=150 kWh, cesta básica, medicines, school supplies, fresh food). Effective standard: 20% in 2025, 21,5% from 01/04/2026. The FECOEP text was read only in a SECONDARY consolidation (LegisWeb); the NF-e table's fixed 1% and 2% are consistent with it.
+  - **Sources:** S-AL-L8779, S-AL-L9776, S-AL-FECOEP-LW, S-NFE-FCP
+  - **Verified:** **no**
+- **AP**
+  - **2025:** 18%
+  - **2026:** 18%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 400/1997 art. 37, III, i = 18% (Lei 1.949/2015). No FCP in AP (NF-e table).
+  - **Sources:** S-AP-L400, S-NFE-FCP
+  - **Verified:** yes
+- **AM**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** LC 19/1997 art. 12, I, b = 20% since 01/04/2023 (GLP 18%). Consolidated text dated 08/01/2026; no later change found. NF-e table: FCP 2,0% and 1,2% (2025); whether either applies generally was not checked.
+  - **Sources:** S-AM-LC19, S-NFE-FCP
+  - **Verified:** yes
+- **BA**
+  - **2025:** 20,5%
+  - **2026:** 20,5%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 7.014/1996 art. 15, I = 20,5% from 07/02/2024 (Lei 14.629/2023). FUNCEP: +2pp only on goods of art. 16, I (art. 16-A).
+  - **Sources:** S-BA-L7014, S-NFE-FCP
+  - **Verified:** yes
+- **CE**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 18.665/2023 art. 65, I, g = 20% from 01/01/2024 (Lei 18.305/2023). NF-e table: FCP 2% (from 01/02/2024); scope not checked in law.
+  - **Sources:** S-CE-L18665, S-NFE-FCP
+  - **Verified:** yes
+- **DF**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 1.254/1996 art. 18, II, c = 20% (Lei 7.326/2023), in force from 2024 after 90-day rule. NF-e table: FCP 2%; scope not checked in law.
+  - **Sources:** S-DF-L7326, S-NFE-FCP
+  - **Verified:** yes
+- **ES**
+  - **2025:** 17%
+  - **2026:** 17%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 7.000/2001 art. 20, I = 17%. FECP +2pp only on products of art. 20, IV, d/e (art. 20-A).
+  - **Sources:** S-ES-L7000, S-NFE-FCP
+  - **Verified:** yes
+- **GO**
+  - **2025:** 19%
+  - **2026:** 19%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** CTE art. 27, I = 19% from 01/04/2024 (Lei 22.460/2023). PROTEGE +2pp only on Anexo VII goods (art. 27 §5º; not on fuel/energy/telecom since LC 194/2022).
+  - **Sources:** S-GO-CTE, S-NFE-FCP
+  - **Verified:** yes
+- **MA**
+  - **2025:** 23%
+  - **2026:** 23%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Changes: 2024-02-19 → 22%; 2025-02-23 → 23%. Lei 7.799/2002 art. 23, III: 22% from 19/02/2024 to 22/02/2025; 23% from 23/02/2025 (Lei 12.426/2024). FUMACOP: NF-e table 2%; scope not checked in law.
+  - **Sources:** S-MA-L7799, S-NFE-FCP
+  - **Verified:** yes
+- **MT**
+  - **2025:** 17%
+  - **2026:** 17%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 7.098/1998 art. 14, I = 17%. NF-e table: FCP up to 2%; scope not checked in law.
+  - **Sources:** S-MT-L7098, S-NFE-FCP
+  - **Verified:** yes
+- **MS**
+  - **2025:** 17%
+  - **2026:** 17%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 1.810/1997 art. 41, III, a = 17% (no 19% found). FECOMP +2% only on listed goods (art. 41-A: arms, alcoholic drinks, tobacco, jewelry, furs, perfumes, art, etc.).
+  - **Sources:** S-MS-L1810, S-NFE-FCP
+  - **Verified:** yes
+- **MG**
+  - **2025:** 18%
+  - **2026:** 18%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 6.763/1975 art. 12, I, d.1 = 18%. FEM +2pp only on listed goods to final consumer (art. 12-A), set to expire 31/12/2026.
+  - **Sources:** S-MG-L6763, S-NFE-FCP
+  - **Verified:** yes
+- **PA**
+  - **2025:** 19%
+  - **2026:** 19%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 5.530/1989 art. 12, VII = 19% (Lei 9.755/2022, effects 90 days after DOE 16/12/2022). No FCP in PA (NF-e table).
+  - **Sources:** S-PA-L9755, S-NFE-FCP
+  - **Verified:** yes
+- **PB**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 6.379/1996 art. 11, I = 20% from 01/01/2024 (Lei 12.788/2023). NF-e table: FCP 2%; scope not checked in law.
+  - **Sources:** S-PB-L6379, S-NFE-FCP
+  - **Verified:** yes
+- **PR**
+  - **2025:** 19,5%
+  - **2026:** 19,5%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 11.580/1996 art. 14, VIII = 19,5% (Lei 21.850 of 14/12/2023). FECOP +2pp only on listed products to final consumer.
+  - **Sources:** S-PR-L11580, S-NFE-FCP
+  - **Verified:** yes
+- **PE**
+  - **2025:** 20,5%
+  - **2026:** 20,5%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 15.730/2016 art. 15, VII = 20,5% from 01/01/2024 (Lei 18.305/2023). NF-e table: FCP 2%; scope not checked in law.
+  - **Sources:** S-PE-L15730, S-NFE-FCP
+  - **Verified:** yes
+- **PI**
+  - **2025:** 22,5%
+  - **2026:** 22,5%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Changes: 2025-04-01 → 22,5%. Lei 4.257/1989 art. 23, I, c = 22,5% from 01/04/2025 (Lei 8.558/2024). Prior rate (Jan-Mar 2025) 21% per secondary source only. NF-e table: FCP 2%; scope not checked.
+  - **Sources:** S-PI-DOE250, S-SST-ALIQ, S-NFE-FCP
+  - **Verified:** yes
+- **RJ**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** 2%
+  - **Changes / notes:** Lei 2.657/1996 art. 14, I = 20% (Lei 10.253/2023, DOE 21/12/2023; applies after 90-day rule, i.e. ~20/03/2024). FECP is a GENERAL +2pp (LC 210/2023 art. 2º, I) with listed exceptions: effective standard rate 22%.
+  - **Sources:** S-RJ-L2657, S-RJ-LC210, S-RJ-NEWS, S-NFE-FCP
+  - **Verified:** yes
+- **RN**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Changes: 2024-01-01 → 18%; 2025-03-20 → 20%. Lei 6.968/1996 art. 27, I, a: 18% from 01/01/2024 (Lei 11.314/2022) until 19/03/2025; 20% from 20/03/2025 (Lei 11.999/2024, +90 days from DOE 20/12/2024). FECOP +2pp only on listed goods (art. 27-A).
+  - **Sources:** S-RN-L11999, S-RN-L11314, S-NFE-FCP
+  - **Verified:** yes
+- **RS**
+  - **2025:** 17%
+  - **2026:** 17%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 8.820/1989 art. 12, II, j = 17% (consolidated to Lei 16.496 of 09/04/2026). AMPARA +2pp only on listed goods (art. 13-A).
+  - **Sources:** S-RS-L8820, S-NFE-FCP
+  - **Verified:** yes
+- **RO**
+  - **2025:** 19,5%
+  - **2026:** 19,5%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 688/1996 art. 27, I, c = 19,5% from 12/01/2024 (Lei 5.634/2023). NF-e table: FCP 2%; scope not checked in law.
+  - **Sources:** S-RO-L688, S-NFE-FCP
+  - **Verified:** yes
+- **RR**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 59/1993 art. 32, I, d = 20% (Lei 1.767/2022, in force 90 days after DOE 30/12/2022). NF-e table: FCP up to 2%; scope not checked in law.
+  - **Sources:** S-RR-L1767, S-RR-L59, S-NFE-FCP
+  - **Verified:** yes
+- **SC**
+  - **2025:** 17%
+  - **2026:** 17%
+  - **FCP on general rate:** 0%
+  - **Changes / notes:** Lei 10.297/1996 art. 19, I = 17% (text version 16/09/2026). No FCP in SC (NF-e table).
+  - **Sources:** S-SC-L10297, S-NFE-FCP
+  - **Verified:** yes
+- **SP**
+  - **2025:** 18%
+  - **2026:** 18%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 6.374/1989 art. 34, I = 18% (since 2009). NF-e table: FCP 2%; the SP fund applies to specific goods under separate law (not read).
+  - **Sources:** S-SP-L6374, S-NFE-FCP
+  - **Verified:** yes
+- **SE**
+  - **2025:** 19%
+  - **2026:** 19%
+  - **FCP on general rate:** 1%
+  - **Changes / notes:** Modal 19% from 01/04/2023 (ALESE). FECOEP: 1% on most goods/services since 2023 (exceptions: medicines, school supplies, cesta básica, residential power <=150 kWh) and 2% on 'supérfluos' (PGE-SE). Effective standard ~20%. Law texts (Lei 3.796/1996, Lei 4.731) not read directly.
+  - **Sources:** S-SE-ALESE, S-SE-PGE, S-NFE-FCP
+  - **Verified:** yes
+- **TO**
+  - **2025:** 20%
+  - **2026:** 20%
+  - **FCP on general rate:** n/v
+  - **Changes / notes:** Lei 1.287/2001 art. 27, II = 20% from 01/04/2023 (Lei 4.141/2023). NF-e table: FCP 2%; scope not checked in law.
+  - **Sources:** S-TO-L4141, S-NFE-FCP
+  - **Verified:** yes
+
+Main points:
+- **2026 change:** Alagoas goes from 19% to **20.5% on 01/04/2026** (Lei 9.776/2025). No other 2026 modal change was found.
+- **2025 changes:** MA 22→23% (23/02/2025); RN 18→20% (20/03/2025); PI →22.5% (01/04/2025).
+- **General-rate FCP:** **RJ** (+2pp, LC 210/2023, with exceptions; 20+2 = 22%), **SE** (+1pp since 2023, with exceptions) and **AL** (+1pp, Lei 6.558/2004 art. 2º-A; SECONDARY read only) apply the fund to the general rate. In BA, ES, GO, MG, MS, PR, RN and RS the fund is limited to listed goods. AC, AP, PA and SC have no FCP. For the other states, scope was not verified (n/v).
+- **Checklist corrections:** MS is 17%, not 19%. AL is 19%+1 in 2025 and 20.5%+1 from 01/04/2026.
+
+## B. IPVA: passenger car (gasoline/flex) and motorcycle
+
+- **AC**
+  - **Car 2025:** 2%
+  - **Car 2026:** 2%
+  - **Moto 2025:** 1%
+  - **Moto 2026:** 1%
+  - **Notes (bands, exemptions):** LC 483/2024 art. 25 (effects 01/01/2025). Two-wheelers <=170cc of individuals owning a single vehicle: 0%.
+  - **Sources:** S-AC-LC483
+  - **Verified:** yes
+- **AL**
+  - **Car 2025:** 2,75–3,25%
+  - **Car 2026:** 2,75–3,25%
+  - **Moto 2025:** 2,0–3,25%
+  - **Moto 2026:** 2,0–3,25%
+  - **Notes (bands, exemptions):** By power: 2,75% (<=80HP), 3% (80-160HP), 3,25% (>160HP). Motorcycles 2% (<=150cc), 2,75% (150-400cc), 3,25% (>400cc). GNV/hybrid 1,5%; electric 2%. Official FAQ is undated.
+  - **Sources:** S-AL-IPVA
+  - **Verified:** yes
+- **AP**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** 1,5%
+  - **Moto 2026:** 1,5%
+  - **Notes (bands, exemptions):** Lei 400/1997 art. 104 (Lei 775/2003).
+  - **Sources:** S-AP-L400
+  - **Verified:** yes
+- **AM**
+  - **Car 2025:** 3,0–4,0%
+  - **Car 2026:** 1,5–2,0%
+  - **Moto 2025:** 3,0–4,0%
+  - **Moto 2026:** 1,5–2,0%
+  - **Notes (bands, exemptions):** LC 19/1997 art. 150 (LC 280/2025): 2025 = 3% (<=1000cc) / 4% (>1000cc); 2026 = 1,5% / 2%. The same cc tiers apply to cars and motorcycles (most motorcycles <=1000cc: 3% -> 1,5%).
+  - **Sources:** S-AM-LC19
+  - **Verified:** yes
+- **BA**
+  - **Car 2025:** 2,5%
+  - **Car 2026:** 2,5%
+  - **Moto 2025:** 1%
+  - **Moto 2026:** 1%
+  - **Notes (bands, exemptions):** Non-diesel cars 2,5%; diesel cars 3%. Official page undated (read Oct 2026).
+  - **Sources:** S-BA-IPVA
+  - **Verified:** yes
+- **CE**
+  - **Car 2025:** 2,5–3,5%
+  - **Car 2026:** 2,5–3,5%
+  - **Moto 2025:** 2,0–3,5%
+  - **Moto 2026:** 2,0–3,5%
+  - **Notes (bands, exemptions):** Cars 2,5% (<=100cv), 3% (100-180cv), 3,5% (>180cv). Motorcycles 2% (<=125cc; 1% with 50% reduction if no fines), 3% (125-300cc), 3,5% (>300cc). Lei 15.893/2015.
+  - **Sources:** S-CE-IPVA
+  - **Verified:** yes
+- **DF**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 7.431/1985 art. 3º (Lei 6.445/2019). The Sefa-PR compilation's 3,5% is outdated.
+  - **Sources:** S-DF-L7431
+  - **Verified:** yes
+- **ES**
+  - **Car 2025:** 2%
+  - **Car 2026:** 2%
+  - **Moto 2025:** 1%
+  - **Moto 2026:** 1%
+  - **Notes (bands, exemptions):** Vehicles >15 years exempt. Official page undated.
+  - **Sources:** S-ES-IPVA
+  - **Verified:** yes
+- **GO**
+  - **Car 2025:** 3,0–3,75%
+  - **Car 2026:** 3,0–3,75%
+  - **Moto 2025:** 3%
+  - **Moto 2026:** 3%
+  - **Notes (bands, exemptions):** CTE art. 93: cars <=100cv and motorcycles 3%; cars >100cv 3,75%; utility vehicles 3,45%.
+  - **Sources:** S-GO-CTE
+  - **Verified:** yes
+- **MA**
+  - **Car 2025:** 2,5–3,0%
+  - **Car 2026:** 2,5–3,0%
+  - **Moto 2025:** 1,0–2,0%
+  - **Moto 2026:** 1,0–2,0%
+  - **Notes (bands, exemptions):** Lei 7.799/2002 art. 88: cars 2,5% (value <=R$150k) / 3% (>R$150k); motorcycles 1% (value <=R$10k) / 2% (>R$10k). Lei 12.768/2026 adds a 0,25pp cut for drivers without infractions (start date not verified).
+  - **Sources:** S-MA-L7799
+  - **Verified:** yes
+- **MT**
+  - **Car 2025:** 2,0–3,0%
+  - **Car 2026:** 2,0–3,0%
+  - **Moto 2025:** 1,0–3,5%
+  - **Moto 2026:** 1,0–3,5%
+  - **Notes (bands, exemptions):** Portaria 196/2025: cars <=1000cc 2%, other passenger cars 3%; motorcycles <=180cc 1%, 180-300cc 2,5%, 300-600cc 3%, >600cc 3,5%. SEFAZ-MT: rates unchanged in 2026.
+  - **Sources:** S-MT-IPVA26, S-MT-IPVA26N
+  - **Verified:** yes
+- **MS**
+  - **Car 2025:** n/v
+  - **Car 2026:** 3%
+  - **Moto 2025:** n/v
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** 2026: new cars 5%; used cars 3,00% (5% with 40% reduction); motorcycles 2%. 2025 rates not verified.
+  - **Sources:** S-MS-IPVA
+  - **Verified:** **no**
+- **MG**
+  - **Car 2025:** 4%
+  - **Car 2026:** 4%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 14.937/2003 art. 10.
+  - **Sources:** S-MG-IPVA
+  - **Verified:** yes
+- **PA**
+  - **Car 2025:** 2,5%
+  - **Car 2026:** 2,5%
+  - **Moto 2025:** 1%
+  - **Moto 2026:** 1%
+  - **Notes (bands, exemptions):** SEFA: rates kept under the law. Motorcycles <=200cc: 30%-100% reduction depending on infractions (Lei 6.017/96).
+  - **Sources:** S-PA-IPVA26
+  - **Verified:** yes
+- **PB**
+  - **Car 2025:** 2,5%
+  - **Car 2026:** 2,5%
+  - **Moto 2025:** 2,5%
+  - **Moto 2026:** 2,5%
+  - **Notes (bands, exemptions):** Lei 11.007/2017 art. 12, II; motorcycles <=170cc exempt (Lei 12.489/2022); rules kept in 2026.
+  - **Sources:** S-PB-IPVA-L11007, S-PB-IPVA26
+  - **Verified:** yes
+- **PR**
+  - **Car 2025:** 3,5%
+  - **Car 2026:** 1,9%
+  - **Moto 2025:** 3,5%
+  - **Moto 2026:** 1,9%
+  - **Notes (bands, exemptions):** 1,9% from 2026 (law sanctioned 23/09/2025, PL 690/2025, amends Lei 14.260/2003). Motorcycles <=170cc exempt (since 2025). Law number not seen.
+  - **Sources:** S-PR-IPVA, S-PR-IPVA-LAW
+  - **Verified:** yes
+- **PE**
+  - **Car 2025:** 2,4%
+  - **Car 2026:** 2,4%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** General 2,4% for the 3rd year in a row (2024-2026). Motorcycles 2% (>=50cc), 1% (<50cc). GNV <=R$100k 1,5%; electric exempt.
+  - **Sources:** S-PE-IPVA26, S-PE-IPVA-FAQ
+  - **Verified:** yes
+- **PI**
+  - **Car 2025:** n/v
+  - **Car 2026:** n/v
+  - **Moto 2025:** n/v
+  - **Moto 2026:** n/v
+  - **Notes (bands, exemptions):** Car and >170cc motorcycle rates not verified in an official source (secondary: 2,5% up to R$150k, 3% above). Officially verified: motorcycles <=170cc have IPVA zero in 2025 and 2026; vehicles >15 years exempt.
+  - **Sources:** S-PI-MOTO26, S-SEFAPR-IPVA-TAB
+  - **Verified:** **no**
+- **RJ**
+  - **Car 2025:** 4%
+  - **Car 2026:** 4%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 2.877/1997 art. 10: ethanol-only 2%, GNV/hybrid 1,5%, electric 0,5%.
+  - **Sources:** S-RJ-L2877
+  - **Verified:** yes
+- **RN**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** n/v
+  - **Moto 2026:** n/v
+  - **Notes (bands, exemptions):** Cars 3% (Lei 6.967/1996 art. 4º III, Lei 9.992/2015). GNV 1,5% and electric 0,5% rising (Lei 12.026/2024). Motorcycle rate not verified (2% <=200cc per SET-RN FAQ snippet; site unreachable).
+  - **Sources:** S-RN-L9992, S-RN-L12026
+  - **Verified:** **no**
+- **RS**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** 2026 rates from SEFAZ-RS; 2025 only from Sefa-PR compilation (secondary). Applies to vehicles made from 2007 in 2026.
+  - **Sources:** S-RS-IPVA, S-SEFAPR-IPVA-TAB
+  - **Verified:** yes
+- **RO**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 950/2000 as stated by Sefin in 2022: cars <=1000cc 2%, other cars 3%, motorcycles 2%; motorcycles <=170cc 0% since 2024 (verified for 2026). No 2025/2026 rate statement read.
+  - **Sources:** S-RO-IPVA22, S-RO-MOTO26
+  - **Verified:** **no**
+- **RR**
+  - **Car 2025:** 3%
+  - **Car 2026:** 3%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 59/1993 art. 100 (worded as 'alíquotas máximas'); lower rates by regulation not checked.
+  - **Sources:** S-RR-L59
+  - **Verified:** yes
+- **SC**
+  - **Car 2025:** 2%
+  - **Car 2026:** 2%
+  - **Moto 2025:** 1%
+  - **Moto 2026:** 1%
+  - **Notes (bands, exemptions):** Motorcycles <=200cc exempt if no infraction in prior year; 20+ year vehicles exempt from 2026.
+  - **Sources:** S-SC-IPVA
+  - **Verified:** yes
+- **SP**
+  - **Car 2025:** 4%
+  - **Car 2026:** 4%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Lei 13.296/2008. Motorcycles <=180cc owned by individuals exempt from 2026 (law sanctioned 23/12/2025). Hydrogen/ethanol-hybrid vehicles <=R$250k exempt; 20+ year vehicles exempt.
+  - **Sources:** S-SP-IPVA26, S-SP-MOTO180
+  - **Verified:** yes
+- **SE**
+  - **Car 2025:** 2,5–3,0%
+  - **Car 2026:** 2,5–3,0%
+  - **Moto 2025:** 2%
+  - **Moto 2026:** 2%
+  - **Notes (bands, exemptions):** Cars 2,5% (value <R$120k) / 3% above; motorcycles 2%; motorcycles <=165cc exempt.
+  - **Sources:** S-SE-IPVA25, S-SE-IPVA26
+  - **Verified:** yes
+- **TO**
+  - **Car 2025:** 2,5–3,5%
+  - **Car 2026:** 2,5–3,5%
+  - **Moto 2025:** 2,5–3,5%
+  - **Moto 2026:** 2,5–3,5%
+  - **Notes (bands, exemptions):** Lei 1.287/2001 art. 78 (Lei 3.036/2015): cars <=100HP 2,5%, >100HP 3,5%; motorcycles <=180cc 2,5%, >180cc 3,5%. Lei 5.061/2026 changed transport-vehicle rate and EV rules. Sefa-PR compilation's 2% is wrong.
+  - **Sources:** S-TO-L1287
+  - **Verified:** yes
+
+Federal frame: EC 137/2025: passenger vehicles, pickups and mixed vehicles with 20+ years of manufacture are immune from IPVA nationwide (states may exempt younger vehicles, e.g. 15 years in ES, PB, PI per official pages read). Source: S-EC137.
+
+Main points:
+- **2026 cuts:** PR 3.5% → **1.9%**. AM 4%/3% → **2%/1.5%** (by cc). SP exempts motorcycles up to 180cc owned by individuals.
+- Many states exempt small motorcycles (PR/PB/PI/RO/AC ≤170cc; SE ≤165cc; SP ≤180cc; SC ≤200cc with conditions; PA ≤200cc 30–100% reduction) and older vehicles (commonly 15 or 20 years).
+- Electric/hybrid treatment varies: RJ 0.5% EV and 1.5% hybrid/GNV; RN EV 0.5% rising; PE EV exempt; SP exempts hydrogen and ethanol-hybrid vehicles up to R$250k; TO EV/hybrid exemption 2026–2027 (Lei 5.061/2026).
+
+## C. ITCMD (inheritance and gift tax)
+
+Federal frame: **maximum 8%** (Resolução do Senado Federal nº 9/1992, art. 1º (from 01/01/1992)). CF art. 155 §1º VI (EC 132/2023): progressive by value of quinhão, legado or doação. LC 227/2026 art. 156: progressive, capped by the Senate maximum, applied marginally (§2º). LC 214/2025 does not set ITCMD rate rules. Sources: S-RSF9-1992, S-EC132, S-LC227, S-LC214.
+
+| UF | Rates | Notes | Sources | Verified |
+|---|---|---|---|---|
+| AC | Causa mortis 4-7% (marginal, above R$50k), 8% collaterals; doação 2/4/6/8% | LC 373/2020 arts. 29-30. | S-AC-LC373 | yes |
+| AL | Causa mortis 4/6/8% (quinhão up to R$1M / R$10M / above); doação 1/1,5/2% | Lei 5.077/1989 art. 168 as amended by Lei 9.440/2024. | S-AL-L9440 | yes |
+| AP | Causa mortis 2/3/4/5/6%; doação 2/3/4% (UPF/AP brackets) | Lei 3.149/2024 + Decreto 5.541/2025 art. 15 (old fixed 4%/3% revoked). | S-AP-D5541, S-AP-L400 | yes |
+| AM | 2/3/4% marginal (to R$2M / R$6M / above) | LC 19/1997 art. 119-A (LC 269/2024). Exemptions widened by LC 280/2025 from 2026. | S-AM-LC19 | yes |
+| BA | Causa mortis 4/6/8% (quinhão >R$100k); doação 3/3,5/4% | Lei 4.826/1989 art. 9º (Lei 14.802/2024) from 27/03/2025; before: doação 3,5%. | S-BA-L4826 | yes |
+| CE | 2/4/6/8% (causa mortis and doação; UFIRCE brackets) | Lei 15.812/2015 art. 16. | S-CE-L15812 | yes |
+| DF | 4/5/6% marginal | Lei 3.804/2006 art. 9º (Lei 5.549/2015); 2026 thresholds R$1.644.288,50 / R$3.288.577,00. | S-DF-L3804, S-DF-AD25 | yes |
+| ES | 4% flat | Lei 10.011/2013 art. 12. | S-ES-L10011 | yes |
+| GO | 2/4/6/8% marginal (to R$25k / R$200k / R$600k / above) | CTE art. 78 (Lei 19.021/2015). | S-GO-CTE | yes |
+| MA | Causa mortis 3/4/5/6/7%; doação 1/1,5/2% | Lei 7.799/2002 art. 110. | S-MA-L7799 | yes |
+| MT | 2/4/6/8% (after exempt bands; UPF/MT brackets) | RITCD art. 25 (Decreto 905/2017). | S-MT-RITCD | yes |
+| MS | Causa mortis 6%; doação 3% | Lei 1.810/1997 art. 129 (from 15/02/2016). | S-MS-L1810 | yes |
+| MG | 5% flat | Lei 14.941/2003 art. 10. | S-MG-L14941 | yes |
+| PA | Causa mortis 2-6%; doação 2-4% (UPF-PA brackets) | Lei 5.529/1989 art. 8º (Lei 8.868/2019, from 01/01/2020). | S-PA-L8868 | yes |
+| PB | 2/4/6/8% (causa mortis and doação) | Lei 5.123/1989 art. 6º (Lei 12.585/2023). | S-PB-L5123 | yes |
+| PR | 4% flat | Lei 18.573/2015 art. 22. | S-PR-L18573 | yes |
+| PE | 2026: exempt to R$80k, then 2/4/6/8% (with deductions) | LC 563/2025 from 01/01/2026. Rates in force in 2025 not verified. | S-PE-LC563 | yes |
+| PI | Causa mortis 2/4/6% (UFR-PI); doação 2/4% | Causa mortis: Lei 8.558/2024 from 01/04/2025. Doação: LC 327/2025 (Dec 2025); the earlier donation rule was not verified. | S-PI-DOE250, S-PI-LC327 | yes |
+| RJ | 4/4,5/5/6/7/8% (applied on the total) | Lei 7.174/2015 art. 26. | S-RJ-L7174 | yes |
+| RN | 3/4/5/6% marginal | Lei 5.887/1989 art. 7º (Lei 9.993/2015). | S-RN-L9993 | yes |
+| RS | Causa mortis 0/3/4/5/6% per quinhão; doação 3/4% | Lei 8.821/1989 arts. 18-19 (Lei 14.741/2015). | S-RS-L8821 | yes |
+| RO | 2/3/4% (UPF/RO brackets) | Lei 959/2000 art. 5º. | S-RO-L959 | yes |
+| RR | 4% flat | Lei 59/1993 art. 79. | S-RR-L59 | yes |
+| SC | 1/3/5/7% marginal | Lei 13.136/2004 art. 9º. | S-SC-L13136 | yes |
+| SP | 4% flat | Lei 10.705/2000 art. 16. | S-SP-L10705 | yes |
+| SE | Causa mortis 3/6/8%; quotas 2%; doação de imóveis 2/4/6/8% | Lei 7.724/2013 art. 14 (Leis 8.729/2020, 9.297/2023). | S-SE-L7724 | yes |
+| TO | 2/4/6/8% | Lei 1.287/2001 art. 61 (Lei 3.019/2015). | S-TO-L1287 | yes |
+
+Flat-rate states (SP 4%, MG 5%, ES 4%, PR 4%, RR 4%; MS fixed 6%/3%) and bracket-on-total states (e.g. RJ, RS) have not yet adapted to the marginal progressivity required by EC 132/2023 and LC 227/2026 art. 156. The rates shown are the ones in their laws today. This report does not assess the legal effect.
+
+## Unverified / caveats
+
+- **PI ICMS prior rate (Jan-Mar 2025) = 21%**: Only a secondary compilation (S-SST-ALIQ). Lei 8.558/2024 does not state the previous rate.
+- **AL FECOEP general 1pp (Lei 6.558/2004 art. 2º-A)**: Read only in a SECONDARY consolidation (LegisWeb). The NF-e table (fixed 1% and 2%) is consistent with it. The official text on SAPL/SEFAZ-AL was not read.
+- **FCP scope (goods-only vs general) for AM, CE, DF, MA, MT, PB, PE, PI, RO, RR, SP, TO**: The NF-e table gives the FCP percentage only. State fund laws not read; fcp_general left null. These funds are commonly limited to listed goods, but that was not confirmed here.
+- **RJ start date of 20% (20/03/2024)**: Inferred from the 90-day rule after DOE 21/12/2023. The SEFAZ-RJ rate page that states it sits behind a bot challenge and was not read.
+- **PR start date of 19,5% (~March 2024)**: Law date read (14/12/2023), start-of-effects clause not read.
+- **SE ICMS law numbers (Lei 9.176/2023; FECOEP Lei 4.731) and the start of the 1% FECOEP**: Rate read on an official Assembly news item and FECOEP structure on a PGE-SE page; law texts not read.
+- **AM ICMS change from 01/04/2026**: A search snippet mentioned a decree note about art. 12, I, b changing from 01/04/2026. The SEFAZ-AM consolidated text (08/01/2026) shows 20% and no such change was found.
+- **AC 20% for postal/express imports from 01/04/2025 (LC 481/2024)**: Secondary only. Not the general rate.
+- **MS IPVA 2025 rates**: Only the 2026 table (3% used cars, 2% motorcycles) was read.
+- **PI IPVA car rates (2,5% up to R$150k, 3% above) and >170cc motorcycle rate**: No official page with rates was found (SEFAZ-PI legislation portal is a JavaScript app).
+- **RN IPVA motorcycle rate (2% up to 200cc, 3% above)**: The SET-RN FAQ was unreachable (connection refused/timeout); seen only in a search snippet.
+- **RO IPVA 2025/2026 car/motorcycle rates**: Only an official 2022 note was read; it found no change, and 2026 news confirms the <=170cc exemption.
+- **RS IPVA 2025 rates**: Official 2026 page read; 2025 only from the Sefa-PR compilation.
+- **AL motorcycle exemption up to 175cc (automatic since 04/2025) and Lei 9.780/2025 (vehicles up to 2010 exempt)**: Search snippets only.
+- **MA IPVA 0,25pp reduction (Lei 12.768/2026)**: The provision was read in the consolidated law, but its start date was not.
+- **RR IPVA actual rates vs 'alíquotas máximas'**: The law sets maximums; lower regulatory rates not checked (Sefa-PR compilation also lists 3%).
+- **PE ITCMD rates in 2025 (before LC 563/2025)**: Not read.
+- **PI ITCMD donation rates before LC 327/2025**: Not read.
+- **Status of state ITCMD laws vs LC 227/2026 (marginal progressivity)**: Flat rates (SP, MG, ES, PR, RR, MS) and bracket-on-total schemes (RJ, RS, ...) may conflict with LC 227 art. 156. The legal effect was not assessed; TaxUp (secondary) flags SP/MG/ES/PR as 'adaptação pendente'.
+- **Hint/checklist corrections**: Tributodevido (Jan 2026): MS 19% is wrong (law: 17%). AL 19+1 matches the 2025 picture (FECOEP 1pp is general, from a secondary read), but AL becomes 20,5%+1 from 01/04/2026. Sefa-PR IPVA table: DF 3,5% and TO 2% do not match the laws.
+
+## Sources
+
+- `S-NFE-FCP`
+  - **Publisher:** Portal Nacional da NF-e (ENCAT/Receita Federal)
+  - **Title:** Tabela de Alíquotas de FCP por UF (atualizada em 25/02/2025), anexa ao Informe Técnico 2023.004 v1.03
+  - **URL:** https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=owT0exphn/8=
+  - **Published:** 2025-02-25
+  - **Supports:** FCP percentages accepted per UF in NF-e (fixed/max). Does NOT say which goods the FCP applies to. AC, AP, PA, SC: no FCP.
+- `S-EC132`
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Emenda Constitucional nº 132, de 20/12/2023
+  - **URL:** https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm
+  - **Published:** 2023-12-20
+  - **Supports:** CF art. 155 §1º VI: ITCMD 'será progressivo em razão do valor do quinhão, do legado ou da doação'.
+- `S-LC227`
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 227, de 13/01/2026 (CGIBS; normas gerais do ITCMD)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp227.htm
+  - **Published:** 2026-01-13
+  - **Supports:** Art. 156: ITCMD rates progressive by quinhão/legado/doação, capped by Senate maximum; §2º marginal (bracket-by-bracket) application. In force from publication (DOU 14/01/2026) for these articles.
+- `S-LC214`
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 214, de 16/01/2025 (IBS/CBS/IS)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm
+  - **Published:** 2025-01-16
+  - **Supports:** Only incidental ITCD mention (IBS/CBS do not alter ITCD base). Does not set ITCMD rate rules.
+- `S-EC137`
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Emenda Constitucional nº 137, de 09/12/2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc137.htm
+  - **Published:** 2025-12-09
+  - **Supports:** CF art. 155 §6º III e: IPVA immunity for passenger land vehicles, pickups and mixed vehicles 20+ years old (not micro-buses, buses, trailers). In force on publication.
+- `S-RSF9-1992`
+  - **Publisher:** Senado Federal (Anais)
+  - **Title:** Resoluções do Senado Federal, vol. 22 (1992) - Resolução nº 9/1992
+  - **URL:** https://www.senado.leg.br/publicacoes/anais/pdf/resolucoes/1992.pdf
+  - **Published:** 1992-05-05
+  - **Supports:** ITCMD maximum rate 8% from 01/01/1992; allows progressive rates.
+- `S-SEFAPR-IPVA-TAB`
+  - **Publisher:** Secretaria da Fazenda do Paraná (SECONDARY for other UFs)
+  - **Title:** Com 1,9%, Paraná terá IPVA mais barato do Brasil; veja a tabela dos outros estados
+  - **URL:** https://www.fazenda.pr.gov.br/Noticia/Com-19-Parana-tera-IPVA-mais-barato-do-Brasil-veja-tabela-dos-outros-estados
+  - **Published:** 2025-08-20
+  - **Supports:** Checklist only: car IPVA rate per UF as of Aug 2025 compiled by PR. Errors found: DF listed 3.5% (law: 3%), TO listed 2% (law: 2.5%/3.5%).
+- `S-TAXUP-ITCMD`
+  - **Publisher:** TaxUp Consultoria Tributária (SECONDARY, CC BY 4.0)
+  - **Title:** Mapa ITCMD Brasil (CSV)
+  - **URL:** https://taxup.com.br/wp-content/themes/taxup/assets/data/mapa-itcmd-brasil.csv
+  - **Published:** 2026-10-08
+  - **Supports:** Checklist only for ITCMD brackets and official-law links; each figure used here was re-read in the official source unless marked unverified.
+- `S-SST-ALIQ`
+  - **Publisher:** substituicaotributaria.com (SECONDARY)
+  - **Title:** Alterações das alíquotas do ICMS
+  - **URL:** https://substituicaotributaria.com/SST/substituicao-tributaria/regra-geral/34/alteracoes-das-aliquotas-do-icms
+  - **Published:** n/d
+  - **Supports:** Checklist of 2025/2026 modal-rate changes (MA, PI, RN 2025; AL 2026). Only source for PI's prior 21% rate.
+- `S-AC-LC55`
+  - **Publisher:** SEFAZ-AC
+  - **Title:** Lei Complementar nº 55/1997 (texto consolidado, atualizado até LC 510/2026)
+  - **URL:** https://sefaz.ac.gov.br/2021/?p=12159
+  - **Published:** n/d (consolidated 2026)
+  - **Supports:** ICMS art. 18, I: 19% (LC 422/2022, effects from 01/04/2023).
+- `S-AL-L8779`
+  - **Publisher:** Assembleia Legislativa de Alagoas (SAPL)
+  - **Title:** Lei nº 8.779, de 20/12/2022
+  - **URL:** https://sapl.al.al.leg.br/media/sapl/public/normajuridica/2022/2419/lei_no_8.779_de_20_de_dezembro_de_2022.pdf
+  - **Published:** 2022-12-21
+  - **Supports:** Lei 5.900/1996 art. 17, I, b = 19% 'nos demais casos' (effects 1st day of 4th month after publication, i.e. 01/04/2023).
+- `S-AL-L9776`
+  - **Publisher:** Assembleia Legislativa de Alagoas (SAPL)
+  - **Title:** Lei nº 9.776, de 22/12/2025
+  - **URL:** https://sapl.al.al.leg.br/media/sapl/public/normajuridica/2025/3699/lei_no_9.776_de_22_de_dezembro_de_2025.pdf
+  - **Published:** 2025-12-23
+  - **Supports:** Lei 5.900/1996 art. 17, I, b = 20,5% 'nos demais casos'; effects in next fiscal year from 1st day of 4th month after publication (01/04/2026).
+- `S-AL-FECOEP-LW`
+  - **Publisher:** LegisWeb (SECONDARY consolidation)
+  - **Title:** Lei nº 6.558/2004 (AL) - FECOEP, texto consolidado
+  - **URL:** https://www.legisweb.com.br/legislacao/?id=117212
+  - **Published:** n/d
+  - **Supports:** Art. 2º-A (Lei 7.742/2015): general +1pp on goods/services not in the art. 2º, I list (2pp list), with exclusions in §3º. The official text was not read.
+- `S-AP-L400`
+  - **Publisher:** Assembleia Legislativa do Amapá
+  - **Title:** Lei nº 400/1997 - texto consolidado
+  - **URL:** http://www.al.ap.gov.br/ver_texto_consolidado.php?iddocumento=10488
+  - **Published:** n/d (amendments to 2024)
+  - **Supports:** ICMS art. 37, III, i: 18% (Lei 1.949/2015). IPVA art. 104: 3% cars, 1.5% motorcycles. Old ITCD art. 78 (4%/3%) revoked by Lei 3.149/2024.
+- `S-AM-LC19`
+  - **Publisher:** SEFAZ-AM
+  - **Title:** Lei Complementar nº 19/1997 - Código Tributário do Amazonas (versão eletrônica gerada em 08/01/2026)
+  - **URL:** https://sistemas.sefaz.am.gov.br/get/Normas.do?metodo=viewDoc&uuidDoc=ac5497ab-4fbd-4bc8-a51b-32405f61dc30
+  - **Published:** 2026-01-08
+  - **Supports:** ICMS art. 12, I, b: 20% (from 01/04/2023). IPVA art. 150 IV/V (LC 280/2025). ITCMD art. 119-A progressive 2/3/4% (LC 269/2024).
+- `S-BA-L7014`
+  - **Publisher:** SEFAZ-BA
+  - **Title:** Lei nº 7.014/1996 com notas
+  - **URL:** http://mbusca.sefaz.ba.gov.br/DITRI/leis/leis_estaduais/legest_1996_7014_icmscomnotas.pdf
+  - **Published:** n/d
+  - **Supports:** ICMS art. 15, I: 20,5% (Lei 14.629/2023, effects from 07/02/2024; 19% from 22/03/2023 to 06/02/2024). Art. 16-A: +2pp FUNCEP only on goods of art. 16, I.
+- `S-CE-L18665`
+  - **Publisher:** Assembleia Legislativa do Ceará
+  - **Title:** Lei nº 18.665, de 28/12/2023 (Lei do ICMS)
+  - **URL:** https://www2.al.ce.gov.br/legislativo/legislacao5/leis2023/18665.htm
+  - **Published:** 2023-12-28
+  - **Supports:** ICMS art. 65, I, g: 20% for other goods from 01/01/2024 (Lei 18.305/2023).
+- `S-DF-L7326`
+  - **Publisher:** SINJ-DF (Governo do Distrito Federal)
+  - **Title:** Lei nº 7.326, de 20/10/2023
+  - **URL:** https://www.sinj.df.gov.br/sinj/Norma/f308fe684e544a29af7a1570ee07ce3f/Lei_7326_20_10_2023.html
+  - **Published:** 2023-10-23
+  - **Supports:** Lei 1.254/1996 art. 18, II, c: 20%; in force 01/01/2024 observing 90-day rule (DODF 23/10/2023).
+- `S-ES-L7000`
+  - **Publisher:** SEFAZ-ES
+  - **Title:** Lei nº 7.000/2001 - atualizada
+  - **URL:** https://sefaz.es.gov.br/Media/Receita%20Estadual/Legislacao/Lei%207000%20-%20Atualizada.pdf
+  - **Published:** n/d
+  - **Supports:** ICMS art. 20, I: 17%. Art. 20-A: +2pp FECP only on products of art. 20, IV, d and e.
+- `S-GO-CTE`
+  - **Publisher:** Secretaria da Economia de Goiás
+  - **Title:** Código Tributário Estadual - Lei nº 11.651/1991 (consolidado)
+  - **URL:** https://appasp.economia.go.gov.br/legislacao/arquivos/Cte/CTE.htm
+  - **Published:** n/d
+  - **Supports:** ICMS art. 27, I: 19% (Lei 22.460/2023, vigência 01/04/2024); §5º PROTEGE +2pp on Anexo VII goods. IPVA art. 93. ITCD art. 78 progressive 2/4/6/8%.
+- `S-MA-L7799`
+  - **Publisher:** SEFAZ-MA (portal SGC)
+  - **Title:** Lei nº 7.799/2002 - Sistema Tributário do Maranhão (consolidada, inclui Lei 12.426/24 e Lei 12.768/26)
+  - **URL:** https://portal-sgc.sefaz.ma.gov.br/sgc/api/portal/arquivos/public/identificador?identificador=2e774d84-6990-4fd3-bdfb-863829fd3c08
+  - **Published:** n/d (2026)
+  - **Supports:** ICMS art. 23, III: 22% from 19/02/2024 (Lei 12.120/23); 23% from 23/02/2025 (Lei 12.426/24). IPVA art. 88. ITCD art. 110.
+- `S-MT-L7098`
+  - **Publisher:** SEFAZ-MT
+  - **Title:** Lei nº 7.098/1998 (ICMS)
+  - **URL:** http://app1.sefaz.mt.gov.br/0325677500623408/07FA81BED2760C6B84256710004D3940/CC9C3B9886404BAA0325678B0043A842
+  - **Published:** n/d
+  - **Supports:** ICMS art. 14, I: 17%.
+- `S-MS-L1810`
+  - **Publisher:** Governo de MS - base de legislação
+  - **Title:** Lei nº 1.810/1997 (Código Tributário de MS)
+  - **URL:** https://aacpdappls.net.ms.gov.br/appls/legislacao/serc/legato.nsf/23b657614c182061042579c80053770d/9b9e5fd2565751de042579cf004d33a6
+  - **Published:** n/d (amendments to 2025)
+  - **Supports:** ICMS art. 41, III, a: 17%. Art. 41-A: +2% FECOMP only on listed goods. ITCD art. 129: 6% causa mortis, 3% doação.
+- `S-MG-L6763`
+  - **Publisher:** SEF/MG
+  - **Title:** Lei nº 6.763/1975 (parte 2/13)
+  - **URL:** https://www.fazenda.mg.gov.br/empresas/legislacao_tributaria/leis/l6763_1975_02.html
+  - **Published:** n/d
+  - **Supports:** ICMS art. 12, I, d.1: 18%. Art. 12-A: +2pp FEM on listed goods to final consumer, until 31/12/2026.
+- `S-PA-L9755`
+  - **Publisher:** Assembleia Legislativa do Pará
+  - **Title:** Lei nº 9.755, de 15/12/2022
+  - **URL:** https://bancodeleis.alepa.pa.gov.br/arquivos/lei9755_2022_29351.pdf
+  - **Published:** 2022-12-16
+  - **Supports:** Lei 5.530/1989 art. 12, VII: 19%; effects 90 days after publication (DOE 16/12/2022).
+- `S-PB-L6379`
+  - **Publisher:** SEFAZ-PB
+  - **Title:** Lei nº 6.379/1996 - atualizada
+  - **URL:** https://www.sefaz.pb.gov.br/legislacao/64-leis/icms/13798-lei-n-6-379-de-2-de-dezembro-de-1996-atualizada-em-06-09-2023
+  - **Published:** n/d
+  - **Supports:** ICMS art. 11, I: 20% from 01/01/2024 (Lei 12.788/2023).
+- `S-PR-L11580`
+  - **Publisher:** Casa Civil PR - Sistema Legislação
+  - **Title:** Lei nº 11.580/1996 (compilada; inclui Lei 22.962/2025)
+  - **URL:** https://www.legislacao.pr.gov.br/legislacao/exibirAto.do?action=iniciarProcesso&codAto=278020&codItemAto=1769727
+  - **Published:** n/d
+  - **Supports:** ICMS art. 14, VIII: 19,5% (Lei 21.850 de 14/12/2023). FECOP: +2pp only on listed products to final consumer.
+- `S-PE-L15730`
+  - **Publisher:** SEFAZ-PE
+  - **Title:** Lei nº 15.730/2016
+  - **URL:** https://www.sefaz.pe.gov.br/Legislacao/Tributaria/Documents/legislacao/Leis_Tributarias/2016/Lei15730_2016.htm
+  - **Published:** n/d
+  - **Supports:** ICMS art. 15, VII: 20,5% from 01/01/2024 (Lei 18.305/2023).
+- `S-PI-DOE250`
+  - **Publisher:** Diário Oficial do Estado do Piauí
+  - **Title:** DOE-PI nº 250/2024 - Lei nº 8.558, de 23/12/2024
+  - **URL:** https://www.diario.pi.gov.br/doe/files/diarios/anexo/f784c39b-3443-4a43-9b80-275dd09b08ae/DOEPI_250_2024.pdf
+  - **Published:** 2024-12-26
+  - **Supports:** Lei 4.257/1989 art. 23, I, c: 22,5% from 01/04/2025; Lei 4.261/1989 art. 15, I (ITCD causa mortis 2/4/6%) from 01/04/2025.
+- `S-RJ-L2657`
+  - **Publisher:** ALERJ
+  - **Title:** Lei nº 2.657/1996 (consolidada)
+  - **URL:** http://alerjln1.alerj.rj.gov.br/contlei.nsf/f25edae7e64db53b032564fe005262ef/01cc04eee53b3b30032564fb005c2ddf?OpenDocument=
+  - **Published:** n/d
+  - **Supports:** ICMS art. 14, I: 20% (redação Lei 10.253/2023).
+- `S-RJ-LC210`
+  - **Publisher:** ALERJ
+  - **Title:** Lei Complementar nº 210, de 21/07/2023 (FECP)
+  - **URL:** http://alerjln1.alerj.rj.gov.br/contlei.nsf/a99e317a9cfec383032568620071f5d2/1769d26d18823fea03258a5300625f7f?OpenDocument
+  - **Published:** 2023-07-21
+  - **Supports:** Art. 2º, I: FECP = general additional of 2pp on ICMS rates, with listed exceptions.
+- `S-RJ-NEWS`
+  - **Publisher:** ALERJ
+  - **Title:** Alíquota modal do ICMS passa a ser de 20% (notícia)
+  - **URL:** https://www.alerj.rj.gov.br/Visualizar/Noticia/62648
+  - **Published:** 2023-12-21
+  - **Supports:** Lei 10.253/23 raises modal rate 18%->20%, published DOE 21/12/2023.
+- `S-RN-L11999`
+  - **Publisher:** Assembleia Legislativa do RN
+  - **Title:** Lei nº 11.999, de 19/12/2024
+  - **URL:** https://www.al.rn.leg.br/storage/legislacao/2025/stqpzaxnkhj8e1efdy6wnsk815m85v.pdf
+  - **Published:** 2024-12-20
+  - **Supports:** Lei 6.968/1996 art. 27, I, a: 20%; effects 90 days after publication (DOE 20/12/2024). Art. 27-A: +2pp FECOP on listed goods.
+- `S-RN-L11314`
+  - **Publisher:** Assembleia Legislativa do RN
+  - **Title:** Lei nº 11.314, de 23/12/2022
+  - **URL:** http://www.al.rn.leg.br/storage/legislacao/2023/b6o3mq3x0lkfwf09m4nc8wfwdhe78b.pdf
+  - **Published:** 2022-12
+  - **Supports:** 20% from 01/04/2023 to 31/12/2023; 18% from 01/01/2024.
+- `S-RS-L8820`
+  - **Publisher:** Assembleia Legislativa do RS
+  - **Title:** Lei nº 8.820/1989 (consolidada até Lei 16.496 de 09/04/2026)
+  - **URL:** https://www.al.rs.gov.br/filerepository/repLegisComp/Lei%20n%C2%BA%2008.820.pdf
+  - **Published:** 2026-04
+  - **Supports:** ICMS art. 12, II, j: 17%. Art. 13-A: +2pp AMPARA only on listed goods (permanent by Lei 16.109/2024).
+- `S-RO-L688`
+  - **Publisher:** SEFIN-RO
+  - **Title:** Lei nº 688/1996 consolidada (até Lei 5.716/2024)
+  - **URL:** https://www.sefin.ro.gov.br/portalsefin/anexos/L96-688---consolidada---L24-5716_24.pdf
+  - **Published:** 2024
+  - **Supports:** ICMS art. 27, I, c: 19,5% from 12/01/2024 (Lei 5.634/23).
+- `S-RR-L1767`
+  - **Publisher:** Imprensa Oficial de Roraima
+  - **Title:** DOE nº 4352 (30/12/2022) - Lei nº 1.767/2022
+  - **URL:** https://api.transparencia.rr.gov.br/storage/legislacoes/8ebfd665-b203-46d2-a42e-b89bfa6183cb.pdf
+  - **Published:** 2022-12-30
+  - **Supports:** Lei 59/1993 art. 32, I, d: 20%; in force 90 days after publication.
+- `S-RR-L59`
+  - **Publisher:** Assembleia Legislativa de Roraima (SAPL)
+  - **Title:** Lei nº 59/1993 - texto articulado
+  - **URL:** https://sapl.al.rr.leg.br/ta/251/text
+  - **Published:** n/d (notes to Dec 2025)
+  - **Supports:** ICMS art. 32, I, d: 20%. IPVA art. 100 ('alíquotas máximas'): 3% cars, 2% motorcycles. ITCD art. 79: 4%.
+- `S-SC-L10297`
+  - **Publisher:** SEF/SC
+  - **Title:** Lei nº 10.297/1996 (versão de 16/09/2026)
+  - **URL:** https://legislacao.sef.sc.gov.br/html/leis/1996/lei_96_10297.htm
+  - **Published:** 2026-09-16
+  - **Supports:** ICMS art. 19, I: 17%.
+- `S-SP-L6374`
+  - **Publisher:** SEFAZ-SP
+  - **Title:** Lei 6.374/1989 - Artigo 34
+  - **URL:** https://legislacao.fazenda.sp.gov.br/Paginas/lei034.aspx
+  - **Published:** n/d (atualizada até Lei 17.784/2023)
+  - **Supports:** ICMS art. 34, I: 18% (Lei 13.230/2008, from 01/01/2009).
+- `S-SE-ALESE`
+  - **Publisher:** Assembleia Legislativa de Sergipe
+  - **Title:** Por unanimidade, deputados aprovam redução do ICMS para 19%
+  - **URL:** https://al.se.leg.br/por-unanimidade-deputados-aprovam-reducao-do-icms-para-19/
+  - **Published:** 2023-03-31
+  - **Supports:** Modal rate 22% -> 19% from 01/04/2023 (PL 95/2023); PL 96 adds 1% FECOEP.
+- `S-SE-PGE`
+  - **Publisher:** PGE-SE
+  - **Title:** STF confirma constitucionalidade dos adicionais de ICMS para o Fundo de Combate à Pobreza em Sergipe
+  - **URL:** https://pge.se.gov.br/stf-confirma-constitucionalidade-dos-adicionais-de-icms-para-o-fundo-de-combate-a-pobreza-em-sergipe/
+  - **Published:** 2024-06-12 (page update)
+  - **Supports:** Fund: 2% on 'supérfluos' since 2003; since 2023 a 1% 'para demais serviços e produtos', excluding medicines, school supplies, cesta básica and residential electricity up to 150 kWh. Legal basis Lei 4.731.
+- `S-TO-L4141`
+  - **Publisher:** Assembleia Legislativa do Tocantins
+  - **Title:** Lei nº 4.141, de 22/03/2023
+  - **URL:** https://www.al.to.leg.br/arquivos/lei_4141-2023_62676.PDF
+  - **Published:** 2023-03-24
+  - **Supports:** Lei 1.287/2001 art. 27, II: 20%, effects from 01/04/2023.
+- `S-TO-L1287`
+  - **Publisher:** Assembleia Legislativa do Tocantins
+  - **Title:** Lei nº 1.287/2001 - Código Tributário (compilado, inclui Lei 5.061 de 01/07/2026)
+  - **URL:** https://www.al.to.leg.br/arquivos/lei_1287-2001_68306.PDF
+  - **Published:** 2026-07
+  - **Supports:** IPVA art. 78 (2,5%/3,5% cars and motorcycles by power/cc). ITCD art. 61: 2/4/6/8%.
+- `S-SP-IPVA26`
+  - **Publisher:** Agência SP (Governo de SP)
+  - **Title:** IPVA 2026: confira a tabela de valores-base para veículos de São Paulo
+  - **URL:** https://www.agenciasp.sp.gov.br/ipva-2026-confira-a-tabela-de-valores-base-para-veiculos-de-sao-paulo/
+  - **Published:** 2025-12-15
+  - **Supports:** Rates 'permanecem as mesmas': 4% cars, 2% motorcycles (Lei 13.296/2008).
+- `S-SP-MOTO180`
+  - **Publisher:** Agência SP (Governo de SP)
+  - **Title:** Governo de SP sanciona lei que isenta IPVA para motos de até 180 cilindradas
+  - **URL:** https://www.agenciasp.sp.gov.br/transporte-e-transito/governo-de-sp-sanciona-projeto-de-lei-que-isenta-ipvapara-motos-de-ate-180-cilindradas/
+  - **Published:** 2025-12-24
+  - **Supports:** Motorcycles up to 180cc owned by individuals exempt from 2026 (amends Lei 13.296/2008).
+- `S-RJ-L2877`
+  - **Publisher:** ALERJ
+  - **Title:** Lei nº 2.877/1997 (IPVA, consolidada)
+  - **URL:** https://alerjln1.alerj.rj.gov.br/CONTLEI.NSF/c8aa0900025feef6032564ec0060dfff/fa1a422b516211130325657a0064293f?OpenDocument=&ExpandView=&ExpandSection=-2
+  - **Published:** n/d
+  - **Supports:** Art. 10: II 4% cars; II-B 2% motorcycles; VI 2% ethanol-only; VI-A 1,5% GNV/hybrid; VII 0,5% electric.
+- `S-MG-IPVA`
+  - **Publisher:** SEF/MG
+  - **Title:** Como se calcula o IPVA
+  - **URL:** https://www.fazenda.mg.gov.br/empresas/impostos/ipva/calculo.html
+  - **Published:** n/d (Cartilha IPVA 2026 menu)
+  - **Supports:** 4% cars; 2% motorcycles (Lei 14.937/2003 art. 10).
+- `S-ES-IPVA`
+  - **Publisher:** SEFAZ-ES
+  - **Title:** Informações IPVA
+  - **URL:** https://sefaz.es.gov.br/informacoes-ipva
+  - **Published:** n/d
+  - **Supports:** 2% cars; 1% motorcycles; vehicles >15 years exempt.
+- `S-PR-IPVA`
+  - **Publisher:** Secretaria da Fazenda do Paraná
+  - **Title:** Com redução de 45%, Paraná terá menor alíquota de IPVA do Brasil em 2026
+  - **URL:** https://www.fazenda.pr.gov.br/Noticia/Com-reducao-de-45-Parana-tera-menor-aliquota-de-IPVA-do-Brasil-em-2026
+  - **Published:** 2025-08-20
+  - **Supports:** 3,5% -> 1,9% from 2026 for cars and motorcycles >170cc; buses/trucks/rental/GNV stay 1%.
+- `S-PR-IPVA-LAW`
+  - **Publisher:** DETRAN-PR
+  - **Title:** Ratinho Junior sanciona lei que reduz IPVA no Paraná e garante menor alíquota do Brasil
+  - **URL:** https://www.detran.pr.gov.br/Noticia/Ratinho-Junior-sanciona-lei-que-reduz-IPVA-no-Parana-e-garante-menor-aliquota-do-Brasil
+  - **Published:** 2025-09-23
+  - **Supports:** Law sanctioned 23/09/2025 (PL 690/2025); keeps exemption of motorcycles up to 170cc (sanctioned Dec 2024).
+- `S-SC-IPVA`
+  - **Publisher:** SEF/SC
+  - **Title:** Secretaria de Estado da Fazenda divulga calendário do IPVA para 2026
+  - **URL:** https://www.sef.sc.gov.br/noticias/secretaria-de-estado-da-fazenda-divulga-calendario-do-ipva-para-2026
+  - **Published:** 2025-12-16
+  - **Supports:** No change in rates: 2% cars, 1% motorcycles; motorcycles up to 200cc exempt (no traffic infraction prior year); 20+ year vehicles exempt from 2026.
+- `S-RS-IPVA`
+  - **Publisher:** Secretaria da Fazenda do RS
+  - **Title:** IPVA 2026: pagamento inicia na terça-feira (16/12)...
+  - **URL:** https://fazenda.rs.gov.br/ipva-2026-pagamento-inicia-na-terca-feira-16-12-com-desconto-maximo-para-quase-1-milhao-de-veiculos
+  - **Published:** 2025-12-10
+  - **Supports:** 3% cars (automóveis e camionetas); 2% motorcycles; applies to vehicles made from 2007.
+- `S-DF-L7431`
+  - **Publisher:** SINJ-DF
+  - **Title:** Lei nº 7.431/1985 (IPVA no DF) - compilada
+  - **URL:** https://www.sinj.df.gov.br/sinj/Norma/a915cb5059cf4561a3bbbbe4285317ed/Lei_federal_7431.html.html
+  - **Published:** n/d
+  - **Supports:** Art. 3º (Lei 6.445/2019): II 2% motorcycles; III 3% cars.
+- `S-MT-IPVA26`
+  - **Publisher:** SEFAZ-MT
+  - **Title:** Portaria nº 196/2025 (IPVA 2026)
+  - **URL:** http://app1.sefaz.mt.gov.br/sistema/legislacao/legislacaotribut.nsf/173e6c0d2202fdcb03258b1700659f1e/d8fcadea198ff27603258d6f00518320?OpenDocument=
+  - **Published:** 2025-12-23
+  - **Supports:** Art. 2º: cars <=1000cc 2%, other passenger 3%; motorcycles <=180cc 1%, 180-300cc 2,5%, 300-600cc 3%, >600cc 3,5%.
+- `S-MT-IPVA26N`
+  - **Publisher:** SEFAZ-MT
+  - **Title:** Sefaz divulga valores venais de veículos para cálculo do IPVA 2026
+  - **URL:** https://www5.sefaz.mt.gov.br/en/w/sefaz-divulga-valores-venais-de-ve%C3%ADculos-para-c%C3%A1lculo-do-ipva-2026
+  - **Published:** 2026-01-05
+  - **Supports:** 'As alíquotas do imposto permanecem inalteradas, variando entre 1% e 4%'.
+- `S-MS-IPVA`
+  - **Publisher:** SEFAZ-MS
+  - **Title:** IPVA (página institucional, referência 2026)
+  - **URL:** https://www.sefaz.ms.gov.br/ipva/
+  - **Published:** n/d (ref. 2026)
+  - **Supports:** Automóvel: 5% (novos); usados 3,00% (5% with 40% reduction) from 01/01/2026; motorcycles 2%.
+- `S-BA-IPVA`
+  - **Publisher:** SEFAZ-BA
+  - **Title:** IPVA - Informações
+  - **URL:** https://www.sefaz.ba.gov.br/inspetoria-eletronica/ipva/informacoes/
+  - **Published:** n/d
+  - **Supports:** 2,5% cars (non-diesel), 3% diesel cars; 1% motorcycles.
+- `S-PE-IPVA26`
+  - **Publisher:** SEFAZ-PE
+  - **Title:** Governo de Pernambuco divulga calendário do IPVA 2026 com alíquota mantida em 2,4%
+  - **URL:** https://www.sefaz.pe.gov.br/Noticias-Destaque/Paginas/Governo-de-Pernambuco-divulga-calend%C3%A1rio-do-IPVA-2026-com-al%C3%ADquota-mantida-em-2,4,-a-menor-do-Nordeste.aspx
+  - **Published:** n/d (Dec 2025)
+  - **Supports:** General 2,4% for the third consecutive year; motorcycles 1% or 2%; GNV 1,5%.
+- `S-PE-IPVA-FAQ`
+  - **Publisher:** SEFAZ-PE
+  - **Title:** IPVA - Perguntas e Respostas
+  - **URL:** https://www.sefaz.pe.gov.br/Servicos/IPVA/Paginas/Perguntas-e-Respostas.aspx
+  - **Published:** n/d
+  - **Supports:** Lei 10.849/1992 art. 12-B III: motorcycles 1% (<50cc), 2% (>=50cc); electric vehicles exempt.
+- `S-CE-IPVA`
+  - **Publisher:** SEFAZ-CE
+  - **Title:** IPVA - Alíquotas praticadas
+  - **URL:** https://servicos.sefaz.ce.gov.br/internet/IPVA/gerados/aliquotas_praticadas.asp
+  - **Published:** n/d (page dated 17/10/2026 on access)
+  - **Supports:** Cars 2,5% (<=100cv), 3% (100-180cv), 3,5% (>180cv); motorcycles 2% (<=125cc; 1% with 50% reduction if no fines), 3%, 3,5% (Lei 15.893/2015).
+- `S-PB-IPVA-L11007`
+  - **Publisher:** SEFAZ-PB
+  - **Title:** Nova Lei do IPVA - Lei 11.007
+  - **URL:** https://www.sefaz.pb.gov.br/announcements/5033-nova-lei-do-imposto-sobre-a-propriedade-de-veiculos-automotores-ipva-lei-11-007
+  - **Published:** 2017-11-07 (law)
+  - **Supports:** Art. 12, II: 2,5% for cars and motorcycles (effects from 01/01/2018).
+- `S-PB-IPVA26`
+  - **Publisher:** SEFAZ-PB
+  - **Title:** SEFAZ-PB publica calendário de pagamento do IPVA 2026 e mantém regras
+  - **URL:** https://www.sefaz.pb.gov.br/announcements/17102-sefaz-pb-publica-calendario-de-pagamento-do-ipva-2026-e-mantem-regras
+  - **Published:** n/d (Dec 2025)
+  - **Supports:** Rules kept for 2026; motorcycles up to 170cc exempt; vehicles made up to 2010 exempt in 2026.
+- `S-RN-L9992`
+  - **Publisher:** Assembleia Legislativa do RN
+  - **Title:** Lei nº 9.992, de 29/10/2015 (IPVA)
+  - **URL:** https://www.al.rn.leg.br/storage/legislacao/2015/11/06/70130df2a51712cf21c4247afa81282a.pdf
+  - **Published:** 2015-10-30
+  - **Supports:** Lei 6.967/1996 art. 4º, III: 3% cars and any vehicle not in I/II (effects 01/02/2016).
+- `S-RN-L12026`
+  - **Publisher:** Assembleia Legislativa do RN
+  - **Title:** Lei nº 12.026, de 27/12/2024 (IPVA)
+  - **URL:** https://www.al.rn.leg.br/storage/legislacao/2025/0v7xxbbydx15hpw1fa1bk4c2hvdtl1.pdf
+  - **Published:** 2024-12-28
+  - **Supports:** Art. 4º IV: 1,5% GNV; art. 4º-A: electric 0,5% rising 0,5pp/year up to half of art. 4 rates.
+- `S-AL-IPVA`
+  - **Publisher:** SEFAZ-AL
+  - **Title:** FAQ IPVA - 3. Cálculo e alíquotas
+  - **URL:** https://www.sefaz.al.gov.br/nise/faq/ipva/473-3-calculo-e-aliquotas
+  - **Published:** n/d
+  - **Supports:** Cars 2,75% (<=80HP), 3% (80-160HP), 3,25% (>160HP); motorcycles 2% (<=150cc), 2,75% (150-400cc), 3,25% (>400cc); electric 2%; GNV/hybrid 1,5%.
+- `S-SE-IPVA26`
+  - **Publisher:** Governo de Sergipe (Agência)
+  - **Title:** Condutores sergipanos já podem consultar os valores do IPVA 2026
+  - **URL:** https://www.se.gov.br/agencia/noticias/governo/condutores_sergipanos_ja_podem_consultar_os_valores_do_ipva_2026_
+  - **Published:** n/d (early 2026)
+  - **Supports:** Cars 2,5% (value < R$120k), 3% above; motorcycles 2%; motorcycles up to 165cc exempt.
+- `S-SE-IPVA25`
+  - **Publisher:** Governo de Sergipe (Agência)
+  - **Title:** Condutores já podem consultar os valores do IPVA 2025
+  - **URL:** https://sergipe.se.gov.br/noticias/governo/condutores_ja_podem_consultar_os_valores_do_ipva_2025_
+  - **Published:** 2025-01-02
+  - **Supports:** Same rates for 2025.
+- `S-PI-MOTO26`
+  - **Publisher:** Governo do Piauí
+  - **Title:** Isenção do IPVA para motos de até 170 cilindradas será mantida pelo Governo do Piauí em 2026
+  - **URL:** https://www.pi.gov.br/isencao-do-ipva-para-motos-de-ate-170-cilindradas-sera-mantida-pelo-governo-do-piaui-em-2026/
+  - **Published:** 2025-12-30
+  - **Supports:** Motorcycles up to 170cc: IPVA zero in 2025 and 2026; vehicles >15 years exempt. No rates for cars.
+- `S-PA-IPVA26`
+  - **Publisher:** Agência Pará (Governo do Pará / SEFA)
+  - **Title:** Sefa divulga calendário e regras do IPVA 2026...
+  - **URL:** https://agenciapara.com.br/noticia/73454/sefa-divulga-calendario-e-regras-do-ipva-2026-com-ate-15-de-desconto-para-bons-motoristas
+  - **Published:** 2025-12-17
+  - **Supports:** Rates 'permanecem conforme os critérios estabelecidos em lei': 2,5% cars; 1% motorcycles; motorcycles <=200cc 30-100% reduction (Lei 6.017/96).
+- `S-AC-LC483`
+  - **Publisher:** SEFAZ-AC
+  - **Title:** Lei Complementar nº 483, de 17/12/2024 (IPVA)
+  - **URL:** https://sefaz.ac.gov.br/2021/?p=21413
+  - **Published:** 2024-12-17
+  - **Supports:** Art. 25: 2% cars; 1% motorcycles; 0% two-wheelers <=170cc of individuals owning one vehicle; effects from 01/01/2025.
+- `S-RO-IPVA22`
+  - **Publisher:** Governo de Rondônia
+  - **Title:** Sefin esclarece que não houve aumento de alíquotas do IPVA
+  - **URL:** https://rondonia.ro.gov.br/sefin-esclarece-que-nao-houve-aumento-de-aliquotas-do-ipva/
+  - **Published:** 2022
+  - **Supports:** Lei 950/2000: 2% motorcycles and cars up to 1000cc; 3% other vehicles; 1% transport/rental.
+- `S-RO-MOTO26`
+  - **Publisher:** Governo de Rondônia
+  - **Title:** Rondônia amplia quantidade de motoristas de aplicativo e motociclistas beneficiados com IPVA zero em 2026
+  - **URL:** https://rondonia.ro.gov.br/rondonia-amplia-quantidade-de-motoristas-de-aplicativo-e-motociclistas-beneficiados-com-ipva-zero-em-2026/
+  - **Published:** 2026
+  - **Supports:** Motorcycles up to 170cc: IPVA zero since 2024 (also 2025, 2026).
+- `S-SP-L10705`
+  - **Publisher:** SEFAZ-SP
+  - **Title:** Lei nº 10.705/2000 (ITCMD)
+  - **URL:** https://legislacao.fazenda.sp.gov.br/Paginas/lei10705.aspx
+  - **Published:** n/d
+  - **Supports:** Art. 16: 4% (from 01/01/2002).
+- `S-RJ-L7174`
+  - **Publisher:** ALERJ
+  - **Title:** Lei nº 7.174/2015 (ITD)
+  - **URL:** https://alerjln1.alerj.rj.gov.br/CONTLEI.NSF/c8aa0900025feef6032564ec0060dfff/38c6d405dd5c89fd83257f1f006deb65?OpenDocument=
+  - **Published:** n/d
+  - **Supports:** Art. 26: 4% (<=70k UFIR-RJ), 4,5%, 5%, 6%, 7%, 8% (>400k UFIR-RJ), applied on the total.
+- `S-MG-L14941`
+  - **Publisher:** SEF/MG
+  - **Title:** Lei nº 14.941/2003 (ITCD)
+  - **URL:** https://www.fazenda.mg.gov.br/empresas/legislacao_tributaria/leis/l14941_2003.html
+  - **Published:** n/d
+  - **Supports:** Art. 10: 5%.
+- `S-ES-L10011`
+  - **Publisher:** SEFAZ-ES
+  - **Title:** Lei nº 10.011/2013 (ITCMD)
+  - **URL:** https://sefaz.es.gov.br/Media/Sefaz/Legisla%C3%A7%C3%A3o/Legislacao-em-Destaque/LEI%20N.%C2%B0%2010.011.pdf
+  - **Published:** n/d
+  - **Supports:** Art. 12: 4%.
+- `S-PR-L18573`
+  - **Publisher:** Casa Civil PR - Sistema Legislação
+  - **Title:** Lei nº 18.573/2015 (ITCMD)
+  - **URL:** https://www.legislacao.pr.gov.br/legislacao/listarAtosAno.do?action=exibir&codAto=147423&codItemAto=901210
+  - **Published:** n/d
+  - **Supports:** Art. 22: 4% for any transmission.
+- `S-SC-L13136`
+  - **Publisher:** SEF/SC
+  - **Title:** Lei nº 13.136/2004 (ITCMD)
+  - **URL:** https://legislacao.sef.sc.gov.br/html/leis/2004/lei_04_13136.htm
+  - **Published:** n/d (versão 13/01/2025)
+  - **Supports:** Art. 9º marginal: 1% (<=R$20k), 3%, 5%, 7% (>R$150k).
+- `S-RS-L8821`
+  - **Publisher:** Assembleia Legislativa do RS
+  - **Title:** Lei nº 8.821/1989 (consolidada até Lei 16.244/2024)
+  - **URL:** https://www.al.rs.gov.br/filerepository/repLegisComp/Lei%20n%C2%BA%2008.821.pdf
+  - **Published:** 2024-12
+  - **Supports:** Art. 18 causa mortis per quinhão: 0% (<=2k UPF-RS), 3%, 4%, 5%, 6% (>50k UPF-RS); art. 19 doação: 3% (<=10k UPF-RS), 4%.
+- `S-BA-L4826`
+  - **Publisher:** SEFAZ-BA
+  - **Title:** Lei nº 4.826/1989 (ITD)
+  - **URL:** https://mbusca.sefaz.ba.gov.br/DITRI/leis/leis_estaduais/legest_1989_4826_lei_itd.pdf
+  - **Published:** n/d
+  - **Supports:** Art. 9º (Lei 14.802/2024, from 27/03/2025): doação 3/3,5/4%; causa mortis 4/6/8% (quinhão >R$100k). Before 27/03/2025: doação 3,5%; causa mortis 4/6/8% by espólio.
+- `S-CE-L15812`
+  - **Publisher:** Assembleia Legislativa do Ceará
+  - **Title:** Lei nº 15.812/2015 (ITCD)
+  - **URL:** https://www2.al.ce.gov.br/legislativo/legislacao5/leis2015/15812.htm
+  - **Published:** 2015
+  - **Supports:** Art. 16: 2/4/6/8% (causa mortis and doação, UFIRCE brackets).
+- `S-DF-L3804`
+  - **Publisher:** SINJ-DF
+  - **Title:** Lei nº 3.804/2006 (ITCD)
+  - **URL:** https://www.sinj.df.gov.br/sinj/Norma/51724/Lei_3804_08_02_2006.html
+  - **Published:** n/d
+  - **Supports:** Art. 9º (Lei 5.549/2015): 4% / 5% / 6% marginal.
+- `S-DF-AD25`
+  - **Publisher:** SINJ-DF
+  - **Title:** Ato Declaratório SUREC nº 25/2025
+  - **URL:** https://www.sinj.df.gov.br/sinj/Norma/5d5a001e8f024029983a75abc5159ee9/Ato_Declarat_rio_25_12_12_2025.html
+  - **Published:** 2025-12-16
+  - **Supports:** 2026 ITCD thresholds: R$ 1.644.288,50 and R$ 3.288.577,00.
+- `S-PE-LC563`
+  - **Publisher:** SEFAZ-PE
+  - **Title:** Lei Complementar nº 563, de 30/06/2025
+  - **URL:** https://www.sefaz.pe.gov.br/Legislacao/Tributaria/Documents/Legislacao/Leis_Complementares_Estadual/2025/LCE563_2025.htm
+  - **Published:** 2025-07-01
+  - **Supports:** From 01/01/2026: exempt up to R$80k; 2% / 4% / 6% / 8% with deductions (Anexo 3).
+- `S-PB-L5123`
+  - **Publisher:** SEFAZ-PB
+  - **Title:** Lei nº 5.123/1989 (ITCD) atualizada
+  - **URL:** https://www.sefaz.pb.gov.br/legislacao/66-leis/itcd/6138-lei-n-5-123-de-27-de-janeiro-de-1990
+  - **Published:** n/d
+  - **Supports:** Art. 6º (Lei 12.585/2023): 2/4/6/8%.
+- `S-RN-L9993`
+  - **Publisher:** Assembleia Legislativa do RN
+  - **Title:** Lei nº 9.993/2015 (ITCD)
+  - **URL:** https://www.al.rn.leg.br/storage/legislacao/2015/11/23/4a8e7c2a1ccd19e4e59037b0ffa46b85.pdf
+  - **Published:** 2015-10-29
+  - **Supports:** Lei 5.887/1989 art. 7º: 3/4/5/6% marginal.
+- `S-SE-L7724`
+  - **Publisher:** Assembleia Legislativa de Sergipe
+  - **Title:** Lei nº 7.724/2013 (ITCMD)
+  - **URL:** https://aleselegis.al.se.leg.br/Arquivo/Documents/legislacao/html/l77242013.html
+  - **Published:** n/d
+  - **Supports:** Art. 14: causa mortis 3/6/8%; quotas 2%; doação de imóveis 2/4/6/8%.
+- `S-AL-L9440`
+  - **Publisher:** Assembleia Legislativa de Alagoas (SAPL)
+  - **Title:** Lei nº 9.440, de 27/12/2024
+  - **URL:** https://sapl.al.al.leg.br/media/sapl/public/normajuridica/2024/3246/lei_no_9.440_de_27_de_dezembro_de_2024_2_-_ultima_publicacao.pdf
+  - **Published:** 2024-12-27
+  - **Supports:** Lei 5.077/1989 art. 168: causa mortis 4/6/8%; doação 1/1,5/2%.
+- `S-PI-LC327`
+  - **Publisher:** Assembleia Legislativa do Piauí (SAPL)
+  - **Title:** Lei Complementar nº 327, de 17/12/2025
+  - **URL:** https://sapl.al.pi.leg.br/media/sapl/public/normajuridica/2025/6912/sei_0021691014_lei_complementar_327.pdf
+  - **Published:** 2025-12-17
+  - **Supports:** Lei 4.261/1989 art. 15, II (doação): 2% (<=10k UFR-PI), 4% above.
+- `S-PA-L8868`
+  - **Publisher:** Imprensa Oficial do Pará
+  - **Title:** DOE 12/06/2019 - Lei nº 8.868/2019
+  - **URL:** https://www.ioepa.com.br/pages/2019/2019.06.12.DOE.pdf
+  - **Published:** 2019-06-12
+  - **Supports:** Lei 5.529/1989 art. 8º: causa mortis 2-6%; doação 2-4% (from 01/01/2020).
+- `S-AP-D5541`
+  - **Publisher:** DIOFE-AP
+  - **Title:** Decreto nº 5.541, de 13/05/2025 (regulamenta Lei 3.149/2024)
+  - **URL:** https://diofe.portal.ap.gov.br/portal/edicoes/download/2518
+  - **Published:** 2025-05-13
+  - **Supports:** Art. 15: causa mortis 2/3/4/5/6%; doação 2/3/4% (UPF/AP brackets).
+- `S-AC-LC373`
+  - **Publisher:** SEFAZ-AC
+  - **Title:** Lei Complementar nº 373/2020 (ITCMD)
+  - **URL:** https://sefaz.ac.gov.br/2021/?p=5118
+  - **Published:** 2020-12-11
+  - **Supports:** Art. 29: causa mortis 4-7% marginal above R$50k, 8% for collaterals; art. 30: doação 2/4/6/8%.
+- `S-RO-L959`
+  - **Publisher:** SEFIN-RO
+  - **Title:** Lei nº 959/2000 (ITCD)
+  - **URL:** https://legislacao.sefin.ro.gov.br/Download?arquivo=c3c0f31dc8b92b5e63cefa697077ed4e.pdf&nome=L00-959-ITCD.pdf
+  - **Published:** n/d
+  - **Supports:** Art. 5º: 2% / 3% / 4% (UPF/RO brackets).
+- `S-MT-RITCD`
+  - **Publisher:** SEFAZ-MT
+  - **Title:** Decreto nº 905/2017 (altera art. 25 do RITCD)
+  - **URL:** https://app1.sefaz.mt.gov.br/sistema/legislacao/legislacaotribut.nsf/7c7b6a9347c50f55032569140065ebbf/d619f160510c8a23842580f4005d4848
+  - **Published:** 2017-03-30
+  - **Supports:** Causa mortis: exempt to 1.500 UPF/MT, then 2/4/6/8%; doação: exempt to 500 UPF/MT, then 2/4/6/8%.
+
+All sources accessed 2026-10-17.

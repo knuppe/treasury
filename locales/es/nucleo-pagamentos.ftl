@@ -1,0 +1,30 @@
+# Boletos, Pix "copia e cola" y comprobantes leídos en la computadora
+# (docs/ocr-other-documents.md): mensajes del núcleo.
+nucleo-pagamentos-boleto = Boleto
+nucleo-pagamentos-boleto-do-banco = Boleto { $banco }
+nucleo-pagamentos-pix = Pix
+nucleo-pagamentos-transferencia = Transferencia
+nucleo-pagamentos-seg-prefeitura = Municipalidad (impuesto inmobiliario o tasa)
+nucleo-pagamentos-seg-agua = Factura de agua
+nucleo-pagamentos-seg-energia = Factura de luz o gas
+nucleo-pagamentos-seg-telefone = Factura de teléfono o internet
+nucleo-pagamentos-seg-governo = Impuesto o tasa del gobierno
+nucleo-pagamentos-seg-multa = Multa de tránsito
+nucleo-pagamentos-seg-conta = Cuenta por pagar
+nucleo-pagamentos-aviso-sem-valor = El código no trae el monto; revísalo y complétalo.
+nucleo-pagamentos-aviso-sem-vencimento = No se leyó el vencimiento; revísalo y complétalo.
+nucleo-pagamentos-aviso-pix-dinamico = Pix de cobro: la app no consulta el banco del destinatario, solo usa lo que está en el código.
+nucleo-pagamentos-aviso-revisar = Revisa el monto y la fecha: el comprobante no se leyó por completo.
+nucleo-pagamentos-nota-boleto = Línea digitable: { $linha }
+nucleo-pagamentos-nota-pix = Pix copia y pega: { $codigo }
+nucleo-pagamentos-erro-codigo = El código del boleto o del Pix no coincide.
+nucleo-pagamentos-erro-ja-lancado = Este boleto o Pix ya está registrado como previsto.
+nucleo-pagamentos-erro-valor = Indica el monto a pagar.
+nucleo-pagamentos-erro-sem-lancamento = Elige el movimiento del comprobante o crea uno.
+nucleo-pagamentos-historico-previsto = Cuenta por pagar prevista: { $descricao }
+nucleo-pagamentos-historico-comprovante = Comprobante vinculado al movimiento: { $descricao }
+nucleo-pagamentos-nota-comprovante = Comprobante
+nucleo-pagamentos-nota-comprovante-pix = Comprobante de Pix
+nucleo-pagamentos-nota-comprovante-boleto = Comprobante de boleto pagado
+nucleo-pagamentos-nota-comprovante-transferencia = Comprobante de transferencia
+nucleo-pagamentos-aviso-agendamento = Comprobante de programación: el dinero aún no salió; el movimiento queda previsto.

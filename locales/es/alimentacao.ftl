@@ -1,0 +1,322 @@
+# 06 · Consumo (docs/consumption.md; antes Alimentación, docs/consumption.md): visión general,
+# compras, productos, precio por kg/L y las categorías de producto en Ajustes › Categorías.
+
+alimentacao-abas = Secciones de Consumo
+alimentacao-aba-produtos = Productos
+alimentacao-resumo = Consumo del mes
+alimentacao-em-casa = Comida en casa
+alimentacao-em-casa-dica = { $cupons } de los cupones y { $sem } de mercado sin cupón
+alimentacao-fora = Comida fuera
+alimentacao-por-classe = Esencial, complementario y superfluo
+alimentacao-classes-dica = Por los artículos de las compras con movimiento. Las clases son tuyas: cambia la del producto o la de la categoría cuando quieras.
+alimentacao-por-categoria = Por categoría
+alimentacao-ultimos-meses = Últimos seis meses
+alimentacao-mes = Mes
+alimentacao-fora-parte = Comer fuera fue el { $pct }% de la comida del mes.
+alimentacao-itens-sem-produto = { $n } ítems de cupones antiguos todavía sin producto.
+alimentacao-ligar = Vincular a productos
+alimentacao-ligados = { $n } ítems vinculados a productos.
+alimentacao-classe-essencial = Esencial
+alimentacao-classe-complementar = Complementario
+alimentacao-classe-superfluo = Superfluo
+alimentacao-classe-sem = Sin clase
+alimentacao-classe = Clase
+alimentacao-classe-dica = La del producto vale más que la de la categoría.
+alimentacao-classe-da-categoria = La de la categoría
+alimentacao-por-kg = /kg
+alimentacao-por-l = /L
+alimentacao-por-un = /ud.
+alimentacao-produtos = Productos
+alimentacao-buscar = Buscar producto
+alimentacao-produto = Producto
+alimentacao-categoria = Categoría
+alimentacao-compras = Compras
+alimentacao-preco-unidade = Último precio por kg/L/ud.
+alimentacao-variacao = Variación
+alimentacao-ultima-compra = Última compra
+alimentacao-sem-produtos = Todavía no hay productos: registra una compra en la pestaña Compras.
+alimentacao-data = Fecha
+alimentacao-loja = Tienda
+alimentacao-valor = Valor
+alimentacao-historico = Historial de precio de { $nome }
+alimentacao-variacao-frase = De { $primeiro }{ $unidade } en la primera compra a { $ultimo }{ $unidade } en la última ({ $variacao }).
+alimentacao-juntar = Unir con
+alimentacao-juntar-dica = El mismo producto con otro nombre o de otra tienda.
+alimentacao-juntar-botao = Unir
+alimentacao-juntados = Productos unidos
+alimentacao-cat-explicacao = Las categorías de los productos comprados, con la clase de cada una. Las de arriba son los segmentos (Alimentación, Ropa…). Sin clase, la categoría hereda la del padre. "Alimento" decide qué cuenta como comida en casa.
+alimentacao-cat-nova = Nueva categoría de producto
+alimentacao-cat-nome = Nombre de la categoría
+alimentacao-cat-criar = Crear
+alimentacao-cat-lista = Categorías de producto
+alimentacao-cat-renomear = Renombrar
+alimentacao-cat-classe-de = Clase de { $nome }
+alimentacao-cat-herdada = Heredada ({ $classe })
+alimentacao-cat-alimento = Alimento
+alimentacao-cat-sub = Nueva subcategoría
+alimentacao-cat-apagar = Borrar { $nome }
+
+# Consumo (docs/consumption.md): visión general por segmento, compras y la compra registrada a mano.
+alimentacao-aba-visao = Visión general
+alimentacao-aba-compras = Compras
+alimentacao-segmentos = Segmentos
+alimentacao-segmentos-dica = Contra el mes anterior. Elige un segmento para ver sus categorías, clases y productos.
+alimentacao-todos = Todos
+alimentacao-ver-todos = Ver todos
+alimentacao-itens =
+    { $n ->
+        [one] 1 artículo
+       *[other] { $n } artículos
+    }
+alimentacao-total = Total
+alimentacao-total-mes = Total del mes
+alimentacao-contra-anterior = { $variacao } contra el mes anterior ({ $anterior })
+alimentacao-por-pessoa-dica = Comida por persona ({ $n }): { $valor }
+alimentacao-compras-sem-lancamento = Compras sin movimiento
+alimentacao-compras-sem-lancamento-dica = { $n } de { $total } compras del mes; no cuentan como gasto hasta tener el movimiento
+alimentacao-outros-segmentos = Aparte de la comida
+alimentacao-categorias-de = Categorías de { $segmento }
+alimentacao-mais-pesaram = Lo que más pesó en el mes
+alimentacao-subiram = Lo que más subió de precio
+alimentacao-sem-altas = Ningún producto comprado en el mes quedó más caro que en la primera compra.
+alimentacao-sem-compras = Ninguna compra con movimiento en este mes.
+alimentacao-escolha-produto = Elige un producto para ver su precio en el tiempo, cambiar la categoría o juntarlo con otro.
+alimentacao-compras-titulo = Compras
+alimentacao-sem-compras-lista = Ninguna compra en el período. Registra una en "Nueva compra".
+alimentacao-buscar-compra = Buscar tienda o artículo
+alimentacao-periodo = Período
+alimentacao-periodo-mes = El mes
+alimentacao-periodo-3m = 3 meses
+alimentacao-periodo-12m = 12 meses
+alimentacao-ler-cupom = Leer recibo
+alimentacao-nova-compra = Nueva compra
+alimentacao-nova-compra-dica = Para la feria, una tienda sin comprobante o un ticket borrado. La categoría de cada artículo vale para el producto en las próximas compras.
+alimentacao-editar-compra = Editar compra
+alimentacao-gravar-compra = Guardar compra
+alimentacao-compra-gravada = Compra guardada
+alimentacao-compra-editada = Compra editada
+alimentacao-compra-apagada = Compra eliminada
+alimentacao-sem-loja = Sin tienda
+alimentacao-familia = Familia
+alimentacao-compra-linha =
+    { $n ->
+        [one] 1 artículo · { $membro }
+       *[other] { $n } artículos · { $membro }
+    }
+alimentacao-origem-manual = a mano
+alimentacao-origem-cupom = comprobante fiscal
+alimentacao-lancamento = Movimiento
+alimentacao-com-lancamento = Vinculada
+alimentacao-sem-lancamento = Sin movimiento
+alimentacao-pago = Pagado
+alimentacao-imposto = Impuesto
+alimentacao-editar-de = Editar la compra de { $loja }
+alimentacao-apagar-de = Eliminar la compra de { $loja }
+alimentacao-desconto-de = Descuento de { $valor } repartido entre los artículos.
+alimentacao-loja-dica = Las últimas tiendas aparecen al escribir.
+alimentacao-membro = Quién compró
+alimentacao-membro-auto = El del movimiento
+alimentacao-itens-da-compra = Artículos de la compra
+alimentacao-item-descricao = Descripción
+alimentacao-item-qtd = Cant.
+alimentacao-item-unidade = Unidad
+alimentacao-item-preco = Precio unitario
+alimentacao-item-total = Total
+alimentacao-item-descricao-n = Descripción del artículo { $n }
+alimentacao-item-descricao-exemplo = Ej.: Tomate, Camiseta, Audífonos
+alimentacao-item-qtd-n = Cantidad del artículo { $n }
+alimentacao-item-unidade-n = Unidad del artículo { $n }
+alimentacao-item-preco-n = Precio unitario del artículo { $n }
+alimentacao-item-total-n = Total del artículo { $n }
+alimentacao-item-categoria-n = Categoría del artículo { $n }
+alimentacao-item-remover-n = Quitar el artículo { $n }
+alimentacao-item-adicionar = Agregar artículo
+alimentacao-categoria-automatica = Automática (por el nombre)
+alimentacao-soma-itens = Suma de los artículos
+alimentacao-desconto = Descuento
+alimentacao-total-pago = Total pagado
+alimentacao-pagamento = Cómo se pagó
+alimentacao-pagamento-criar = Crear el gasto
+alimentacao-pagamento-ligar = Vincular a un movimiento
+alimentacao-pagamento-sem = Sin movimiento
+alimentacao-pagamento-sem-dica = La compra queda aparte y no cuenta como gasto hasta tener un movimiento.
+alimentacao-conta = Cuenta
+alimentacao-categoria-lancamento = Categoría del movimiento
+alimentacao-categoria-lancamento-dica = Si no eliges: Supermercado, cuando casi todo es comida.
+alimentacao-candidatos = Movimientos con el mismo valor
+alimentacao-sem-candidatos = Ningún gasto con ese valor cerca de esa fecha. Crea el gasto o déjala sin movimiento.
+alimentacao-lancamento-criado = El movimiento creado con la compra (sigue el nuevo valor)
+alimentacao-lancamento-atual = El movimiento vinculado ahora
+alimentacao-nome-produto = Nombre del producto
+alimentacao-nome-produto-dica = Cómo aparece en las listas. Las próximas compras del mismo artículo siguen yendo a este producto.
+
+# Comprobante de otro país por el QR (receipts/foreign.rs)
+alimentacao-nota-exterior = { $pais ->
+    [PT] Factura de Portugal
+    [ES] Factura de España
+   *[AR] Comprobante de Argentina
+} leído por el QR de la { $orgao }: { $documento }, { $rotulo } { $cuit }.
+alimentacao-nota-exterior-valor = Importe en el comprobante:
+alimentacao-nota-exterior-convertido = en tu moneda a la cotización del { $data }:
+alimentacao-nota-exterior-sem-cotacao = la app no tiene cotización de esta moneda; ingresa el importe en tu moneda (el del resumen de la tarjeta).
+alimentacao-nota-exterior-itens = El QR de la { $orgao } no trae los ítems ni el nombre del comercio: agrega los ítems con la foto del ticket o a mano, y cambia el nombre del comercio si quieres.
+alimentacao-codigo-barras = Código de barras
+alimentacao-codigo-todos = Todos
+alimentacao-codigo-com = Con código de barras
+alimentacao-codigo-sem = Sin código de barras
+
+## Inflación de tu canasta (docs/gtin-inflation.md §5)
+alimentacao-aba-precos = Precios
+alimentacao-cesta-titulo = Inflación de tu canasta
+alimentacao-cesta-manchete = Las mismas compras que hiciste en los últimos 3 meses habrían costado { $antes } hace un año. Hoy costaron { $agora } ({ $variacao }).
+alimentacao-cesta-sem-ano = Todavía no hay compras de hace un año para comparar las mismas compras.
+alimentacao-cesta-poucas = Todavía hay pocas compras repetidas (el mismo producto, en la misma tienda) para medir la inflación de tu canasta.
+alimentacao-cesta-sua = Tu canasta en 12 meses
+alimentacao-cesta-sua-dica = Los mismos productos, en la misma tienda, mes a mes.
+alimentacao-cesta-oficial = Índice oficial de alimentos
+alimentacao-cesta-oficial-dica = En el mismo período, según el organismo oficial.
+alimentacao-cesta-oficial-sem = Sin índice oficial de alimentos para tu país, o todavía no descargado.
+alimentacao-cesta-grafico = Tu canasta y el índice oficial de alimentos, base 100
+alimentacao-cesta-serie = Tu canasta
+alimentacao-cesta-metodo = Cómo se calcula: el precio por kg, L o unidad, ya con descuento, del mismo producto en la misma tienda, mes a mes; cambiar de tienda no cuenta como inflación. Un mes con pocas compras repetidas queda sin punto.
+alimentacao-cesta-mudaram = Lo que más cambió de precio
+alimentacao-cesta-subiram = Subieron
+alimentacao-cesta-cairam = Bajaron
+alimentacao-cesta-nada = Nada por aquí todavía.
+alimentacao-cesta-resumo = Tu canasta: { $sua } en 12 meses. { $nome }: { $oficial }.
+alimentacao-cesta-ver = Ver precios
+
+## Salud de la canasta (Open Food Facts) y los productos de la misma línea (docs/gtin-inflation.md §4 y §7)
+alimentacao-aba-saude = Salud
+alimentacao-saude-titulo = Salud de la canasta
+alimentacao-saude-desligada = Con Open Food Facts activado, Treasury muestra el grupo NOVA, los "alto en", la proteína y los alérgenos de los productos que compras.
+alimentacao-saude-privacidade = Solo el código de barras sale de tu computadora, una vez por producto; nunca la tienda, la fecha, el precio ni el ticket. Los datos son abiertos (ODbL) e indicativos.
+alimentacao-saude-ligar = Activar Open Food Facts
+alimentacao-saude-ligada = Open Food Facts activado
+alimentacao-saude-buscar = Buscar datos de los productos
+alimentacao-saude-buscar-n =
+    { $n ->
+        [one] Buscar datos de 1 producto
+       *[other] Buscar datos de { $n } productos
+    }
+alimentacao-saude-buscando = La consulta es lenta a propósito (algunos segundos por producto), para respetar el límite de Open Food Facts.
+alimentacao-saude-buscou = { $encontrados } de { $consultados } productos encontrados en Open Food Facts.
+alimentacao-saude-buscou-falhas = { $falhas } consultas fallaron; inténtalo de nuevo más tarde.
+alimentacao-saude-buscou-faltam = Faltan { $faltam } productos; quedan para la próxima vez.
+alimentacao-saude-cobertura = { $pct } de tu gasto en comida de los últimos 3 meses tiene datos de Open Food Facts.
+alimentacao-saude-pouca = Todavía es poco para mostrar las partes del gasto: los números aparecen a partir de { $minimo } de cobertura.
+alimentacao-saude-ultra = En los últimos 3 meses, { $pct } de tu gasto en comida con datos fue en ultraprocesados.
+alimentacao-saude-ultra-ano = En los últimos 3 meses, { $pct } de tu gasto en comida con datos fue en ultraprocesados (era { $antes } hace un año).
+alimentacao-saude-ultra-rotulo = Gasto en ultraprocesados
+alimentacao-saude-ultra-dica = Grupo 4 de la clasificación NOVA, en la parte del gasto con datos.
+alimentacao-saude-ultra-ano-rotulo = Hace un año
+alimentacao-saude-ultra-ano-sem = Sin compras con datos de hace un año.
+alimentacao-saude-cobertura-rotulo = Gasto con datos
+alimentacao-saude-cobertura-dica = Últimos 3 meses.
+alimentacao-saude-alto-em = Alto en
+alimentacao-saude-alto-em-dica = Según los límites del etiquetado frontal de Brasil (Anvisa), por 100 g o 100 ml. Del más gastado al menos.
+alimentacao-saude-alto-em-nada = Ningún producto con datos supera los límites.
+alimentacao-saude-alto-em-fora = El "alto en" sigue la regla brasileña y solo aparece con la familia en Brasil.
+alimentacao-saude-alto-acucar = Azúcar añadido
+alimentacao-saude-alto-gordura = Grasa saturada
+alimentacao-saude-alto-sodio = Sodio
+alimentacao-saude-alto-selo = Alto en { $nutriente }
+alimentacao-saude-proteina = Proteína por dinero gastado
+alimentacao-saude-proteina-dica = Gramos de proteína por { $moeda } gastado, según el último precio por kg o L.
+alimentacao-saude-proteina-valor = { $g } g
+alimentacao-saude-proteina-nada = Sin productos con proteína y precio por kg o L.
+alimentacao-saude-alergias = Alergias y restricciones
+alimentacao-saude-alergias-dica = Productos comprados en los últimos 3 meses que coinciden con las restricciones marcadas para cada persona.
+alimentacao-saude-alergias-nada = Ningún producto con datos coincide con las restricciones marcadas.
+alimentacao-saude-alergias-sem = Marca las alergias y restricciones de cada persona en su ficha de miembro, en 02 · Familia, para ver aquí los productos que coinciden con ellas.
+alimentacao-saude-alerta = { $membro }: { $produto } ({ $restricao })
+alimentacao-saude-pode-conter = puede contener
+alimentacao-saude-contem = contiene
+alimentacao-saude-rodape = Información indicativa a partir de Open Food Facts y de los límites de Anvisa. No es orientación médica ni nutricional; revisa la etiqueta.
+alimentacao-saude-credito = Datos: Open Food Facts (ODbL)
+alimentacao-saude-ver-produto = ver el producto
+alimentacao-restricao-gluten = Gluten
+alimentacao-restricao-milk = Leche
+alimentacao-restricao-eggs = Huevos
+alimentacao-restricao-peanuts = Maní
+alimentacao-restricao-nuts = Frutos secos
+alimentacao-restricao-soybeans = Soya
+alimentacao-restricao-fish = Pescado
+alimentacao-restricao-crustaceans = Crustáceos
+alimentacao-restricao-sesame = Ajonjolí
+alimentacao-restricao-vegan = Vegano
+alimentacao-restricao-vegetarian = Vegetariano
+alimentacao-alergeno-molluscs = Moluscos
+alimentacao-alergeno-mustard = Mostaza
+alimentacao-alergeno-celery = Apio
+alimentacao-alergeno-lupin = Altramuz
+alimentacao-alergeno-sulphites = Sulfitos
+alimentacao-nova-1 = Grupo 1 · sin procesar o mínimamente procesado
+alimentacao-nova-2 = Grupo 2 · ingrediente culinario procesado
+alimentacao-nova-3 = Grupo 3 · procesado
+alimentacao-nova-4 = Grupo 4 · ultraprocesado
+alimentacao-nova-explica = La clasificación NOVA separa los alimentos por su grado de procesamiento, de 1 a 4. El grupo 4 (ultraprocesado) se hace en buena parte con ingredientes de uso industrial, como saborizantes, emulsionantes y colorantes, que no se usan en la cocina de casa.
+alimentacao-produto-saude = Salud
+alimentacao-produto-nova = Grupo NOVA
+alimentacao-produto-nutrientes = Por { $base }
+alimentacao-nutriente-energia = Energía
+alimentacao-nutriente-acucares = Azúcares
+alimentacao-nutriente-acucar-adicionado = Azúcar añadido
+alimentacao-nutriente-gordura-saturada = Grasa saturada
+alimentacao-nutriente-sodio = Sodio
+alimentacao-nutriente-proteina = Proteína
+alimentacao-nutriente-fibra = Fibra
+alimentacao-produto-alergenos = Alérgenos
+alimentacao-produto-tracos = Puede contener
+alimentacao-produto-nutriscore = Nutri-Score { $nota } según Open Food Facts
+alimentacao-produto-sem-dados = Open Food Facts no tiene este código de barras.
+alimentacao-outros-tamanhos = Otros tamaños
+alimentacao-outros-tamanhos-dica = El mismo producto en otro empaque. Compara el precio por kg, L o unidad: un empaque más chico con precio por kg más alto es la reduflación.
+alimentacao-tamanho = Tamaño
+alimentacao-mesmo-produto = Quizás sean el mismo producto
+alimentacao-mesmo-produto-dica = Nombres parecidos, quizás de tiendas distintas o con la abreviatura del ticket. Unir pasa las compras del segundo al primero.
+alimentacao-mesmo-produto-n =
+    { $n ->
+        [one] 1 par de productos con nombres parecidos.
+       *[other] { $n } pares de productos con nombres parecidos.
+    }
+alimentacao-mesmo-produto-ver = Ver
+alimentacao-mesmo-produto-esconder = Ocultar
+alimentacao-mesmo-produto-par = { $a } y { $b }
+alimentacao-juntar-par = Unir { $b } en { $a }
+alimentacao-juntar-titulo = ¿Unir los productos?
+alimentacao-juntar-texto = Las compras de "{ $b }" pasan a "{ $a }", que conserva el nombre. Se puede deshacer desde el historial.
+alimentacao-codigo-barras-dica = El EAN que está debajo de las barras (8, 12, 13 o 14 números). Une las compras del mismo producto en cualquier tienda.
+alimentacao-codigos-do-produto = Códigos de barras del producto
+alimentacao-codigo-tirar = Quitar el código { $codigo }
+alimentacao-codigo-novo = Nuevo código de barras
+alimentacao-codigo-adicionar = Agregar
+alimentacao-codigo-foto = Leer el código de barras de una foto
+alimentacao-codigo-foto-nada = No encontré un código de barras de producto en la foto. Prueba una foto más cercana, derecha y con buena luz.
+alimentacao-item-codigo-mostrar-n = Código de barras del artículo { $n }
+alimentacao-item-codigo-n = Código de barras del artículo { $n }
+alimentacao-item-codigo-foto-n = Leer de la foto el código de barras del artículo { $n }
+alimentacao-item-codigo-exemplo = Código de barras (opcional)
+alimentacao-item-codigo-dica = Opcional. Une el artículo al producto con el mismo código.
+alimentacao-compra-fiscal-dica = Los artículos y los importes son los del documento fiscal y no cambian aquí. Elija la categoría de cada artículo, quién compró y el movimiento.
+alimentacao-adicionar-compra = Añadir compra
+alimentacao-adicionar-compra-dica = Suelte la foto, el PDF o el XML del comprobante, pegue el enlace del QR o escriba los artículos.
+alimentacao-palpite-conhecido = ya comprado
+alimentacao-palpite-dados-abertos = datos abiertos
+alimentacao-palpite-palavras = por la descripción
+alimentacao-palpite-nenhum = Sin categoría (elija una)
+alimentacao-comecar-ultima = Empezar por la última compra en esta tienda
+alimentacao-sem-detalhe = { $valor } del movimiento quedan sin detalle y siguen en su categoría.
+alimentacao-compra-passa = La compra supera el importe del movimiento en { $valor }.
+alimentacao-repetir = Repetir
+alimentacao-repetir-de = Repetir la compra de { $loja }
+alimentacao-detalhar-itens = Detallar artículos
+alimentacao-ver-itens = Ver los artículos
+alimentacao-tem-itens = Tiene los artículos en Consumo
+alimentacao-colar-itens = Pegar los artículos como texto
+alimentacao-colar-itens-exemplo = Un artículo por línea, con el importe al final. Ejemplo: Arroz 1 kg 1,90
+alimentacao-colar-itens-ler = Leer los artículos
+alimentacao-por-lb = /lb
+alimentacao-por-gal = /gal
+alimentacao-imposto-somado = Impuesto añadido
+alimentacao-imposto-somado-dica = La línea de impuesto al final del ticket.

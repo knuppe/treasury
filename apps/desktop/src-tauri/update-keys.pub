@@ -1,0 +1,12 @@
+# Chaves de hardware que assinam as atualizações do Treasury (docs/auto-update.md). Só chave
+# pública aqui, uma linha por chave, como no arquivo .pub do ssh-keygen:
+# - YubiKey (FIDO2, `ssh-keygen -t ed25519-sk -O verify-required`): o app exige o toque e o PIN
+#   marcados na assinatura;
+# - Secure Enclave do Mac do mantenedor (`sc_auth create-ctk-identity -k p-256-ne -t bio`): a
+#   linha começa com a palavra `secure-enclave`. Quem exige a digital é o chip; o app não vê isso
+#   na assinatura, e os scripts de release conferem a proteção `bio` antes de assinar.
+# O app exige a assinatura de uma delas em toda atualização, além da assinatura minisign. Sem
+# nenhuma chave aqui, o app recusa toda atualização, e o release.yml e o sign-release.sh se
+# recusam a publicar (docs/trust.md).
+secure-enclave sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBPWxxmmccD3C9enJ0p1fZWiffJFsBhODzRocKlajz/X60tQ7yHntKVOAZBNQmxLprJhHA0MrfnJ1bHPNZpbURwYAAAAEc3NoOg== treasury-update mac-1
+sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIIibfK8QO1C1cHJAT/fB0PdF4nRYxXs1fDN8aq/fZe/dAAAAE3NzaDp0cmVhc3VyeS11cGRhdGU= treasury-update yubikey-1

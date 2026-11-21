@@ -1,0 +1,2334 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Catálogo de métricas do score de saúde por ativo: direção, âncoras absolutas (pontos x → nota 0–100, interpolação linear, fora da tabela vale o extremo), regras de normalização, dados faltantes, confiança, faixas, red flags e alertas. Pontos de partida da literatura (ver ../ASSUMPTIONS.md e ../LITERATURE.md); calibrar com dados (§12 da especificação).",
+  "metrics": {
+    "roic": {
+      "label": "ROIC",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "NOPAT ÷ (dívida líquida + patrimônio líquido), NOPAT = EBIT × (1 − 34%)",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          0.08,
+          45
+        ],
+        [
+          0.15,
+          75
+        ],
+        [
+          0.25,
+          100
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.03
+    },
+    "roic_norm": {
+      "label": "ROIC normalizado (média de 5 anos)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Média do ROIC anual dos últimos 5 exercícios (normalização cíclica)",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          0.08,
+          45
+        ],
+        [
+          0.15,
+          75
+        ],
+        [
+          0.25,
+          100
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.03
+    },
+    "roe": {
+      "label": "ROE",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Lucro líquido (12 meses) ÷ patrimônio líquido médio",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          0.1,
+          45
+        ],
+        [
+          0.15,
+          65
+        ],
+        [
+          0.2,
+          85
+        ],
+        [
+          0.3,
+          100
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.03
+    },
+    "roa": {
+      "label": "ROA",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Lucro líquido (12 meses) ÷ ativo total médio",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.005,
+          30
+        ],
+        [
+          0.01,
+          55
+        ],
+        [
+          0.015,
+          75
+        ],
+        [
+          0.02,
+          90
+        ],
+        [
+          0.03,
+          100
+        ]
+      ]
+    },
+    "gross_profitability": {
+      "label": "Rentabilidade bruta (Novy-Marx)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "(Receita − CPV) ÷ ativo total",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.1,
+          30
+        ],
+        [
+          0.25,
+          60
+        ],
+        [
+          0.4,
+          85
+        ],
+        [
+          0.6,
+          100
+        ]
+      ]
+    },
+    "ebit_margin": {
+      "label": "Margem EBIT",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "EBIT ÷ receita líquida (12 meses)",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          0.08,
+          50
+        ],
+        [
+          0.15,
+          75
+        ],
+        [
+          0.25,
+          100
+        ]
+      ]
+    },
+    "net_margin": {
+      "label": "Margem líquida",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Lucro líquido ÷ receita líquida (12 meses)",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          0.05,
+          45
+        ],
+        [
+          0.1,
+          70
+        ],
+        [
+          0.2,
+          100
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.02
+    },
+    "net_debt_ebitda": {
+      "label": "Dívida líquida / EBITDA",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "(Dívida bruta + arrendamentos − caixa) ÷ EBITDA (12 meses), EBITDA = EBIT + D&A recalculado das demonstrações",
+      "anchor": [
+        [
+          -1,
+          100
+        ],
+        [
+          0,
+          100
+        ],
+        [
+          1.5,
+          85
+        ],
+        [
+          3,
+          45
+        ],
+        [
+          4,
+          20
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.5
+    },
+    "net_debt_ebitda_norm": {
+      "label": "Dívida líquida / EBITDA normalizado",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "(Dívida bruta + arrendamentos − caixa) ÷ EBITDA médio dos últimos 5 exercícios",
+      "anchor": [
+        [
+          -1,
+          100
+        ],
+        [
+          0,
+          100
+        ],
+        [
+          1,
+          90
+        ],
+        [
+          2,
+          60
+        ],
+        [
+          3,
+          30
+        ],
+        [
+          4.5,
+          0
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.5
+    },
+    "interest_coverage": {
+      "label": "Cobertura de juros",
+      "unit": "multiple",
+      "direction": "higher",
+      "formula": "EBIT ÷ despesa financeira líquida (12 meses)",
+      "anchor": [
+        [
+          1.5,
+          0
+        ],
+        [
+          3,
+          40
+        ],
+        [
+          5,
+          70
+        ],
+        [
+          8,
+          100
+        ]
+      ]
+    },
+    "altman_z2": {
+      "label": "Altman Z''",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "6,56·X1 + 3,26·X2 + 6,72·X3 + 1,05·X4 (X1 capital de giro/ativo, X2 lucros retidos/ativo, X3 EBIT/ativo, X4 PL contábil/passivo)",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          1.1,
+          20
+        ],
+        [
+          2.6,
+          70
+        ],
+        [
+          4,
+          90
+        ],
+        [
+          6,
+          100
+        ]
+      ]
+    },
+    "current_ratio": {
+      "label": "Liquidez corrente",
+      "unit": "multiple",
+      "direction": "range",
+      "formula": "Ativo circulante ÷ passivo circulante",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.8,
+          30
+        ],
+        [
+          1.0,
+          55
+        ],
+        [
+          1.2,
+          80
+        ],
+        [
+          1.5,
+          100
+        ],
+        [
+          3,
+          100
+        ],
+        [
+          5,
+          70
+        ]
+      ]
+    },
+    "cash_to_st_debt": {
+      "label": "Caixa ÷ dívida de curto prazo",
+      "unit": "multiple",
+      "direction": "higher",
+      "formula": "Caixa e aplicações ÷ empréstimos e financiamentos do passivo circulante",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.5,
+          40
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          2,
+          100
+        ]
+      ]
+    },
+    "equity_to_assets": {
+      "label": "Patrimônio ÷ ativo",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Patrimônio líquido ÷ ativo total",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.05,
+          30
+        ],
+        [
+          0.1,
+          60
+        ],
+        [
+          0.2,
+          90
+        ],
+        [
+          0.3,
+          100
+        ]
+      ]
+    },
+    "fcf_to_net_income": {
+      "label": "Conversão de lucro em caixa (FCF/LL)",
+      "unit": "multiple",
+      "direction": "range",
+      "formula": "(FCO − capex) ÷ lucro líquido (12 meses); acima de 1 é bom, valores muito altos só indicam lucro pequeno",
+      "anchor": [
+        [
+          -0.5,
+          0
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          0.5,
+          45
+        ],
+        [
+          0.8,
+          80
+        ],
+        [
+          1.0,
+          100
+        ],
+        [
+          3,
+          100
+        ],
+        [
+          10,
+          80
+        ]
+      ]
+    },
+    "fcf_margin": {
+      "label": "Margem de fluxo de caixa livre",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "(FCO − capex) ÷ receita líquida (12 meses)",
+      "anchor": [
+        [
+          -0.1,
+          0
+        ],
+        [
+          0,
+          25
+        ],
+        [
+          0.05,
+          50
+        ],
+        [
+          0.1,
+          75
+        ],
+        [
+          0.2,
+          100
+        ]
+      ],
+      "key": true,
+      "trend_scale": 0.02
+    },
+    "accruals": {
+      "label": "Accruals (Sloan)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "(Lucro líquido − FCO) ÷ ativo total médio",
+      "anchor": [
+        [
+          -0.1,
+          100
+        ],
+        [
+          -0.05,
+          90
+        ],
+        [
+          0,
+          70
+        ],
+        [
+          0.05,
+          40
+        ],
+        [
+          0.1,
+          15
+        ],
+        [
+          0.15,
+          0
+        ]
+      ]
+    },
+    "piotroski": {
+      "label": "Piotroski F-Score",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Soma de 9 critérios binários (rentabilidade, alavancagem/liquidez, eficiência) entre os dois últimos exercícios",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          15
+        ],
+        [
+          4,
+          40
+        ],
+        [
+          6,
+          70
+        ],
+        [
+          8,
+          95
+        ],
+        [
+          9,
+          100
+        ]
+      ]
+    },
+    "revenue_cagr_5y_real": {
+      "label": "Crescimento real da receita (5 anos)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "CAGR da receita líquida anual em 5 anos, descontado o IPCA do período",
+      "anchor": [
+        [
+          -0.1,
+          0
+        ],
+        [
+          -0.03,
+          20
+        ],
+        [
+          0,
+          40
+        ],
+        [
+          0.03,
+          60
+        ],
+        [
+          0.08,
+          85
+        ],
+        [
+          0.15,
+          100
+        ]
+      ]
+    },
+    "revenue_cagr_3y_real": {
+      "label": "Crescimento real da receita (3 anos)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "CAGR da receita líquida anual em 3 anos, descontado o IPCA do período",
+      "anchor": [
+        [
+          -0.1,
+          0
+        ],
+        [
+          -0.03,
+          20
+        ],
+        [
+          0,
+          40
+        ],
+        [
+          0.03,
+          60
+        ],
+        [
+          0.08,
+          85
+        ],
+        [
+          0.15,
+          100
+        ]
+      ]
+    },
+    "eps_cagr_5y": {
+      "label": "Crescimento do lucro por ação (5 anos)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "CAGR do lucro líquido por ação (lucro ÷ ações em circulação) em 5 exercícios",
+      "anchor": [
+        [
+          -0.15,
+          0
+        ],
+        [
+          0,
+          35
+        ],
+        [
+          0.05,
+          55
+        ],
+        [
+          0.1,
+          75
+        ],
+        [
+          0.2,
+          100
+        ]
+      ]
+    },
+    "asset_growth": {
+      "label": "Crescimento do ativo (1 ano)",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Ativo total ÷ ativo total 12 meses antes − 1 (Cooper, Gulen & Schill: expansão agressiva prediz retorno menor)",
+      "anchor": [
+        [
+          -0.2,
+          40
+        ],
+        [
+          -0.05,
+          70
+        ],
+        [
+          0,
+          85
+        ],
+        [
+          0.05,
+          100
+        ],
+        [
+          0.15,
+          100
+        ],
+        [
+          0.25,
+          60
+        ],
+        [
+          0.5,
+          20
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "rule_of_40": {
+      "label": "Rule of 40",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Crescimento da receita em 12 meses + margem de fluxo de caixa livre",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.2,
+          30
+        ],
+        [
+          0.4,
+          80
+        ],
+        [
+          0.6,
+          100
+        ]
+      ]
+    },
+    "asset_turnover": {
+      "label": "Giro do ativo",
+      "unit": "multiple",
+      "direction": "higher",
+      "formula": "Receita líquida (12 meses) ÷ ativo total médio",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.3,
+          30
+        ],
+        [
+          0.7,
+          60
+        ],
+        [
+          1.2,
+          85
+        ],
+        [
+          2,
+          100
+        ]
+      ]
+    },
+    "cash_cycle_days": {
+      "label": "Ciclo de caixa (dias)",
+      "unit": "days",
+      "direction": "lower",
+      "formula": "Prazo médio de recebimento + prazo médio de estoques − prazo médio de pagamento (base: receita e CPV de 12 meses)",
+      "anchor": [
+        [
+          -60,
+          100
+        ],
+        [
+          0,
+          90
+        ],
+        [
+          60,
+          65
+        ],
+        [
+          120,
+          35
+        ],
+        [
+          200,
+          0
+        ]
+      ]
+    },
+    "earnings_yield": {
+      "label": "Earnings yield (EBIT/EV)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "EBIT (12 meses) ÷ (valor de mercado + dívida líquida + minoritários)",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          0.05,
+          35
+        ],
+        [
+          0.1,
+          65
+        ],
+        [
+          0.15,
+          85
+        ],
+        [
+          0.2,
+          100
+        ]
+      ]
+    },
+    "fcf_yield": {
+      "label": "FCF yield",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Fluxo de caixa livre (12 meses) ÷ valor de mercado",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          0.04,
+          45
+        ],
+        [
+          0.08,
+          75
+        ],
+        [
+          0.12,
+          100
+        ]
+      ]
+    },
+    "earnings_to_price": {
+      "label": "Lucro ÷ preço (inverso do P/L)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Lucro líquido (12 meses) ÷ valor de mercado",
+      "anchor": [
+        [
+          -0.05,
+          0
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          0.05,
+          35
+        ],
+        [
+          0.1,
+          65
+        ],
+        [
+          0.15,
+          90
+        ],
+        [
+          0.2,
+          100
+        ]
+      ]
+    },
+    "pb": {
+      "label": "P/VP",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "Valor de mercado ÷ patrimônio líquido",
+      "anchor": [
+        [
+          0.5,
+          100
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          2,
+          55
+        ],
+        [
+          4,
+          25
+        ],
+        [
+          8,
+          0
+        ]
+      ]
+    },
+    "ev_ebitda": {
+      "label": "EV/EBITDA",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "(Valor de mercado + dívida líquida + minoritários) ÷ EBITDA (12 meses)",
+      "anchor": [
+        [
+          2,
+          100
+        ],
+        [
+          5,
+          80
+        ],
+        [
+          8,
+          55
+        ],
+        [
+          12,
+          30
+        ],
+        [
+          20,
+          0
+        ]
+      ]
+    },
+    "dy": {
+      "label": "Dividend yield (12 meses)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Proventos por ação dos últimos 12 meses ÷ cotação",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.03,
+          40
+        ],
+        [
+          0.06,
+          70
+        ],
+        [
+          0.1,
+          100
+        ]
+      ]
+    },
+    "listing_segment": {
+      "label": "Segmento de listagem (B3)",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Novo Mercado 100; Nível 2 80; Bovespa Mais 70; Nível 1 60; Básico/Tradicional 40",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          100,
+          100
+        ]
+      ],
+      "absolute_only": true
+    },
+    "timely_filing": {
+      "label": "Entregas no prazo (DFP/ITR)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Fração das últimas 4 entregas de DFP/ITR feitas no prazo da CVM (DFP: 3 meses após o exercício; ITR: 45 dias após o trimestre)",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.75,
+          50
+        ],
+        [
+          1,
+          100
+        ]
+      ],
+      "absolute_only": true
+    },
+    "roe_stability": {
+      "label": "Volatilidade do ROE (desvio-padrão anual)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão do ROE anual nos últimos 5 a 10 exercícios",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.03,
+          90
+        ],
+        [
+          0.06,
+          70
+        ],
+        [
+          0.1,
+          45
+        ],
+        [
+          0.2,
+          0
+        ]
+      ]
+    },
+    "loss_years_10y": {
+      "label": "Anos com prejuízo (até 10 anos)",
+      "unit": "count",
+      "direction": "lower",
+      "formula": "Exercícios com lucro líquido negativo nos últimos 10 (mínimo de 3 exercícios)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          1,
+          75
+        ],
+        [
+          2,
+          55
+        ],
+        [
+          4,
+          25
+        ],
+        [
+          6,
+          0
+        ]
+      ]
+    },
+    "volatility_1y": {
+      "label": "Volatilidade anual da cotação",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão dos retornos diários de 1 ano × √252",
+      "anchor": [
+        [
+          0.15,
+          100
+        ],
+        [
+          0.25,
+          75
+        ],
+        [
+          0.35,
+          50
+        ],
+        [
+          0.5,
+          20
+        ],
+        [
+          0.8,
+          0
+        ]
+      ],
+      "absolute_only": true
+    },
+    "payout": {
+      "label": "Payout",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Dividendos e JCP declarados (12 meses) ÷ lucro líquido",
+      "anchor": [
+        [
+          -0.01,
+          0
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          0.25,
+          100
+        ],
+        [
+          0.75,
+          100
+        ],
+        [
+          1.0,
+          50
+        ],
+        [
+          1.5,
+          0
+        ]
+      ]
+    },
+    "dividend_fcf_coverage": {
+      "label": "Cobertura dos dividendos pelo caixa livre",
+      "unit": "multiple",
+      "direction": "range",
+      "formula": "Fluxo de caixa livre ÷ dividendos e JCP pagos (12 meses)",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.5,
+          30
+        ],
+        [
+          1,
+          75
+        ],
+        [
+          1.5,
+          100
+        ]
+      ]
+    },
+    "dilution": {
+      "label": "Diluição líquida (1 ano)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Ações em circulação ÷ ações 12 meses antes − 1 (negativo = recompra)",
+      "anchor": [
+        [
+          -0.05,
+          100
+        ],
+        [
+          0,
+          85
+        ],
+        [
+          0.01,
+          70
+        ],
+        [
+          0.03,
+          40
+        ],
+        [
+          0.05,
+          15
+        ],
+        [
+          0.1,
+          0
+        ]
+      ]
+    },
+    "momentum_12_1": {
+      "label": "Momentum 12-1",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Cotação de 1 mês atrás ÷ cotação de 12 meses atrás − 1",
+      "anchor": [
+        [
+          -0.5,
+          0
+        ],
+        [
+          -0.2,
+          25
+        ],
+        [
+          0,
+          50
+        ],
+        [
+          0.2,
+          75
+        ],
+        [
+          0.5,
+          100
+        ]
+      ],
+      "absolute_only": true
+    },
+    "basel_ratio": {
+      "label": "Índice de Basileia",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Patrimônio de referência ÷ ativos ponderados pelo risco (Bacen IF.data, conglomerado prudencial)",
+      "anchor": [
+        [
+          0.105,
+          0
+        ],
+        [
+          0.115,
+          25
+        ],
+        [
+          0.135,
+          60
+        ],
+        [
+          0.16,
+          85
+        ],
+        [
+          0.2,
+          100
+        ]
+      ]
+    },
+    "cet1_ratio": {
+      "label": "Capital principal (CET1)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Capital principal ÷ ativos ponderados pelo risco (Bacen IF.data)",
+      "anchor": [
+        [
+          0.07,
+          0
+        ],
+        [
+          0.08,
+          20
+        ],
+        [
+          0.1,
+          55
+        ],
+        [
+          0.12,
+          80
+        ],
+        [
+          0.15,
+          100
+        ]
+      ]
+    },
+    "leverage_ratio": {
+      "label": "Razão de alavancagem (Basileia III)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Capital nível I ÷ exposição total (Bacen IF.data)",
+      "anchor": [
+        [
+          0.03,
+          0
+        ],
+        [
+          0.04,
+          30
+        ],
+        [
+          0.06,
+          65
+        ],
+        [
+          0.08,
+          85
+        ],
+        [
+          0.1,
+          100
+        ]
+      ]
+    },
+    "lcr": {
+      "label": "LCR (liquidez de curto prazo)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Ativos líquidos de alta qualidade ÷ saídas líquidas em 30 dias",
+      "anchor": [
+        [
+          0.8,
+          0
+        ],
+        [
+          1.0,
+          50
+        ],
+        [
+          1.5,
+          90
+        ],
+        [
+          2,
+          100
+        ]
+      ],
+      "unavailable": "O LCR é divulgado só no relatório de gerenciamento de riscos (Pilar 3) de cada banco; não há fonte estruturada gratuita."
+    },
+    "npl90": {
+      "label": "Inadimplência acima de 90 dias",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Carteira com atraso acima de 90 dias ÷ carteira de crédito total (Bacen IF.data)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.01,
+          90
+        ],
+        [
+          0.025,
+          70
+        ],
+        [
+          0.04,
+          45
+        ],
+        [
+          0.06,
+          20
+        ],
+        [
+          0.1,
+          0
+        ]
+      ]
+    },
+    "coverage": {
+      "label": "Índice de cobertura",
+      "unit": "multiple",
+      "direction": "higher",
+      "formula": "Provisão para perdas esperadas ÷ carteira com atraso acima de 90 dias",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.8,
+          20
+        ],
+        [
+          1.0,
+          40
+        ],
+        [
+          1.5,
+          75
+        ],
+        [
+          2.0,
+          90
+        ],
+        [
+          3,
+          100
+        ]
+      ]
+    },
+    "cost_of_credit": {
+      "label": "Custo do crédito",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Despesa com perdas esperadas (12 meses) ÷ carteira de crédito média",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.01,
+          85
+        ],
+        [
+          0.025,
+          60
+        ],
+        [
+          0.04,
+          35
+        ],
+        [
+          0.07,
+          0
+        ]
+      ]
+    },
+    "problem_assets_ratio": {
+      "label": "Ativos problemáticos",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Ativos problemáticos ÷ carteira de crédito total (Bacen IF.data)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.03,
+          80
+        ],
+        [
+          0.06,
+          55
+        ],
+        [
+          0.1,
+          25
+        ],
+        [
+          0.15,
+          0
+        ]
+      ]
+    },
+    "loan_growth": {
+      "label": "Crescimento da carteira de crédito (1 ano)",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Carteira de crédito ÷ carteira 12 meses antes − 1",
+      "anchor": [
+        [
+          -0.2,
+          10
+        ],
+        [
+          -0.05,
+          40
+        ],
+        [
+          0,
+          60
+        ],
+        [
+          0.05,
+          85
+        ],
+        [
+          0.2,
+          100
+        ],
+        [
+          0.25,
+          70
+        ],
+        [
+          0.4,
+          20
+        ],
+        [
+          0.6,
+          0
+        ]
+      ]
+    },
+    "efficiency_ratio": {
+      "label": "Índice de eficiência",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "(Despesas de pessoal + administrativas) ÷ (resultado de intermediação financeira + tarifas e serviços)",
+      "anchor": [
+        [
+          0.3,
+          100
+        ],
+        [
+          0.4,
+          90
+        ],
+        [
+          0.5,
+          65
+        ],
+        [
+          0.55,
+          50
+        ],
+        [
+          0.7,
+          20
+        ],
+        [
+          0.9,
+          0
+        ]
+      ]
+    },
+    "net_income_growth": {
+      "label": "Crescimento do lucro (1 ano)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Lucro líquido de 12 meses ÷ o de 12 meses antes − 1",
+      "anchor": [
+        [
+          -0.3,
+          0
+        ],
+        [
+          0,
+          40
+        ],
+        [
+          0.1,
+          70
+        ],
+        [
+          0.2,
+          100
+        ]
+      ]
+    },
+    "pb_vs_justified": {
+      "label": "P/VP ÷ P/VP justo",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "P/VP ÷ [(ROE − g) ÷ (Ke − g)], Ke e g nas premissas (ASSUMPTIONS.md)",
+      "anchor": [
+        [
+          0.5,
+          100
+        ],
+        [
+          0.8,
+          85
+        ],
+        [
+          1.0,
+          65
+        ],
+        [
+          1.3,
+          35
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    "susep_solvency": {
+      "label": "Solvência regulatória (Susep)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Patrimônio líquido ajustado ÷ capital mínimo requerido",
+      "anchor": [
+        [
+          1,
+          0
+        ],
+        [
+          1.2,
+          50
+        ],
+        [
+          1.5,
+          80
+        ],
+        [
+          2,
+          100
+        ]
+      ],
+      "unavailable": "A Susep publica a solvência em painéis sem API estável; ainda não há conector."
+    },
+    "vacancy_financial": {
+      "label": "Vacância financeira",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Vacância de cada imóvel ponderada pela participação na receita (informe trimestral CVM)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.05,
+          85
+        ],
+        [
+          0.1,
+          65
+        ],
+        [
+          0.2,
+          30
+        ],
+        [
+          0.3,
+          0
+        ]
+      ]
+    },
+    "default_rate": {
+      "label": "Inadimplência dos inquilinos",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Inadimplência de cada imóvel ponderada pela participação na receita (informe trimestral CVM)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.02,
+          80
+        ],
+        [
+          0.05,
+          50
+        ],
+        [
+          0.1,
+          15
+        ],
+        [
+          0.15,
+          0
+        ]
+      ]
+    },
+    "walt_years": {
+      "label": "Prazo médio dos contratos (WALT)",
+      "unit": "years",
+      "direction": "higher",
+      "formula": "Média dos vencimentos dos contratos ponderada pela receita (faixas do informe trimestral; acima de 36 meses = 5 anos)",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          20
+        ],
+        [
+          3,
+          50
+        ],
+        [
+          5,
+          80
+        ],
+        [
+          8,
+          100
+        ]
+      ]
+    },
+    "income_coverage": {
+      "label": "Rendimento coberto pelo resultado",
+      "unit": "multiple",
+      "direction": "range",
+      "formula": "Resultado financeiro líquido recorrente ÷ rendimentos declarados (últimos 4 trimestres)",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.8,
+          30
+        ],
+        [
+          0.95,
+          80
+        ],
+        [
+          1.0,
+          100
+        ],
+        [
+          1.3,
+          100
+        ],
+        [
+          2,
+          70
+        ]
+      ]
+    },
+    "properties": {
+      "label": "Número de imóveis",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Imóveis informados no informe trimestral",
+      "anchor": [
+        [
+          1,
+          10
+        ],
+        [
+          3,
+          40
+        ],
+        [
+          6,
+          70
+        ],
+        [
+          10,
+          90
+        ],
+        [
+          20,
+          100
+        ]
+      ]
+    },
+    "top_property_share": {
+      "label": "Maior imóvel (% da receita)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior participação de um imóvel na receita do fundo",
+      "anchor": [
+        [
+          0.1,
+          100
+        ],
+        [
+          0.2,
+          85
+        ],
+        [
+          0.4,
+          50
+        ],
+        [
+          0.7,
+          15
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "top_tenant_share": {
+      "label": "Maior inquilino (% da receita)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior participação de um inquilino (por imóvel e setor) na receita do fundo; aproximação a partir do informe trimestral",
+      "anchor": [
+        [
+          0.1,
+          100
+        ],
+        [
+          0.2,
+          80
+        ],
+        [
+          0.4,
+          40
+        ],
+        [
+          0.6,
+          10
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "liabilities_to_nav": {
+      "label": "Passivo ÷ patrimônio",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Passivo total ÷ patrimônio líquido do fundo (inclui obrigações por aquisição de imóveis e compromissadas)",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.05,
+          95
+        ],
+        [
+          0.15,
+          75
+        ],
+        [
+          0.3,
+          45
+        ],
+        [
+          0.5,
+          10
+        ],
+        [
+          0.8,
+          0
+        ]
+      ]
+    },
+    "acq_obligations_to_nav": {
+      "label": "Obrigações por aquisição ÷ patrimônio",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Obrigações por aquisição de imóveis ÷ patrimônio líquido do fundo",
+      "anchor": [
+        [
+          0,
+          100
+        ],
+        [
+          0.05,
+          80
+        ],
+        [
+          0.1,
+          60
+        ],
+        [
+          0.2,
+          20
+        ],
+        [
+          0.3,
+          0
+        ]
+      ]
+    },
+    "pvp_fii": {
+      "label": "P/VP",
+      "unit": "multiple",
+      "direction": "range",
+      "formula": "Cotação ÷ valor patrimonial por cota (abaixo de 1 pode ser desconto ou sinal de problema)",
+      "anchor": [
+        [
+          0.5,
+          40
+        ],
+        [
+          0.75,
+          75
+        ],
+        [
+          0.9,
+          95
+        ],
+        [
+          1.0,
+          85
+        ],
+        [
+          1.1,
+          60
+        ],
+        [
+          1.3,
+          25
+        ],
+        [
+          1.6,
+          0
+        ]
+      ]
+    },
+    "dy_12m": {
+      "label": "Dividend yield (12 meses)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Rendimentos por cota dos últimos 12 meses ÷ cotação",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          0.06,
+          40
+        ],
+        [
+          0.09,
+          70
+        ],
+        [
+          0.12,
+          90
+        ],
+        [
+          0.16,
+          100
+        ]
+      ]
+    },
+    "dy_spread_cdi": {
+      "label": "DY − CDI (12 meses)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Dividend yield de 12 meses − CDI acumulado em 12 meses",
+      "anchor": [
+        [
+          -0.08,
+          0
+        ],
+        [
+          -0.03,
+          40
+        ],
+        [
+          0,
+          70
+        ],
+        [
+          0.02,
+          90
+        ],
+        [
+          0.04,
+          100
+        ]
+      ]
+    },
+    "admin_fee": {
+      "label": "Taxa de administração (a.a.)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Despesas com taxa de administração ÷ patrimônio, anualizadas (informe mensal CVM)",
+      "anchor": [
+        [
+          0.003,
+          100
+        ],
+        [
+          0.006,
+          85
+        ],
+        [
+          0.01,
+          60
+        ],
+        [
+          0.015,
+          30
+        ],
+        [
+          0.025,
+          0
+        ]
+      ]
+    },
+    "nav_per_share_real_growth": {
+      "label": "Variação real do valor patrimonial por cota (12 meses)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Valor patrimonial por cota ÷ o de 12 meses antes, descontado o IPCA, − 1",
+      "anchor": [
+        [
+          -0.15,
+          0
+        ],
+        [
+          -0.05,
+          30
+        ],
+        [
+          0,
+          60
+        ],
+        [
+          0.03,
+          85
+        ],
+        [
+          0.06,
+          100
+        ]
+      ]
+    },
+    "avg_volume": {
+      "label": "Volume médio diário",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "Volume financeiro médio dos últimos pregões",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          300000,
+          20
+        ],
+        [
+          1000000,
+          50
+        ],
+        [
+          5000000,
+          85
+        ],
+        [
+          20000000,
+          100
+        ]
+      ]
+    },
+    "holders": {
+      "label": "Número de cotistas",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Cotistas no último informe mensal",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          1000,
+          20
+        ],
+        [
+          10000,
+          50
+        ],
+        [
+          100000,
+          85
+        ],
+        [
+          300000,
+          100
+        ]
+      ]
+    },
+    "cri_top_issuer_share": {
+      "label": "Maior emissor de CRI (% da carteira de CRI)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior valor por emissor ÷ total de CRI/CRA (informe trimestral; o emissor é a securitizadora, aproximação da concentração por devedor)",
+      "anchor": [
+        [
+          0.05,
+          100
+        ],
+        [
+          0.15,
+          80
+        ],
+        [
+          0.3,
+          45
+        ],
+        [
+          0.5,
+          15
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "ltv_avg": {
+      "label": "LTV médio dos CRIs",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Saldo devedor ÷ valor das garantias, ponderado",
+      "anchor": [
+        [
+          0.3,
+          100
+        ],
+        [
+          0.5,
+          80
+        ],
+        [
+          0.6,
+          60
+        ],
+        [
+          0.8,
+          20
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "unavailable": "O LTV dos CRIs só aparece nos relatórios gerenciais (PDF) de cada fundo; não há fonte estruturada gratuita."
+    },
+    "rating_avg": {
+      "label": "Rating médio da carteira de crédito",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Rating das agências em escala numérica, ponderado",
+      "anchor": [
+        [
+          0,
+          0
+        ],
+        [
+          100,
+          100
+        ]
+      ],
+      "unavailable": "Ratings de CRIs não estão nos informes da CVM; dependem das agências (pagas) ou dos relatórios gerenciais."
+    }
+  },
+  "normalization": {
+    "peer_min": 8,
+    "winsor_low": 0.025,
+    "winsor_high": 0.975,
+    "relative_weight": 0.7,
+    "absolute_weight": 0.3,
+    "level_weight": 0.5,
+    "average_weight": 0.25,
+    "trend_weight": 0.25,
+    "history_years": 5,
+    "tax_rate_br": 0.34
+  },
+  "missing": {
+    "dimension_min_coverage": 0.6,
+    "impute_factor": 0.9,
+    "max_imputed_share": 0.3,
+    "stale_days": 200
+  },
+  "confidence": {
+    "peer_level_factor": {
+      "sector": 1.0,
+      "segment": 0.95,
+      "class": 0.85,
+      "none": 0.7
+    },
+    "stale_factor": 0.8,
+    "low_liquidity_factor": 0.9,
+    "reconcile_factor": 0.9
+  },
+  "reconciliation": {
+    "tolerance": 0.02,
+    "confidence_tolerance": 0.25
+  },
+  "bank_valuation": {
+    "cost_of_equity": 0.16,
+    "growth": 0.05
+  },
+  "bands": [
+    {
+      "key": "robusto",
+      "label": "Robusto",
+      "min": 75,
+      "meaning": "Fundamentos sólidos nos critérios medidos"
+    },
+    {
+      "key": "saudavel",
+      "label": "Saudável",
+      "min": 60,
+      "meaning": "Ok; monitorar trimestralmente"
+    },
+    {
+      "key": "atencao",
+      "label": "Atenção",
+      "min": 40,
+      "meaning": "Deterioração ou fraqueza relevante; revisar a tese"
+    },
+    {
+      "key": "risco",
+      "label": "Risco",
+      "min": 0,
+      "meaning": "Fundamentos comprometidos nos critérios medidos"
+    }
+  ],
+  "flags": {
+    "altman_distress": {
+      "label": "Altman Z'' em zona de estresse",
+      "threshold": 1.1,
+      "cap": 45,
+      "severity": "high"
+    },
+    "beneish_manipulation": {
+      "label": "Beneish: provável manipulação de resultados (revisar)",
+      "threshold": -1.78,
+      "penalty": 10,
+      "severity": "high"
+    },
+    "piotroski_low": {
+      "label": "Piotroski muito baixo",
+      "threshold": 2,
+      "penalty": 5,
+      "severity": "medium"
+    },
+    "interest_coverage_low": {
+      "label": "Cobertura de juros abaixo de 1,5x por 2 trimestres",
+      "threshold": 1.5,
+      "cap": 50,
+      "severity": "high"
+    },
+    "fcf_negative_3y": {
+      "label": "Fluxo de caixa livre negativo por 3 anos seguidos",
+      "penalty": 8,
+      "severity": "medium"
+    },
+    "dividends_above_fcf": {
+      "label": "Dividendos acima do caixa livre por 2 anos ou mais",
+      "penalty": 5,
+      "severity": "medium"
+    },
+    "dilution_high": {
+      "label": "Diluição acima de 5% ao ano",
+      "threshold": 0.05,
+      "penalty": 5,
+      "severity": "medium"
+    },
+    "negative_equity": {
+      "label": "Patrimônio líquido negativo",
+      "cap": 30,
+      "severity": "critical"
+    },
+    "dsri_high": {
+      "label": "Recebíveis crescendo muito acima da receita (DSRI)",
+      "threshold": 1.4,
+      "penalty": 3,
+      "severity": "low"
+    },
+    "late_filing": {
+      "label": "Atraso na entrega de DFP/ITR",
+      "penalty": 10,
+      "severity": "high"
+    },
+    "auditor_change": {
+      "label": "Troca de auditor fora do rodízio",
+      "min_tenure_years": 5,
+      "penalty": 5,
+      "severity": "medium"
+    },
+    "bank_basel_low": {
+      "label": "Basileia abaixo do mínimo regulatório + 1 p.p.",
+      "threshold": 0.115,
+      "cap": 40,
+      "severity": "critical"
+    },
+    "fii_vacancy_high": {
+      "label": "Vacância financeira acima de 25%",
+      "threshold": 0.25,
+      "penalty": 7,
+      "severity": "medium"
+    },
+    "fii_tenant_concentration": {
+      "label": "Um inquilino com mais de 40% da receita",
+      "threshold": 0.4,
+      "penalty": 5,
+      "severity": "medium"
+    },
+    "low_liquidity": {
+      "label": "Liquidez baixa (volume médio abaixo de R$ 1 mi/dia)",
+      "threshold": 1000000,
+      "severity": "info"
+    }
+  },
+  "alerts": {
+    "_comment": "Alerta só quando a saúde piora de fato, entre dois scores definitivos (sem dados insuficientes, parcial ou título vencido de um lado): queda de `drop_points` ou mais, faixa que piora até `band_floor` ou abaixo, ou red flag alta/crítica nova. Melhoras não alertam.",
+    "drop_points": 10,
+    "band_floor": "atencao"
+  },
+  "events": {
+    "_comment": "Eventos qualitativos (§8.2): só valem depois de aceitos pelo usuário. A penalidade decai pela meia-vida e o teto relaxa na mesma proporção, até o evento ser marcado como resolvido. `keywords` sugerem eventos a partir dos assuntos dos fatos relevantes e comunicados da CVM (IPE); a confirmação é sempre do usuário.",
+    "half_life_quarters": 4,
+    "kinds": {
+      "recuperacao_judicial": {
+        "label": "Recuperação judicial ou extrajudicial / default",
+        "cap": 20,
+        "severity": "critical",
+        "keywords": [
+          "recuperacao judicial",
+          "recuperacao extrajudicial",
+          "pedido de recuperacao",
+          "inadimplemento",
+          "vencimento antecipado",
+          "falencia"
+        ]
+      },
+      "fraude": {
+        "label": "Fraude contábil ou reapresentação de demonstrações",
+        "cap": 25,
+        "severity": "critical",
+        "keywords": [
+          "reapresentacao",
+          "inconsistencias contabeis",
+          "fraude",
+          "republicacao das demonstracoes"
+        ]
+      },
+      "litigio": {
+        "label": "Litígio relevante",
+        "penalty": 10,
+        "severity": "high",
+        "keywords": [
+          "acao civil publica",
+          "arbitragem",
+          "auto de infracao",
+          "condenacao"
+        ]
+      },
+      "ambiental": {
+        "label": "Desastre ambiental ou ESG",
+        "penalty": 15,
+        "severity": "high",
+        "keywords": [
+          "rompimento",
+          "barragem",
+          "vazamento",
+          "acidente",
+          "desastre"
+        ]
+      },
+      "governanca": {
+        "label": "Governança (troca abrupta de CEO/CFO, partes relacionadas, interferência)",
+        "penalty": 5,
+        "severity": "medium",
+        "keywords": [
+          "renuncia do diretor presidente",
+          "renuncia do ceo",
+          "destituicao",
+          "renuncia do diretor financeiro",
+          "partes relacionadas",
+          "intervencao"
+        ]
+      },
+      "regulacao": {
+        "label": "Regulação (tarifa, concessão, intervenção em preços)",
+        "penalty": 5,
+        "severity": "medium",
+        "keywords": [
+          "revisao tarifaria",
+          "caducidade",
+          "encampacao",
+          "intervencao"
+        ]
+      },
+      "outro": {
+        "label": "Outro evento relevante",
+        "penalty": 5,
+        "severity": "medium",
+        "keywords": []
+      }
+    }
+  }
+}

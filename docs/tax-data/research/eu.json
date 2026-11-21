@@ -1,0 +1,1688 @@
+{
+  "country": "EU",
+  "version": "2026-10",
+  "generated": "2026-10-17",
+  "currency": "EUR (OECD average wages in national currency where noted)",
+  "units": "Rates are percentages as decimals (21 = 21%).",
+  "sources": [
+    {
+      "id": "youreurope_vat",
+      "publisher": "European Union - Your Europe (European Commission)",
+      "title": "VAT rules and rates: standard, special & reduced rates - 'List of VAT rates applied in EU member countries'",
+      "url": "https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_en.htm",
+      "published": "page last checked 2026-07-13",
+      "accessed": "2026-10-17",
+      "supports": "Standard, reduced, super-reduced and parking VAT rates for all 27 Member States (excludes region-specific rates)."
+    },
+    {
+      "id": "ec_taxud_vat_rates",
+      "publisher": "European Commission - DG Taxation and Customs Union (DG TAXUD)",
+      "title": "VAT Rates",
+      "url": "https://taxation-customs.ec.europa.eu/taxation/vat/vat-directive/vat-rates_en",
+      "published": "page modified 2025-11-13",
+      "accessed": "2026-10-17",
+      "supports": "EU rules: standard rate at least 15% (Art. 97); up to two reduced rates >= 5% for Annex III categories; one super-reduced rate < 5% and one zero rate for up to seven basic-needs categories (e.g., foodstuffs, medicines); parking rate >= 12%; points to TEDB for country rates."
+    },
+    {
+      "id": "ec_taxud_vat_rates_pdf_2020",
+      "publisher": "European Commission - DG TAXUD",
+      "title": "VAT rates applied in the Member States of the European Union - Situation at 1st January 2020 (taxud.c.1(2020))",
+      "url": "https://taxation-customs.ec.europa.eu/document/download/82a38bdb-d724-472d-8e02-325b271e0d88_en?filename=vat_rates_en.pdf",
+      "published": "2020 (situation at 2020-01-01)",
+      "accessed": "2026-10-17",
+      "supports": "Historical only: the downloadable DG TAXUD PDF is still the 2020 edition; the Commission now points to TEDB / Your Europe. Not used for current figures."
+    },
+    {
+      "id": "ec_a2m_vat_changes_2025",
+      "publisher": "European Commission - Access2Markets",
+      "title": "Recent VAT changes in certain EU Member States",
+      "url": "https://trade.ec.europa.eu/access-to-markets/en/news/recent-vat-changes-certain-eu-member-states",
+      "published": "2025-01-15",
+      "accessed": "2026-10-17",
+      "supports": "Slovakia 20%->23% standard, 10%->19% reduced (other food, electricity), 5% super-reduced (basic food, medicines, books) from 2025-01-01; Spain basic foods back to 4% and seed oils/pasta to 10% from 2025-01-01; Cyprus temporary zero rate until 2025-12-31."
+    },
+    {
+      "id": "vero_fi_changes",
+      "publisher": "Finnish Tax Administration (Vero Skatt)",
+      "title": "The changes to VAT rates",
+      "url": "https://www.vero.fi/en/businesses-and-corporations/taxes-and-charges/vat/rates-of-vat/the-changes-to-VAT-rates/",
+      "published": "page updated 2026-01-01",
+      "accessed": "2026-10-17",
+      "supports": "Finland standard rate 24%->25.5% from 2024-09-01; 14% reduced rate cut to 13.5% from 2026-01-01; books moved 10%->14% (2025)->13.5% (2026); passenger transport, accommodation, cultural events at 13.5% from 2026."
+    },
+    {
+      "id": "emta_ee_standard",
+      "publisher": "Estonian Tax and Customs Board (EMTA)",
+      "title": "Standard VAT rate",
+      "url": "https://emta.ee/en/business-client/taxes-and-payment/value-added-tax/vat-rates-and-supply-exempt-tax/standard-vat-rate",
+      "published": "n/d",
+      "accessed": "2026-10-17",
+      "supports": "Estonia standard VAT 24% from 2025-07-01; VAT Act rates 24%, 13%, 9%, 0%."
+    },
+    {
+      "id": "emta_ee_vat",
+      "publisher": "Estonian Tax and Customs Board (EMTA)",
+      "title": "Value added tax",
+      "url": "https://www.emta.ee/en/business-client/taxes-and-payment/value-added-tax",
+      "published": "n/d",
+      "accessed": "2026-10-17",
+      "supports": "Estonia standard VAT 22% -> 24% from 2025-07-01; accommodation (incl. with breakfast) 9% -> 13% from 2025-01-01; press publications 5% -> 9% from 2025-01-01."
+    },
+    {
+      "id": "ey_romania_2025",
+      "publisher": "EY (Ernst & Young) Global Tax Alert",
+      "title": "Romanian tax changes introduced by new fiscal and budgetary measures",
+      "url": "https://www.ey.com/en_gl/technical/tax-alerts/romanian-tax-changes-introduced-by-new-fiscal-and-budgetary-measures",
+      "published": "2025-07-30",
+      "accessed": "2026-10-17",
+      "supports": "Romania standard VAT 19%->21% from 2025-08-01; 5% and 9% merged into single 11% reduced rate (food, medicines, books, water, restaurants, hotels, etc.) under Law 141/2025 (Official Monitor 2025-07-25)."
+    },
+    {
+      "id": "usp_at_49",
+      "publisher": "Austria - Unternehmensserviceportal (USP), Federal Ministry of Finance",
+      "title": "Neuer Umsatzsteuersatz von 4,9 Prozent",
+      "url": "https://www.usp.gv.at/aktuelles/newsliste/neuer_ustsatz.html",
+      "published": "last updated 2026-07-10",
+      "accessed": "2026-10-17",
+      "supports": "Austria: new 4.9% VAT rate on selected basic foods (Annex 3 UStG, by CN code) from 2026-07-01; restaurant/catering excluded; non-listed foods stay at 10%."
+    },
+    {
+      "id": "de_ustg_12",
+      "publisher": "Germany - Federal Ministry of Justice (gesetze-im-internet.de)",
+      "title": "Umsatzsteuergesetz (UStG) § 12 Steuersätze, and Anlage 2",
+      "url": "https://www.gesetze-im-internet.de/ustg_1980/__12.html",
+      "published": "consolidated law (accessed online)",
+      "accessed": "2026-10-17",
+      "supports": "Germany 19% standard, 7% reduced for Anlage 2 goods (most foods, coffee/tea, books, newspapers), local passenger transport, short-term accommodation, restaurant/catering services excluding beverages; 0% on residential solar panels. Anlage 2: https://www.gesetze-im-internet.de/ustg_1980/anlage_2.html"
+    },
+    {
+      "id": "de_breg_gastro_2026",
+      "publisher": "Bundesregierung (German Federal Government)",
+      "title": "Entlastungen für Pendler und Gastronomie",
+      "url": "https://www.bundesregierung.de/breg-de/aktuelles/steueraenderungsgesetz-bundesrat-2383684",
+      "published": "2026-01-01",
+      "accessed": "2026-10-17",
+      "supports": "Germany: VAT on restaurant food cut from 19% to 7% since 2026-01-01 (beverages excluded)."
+    },
+    {
+      "id": "fr_sp_food",
+      "publisher": "Service-Public.fr (Entreprendre) - French administration",
+      "title": "Taux de TVA sur les produits alimentaires et les boissons (F22399)",
+      "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F22399",
+      "published": "verified 2025-12-03",
+      "accessed": "2026-10-17",
+      "supports": "France: 5.5% food for deferred consumption (shops/supermarkets); 10% food and soft drinks for immediate consumption (restaurants, takeaway sandwiches); 20% alcohol."
+    },
+    {
+      "id": "fr_sp_health",
+      "publisher": "Service-Public.fr (Entreprendre) - French administration",
+      "title": "Taux de TVA dans le secteur de l'hygiène et de la santé (F23567)",
+      "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23567",
+      "published": "verified 2025-06-18",
+      "accessed": "2026-10-17",
+      "supports": "France: 2.1% medicines reimbursed by social security; 10% non-reimbursed medicines; 5.5% feminine hygiene products and condoms."
+    },
+    {
+      "id": "es_aeat_2026",
+      "publisher": "Agencia Tributaria (Spain)",
+      "title": "Tipos impositivos en el IVA 2026",
+      "url": "https://sede.agenciatributaria.gob.es/static_files/Sede/Tema/IVA/IVA_reperc/Tipos_IVA_2026_26_02_2026.pdf",
+      "published": "2026-02-26",
+      "accessed": "2026-10-17",
+      "supports": "Spain: 21% general; 10% food in general, water, passenger transport, restaurants/hotels; 4% bread, milk, cheese, eggs, fruit, vegetables, olive oil, books/newspapers, human medicines; electricity/gas/fuels 21% from 2026-01-01 to 2026-03-21 and 10% from 2026-03-22 to 2026-06-30 (temporary, conditional)."
+    },
+    {
+      "id": "it_ade_aliquote",
+      "publisher": "Agenzia delle Entrate (Italy)",
+      "title": "IVA - Norme generali e aliquote",
+      "url": "https://www.agenziaentrate.gov.it/portale/iva-regole-generali-aliquote-esenzioni-pagamento/norme-generali-e-aliquote",
+      "published": "page last updated 2020-12-12",
+      "accessed": "2026-10-17",
+      "supports": "Italy: 22% ordinary; 10% domestic electricity and gas, medicines, building renovation; 5% certain foods; 4% foods, beverages, agricultural products (full list in Tabella A, DPR 633/1972)."
+    },
+    {
+      "id": "pt_at_civa",
+      "publisher": "Autoridade Tributária e Aduaneira - Portal das Finanças (Portugal)",
+      "title": "Código do IVA, artigo 18.º (Taxas) and Listas I e II anexas",
+      "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/c-iva-listas.aspx",
+      "published": "consolidated code (accessed online)",
+      "accessed": "2026-10-17",
+      "supports": "Portugal (mainland): 6% List I (bread, milk, fruit/vegetables, water, medicines, books/newspapers, electricity consumption within limits, passenger transport, hotels); 13% List II (restaurant/food services excl. alcohol and soft drinks, ordinary wine, edible oils); 23% other. Art. 18: https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/iva18.aspx"
+    },
+    {
+      "id": "nl_bd_9",
+      "publisher": "Belastingdienst (Netherlands Tax Administration)",
+      "title": "Goederen met 9% btw; and news 'Vanaf 1 januari 2026: btw-tarief logies omhoog naar 21%' (2025-10-30)",
+      "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/tarieven_en_vrijstellingen/goederen_9_btw/goederen_met_9_btw",
+      "published": "n/d; news item 2025-10-30",
+      "accessed": "2026-10-17",
+      "supports": "Netherlands: 9% for food, water, ornamental plants, medicines and aids, art/antiques, books and periodicals; accommodation moved to 21% from 2026-01-01."
+    },
+    {
+      "id": "oecd_taxing_wages_db",
+      "publisher": "OECD",
+      "title": "Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions",
+      "published": "data through 2025 (Taxing Wages 2026 edition, published April 2026)",
+      "accessed": "2026-10-17",
+      "supports": "Average tax wedge and components (income tax, employee and employer SSC) for a single worker, no children, at 100% of the average wage, 2024 and 2025, for 22 EU-OECD members, the EU-22 average and the OECD average."
+    }
+  ],
+  "income": {
+    "oecd_taxing_wages": {
+      "household": "Single person, no children, earning 100% of the national average wage (AW)",
+      "edition": "OECD Taxing Wages 2026 (data years 2024 and 2025); the 2025 edition covered 2024",
+      "measures": {
+        "tax_wedge_pct_labour_cost": "Average tax wedge: income tax + employee SSC + employer SSC (incl. payroll taxes) minus cash benefits, as % of total labour cost",
+        "income_tax_plus_employee_ssc_pct_gross_wage": "Average rate of income tax and employee SSC, % of gross wage (what the worker sees on the payslip)",
+        "income_tax_pct_gross_wage": "Average income tax rate (central + sub-central), % of gross wage",
+        "employee_ssc_pct_gross_wage": "Employee social security contributions, % of gross wage",
+        "employer_ssc_pct_gross_wage": "Employer social security contributions, % of gross wage",
+        "average_wage_annual_national_currency": "Average gross annual wage used by the OECD (national currency)"
+      },
+      "oecd_average": {
+        "name": "OECD average country",
+        "2024": {
+          "employee_ssc_pct_gross_wage": 9.59,
+          "employer_ssc_pct_gross_wage": 16.43,
+          "income_tax_pct_gross_wage": 15.46,
+          "income_tax_plus_employee_ssc_pct_gross_wage": 25.05,
+          "tax_wedge_pct_labour_cost": 34.93
+        },
+        "2025": {
+          "employee_ssc_pct_gross_wage": 9.61,
+          "employer_ssc_pct_gross_wage": 16.61,
+          "income_tax_pct_gross_wage": 15.49,
+          "income_tax_plus_employee_ssc_pct_gross_wage": 25.11,
+          "tax_wedge_pct_labour_cost": 35.08
+        }
+      },
+      "eu22_average": {
+        "name": "European Union (22 countries) in OECD",
+        "2024": {
+          "employee_ssc_pct_gross_wage": 12.02,
+          "employer_ssc_pct_gross_wage": 21.71,
+          "income_tax_pct_gross_wage": 17.2,
+          "income_tax_plus_employee_ssc_pct_gross_wage": 29.22,
+          "tax_wedge_pct_labour_cost": 41.64
+        },
+        "2025": {
+          "employee_ssc_pct_gross_wage": 12.04,
+          "employer_ssc_pct_gross_wage": 21.85,
+          "income_tax_pct_gross_wage": 17.19,
+          "income_tax_plus_employee_ssc_pct_gross_wage": 29.24,
+          "tax_wedge_pct_labour_cost": 41.73
+        }
+      },
+      "countries": [
+        {
+          "iso3": "AUT",
+          "country": "Austria",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 17.93,
+            "employer_ssc_pct_gross_wage": 27.61,
+            "income_tax_pct_gross_wage": 14.56,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 32.49,
+            "tax_wedge_pct_labour_cost": 46.8,
+            "average_wage_annual_national_currency": 60749
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 17.93,
+            "employer_ssc_pct_gross_wage": 27.61,
+            "income_tax_pct_gross_wage": 14.55,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 32.48,
+            "tax_wedge_pct_labour_cost": 47.09,
+            "average_wage_annual_national_currency": 63054
+          }
+        },
+        {
+          "iso3": "BEL",
+          "country": "Belgium",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 13.99,
+            "employer_ssc_pct_gross_wage": 27.04,
+            "income_tax_pct_gross_wage": 25.54,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 39.53,
+            "tax_wedge_pct_labour_cost": 52.4,
+            "average_wage_annual_national_currency": 60370
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 13.99,
+            "employer_ssc_pct_gross_wage": 27.22,
+            "income_tax_pct_gross_wage": 25.55,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 39.55,
+            "tax_wedge_pct_labour_cost": 52.48,
+            "average_wage_annual_national_currency": 62348
+          }
+        },
+        {
+          "iso3": "CZE",
+          "country": "Czechia",
+          "focus": false,
+          "currency": "CZK",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 11.6,
+            "employer_ssc_pct_gross_wage": 33.8,
+            "income_tax_pct_gross_wage": 9.4,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 21.0,
+            "tax_wedge_pct_labour_cost": 40.96,
+            "average_wage_annual_national_currency": 551030
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 11.6,
+            "employer_ssc_pct_gross_wage": 33.8,
+            "income_tax_pct_gross_wage": 9.73,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 21.33,
+            "tax_wedge_pct_labour_cost": 41.2,
+            "average_wage_annual_national_currency": 584744
+          }
+        },
+        {
+          "iso3": "DEU",
+          "country": "Germany",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 20.69,
+            "employer_ssc_pct_gross_wage": 20.1,
+            "income_tax_pct_gross_wage": 16.77,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 37.46,
+            "tax_wedge_pct_labour_cost": 47.93,
+            "average_wage_annual_national_currency": 63528
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 21.46,
+            "employer_ssc_pct_gross_wage": 20.86,
+            "income_tax_pct_gross_wage": 17.22,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 38.68,
+            "tax_wedge_pct_labour_cost": 49.26,
+            "average_wage_annual_national_currency": 66700
+          }
+        },
+        {
+          "iso3": "DNK",
+          "country": "Denmark",
+          "focus": false,
+          "currency": "DKK",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 0.0,
+            "employer_ssc_pct_gross_wage": 0.6,
+            "income_tax_pct_gross_wage": 35.79,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 35.79,
+            "tax_wedge_pct_labour_cost": 36.17,
+            "average_wage_annual_national_currency": 521300
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 0.0,
+            "employer_ssc_pct_gross_wage": 0.67,
+            "income_tax_pct_gross_wage": 35.33,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 35.33,
+            "tax_wedge_pct_labour_cost": 35.76,
+            "average_wage_annual_national_currency": 537071
+          }
+        },
+        {
+          "iso3": "ESP",
+          "country": "Spain",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 6.47,
+            "employer_ssc_pct_gross_wage": 30.48,
+            "income_tax_pct_gross_wage": 16.72,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 23.19,
+            "tax_wedge_pct_labour_cost": 41.14,
+            "average_wage_annual_national_currency": 31472
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 6.48,
+            "employer_ssc_pct_gross_wage": 30.57,
+            "income_tax_pct_gross_wage": 17.06,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 23.54,
+            "tax_wedge_pct_labour_cost": 41.44,
+            "average_wage_annual_national_currency": 32678
+          }
+        },
+        {
+          "iso3": "EST",
+          "country": "Estonia",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 1.6,
+            "employer_ssc_pct_gross_wage": 33.8,
+            "income_tax_pct_gross_wage": 19.04,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 20.64,
+            "tax_wedge_pct_labour_cost": 40.69,
+            "average_wage_annual_national_currency": 24139
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 1.6,
+            "employer_ssc_pct_gross_wage": 33.8,
+            "income_tax_pct_gross_wage": 21.65,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 23.25,
+            "tax_wedge_pct_labour_cost": 42.64,
+            "average_wage_annual_national_currency": 25603
+          }
+        },
+        {
+          "iso3": "FIN",
+          "country": "Finland",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 9.39,
+            "employer_ssc_pct_gross_wage": 19.95,
+            "income_tax_pct_gross_wage": 21.2,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 30.59,
+            "tax_wedge_pct_labour_cost": 42.13,
+            "average_wage_annual_national_currency": 53858
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 9.53,
+            "employer_ssc_pct_gross_wage": 20.46,
+            "income_tax_pct_gross_wage": 21.18,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 30.71,
+            "tax_wedge_pct_labour_cost": 42.48,
+            "average_wage_annual_national_currency": 55462
+          }
+        },
+        {
+          "iso3": "FRA",
+          "country": "France",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 11.31,
+            "employer_ssc_pct_gross_wage": 36.35,
+            "income_tax_pct_gross_wage": 16.59,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 27.9,
+            "tax_wedge_pct_labour_cost": 47.12,
+            "average_wage_annual_national_currency": 45313
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 11.31,
+            "employer_ssc_pct_gross_wage": 36.35,
+            "income_tax_pct_gross_wage": 16.67,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 27.98,
+            "tax_wedge_pct_labour_cost": 47.18,
+            "average_wage_annual_national_currency": 45964
+          }
+        },
+        {
+          "iso3": "GRC",
+          "country": "Greece",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 13.87,
+            "employer_ssc_pct_gross_wage": 22.29,
+            "income_tax_pct_gross_wage": 12.14,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 26.01,
+            "tax_wedge_pct_labour_cost": 39.5,
+            "average_wage_annual_national_currency": 25680
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 13.37,
+            "employer_ssc_pct_gross_wage": 21.79,
+            "income_tax_pct_gross_wage": 12.75,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 26.12,
+            "tax_wedge_pct_labour_cost": 39.34,
+            "average_wage_annual_national_currency": 26563
+          }
+        },
+        {
+          "iso3": "HUN",
+          "country": "Hungary",
+          "focus": false,
+          "currency": "HUF",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 18.5,
+            "employer_ssc_pct_gross_wage": 13.0,
+            "income_tax_pct_gross_wage": 15.0,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 33.5,
+            "tax_wedge_pct_labour_cost": 41.15,
+            "average_wage_annual_national_currency": 7754304
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 18.5,
+            "employer_ssc_pct_gross_wage": 13.0,
+            "income_tax_pct_gross_wage": 15.0,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 33.5,
+            "tax_wedge_pct_labour_cost": 41.15,
+            "average_wage_annual_national_currency": 8455487
+          }
+        },
+        {
+          "iso3": "IRL",
+          "country": "Ireland",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 4.03,
+            "employer_ssc_pct_gross_wage": 11.05,
+            "income_tax_pct_gross_wage": 21.86,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 25.89,
+            "tax_wedge_pct_labour_cost": 33.26,
+            "average_wage_annual_national_currency": 58026
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 4.1,
+            "employer_ssc_pct_gross_wage": 11.18,
+            "income_tax_pct_gross_wage": 21.0,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 25.1,
+            "tax_wedge_pct_labour_cost": 32.63,
+            "average_wage_annual_national_currency": 60258
+          }
+        },
+        {
+          "iso3": "ITA",
+          "country": "Italy",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 9.49,
+            "employer_ssc_pct_gross_wage": 31.58,
+            "income_tax_pct_gross_wage": 20.72,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 30.21,
+            "tax_wedge_pct_labour_cost": 46.96,
+            "average_wage_annual_national_currency": 35360
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 9.49,
+            "employer_ssc_pct_gross_wage": 31.58,
+            "income_tax_pct_gross_wage": 19.14,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 28.63,
+            "tax_wedge_pct_labour_cost": 45.76,
+            "average_wage_annual_national_currency": 36594
+          }
+        },
+        {
+          "iso3": "LTU",
+          "country": "Lithuania",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 19.5,
+            "employer_ssc_pct_gross_wage": 1.79,
+            "income_tax_pct_gross_wage": 18.83,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 38.33,
+            "tax_wedge_pct_labour_cost": 39.42,
+            "average_wage_annual_national_currency": 25984
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 19.5,
+            "employer_ssc_pct_gross_wage": 1.79,
+            "income_tax_pct_gross_wage": 19.22,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 38.72,
+            "tax_wedge_pct_labour_cost": 39.79,
+            "average_wage_annual_national_currency": 28474
+          }
+        },
+        {
+          "iso3": "LUX",
+          "country": "Luxembourg",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 12.31,
+            "employer_ssc_pct_gross_wage": 12.52,
+            "income_tax_pct_gross_wage": 20.1,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 32.4,
+            "tax_wedge_pct_labour_cost": 39.92,
+            "average_wage_annual_national_currency": 75341
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 12.31,
+            "employer_ssc_pct_gross_wage": 13.65,
+            "income_tax_pct_gross_wage": 19.69,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 31.99,
+            "tax_wedge_pct_labour_cost": 40.16,
+            "average_wage_annual_national_currency": 77844
+          }
+        },
+        {
+          "iso3": "LVA",
+          "country": "Latvia",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 10.5,
+            "employer_ssc_pct_gross_wage": 23.61,
+            "income_tax_pct_gross_wage": 17.28,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 27.78,
+            "tax_wedge_pct_labour_cost": 41.58,
+            "average_wage_annual_national_currency": 19992
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 10.5,
+            "employer_ssc_pct_gross_wage": 23.61,
+            "income_tax_pct_gross_wage": 15.5,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 26.0,
+            "tax_wedge_pct_labour_cost": 40.14,
+            "average_wage_annual_national_currency": 21321
+          }
+        },
+        {
+          "iso3": "NLD",
+          "country": "Netherlands",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 10.45,
+            "employer_ssc_pct_gross_wage": 12.32,
+            "income_tax_pct_gross_wage": 17.55,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 28.0,
+            "tax_wedge_pct_labour_cost": 35.9,
+            "average_wage_annual_national_currency": 66190
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 10.02,
+            "employer_ssc_pct_gross_wage": 12.6,
+            "income_tax_pct_gross_wage": 17.85,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 27.86,
+            "tax_wedge_pct_labour_cost": 35.94,
+            "average_wage_annual_national_currency": 69028
+          }
+        },
+        {
+          "iso3": "POL",
+          "country": "Poland",
+          "focus": false,
+          "currency": "PLN",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 17.83,
+            "employer_ssc_pct_gross_wage": 16.35,
+            "income_tax_pct_gross_wage": 6.25,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 24.07,
+            "tax_wedge_pct_labour_cost": 34.74,
+            "average_wage_annual_national_currency": 96364
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 17.83,
+            "employer_ssc_pct_gross_wage": 16.3,
+            "income_tax_pct_gross_wage": 6.61,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 24.44,
+            "tax_wedge_pct_labour_cost": 35.03,
+            "average_wage_annual_national_currency": 105738
+          }
+        },
+        {
+          "iso3": "PRT",
+          "country": "Portugal",
+          "focus": true,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 11.0,
+            "employer_ssc_pct_gross_wage": 23.75,
+            "income_tax_pct_gross_wage": 14.23,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 25.23,
+            "tax_wedge_pct_labour_cost": 39.58,
+            "average_wage_annual_national_currency": 23118
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 11.0,
+            "employer_ssc_pct_gross_wage": 23.75,
+            "income_tax_pct_gross_wage": 13.93,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 24.93,
+            "tax_wedge_pct_labour_cost": 39.34,
+            "average_wage_annual_national_currency": 24254
+          }
+        },
+        {
+          "iso3": "SVK",
+          "country": "Slovak Republic",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 13.4,
+            "employer_ssc_pct_gross_wage": 32.2,
+            "income_tax_pct_gross_wage": 10.6,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 24.0,
+            "tax_wedge_pct_labour_cost": 42.51,
+            "average_wage_annual_national_currency": 18336
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 13.4,
+            "employer_ssc_pct_gross_wage": 32.2,
+            "income_tax_pct_gross_wage": 10.87,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 24.27,
+            "tax_wedge_pct_labour_cost": 42.72,
+            "average_wage_annual_national_currency": 19590
+          }
+        },
+        {
+          "iso3": "SVN",
+          "country": "Slovenia",
+          "focus": false,
+          "currency": "EUR",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 23.59,
+            "employer_ssc_pct_gross_wage": 16.1,
+            "income_tax_pct_gross_wage": 12.16,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 35.75,
+            "tax_wedge_pct_labour_cost": 44.66,
+            "average_wage_annual_national_currency": 28242
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 24.07,
+            "employer_ssc_pct_gross_wage": 16.6,
+            "income_tax_pct_gross_wage": 12.15,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 36.21,
+            "tax_wedge_pct_labour_cost": 45.3,
+            "average_wage_annual_national_currency": 30135
+          }
+        },
+        {
+          "iso3": "SWE",
+          "country": "Sweden",
+          "focus": false,
+          "currency": "SEK",
+          "2024": {
+            "employee_ssc_pct_gross_wage": 7.0,
+            "employer_ssc_pct_gross_wage": 31.42,
+            "income_tax_pct_gross_wage": 16.13,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 23.13,
+            "tax_wedge_pct_labour_cost": 41.51,
+            "average_wage_annual_national_currency": 539923
+          },
+          "2025": {
+            "employee_ssc_pct_gross_wage": 7.0,
+            "employer_ssc_pct_gross_wage": 31.42,
+            "income_tax_pct_gross_wage": 15.64,
+            "income_tax_plus_employee_ssc_pct_gross_wage": 22.64,
+            "tax_wedge_pct_labour_cost": 41.14,
+            "average_wage_annual_national_currency": 557053
+          }
+        }
+      ],
+      "source_ids": [
+        "oecd_taxing_wages_db"
+      ],
+      "note": "Values rounded to 2 decimals from the OECD database. Bulgaria, Croatia, Cyprus, Malta and Romania are not included in this OECD dataset. Search-result excerpt of the Taxing Wages 2026 executive summary reports an OECD-average wedge of 35.1% in 2025, consistent with 35.08 here."
+    }
+  },
+  "payroll": {
+    "note": "Employee and employer social security contribution rates at the average wage for a single worker (OECD Taxing Wages). Statutory rates, ceilings and brackets differ by country and are not compiled here.",
+    "countries": [
+      {
+        "iso3": "AUT",
+        "country": "Austria",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 17.93,
+          "employer_ssc_pct_gross_wage": 27.61
+        }
+      },
+      {
+        "iso3": "BEL",
+        "country": "Belgium",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 13.99,
+          "employer_ssc_pct_gross_wage": 27.22
+        }
+      },
+      {
+        "iso3": "CZE",
+        "country": "Czechia",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 11.6,
+          "employer_ssc_pct_gross_wage": 33.8
+        }
+      },
+      {
+        "iso3": "DEU",
+        "country": "Germany",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 21.46,
+          "employer_ssc_pct_gross_wage": 20.86
+        }
+      },
+      {
+        "iso3": "DNK",
+        "country": "Denmark",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 0.0,
+          "employer_ssc_pct_gross_wage": 0.67
+        }
+      },
+      {
+        "iso3": "ESP",
+        "country": "Spain",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 6.48,
+          "employer_ssc_pct_gross_wage": 30.57
+        }
+      },
+      {
+        "iso3": "EST",
+        "country": "Estonia",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 1.6,
+          "employer_ssc_pct_gross_wage": 33.8
+        }
+      },
+      {
+        "iso3": "FIN",
+        "country": "Finland",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 9.53,
+          "employer_ssc_pct_gross_wage": 20.46
+        }
+      },
+      {
+        "iso3": "FRA",
+        "country": "France",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 11.31,
+          "employer_ssc_pct_gross_wage": 36.35
+        }
+      },
+      {
+        "iso3": "GRC",
+        "country": "Greece",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 13.37,
+          "employer_ssc_pct_gross_wage": 21.79
+        }
+      },
+      {
+        "iso3": "HUN",
+        "country": "Hungary",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 18.5,
+          "employer_ssc_pct_gross_wage": 13.0
+        }
+      },
+      {
+        "iso3": "IRL",
+        "country": "Ireland",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 4.1,
+          "employer_ssc_pct_gross_wage": 11.18
+        }
+      },
+      {
+        "iso3": "ITA",
+        "country": "Italy",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 9.49,
+          "employer_ssc_pct_gross_wage": 31.58
+        }
+      },
+      {
+        "iso3": "LTU",
+        "country": "Lithuania",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 19.5,
+          "employer_ssc_pct_gross_wage": 1.79
+        }
+      },
+      {
+        "iso3": "LUX",
+        "country": "Luxembourg",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 12.31,
+          "employer_ssc_pct_gross_wage": 13.65
+        }
+      },
+      {
+        "iso3": "LVA",
+        "country": "Latvia",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 10.5,
+          "employer_ssc_pct_gross_wage": 23.61
+        }
+      },
+      {
+        "iso3": "NLD",
+        "country": "Netherlands",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 10.02,
+          "employer_ssc_pct_gross_wage": 12.6
+        }
+      },
+      {
+        "iso3": "POL",
+        "country": "Poland",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 17.83,
+          "employer_ssc_pct_gross_wage": 16.3
+        }
+      },
+      {
+        "iso3": "PRT",
+        "country": "Portugal",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 11.0,
+          "employer_ssc_pct_gross_wage": 23.75
+        }
+      },
+      {
+        "iso3": "SVK",
+        "country": "Slovak Republic",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 13.4,
+          "employer_ssc_pct_gross_wage": 32.2
+        }
+      },
+      {
+        "iso3": "SVN",
+        "country": "Slovenia",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 24.07,
+          "employer_ssc_pct_gross_wage": 16.6
+        }
+      },
+      {
+        "iso3": "SWE",
+        "country": "Sweden",
+        "2025": {
+          "employee_ssc_pct_gross_wage": 7.0,
+          "employer_ssc_pct_gross_wage": 31.42
+        }
+      }
+    ],
+    "source_ids": [
+      "oecd_taxing_wages_db"
+    ]
+  },
+  "consumption": [
+    {
+      "code": "AT",
+      "iso2": "AT",
+      "country": "Austria",
+      "standard_rate": 20.0,
+      "reduced_rates": [
+        10.0,
+        13.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": 13.0,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "additional_rates_not_in_table": {
+        "rates": [
+          4.9
+        ],
+        "note": "4.9% on selected basic foods from 2026-07-01 (USP/BMF).",
+        "source_ids": [
+          "usp_at_49"
+        ]
+      },
+      "recent_changes": [
+        {
+          "date": "2026-07-01",
+          "change": "New 4.9% rate on selected basic foods listed by CN code in Annex 3 UStG (restaurant/catering excluded; other food stays 10%). Not yet shown in the Your Europe table checked 2026-07-13.",
+          "source_ids": [
+            "usp_at_49"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "basic_foods_annex3": 4.9,
+        "other_food": 10,
+        "restaurant_catering": "not 4.9 (rate not verified)",
+        "source_ids": [
+          "usp_at_49"
+        ]
+      }
+    },
+    {
+      "code": "BE",
+      "iso2": "BE",
+      "country": "Belgium",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        6.0,
+        12.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": 12.0,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "BG",
+      "iso2": "BG",
+      "country": "Bulgaria",
+      "standard_rate": 20.0,
+      "reduced_rates": [
+        9.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "CY",
+      "iso2": "CY",
+      "country": "Cyprus",
+      "standard_rate": 19.0,
+      "reduced_rates": [
+        5.0,
+        9.0
+      ],
+      "super_reduced_rate": 3.0,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "until 2025-12-31",
+          "change": "Temporary zero rate on baby milk, diapers, feminine hygiene, fresh fruit and vegetables; status in 2026 not verified.",
+          "source_ids": [
+            "ec_a2m_vat_changes_2025"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CZ",
+      "iso2": "CZ",
+      "country": "Czechia",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        12.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": true,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "DE",
+      "iso2": "DE",
+      "country": "Germany",
+      "standard_rate": 19.0,
+      "reduced_rates": [
+        7.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2026-01-01",
+          "change": "Restaurant and catering food permanently at 7% (was 19%); beverages remain 19%.",
+          "source_ids": [
+            "de_breg_gastro_2026",
+            "de_ustg_12"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "food": 7,
+        "restaurant_food": 7,
+        "restaurant_beverages": 19,
+        "books_newspapers": 7,
+        "local_passenger_transport": 7,
+        "accommodation": 7,
+        "coffee_tea": 7,
+        "packaged_drinking_water_and_juices": 19,
+        "source_ids": [
+          "de_ustg_12",
+          "de_breg_gastro_2026"
+        ]
+      }
+    },
+    {
+      "code": "DK",
+      "iso2": "DK",
+      "country": "Denmark",
+      "standard_rate": 25.0,
+      "reduced_rates": [],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": true,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "EE",
+      "iso2": "EE",
+      "country": "Estonia",
+      "standard_rate": 24.0,
+      "reduced_rates": [
+        9.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "additional_rates_not_in_table": {
+        "rates": [
+          13.0
+        ],
+        "note": "EMTA: 13% applies to accommodation from 2025-01-01; the Your Europe table shows only 9% as reduced.",
+        "source_ids": [
+          "emta_ee_vat",
+          "emta_ee_standard"
+        ]
+      },
+      "recent_changes": [
+        {
+          "date": "2025-01-01",
+          "change": "Accommodation (incl. with breakfast) 9% -> 13%; press publications 5% -> 9%.",
+          "source_ids": [
+            "emta_ee_vat"
+          ]
+        },
+        {
+          "date": "2025-07-01",
+          "change": "Standard rate 22% -> 24%.",
+          "source_ids": [
+            "emta_ee_vat",
+            "emta_ee_standard"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EL",
+      "iso2": "GR",
+      "country": "Greece",
+      "standard_rate": 24.0,
+      "reduced_rates": [
+        6.0,
+        13.0,
+        17.0
+      ],
+      "super_reduced_rate": 4.0,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "ES",
+      "iso2": "ES",
+      "country": "Spain",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        10.0
+      ],
+      "super_reduced_rate": 4.0,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2025-01-01",
+          "change": "Temporary food VAT cuts ended: basic foods 2% -> 4%; olive oil 2% -> 4%; seed oils and pasta 7.5% -> 10%.",
+          "source_ids": [
+            "ec_a2m_vat_changes_2025"
+          ]
+        },
+        {
+          "date": "2026-03-22",
+          "change": "Electricity (<10 kW), natural gas, biomass and motor fuels: 21% from 2026-01-01 to 2026-03-21, temporary 10% from 2026-03-22 to 2026-06-30 (conditional on April CPI). Status after 2026-06-30 not verified.",
+          "source_ids": [
+            "es_aeat_2026"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "basic_food_bread_milk_eggs_fruit_veg_olive_oil": 4,
+        "other_food": 10,
+        "sugary_soft_drinks": 21,
+        "alcohol": 21,
+        "restaurants_hotels": 10,
+        "passenger_transport": 10,
+        "books_newspapers": 4,
+        "medicines_human": 4,
+        "water": 10,
+        "electricity_gas_fuels": "21 (2026-01-01..03-21); 10 temporary (2026-03-22..06-30)",
+        "source_ids": [
+          "es_aeat_2026"
+        ]
+      }
+    },
+    {
+      "code": "FI",
+      "iso2": "FI",
+      "country": "Finland",
+      "standard_rate": 25.5,
+      "reduced_rates": [
+        10.0,
+        13.5
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2024-09-01",
+          "change": "Standard rate 24% -> 25.5%.",
+          "source_ids": [
+            "vero_fi_changes"
+          ]
+        },
+        {
+          "date": "2025-01-01",
+          "change": "Books, movie tickets moved from 10% to 14%.",
+          "source_ids": [
+            "vero_fi_changes"
+          ]
+        },
+        {
+          "date": "2026-01-01",
+          "change": "14% reduced rate cut to 13.5% (books, passenger transport, accommodation, cultural events, gyms).",
+          "source_ids": [
+            "vero_fi_changes"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "books": 13.5,
+        "passenger_transport": 13.5,
+        "accommodation": 13.5,
+        "cultural_events": 13.5,
+        "note": "Food, restaurants and medicines rates not shown on the Vero page read (see unverified).",
+        "source_ids": [
+          "vero_fi_changes"
+        ]
+      }
+    },
+    {
+      "code": "FR",
+      "iso2": "FR",
+      "country": "France",
+      "standard_rate": 20.0,
+      "reduced_rates": [
+        5.5,
+        10.0
+      ],
+      "super_reduced_rate": 2.1,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "reduced_rate_examples": {
+        "food_shops": 5.5,
+        "restaurant_and_immediate_consumption": 10,
+        "alcohol": 20,
+        "medicines_reimbursed": 2.1,
+        "medicines_not_reimbursed": 10,
+        "feminine_hygiene": 5.5,
+        "source_ids": [
+          "fr_sp_food",
+          "fr_sp_health"
+        ]
+      }
+    },
+    {
+      "code": "HR",
+      "iso2": "HR",
+      "country": "Croatia",
+      "standard_rate": 25.0,
+      "reduced_rates": [
+        5.0,
+        13.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "HU",
+      "iso2": "HU",
+      "country": "Hungary",
+      "standard_rate": 27.0,
+      "reduced_rates": [
+        5.0,
+        18.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "IE",
+      "iso2": "IE",
+      "country": "Ireland",
+      "standard_rate": 23.0,
+      "reduced_rates": [
+        9.0,
+        13.5
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "IT",
+      "iso2": "IT",
+      "country": "Italy",
+      "standard_rate": 22.0,
+      "reduced_rates": [
+        5.0,
+        10.0
+      ],
+      "super_reduced_rate": 4.0,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "reduced_rate_examples": {
+        "food_beverages_agricultural_basic": 4,
+        "certain_foods": 5,
+        "domestic_electricity_gas": 10,
+        "medicines": 10,
+        "note": "Agenzia Entrate summary (page dated 2020-12-12); full list in Tabella A, DPR 633/1972.",
+        "source_ids": [
+          "it_ade_aliquote"
+        ]
+      }
+    },
+    {
+      "code": "LT",
+      "iso2": "LT",
+      "country": "Lithuania",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        5.0,
+        12.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "LU",
+      "iso2": "LU",
+      "country": "Luxembourg",
+      "standard_rate": 17.0,
+      "reduced_rates": [
+        8.0
+      ],
+      "super_reduced_rate": 3.0,
+      "parking_rate": 14.0,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "LV",
+      "iso2": "LV",
+      "country": "Latvia",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        5.0,
+        12.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "MT",
+      "iso2": "MT",
+      "country": "Malta",
+      "standard_rate": 18.0,
+      "reduced_rates": [
+        5.0,
+        7.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": 12.0,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "NL",
+      "iso2": "NL",
+      "country": "Netherlands",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        9.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2026-01-01",
+          "change": "Accommodation (logies) VAT raised to 21% (previous rate not stated on the page read).",
+          "source_ids": [
+            "nl_bd_9"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "food": 9,
+        "water": 9,
+        "medicines": 9,
+        "books_periodicals": 9,
+        "accommodation": 21,
+        "source_ids": [
+          "nl_bd_9"
+        ]
+      }
+    },
+    {
+      "code": "PL",
+      "iso2": "PL",
+      "country": "Poland",
+      "standard_rate": 23.0,
+      "reduced_rates": [
+        5.0,
+        8.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "PT",
+      "iso2": "PT",
+      "country": "Portugal",
+      "standard_rate": 23.0,
+      "reduced_rates": [
+        6.0,
+        13.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": 13.0,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "reduced_rate_examples": {
+        "basic_food_bread_milk_fruit_veg": 6,
+        "water": 6,
+        "medicines": 6,
+        "books_newspapers": 6,
+        "electricity_consumption_within_limits": 6,
+        "passenger_transport": 6,
+        "hotels": 6,
+        "restaurants_food_services": 13,
+        "ordinary_wine": 13,
+        "edible_oils": 13,
+        "note": "Mainland rates; Azores and Madeira set lower regional rates (not verified).",
+        "source_ids": [
+          "pt_at_civa"
+        ]
+      }
+    },
+    {
+      "code": "RO",
+      "iso2": "RO",
+      "country": "Romania",
+      "standard_rate": 21.0,
+      "reduced_rates": [
+        11.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2025-08-01",
+          "change": "Standard rate 19% -> 21%; 5% and 9% reduced rates merged into a single 11% rate (Law 141/2025).",
+          "source_ids": [
+            "ey_romania_2025"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "food_and_beverages_general": 11,
+        "medicines_human": 11,
+        "books_newspapers": 11,
+        "water_supply": 11,
+        "restaurants_excl_alcohol": 11,
+        "hotels": 11,
+        "alcohol_juices_nonalcoholic_beer_foods_10g_added_sugar_per_100g": 21,
+        "veterinary_medicines": 21,
+        "source_ids": [
+          "ey_romania_2025"
+        ]
+      }
+    },
+    {
+      "code": "SE",
+      "iso2": "SE",
+      "country": "Sweden",
+      "standard_rate": 25.0,
+      "reduced_rates": [
+        6.0,
+        12.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "SI",
+      "iso2": "SI",
+      "country": "Slovenia",
+      "standard_rate": 22.0,
+      "reduced_rates": [
+        5.0,
+        9.5
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    {
+      "code": "SK",
+      "iso2": "SK",
+      "country": "Slovakia",
+      "standard_rate": 23.0,
+      "reduced_rates": [
+        5.0,
+        19.0
+      ],
+      "super_reduced_rate": null,
+      "parking_rate": null,
+      "zero_rate_listed_in_reduced_column": false,
+      "as_of": "Your Europe table, last checked 2026-07-13",
+      "source_ids": [
+        "youreurope_vat"
+      ],
+      "recent_changes": [
+        {
+          "date": "2025-01-01",
+          "change": "Standard 20% -> 23%; reduced 10% -> 19% (non-basic food, electricity); 5% for basic food, medicines, books.",
+          "source_ids": [
+            "ec_a2m_vat_changes_2025"
+          ]
+        }
+      ],
+      "reduced_rate_examples": {
+        "basic_food": 5,
+        "medicines": 5,
+        "books": 5,
+        "other_food": 19,
+        "electricity": 19,
+        "source_ids": [
+          "ec_a2m_vat_changes_2025"
+        ]
+      }
+    }
+  ],
+  "context": {
+    "eu_vat_rules": {
+      "standard_rate_minimum": 15,
+      "text": "Standard rate must be at least 15% with no maximum (Art. 97 VAT Directive). Since the 2022 reform (Directive (EU) 2022/542) Member States may apply up to two reduced rates of at least 5% to the 24 categories of Annex III, one super-reduced rate below 5% and one zero rate to at most seven categories covering basic needs (e.g., foodstuffs, medicines, pharmaceutical products); some derogations allow parking rates of at least 12%.",
+      "source_ids": [
+        "ec_taxud_vat_rates"
+      ]
+    },
+    "reduced_rate_goods_general_note": {
+      "text": "Across Member States, reduced or super-reduced rates are most commonly applied to foodstuffs (often with a lower rate for basic staples), medicines and pharmaceutical products, books and newspapers, water supply, passenger transport, accommodation and, in several countries, restaurant food. Alcohol, sugary soft drinks and most other goods are taxed at the standard rate. Energy treatment varies by country and has changed often since 2022 (e.g., Spain's temporary 2026 cut; Portugal's 6% on electricity consumption within limits; Slovakia 19% on electricity; Italy 10% on domestic electricity and gas). See consumption[].reduced_rate_examples for verified country examples (DE, FR, ES, IT, PT, NL, AT, RO, SK, FI).",
+      "source_ids": [
+        "ec_taxud_vat_rates",
+        "de_ustg_12",
+        "fr_sp_food",
+        "es_aeat_2026",
+        "it_ade_aliquote",
+        "pt_at_civa",
+        "nl_bd_9",
+        "usp_at_49",
+        "ey_romania_2025",
+        "ec_a2m_vat_changes_2025"
+      ]
+    },
+    "vat_range": {
+      "lowest_standard": {
+        "country": "Luxembourg",
+        "rate": 17
+      },
+      "highest_standard": {
+        "country": "Hungary",
+        "rate": 27
+      },
+      "source_ids": [
+        "youreurope_vat"
+      ]
+    },
+    "official_table_status": "The DG TAXUD 'VAT rates applied in the Member States' PDF downloadable from the Commission is still the 2020 edition; the Commission now refers users to the Taxes in Europe Database (TEDB) and the Your Europe table, which is used here (last checked 2026-07-13).",
+    "scenario_guidance": {
+      "status": "methodology suggestion, not a sourced figure",
+      "text": "VAT paid on a basket = sum(spend_i * r_i / (1 + r_i)) since EU shelf prices include VAT. Conservador: apply the lowest applicable reduced/super-reduced rate to food and essentials and the standard rate only to clearly standard-rated categories; Provável: map each spending category to its typical rate (examples per country); Elevado: standard rate to everything except categories verified as reduced. For labour taxes, the OECD 'income_tax_plus_employee_ssc_pct_gross_wage' at the average wage is a reasonable 'Provável' benchmark for a single average earner; the tax wedge (which adds employer SSC) is an upper-bound view of the total labour tax burden."
+    }
+  },
+  "unverified": [
+    {
+      "item": "Taxes in Europe Database (TEDB) detail per Member State",
+      "reason": "TEDB is a dynamic web application and was not queried; the Your Europe summary table (checked 2026-07-13) is used instead. Region-specific rates (Azores, Madeira, Canary Islands, etc.) are excluded."
+    },
+    {
+      "item": "Estonia 9% rate scope beyond press publications",
+      "reason": "EMTA pages read confirm 13% for accommodation and 9% for press publications; other goods at 9% (e.g., books, medicines) were not read. Your Europe lists only 9% as reduced, omitting 13%."
+    },
+    {
+      "item": "Finland: rates for food, restaurants and medicines in 2026; scope of remaining 10% rate",
+      "reason": "The Vero page read covers books, transport, accommodation, culture and gyms only. A search excerpt (not a read page) says food and pharmaceuticals are in the 13.5% rate."
+    },
+    {
+      "item": "Romania transitional rules",
+      "reason": "Search excerpts mention housing contracts that may keep 9% until 2026-07-31; not read from a source. Romanian figures come from an EY alert (secondary but widely recognized), not from ANAF/Official Monitor directly."
+    },
+    {
+      "item": "Spain energy VAT after 2026-06-30",
+      "reason": "AEAT 2026 table shows 10% only until 2026-06-30 (conditional); the rate applying from 2026-07-01 was not verified."
+    },
+    {
+      "item": "France energy VAT (electricity/gas subscription 5.5% abolished from 2025-08-01)",
+      "reason": "Seen only in a search excerpt; not read from an official page."
+    },
+    {
+      "item": "Italy item-level rates (e.g., bread and milk at 4%)",
+      "reason": "Agenzia Entrate summary page is dated 2020-12-12 and lists categories only; Tabella A of DPR 633/1972 not read."
+    },
+    {
+      "item": "Portugal regional rates (Azores 4/9/16, Madeira 4/12/22)",
+      "reason": "Seen only in search excerpts of the Portal das Finanças tax leaflet; not read."
+    },
+    {
+      "item": "Germany medicines VAT rate",
+      "reason": "Not stated in the § 12 UStG / Anlage 2 extracts read; not included."
+    },
+    {
+      "item": "Austria restaurant/catering VAT rate",
+      "reason": "USP page only says catering is outside the 4.9% rate; the applicable rate (10% for food in restaurants is commonly cited) was not verified."
+    },
+    {
+      "item": "Cyprus temporary zero rate status in 2026",
+      "reason": "Access2Markets news (2025-01-15) says it applied until 2025-12-31; any extension not checked."
+    },
+    {
+      "item": "Other 2025/2026 VAT changes not listed (e.g., Lithuania, Czechia, Croatia, Latvia, Ireland)",
+      "reason": "Only the changes listed under recent_changes were verified; the Your Europe table reflects current rates but not change dates."
+    },
+    {
+      "item": "OECD Taxing Wages 2026 report, country notes and press release pages",
+      "reason": "oecd.org returned HTTP 403; all wedge values were read directly from the OECD SDMX database. Publication month (April 2026) inferred from OECD URL paths in search results. Whether the latest year (2025) average wages are OECD estimates was not checked."
+    }
+  ]
+}

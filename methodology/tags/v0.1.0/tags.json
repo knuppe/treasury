@@ -1,0 +1,62 @@
+{
+  "version": "0.1.0",
+  "note": "Características calculadas com os indicadores do universo (dados públicos da CVM, B3 e SEC). Cada tag é um retrato do dado, não uma recomendação. Uma tag com várias regras vale pela regra da classe do papel; as condições de uma regra valem todas juntas.",
+  "tags": [
+    {"key": "nunca_prejuizo", "group": "historico", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "loss_years_10y", "op": "eq", "value": 0},
+      {"field": "eps_growth_10y", "op": "exists"}]}]},
+    {"key": "lucro_crescente", "group": "historico", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "earnings_cagr_5y", "op": "gte", "value": 0.05}]}]},
+    {"key": "receita_crescente", "group": "historico", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "revenue_cagr_5y", "op": "gte", "value": 0.05}]}]},
+    {"key": "proventos_10_anos", "group": "proventos", "rules": [{"classes": ["stock_br", "stock_us", "fii"], "all": [
+      {"field": "dividend_years", "op": "gte", "value": 10}]}]},
+    {"key": "proventos_5_anos", "group": "proventos", "rules": [{"classes": ["stock_br", "stock_us", "fii"], "all": [
+      {"field": "dividend_years", "op": "gte", "value": 5}]}]},
+    {"key": "proventos_crescentes", "group": "proventos", "rules": [{"classes": ["stock_br", "stock_us", "fii"], "all": [
+      {"field": "dividend_cagr_5y", "op": "gt", "value": 0}]}]},
+    {"key": "dy_alto", "group": "proventos", "rules": [
+      {"classes": ["stock_br", "stock_us"], "all": [{"field": "dy", "op": "gte", "value": 0.06}]},
+      {"classes": ["fii"], "all": [{"field": "dy", "op": "gte", "value": 0.10}]}]},
+    {"key": "divida_baixa", "group": "solidez", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "net_debt_ebitda", "op": "lte", "value": 1}]}]},
+    {"key": "caixa_liquido", "group": "solidez", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "net_debt_equity", "op": "lt", "value": 0}]}]},
+    {"key": "folga_curto_prazo", "group": "solidez", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "current_ratio", "op": "gte", "value": 1.5}]}]},
+    {"key": "roe_alto", "group": "rentabilidade", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "roe", "op": "gte", "value": 0.15}]}]},
+    {"key": "margem_alta", "group": "rentabilidade", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "net_margin", "op": "gte", "value": 0.15}]}]},
+    {"key": "piotroski_forte", "group": "rentabilidade", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "piotroski", "op": "gte", "value": 7}]}]},
+    {"key": "score_saudavel", "group": "score", "rules": [{"classes": ["stock_br", "fii"], "all": [
+      {"field": "score_band", "op": "in", "value": ["robusto", "saudavel"]}]}]},
+    {"key": "sem_alertas", "group": "score", "rules": [{"classes": ["stock_br", "fii"], "all": [
+      {"field": "score", "op": "exists"},
+      {"field": "red_flags", "op": "missing"}]}]},
+    {"key": "abaixo_vp", "group": "preco", "rules": [{"classes": ["stock_br", "stock_us", "fii"], "all": [
+      {"field": "pvp", "op": "between", "value": [0.000001, 0.999999]}]}]},
+    {"key": "pl_baixo", "group": "preco", "rules": [{"classes": ["stock_br", "stock_us"], "all": [
+      {"field": "pl", "op": "between", "value": [0.000001, 10]}]}]},
+    {"key": "liquidez_alta", "group": "mercado", "rules": [
+      {"classes": ["stock_br"], "all": [{"field": "liquidity", "op": "gte", "value": 10000000}]},
+      {"classes": ["fii"], "all": [{"field": "liquidity", "op": "gte", "value": 1000000}]}]},
+    {"key": "grande", "group": "mercado", "rules": [
+      {"classes": ["stock_br"], "all": [{"field": "market_cap", "op": "gte", "value": 10000000000}]},
+      {"classes": ["fii"], "all": [{"field": "market_cap", "op": "gte", "value": 1000000000}]}]},
+    {"key": "baixa_volatilidade", "group": "mercado", "rules": [{"classes": ["stock_br", "fii"], "all": [
+      {"field": "volatility_1y", "op": "lte", "value": 0.25}]}]},
+    {"key": "em_alta_12m", "group": "mercado", "rules": [{"classes": ["stock_br", "fii"], "all": [
+      {"field": "momentum_12_1", "op": "gt", "value": 0}]}]},
+    {"key": "muitos_cotistas", "group": "fii", "rules": [{"classes": ["fii"], "all": [
+      {"field": "holders", "op": "gte", "value": 100000}]}]},
+    {"key": "vacancia_baixa", "group": "fii", "rules": [{"classes": ["fii"], "all": [
+      {"field": "vacancy", "op": "lte", "value": 0.05}]}]},
+    {"key": "metodo_graham_defensivo", "group": "metodos", "method": "graham_defensivo"},
+    {"key": "metodo_bazin", "group": "metodos", "method": "bazin"},
+    {"key": "metodo_magic_formula", "group": "metodos", "method": "magic_formula"},
+    {"key": "metodo_qualidade_preco_justo", "group": "metodos", "method": "qualidade_preco_justo"},
+    {"key": "metodo_fii_desconto", "group": "metodos", "method": "fii_desconto"}
+  ]
+}

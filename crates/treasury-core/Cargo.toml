@@ -1,0 +1,97 @@
+[package]
+name = "treasury-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+default = ["ocr-paddle"]
+# Argon2id rápido e inseguro para testes e servidor de desenvolvimento.
+fast-kdf = []
+# PaddleOCR embutido (docs/ocr-receipts.md §12.2): leitura de cupom por foto em Rust puro, com os
+# modelos em assets/ocr/ dentro do binário (~10 MB). Sem ele, só o Vision (Mac) e a IA.
+ocr-paddle = ["dep:tract-onnx", "dep:image"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+refinery = { version = "0.10", features = ["rusqlite"] }
+argon2 = { version = "0.6", features = ["zeroize"] }
+zeroize = { version = "1", features = ["derive", "serde"] }
+uuid = { version = "1", features = ["v7", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+hex = "0.4"
+base32 = "0.5"
+getrandom.workspace = true
+sha2 = "0.11"
+# Segredos (API keys) cifrados em nível de campo: XChaCha20-Poly1305 com subchave HKDF-SHA256.
+chacha20poly1305 = { version = "0.11", default-features = false, features = ["alloc"] }
+hkdf = "0.13"
+rust_decimal = { version = "1", features = ["serde-str", "maths"] }
+fallible-streaming-iterator = "0.1"
+toml = "0.9"
+dirs = "6"
+ureq = { version = "3", default-features = false, features = ["rustls", "gzip"] }
+ts-rs = { version = "12", features = ["serde-json-impl", "no-serde-warnings"] }
+regex = "1"
+csv = "1"
+encoding_rs = "0.8"
+# Leitura dos relatórios em Excel da Área do Investidor B3.
+calamine = "0.38"
+# Arquivos zip da CVM e da B3 (análise de ativos).
+zip = { version = "9", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+tokio.workspace = true
+rmcp.workspace = true
+axum.workspace = true
+http = "1"
+tokio-util = "0.7"
+futures-util = { version = "0.3", default-features = false }
+schemars.workspace = true
+keyring.workspace = true
+keyring-core.workspace = true
+base64.workspace = true
+pdf-extract = "0.12.1"
+# Imagens das páginas de um PDF escaneado (`pdf::page_jpegs`); já vem com o `pdf-extract`.
+lopdf = "0.42"
+# E-mail de ingestão (docs/email-ingest.md): leitura de mensagens (.eml, MIME, RFC 2047) e
+# cliente IMAP sobre TLS (rustls, sem aceitar certificado inválido).
+mail-parser = { version = "0.11", features = ["full_encoding"] }
+imap = { version = "3.0.0-alpha.15", default-features = false }
+# Tipos das respostas do IMAP (marcas das pastas, capacidades), os mesmos do `imap`.
+imap-proto = "0.16"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
+webpki-roots = "1"
+# Catálogos de idioma (Fluent, docs/i18n-design.md): os .ftl de locales/ vêm embutidos pelo
+# build.rs e o fluent-bundle monta as mensagens (plurais, seletores, argumentos).
+fluent-bundle = "0.16"
+unic-langid = "0.9"
+# Motor do PaddleOCR (feature `ocr-paddle`): roda os modelos ONNX em Rust puro, sem ONNX Runtime.
+tract-onnx = { version = "0.22", optional = true }
+# Abre a foto do cupom para o PaddleOCR (JPEG, PNG e WebP, com a rotação EXIF).
+image = { version = "0.25", optional = true, default-features = false, features = ["jpeg", "png", "webp"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+rusqlite = { version = "0.41", features = ["bundled-sqlcipher", "session", "backup", "serde_json", "chrono", "functions"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+rusqlite = { version = "0.41", features = ["bundled-sqlcipher-vendored-openssl", "session", "backup", "serde_json", "chrono", "functions"] }
+
+[dev-dependencies]
+tempfile = "3"
+rust_decimal_macros = "1"
+rmcp = { workspace = true, features = ["client"] }
+
+# mlock da chave do banco e PR_SET_DUMPABLE no Linux (docs/local-security.md); já vem
+# compilado por outras dependências.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+# Prova de conceito da Secure Enclave (docs/local-security.md, item 5); já vem no Cargo.lock
+# pelo keyring, com as mesmas features.
+[target.'cfg(target_os = "macos")'.dev-dependencies]
+security-framework = "3.7"
+security-framework-sys = "2.17"
+core-foundation = "0.10"

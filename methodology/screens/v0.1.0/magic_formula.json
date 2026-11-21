@@ -1,0 +1,17 @@
+{
+  "key": "magic_formula",
+  "version": "0.1.0",
+  "classes": ["stock_br"],
+  "exclude_sectors": ["banc", "segur", "intermedia", "financ", "previd", "holding", "energia eletrica", "saneamento"],
+  "hygiene": { "min_liquidity": 1000000 },
+  "criteria": [
+    { "id": "ey", "field": "earnings_yield", "op": "gt", "value": 0 },
+    { "id": "roc", "field": "magic_roc", "op": "gt", "value": 0 }
+  ],
+  "order": {
+    "rank_sum": [
+      { "field": "earnings_yield", "dir": "desc" },
+      { "field": "magic_roc", "dir": "desc" }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Entitlements do build de release com hardened runtime (scripts/release.sh, docs/local-security.md,
+  item 4). Vazio de propósito: sem com.apple.security.get-task-allow (outro processo não depura nem lê
+  a memória do app), sem allow-dyld-environment-variables (DYLD_INSERT_LIBRARIES não injeta código),
+  sem disable-library-validation e sem JIT (o WKWebView roda o JavaScript no processo dele, assinado
+  pela Apple). Se algo precisar de exceção, acrescente só ela, com o motivo no commit.
+-->
+<plist version="1.0">
+<dict/>
+</plist>

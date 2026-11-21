@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Treasury</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Aplica o tema salvo antes da primeira pintura (evita flash de tema errado).
+      // Só lê preferências de UI; nunca há dados financeiros no localStorage.
+      (function () {
+        try {
+          var raw = localStorage.getItem('treasury.ui');
+          var theme = raw && JSON.parse(raw).state.theme;
+          if (
+            /^(dark|light|midnight|paper|glass|mono|kitt|interstellar|bladerunner|lofi|matrix)$/.test(
+              theme,
+            )
+          ) {
+            document.documentElement.setAttribute('data-theme', theme);
+          }
+        } catch (e) {
+          /* preferências ilegíveis: fica no tema padrão */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
