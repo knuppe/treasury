@@ -1,0 +1,17 @@
+Treasury: licenciado sob a GNU AGPL-3.0-only (veja LICENSE).
+
+Este produto inclui software de terceiros, cada um com a sua licença:
+
+TradingView Lightweight Charts™
+Copyright (с) 2025 TradingView, Inc. https://www.tradingview.com/
+Licenciado sob a Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0
+Usado nos gráficos de preço e intradiário (pacote npm lightweight-charts). O logo com o
+link para a TradingView fica visível nos gráficos, e o mesmo aviso aparece em
+Ajustes › Sobre e apoio.
+
+Os dados e modelos embutidos (tábuas de mortalidade da ONU e do IBGE, bandeiras dos
+idiomas, modelos do PaddleOCR e outros) e as licenças deles estão em DATA_LICENSES.md.
+
+As licenças e os avisos de copyright de todas as dependências (crates Rust, pacotes npm,
+fontes, SQLCipher e OpenSSL) estão em THIRD_PARTY_LICENSES.md, gerado por
+scripts/third-party-licenses.py e levado junto nos instaladores.

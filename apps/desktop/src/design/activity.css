@@ -1,0 +1,386 @@
+/*
+ * Treasury · atividade dos temas de cinema e do Lo-fi
+ *
+ * O par do scanner do tema Scanner (scanner.css) para os outros temas divertidos: uma
+ * peça na borda de baixo da barra superior que só se mexe enquanto há tarefa do
+ * agente em andamento (components/ThemeActivity.tsx). Cada tema tem a sua, e cada
+ * uma liga e apaga do seu jeito:
+ *
+ * - Órbita: a nave, um ponto de luz quente com um anel de Einstein que
+ *   pulsa, cruza devagar a linha fina da lente gravitacional. Apaga colapsando para
+ *   o centro, como algo que cai no horizonte de eventos.
+ * - Neon: o tubo de neon rosa e ciano, com uma tremulação leve, e as duas
+ *   luzes da polícia indo e vindo em sentidos opostos (o clarão quando
+ *   se cruzam). Acende piscando como neon velho e apaga em degraus.
+ * - Lo-fi: um ginkgo e um bordo levados pelo vento ao longo da barra, balançando, em
+ *   cores quentes que funcionam no fundo claro. Apaga devagar, assentando.
+ *
+ * Fora desses três temas nada aparece (--activity-*-display em tokens.css). Como em
+ * motion.css, só opacidade e transform se movem, as animações pausam quando a peça
+ * apaga e, com movimento reduzido (fim do arquivo), tudo fica parado no meio.
+ * `themeActivity.test.tsx` verifica.
+ */
+
+.theme-activity {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: -8px;
+  left: 0;
+  height: 16px;
+  pointer-events: none;
+}
+.theme-activity[data-active='false'] *,
+.theme-activity[data-active='false'] *::before,
+.theme-activity[data-active='false'] *::after {
+  animation-play-state: paused;
+}
+
+/* Cada peça é uma faixa centrada que some nas pontas. */
+.activity-orbit,
+.activity-neon,
+.activity-lofi {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+  transform-origin: center;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18% 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18% 82%, transparent);
+}
+
+/* ── Órbita: a luz que cruza a lente gravitacional ── */
+.activity-orbit {
+  display: var(--activity-orbit-display);
+  width: clamp(240px, 46%, 660px);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 720ms var(--ease-emphasis);
+}
+.theme-activity[data-active='false'] .activity-orbit {
+  opacity: 0;
+  transform: scaleX(0.02);
+}
+/* O brilho fraco em volta da linha, parado. */
+.activity-orbit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 50% at 50% 50%, rgb(240 178 90 / 0.14), transparent);
+}
+/* A lente: azul-frio nas pontas, dourada no meio, como os arcos em volta do buraco negro. */
+.activity-lens {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  margin-top: -0.5px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(120 150 220 / 0.4) 20%,
+    rgb(255 220 160 / 0.75) 50%,
+    rgb(120 150 220 / 0.4) 80%,
+    transparent
+  );
+}
+/* A nave: miolo quase branco, esticado na horizontal pela lente. */
+.activity-star {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 8%;
+  background: radial-gradient(
+    closest-side,
+    #fff7e6,
+    rgb(255 214 150 / 0.85) 30%,
+    rgb(240 160 70 / 0.3) 60%,
+    transparent
+  );
+  animation: activity-orbit 4.2s cubic-bezier(0.45, 0, 0.55, 1) infinite both;
+  will-change: transform, opacity;
+}
+/* O anel de Einstein: abre e some em volta da luz. */
+.activity-star::after {
+  content: '';
+  position: absolute;
+  inset: 1px 22%;
+  border: 1px solid rgb(255 220 160 / 0.7);
+  border-radius: 50%;
+  animation: activity-ring 2.1s ease-out infinite;
+}
+@keyframes activity-orbit {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1250%);
+    opacity: 0;
+  }
+}
+@keyframes activity-ring {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* ── Neon: o neon e as luzes ── */
+.activity-neon {
+  display: var(--activity-neon-display);
+  width: clamp(220px, 40%, 580px);
+}
+/* Acende piscando, como um letreiro velho; apaga em degraus, perdendo a força. */
+.theme-activity[data-active='true'] .activity-neon {
+  animation: activity-ignite 640ms steps(1, end) both;
+}
+.theme-activity[data-active='false'] .activity-neon {
+  opacity: 0;
+  transition: opacity 360ms steps(4, end);
+}
+.activity-tube {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  margin-top: -0.5px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 79 176 / 0.9) 18%,
+    #ffd0ec 50%,
+    rgb(63 220 255 / 0.9) 82%,
+    transparent
+  );
+  box-shadow: 0 0 6px rgb(255 79 176 / 0.6);
+  animation: activity-flicker 3.8s steps(1, end) infinite;
+}
+/* A luz rosa vai enquanto a ciano volta; mais fortes quando passam pelo meio. */
+.activity-spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20%;
+  background: radial-gradient(
+    closest-side,
+    #ffe3f4,
+    rgb(255 79 176 / 0.85) 35%,
+    rgb(255 79 176 / 0.25) 65%,
+    transparent
+  );
+  animation: activity-spinner 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate both;
+  will-change: transform, opacity;
+}
+.activity-spinner-cyan {
+  background: radial-gradient(
+    closest-side,
+    #e0fbff,
+    rgb(63 220 255 / 0.85) 35%,
+    rgb(63 220 255 / 0.25) 65%,
+    transparent
+  );
+  animation-direction: alternate-reverse;
+}
+@keyframes activity-ignite {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.85;
+  }
+  26% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 1;
+  }
+  52% {
+    opacity: 0.35;
+  }
+  64%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes activity-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  9% {
+    opacity: 0.55;
+  }
+  10% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 0.8;
+  }
+  48% {
+    opacity: 0.35;
+  }
+  49% {
+    opacity: 1;
+  }
+  81% {
+    opacity: 0.7;
+  }
+  82% {
+    opacity: 1;
+  }
+}
+@keyframes activity-spinner {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(430%);
+    opacity: 0.3;
+  }
+}
+
+/* ── Lo-fi: folhas levadas pelo vento ── */
+.activity-lofi {
+  display: var(--activity-lofi-display);
+  top: -2px;
+  bottom: -2px;
+  width: clamp(260px, 60%, 820px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+}
+.theme-activity[data-active='false'] .activity-lofi {
+  opacity: 0;
+  transform: translateY(4px);
+}
+/* O rastro do vento: uma linha fina em ocre e laranja, parada. */
+.activity-lofi::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(208 100 58 / 0.3) 30%,
+    rgb(224 176 74 / 0.45) 50%,
+    rgb(208 100 58 / 0.3) 70%,
+    transparent
+  );
+}
+/* Cada folha anda num trilho da largura da faixa; a folha em si balança no trilho. */
+.activity-leaf {
+  position: absolute;
+  inset: 0;
+  animation: activity-drift 11s linear -3s infinite;
+  will-change: transform;
+}
+.activity-leaf::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -14px;
+  width: 13px;
+  height: 13px;
+  margin-top: -6.5px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20'%3E%3Cpath d='M0 9V3' stroke='%23b8862a' stroke-width='1.2' fill='none'/%3E%3Cpath d='M0 3C-3 1 -9 -1 -9 -5Q-5 -9 -1 -7L0 -4L1 -7Q5 -9 9 -5C9 -1 3 1 0 3Z' fill='%23e0b04a'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  animation: activity-sway 1.7s ease-in-out infinite alternate both;
+}
+.activity-leaf-maple {
+  animation-duration: 14s;
+  animation-delay: -10s;
+}
+.activity-leaf-maple::after {
+  width: 11px;
+  height: 11px;
+  margin-top: -5.5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20'%3E%3Cpath d='M0 4V9' stroke='%23a9472a' stroke-width='1' fill='none'/%3E%3Cpath d='M0 -9L2 -4L6 -6L5 -1L9 0L4 3L5 6L0 4L-5 6L-4 3L-9 0L-5 -1L-6 -6L-2 -4Z' fill='%23d0643a'/%3E%3C/svg%3E");
+  animation-duration: 2.3s;
+  animation-delay: -0.8s;
+}
+@keyframes activity-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100% + 14px));
+  }
+}
+@keyframes activity-sway {
+  0% {
+    transform: translateY(-3px) rotate(-28deg);
+  }
+  100% {
+    transform: translateY(3px) rotate(24deg);
+  }
+}
+
+/*
+ * Movimento reduzido: nada se move. A luz da Órbita fica no meio da lente, as
+ * luzes paradas lado a lado e as folhas pousadas; ligar e apagar viram só
+ * um esmaecer.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .activity-star,
+  .activity-star::after,
+  .activity-tube,
+  .activity-spinner,
+  .activity-leaf,
+  .activity-leaf::after,
+  .theme-activity[data-active='true'] .activity-neon {
+    animation: none !important;
+  }
+  .activity-star {
+    transform: translateX(575%);
+  }
+  .activity-star::after {
+    opacity: 0.6;
+  }
+  .activity-spinner {
+    transform: translateX(150%);
+  }
+  .activity-spinner-cyan {
+    transform: translateX(250%);
+  }
+  .activity-leaf {
+    transform: translateX(42%);
+  }
+  .activity-leaf-maple {
+    transform: translateX(58%);
+  }
+  .activity-leaf::after {
+    transform: rotate(-12deg);
+  }
+  .activity-orbit,
+  .activity-neon,
+  .activity-lofi {
+    transition: opacity 360ms var(--ease-out);
+  }
+  .theme-activity[data-active='false'] .activity-orbit,
+  .theme-activity[data-active='false'] .activity-lofi {
+    transform: none;
+  }
+}

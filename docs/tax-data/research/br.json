@@ -1,0 +1,995 @@
+{
+  "country": "BR",
+  "version": "2026-10",
+  "generated": "2026-10-17",
+  "currency": "BRL",
+  "methodology": {
+    "scenarios": "Conservador = extremo baixo de uma faixa realista; Provável = valor central; Elevado = extremo alto. Grupos com um único dado usam o mesmo valor nos três.",
+    "percent_basis": "Percentual do preço final pago pelo consumidor (tributos 'por dentro'), salvo indicação (ex.: IOF de seguros sobre o prêmio).",
+    "consumption": "Desde 2026-11 os percentuais de consumo vêm das Contas Nacionais do IBGE (research/br_ibge_tru_2021.json, script scripts/tax-data/br_consumo_ibge.py). Aqui ficam só os grupos com composição de preço da Petrobras ou alíquota da lei."
+  },
+  "sources": [
+    {
+      "id": "lei_12741_2012",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 12.741, de 8 de dezembro de 2012",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
+      "published": "2012-12-10 (DOU)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Tributos que compõem o 'valor aproximado dos tributos' (ICMS, ISS, IPI, IOF, PIS/Pasep, Cofins, Cide; II e PIS/Cofins-Importação quando insumos importados > 20%; contribuição previdenciária quando folha é custo direto)"
+    },
+    {
+      "id": "petrobras_gasolina_br",
+      "publisher": "Petrobras",
+      "title": "Composição de preços ao consumidor – Gasolina (Brasil)",
+      "url": "https://precos.petrobras.com.br/w/gasolina/br",
+      "published": "coleta 2026-10-04 a 2026-10-10",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Parcela de tributos federais e ICMS no preço médio da gasolina C"
+    },
+    {
+      "id": "petrobras_diesel_br",
+      "publisher": "Petrobras",
+      "title": "Composição de preços ao consumidor – Diesel (Brasil)",
+      "url": "https://precos.petrobras.com.br/w/diesel/br",
+      "published": "coleta 2026-10-04 a 2026-10-10",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Parcela de tributos federais e ICMS no preço médio do diesel B"
+    },
+    {
+      "id": "petrobras_glp_br",
+      "publisher": "Petrobras",
+      "title": "Composição de preços ao consumidor – GLP 13 kg (Brasil)",
+      "url": "https://precos.petrobras.com.br/w/glp/br",
+      "published": "coleta 2026-10-04 a 2026-10-10",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Parcela de ICMS no preço médio do botijão de 13 kg; tributos federais zerados"
+    },
+    {
+      "id": "decreto_13134_2026",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 13.134, de 9 de outubro de 2026",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13134.htm",
+      "published": "2026-10-09 (DOU edição extra)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "PIS/Cofins e Cide sobre gasolina zerados e PIS/Cofins sobre etanol hidratado zerados de 10/10/2026 a 09/11/2026; PIS/Cofins gasolina R$ 28,49 + R$ 131,51/m³ de 10/09 a 09/10/2026"
+    },
+    {
+      "id": "lc_235_2026",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei Complementar nº 235, de 27 de agosto de 2026",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/Lcp235.htm",
+      "published": "2026-08-27",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Autoriza em 2026 reduções de tributos federais sobre diesel, biodiesel, gasolina, etanol e QAV (choque de energia)"
+    },
+    {
+      "id": "lc_194_2022",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei Complementar nº 194, de 23 de junho de 2022",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp194.htm",
+      "published": "2022-06-23",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Combustíveis, gás natural, energia elétrica, comunicações e transporte coletivo são essenciais: ICMS não pode superar a alíquota das operações em geral"
+    },
+    {
+      "id": "lei_9715_1998",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 9.715, de 25 de novembro de 1998 (art. 8º, I)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9715.htm",
+      "published": "1998-11-26",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "PIS/Pasep cumulativo 0,65% sobre o faturamento"
+    },
+    {
+      "id": "lei_10684_2003",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 10.684, de 30 de maio de 2003 (art. 18)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/2003/l10.684.htm",
+      "published": "2003-05-31",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Cofins de 4% para bancos e instituições financeiras (art. 3º, §§ 6º e 8º, da Lei 9.718)"
+    },
+    {
+      "id": "lc_116_2003",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei Complementar nº 116, de 31 de julho de 2003 (arts. 8º e 8º-A)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp116.htm",
+      "published": "2003-08-01",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "ISS: alíquota máxima 5%, mínima 2% (LC 157/2016)"
+    },
+    {
+      "id": "decreto_6306_2007_consolidado",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 6.306, de 14 de dezembro de 2007 – Regulamento do IOF (texto compilado)",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/decreto/d6306.htm",
+      "published": "texto compilado consultado em 2026-10-17",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "IOF crédito PF 0,0082% ao dia + 0,38% adicional; limite de 365 dias; IOF seguros (vida 0,38%, saúde 2,38%, demais 7,38%); câmbio (histórico 15-B e 15-C)"
+    },
+    {
+      "id": "decreto_12466_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 12.466, de 22 de maio de 2025",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12466.htm",
+      "published": "2025-05-22 (DOU edição extra)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "IOF câmbio 3,5% (cartões, pré-pago, espécie, remessas) com efeitos a partir de 23/05/2025; revogado pelo Decreto 12.499"
+    },
+    {
+      "id": "decreto_12467_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 12.467, de 23 de maio de 2025",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12467.htm",
+      "published": "2025-05-23 (DOU edição extra)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Remessa para investimento no exterior 1,10%; revogado pelo Decreto 12.499"
+    },
+    {
+      "id": "decreto_12499_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 12.499, de 11 de junho de 2025",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12499.htm",
+      "published": "2025-06-11 (DOU edição extra)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Texto vigente do IOF câmbio 3,5% (cartão internacional, saques no exterior, pré-pago, moeda em espécie, transferências para disponibilidade no exterior), 1,10% (investimento), 0,38% ingresso; revoga 15-C (cronograma de redução)"
+    },
+    {
+      "id": "stf_2025_07_04",
+      "publisher": "Supremo Tribunal Federal",
+      "title": "STF suspende decretos sobre IOF e marca audiência de conciliação",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-suspende-decretos-sobre-iof-e-marca-audiencia-de-conciliacao/",
+      "published": "2025-07-04",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Suspensão dos decretos presidenciais e do decreto legislativo (ADC 96, ADIs 7827 e 7839)"
+    },
+    {
+      "id": "stf_2025_07_16",
+      "publisher": "Supremo Tribunal Federal",
+      "title": "STF restabelece parcialmente decreto que eleva alíquotas do IOF",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-restabelece-parcialmente-decreto-que-eleva-aliquotas-do-iof/",
+      "published": "2025-07-16",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Decreto restabelecido com efeitos desde 11/06/2025, exceto 'risco sacado'; decisão liminar a ser analisada pelo Plenário"
+    },
+    {
+      "id": "stf_2025_07_18",
+      "publisher": "Supremo Tribunal Federal",
+      "title": "Decisão que restabeleceu aumento do IOF não alcança período de suspensão, esclarece STF",
+      "url": "https://noticias.stf.jus.br/postsnoticias/decisao-que-restabeleceu-aumento-do-iof-nao-alcanca-periodo-de-suspensao-esclarece-stf/",
+      "published": "2025-07-18",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Alíquotas majoradas não se aplicam ao período em que o decreto esteve suspenso (título da notícia; texto não lido integralmente)"
+    },
+    {
+      "id": "rfb_tabelas_2026",
+      "publisher": "Receita Federal do Brasil",
+      "title": "Tabelas 2026 (IRPF)",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026",
+      "published": "atualizado 2026-04-27",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Tabela progressiva mensal 2026, tabela de redução mensal e anual (Lei 15.270), deduções e limites mensais e anuais"
+    },
+    {
+      "id": "rfb_tabelas_2025",
+      "publisher": "Receita Federal do Brasil",
+      "title": "Tabelas 2025 (IRPF)",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2025",
+      "published": "não informado",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Tabelas mensais jan-abr/2025 (Lei 14.848/2024) e a partir de mai/2025 (Lei 15.191/2025); tabela anual exercício 2026"
+    },
+    {
+      "id": "lei_15270_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 15.270, de 26 de novembro de 2025",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15270.htm",
+      "published": "2025-11-27 (DOU)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Redução do IRPF mensal (art. 3º-A da Lei 9.250) e anual (art. 11-A), aplicação ao 13º, desconto simplificado anual R$ 17.640, tributação mínima de altas rendas, retenção de 10% sobre dividendos > R$ 50 mil/mês"
+    },
+    {
+      "id": "lei_8134_1990",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 8.134, de 27 de dezembro de 1990 (art. 16)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8134.htm",
+      "published": "1990-12-28",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "13º salário: tributação exclusiva na fonte, separadamente, sobre o valor integral, no mês da quitação"
+    },
+    {
+      "id": "lei_7713_1988",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 7.713, de 22 de dezembro de 1988 (art. 26)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l7713.htm",
+      "published": "1988-12-23",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Base original da tributação da gratificação de Natal"
+    },
+    {
+      "id": "rfb_quem_deve_declarar",
+      "publisher": "Receita Federal do Brasil",
+      "title": "Quem deve declarar (exercício 2026, ano-calendário 2025)",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/quem",
+      "published": "2026 (IN RFB 2.312/2026)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Limites de obrigatoriedade da declaração 2026"
+    },
+    {
+      "id": "inss_tabela_2026",
+      "publisher": "Instituto Nacional do Seguro Social (gov.br/inss)",
+      "title": "Tabela de contribuição mensal",
+      "url": "https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal",
+      "published": "vigência competência jan/2026 (Portaria Interministerial MPS/MF nº 13, de 09/01/2026)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Faixas e alíquotas do segurado empregado, doméstico e avulso em 2026"
+    },
+    {
+      "id": "portaria_mps_mf_6_2025",
+      "publisher": "Ministério da Previdência Social / Ministério da Fazenda",
+      "title": "Portaria Interministerial MPS/MF nº 6, de 10 de janeiro de 2025 (DOU 13/01/2025; revogada pela Portaria MPS/MF nº 13/2026)",
+      "url": "https://www.gov.br/previdencia/pt-br/assuntos/rpps/legislacao-dos-rpps/2025/PortariaInterministerialMPSMFn6de10jan2025Revogada.pdf",
+      "published": "2025-01-13 (DOU)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Faixas e alíquotas do segurado empregado em 2025 (Anexo II); limite máximo R$ 8.157,41"
+    },
+    {
+      "id": "decreto_12342_2024",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 12.342, de 30 de dezembro de 2024",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/decreto/D12342.htm",
+      "published": "2024-12-31 (DOU)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Salário mínimo 2025 = R$ 1.518,00"
+    },
+    {
+      "id": "decreto_12797_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Decreto nº 12.797, de 23 de dezembro de 2025",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12797.htm",
+      "published": "2025-12-24 (DOU)",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Salário mínimo 2026 = R$ 1.621,00"
+    },
+    {
+      "id": "lei_8212_1991",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 8.212, de 24 de julho de 1991 (art. 22, I) – texto compilado",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm",
+      "published": "texto compilado",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Contribuição patronal de 20% sobre a folha (regra geral)"
+    },
+    {
+      "id": "lei_8036_1990",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei nº 8.036, de 11 de maio de 1990 (art. 15) – texto compilado",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8036consol.htm",
+      "published": "texto compilado",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "Depósito de FGTS de 8% da remuneração"
+    },
+    {
+      "id": "tesouro_ctb_2025",
+      "publisher": "Tesouro Nacional (STN)",
+      "title": "Carga tributária bruta do Governo Geral atinge 32,40% do PIB em 2025",
+      "url": "https://www.gov.br/tesouronacional/pt-br/noticias/carga-tributaria-bruta-do-governo-geral-atinge-32-40-do-pib-em-2025",
+      "published": "2026-04-10",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "CTB 2025 = 32,40% do PIB (preliminar); composição por base econômica"
+    },
+    {
+      "id": "rfb_ctb_2024",
+      "publisher": "Receita Federal do Brasil",
+      "title": "Carga Tributária no Brasil 2024",
+      "url": "https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/estudos/carga-tributaria/carga-tributaria-no-brasil-2024/@@download/file",
+      "published": "2025-12-02",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "CTB oficial 2024 = 32,20% do PIB (34,12% com FGTS e Sistema S); participação por base de incidência"
+    },
+    {
+      "id": "lc_214_2025",
+      "publisher": "Presidência da República (Planalto)",
+      "title": "Lei Complementar nº 214, de 16 de janeiro de 2025 (arts. 343, 346 e 348)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+      "published": "2025-01-16",
+      "accessed": "2026-10-17",
+      "kind": "primary",
+      "supports": "2026: CBS 0,9% e IBS 0,1%, compensáveis com PIS/Cofins; recolhimento dispensado para quem cumprir obrigações acessórias"
+    }
+  ],
+  "consumption": [
+    {
+      "key": "gasolina",
+      "label": "Gasolina comum (gasolina C)",
+      "unit": "percent_of_price",
+      "low": 24.0,
+      "central": 27.7,
+      "high": 34.16,
+      "method": "official_composition",
+      "scenario_mapping": "Conservador = só ICMS (24,0%), situação com PIS/Cofins e Cide zerados pelo Decreto 13.134 (10/10 a 09/11/2026); Provável = tributos federais (3,7%) + ICMS (24,0%) da composição Petrobras da semana 04-10/10/2026; Elevado = ICMS R$ 1,57/l + tributos federais nas alíquotas cheias informadas na nota 1 da Petrobras (Cide+PIS/Cofins gasolina A R$ 0,8925/l x 70% + PIS/Cofins etanol anidro R$ 0,1309/l x 30%) sobre o preço médio de R$ 6,54/l (cálculo derivado).",
+      "products": [
+        {
+          "name": "Preço médio gasolina C",
+          "value_brl_per_litre": 6.54
+        },
+        {
+          "name": "ICMS (ad rem)",
+          "value_brl_per_litre": 1.57,
+          "percent": 24.0
+        },
+        {
+          "name": "Tributos federais (Cide, PIS/Pasep, Cofins) na semana de coleta",
+          "value_brl_per_litre": 0.24,
+          "percent": 3.7
+        }
+      ],
+      "source_ids": [
+        "petrobras_gasolina_br",
+        "decreto_13134_2026",
+        "lc_235_2026"
+      ],
+      "reference_date": "coleta 2026-10-04 a 2026-10-10",
+      "uf_variation": "ICMS sobre gasolina é ad rem (R$/litro, uniforme no país); o percentual varia conforme o preço de cada UF. A Petrobras publica a composição por UF na mesma página.",
+      "notes": "Em 2026 os tributos federais sobre a gasolina foram reduzidos temporariamente (LC 235/2026; Decreto 13.134/2026: PIS/Cofins R$ 160,00/m³ de 10/09 a 09/10/2026 e zero de 10/10 a 09/11/2026; Cide zero no mesmo período).por isso não foi usado no cenário.",
+      "verified": true
+    },
+    {
+      "key": "diesel",
+      "label": "Óleo diesel (diesel B)",
+      "unit": "percent_of_price",
+      "low": 20.2,
+      "central": 20.2,
+      "high": 20.2,
+      "method": "official_composition",
+      "scenario_mapping": "Os três cenários usam a composição Petrobras: tributos federais 4,3% + ICMS 15,9% (preço médio R$ 7,36/l).",
+      "products": [
+        {
+          "name": "Preço médio diesel B",
+          "value_brl_per_litre": 7.36
+        },
+        {
+          "name": "ICMS",
+          "value_brl_per_litre": 1.17,
+          "percent": 15.9
+        },
+        {
+          "name": "Tributos federais (PIS/Cofins; diesel A R$ 0,3515/l, biodiesel R$ 0,148/l)",
+          "value_brl_per_litre": 0.32,
+          "percent": 4.3
+        }
+      ],
+      "source_ids": [
+        "petrobras_diesel_br"
+      ],
+      "reference_date": "coleta 2026-10-04 a 2026-10-10",
+      "uf_variation": "Percentual varia por UF conforme o preço.",
+      "notes": "não usada pelo mesmo motivo da gasolina).",
+      "verified": true
+    },
+    {
+      "key": "glp",
+      "label": "Gás de cozinha (GLP, botijão 13 kg)",
+      "unit": "percent_of_price",
+      "low": 16.7,
+      "central": 16.7,
+      "high": 16.7,
+      "method": "official_composition",
+      "scenario_mapping": "Conservador e Provável = ICMS 16,7% da composição Petrobras (tributos federais zerados);data não informada).",
+      "products": [
+        {
+          "name": "Preço médio botijão 13 kg",
+          "value_brl": 114.61
+        },
+        {
+          "name": "ICMS",
+          "value_brl": 19.11,
+          "percent": 16.7
+        },
+        {
+          "name": "Tributos federais",
+          "value_brl": 0.0,
+          "percent": 0.0
+        }
+      ],
+      "source_ids": [
+        "petrobras_glp_br"
+      ],
+      "reference_date": "coleta 2026-10-04 a 2026-10-10",
+      "uf_variation": "Percentual de ICMS varia por UF.",
+      "notes": "A Petrobras informa que CIDE, PIS/Pasep e Cofins do GLP estão zerados.",
+      "verified": true,
+      "high_products": []
+    },
+    {
+      "key": "seguros",
+      "label": "Seguros (IOF sobre o prêmio)",
+      "unit": "percent_of_price",
+      "low": 0.38,
+      "central": 7.38,
+      "high": 7.38,
+      "method": "statutory_rates",
+      "scenario_mapping": "Somente IOF, alíquota legal sobre o prêmio: vida e acidentes pessoais 0,38%; seguro-saúde 2,38%; demais (automóvel, residencial etc.) 7,38%. Conservador = seguro de vida; Provável e Elevado = automóvel/residencial.",
+      "products": [
+        {
+          "name": "Seguro de vida/acidentes pessoais",
+          "percent_of_premium": 0.38
+        },
+        {
+          "name": "Seguro-saúde",
+          "percent_of_premium": 2.38
+        },
+        {
+          "name": "Demais seguros (auto, residencial)",
+          "percent_of_premium": 7.38
+        }
+      ],
+      "source_ids": [
+        "decreto_6306_2007_consolidado"
+      ],
+      "reference_date": "texto vigente em 2026",
+      "uf_variation": "Nacional (tributo federal).",
+      "notes": "Percentual sobre o prêmio (como parcela do total pago: alíquota/(1+alíquota), ex. 7,38% -> 6,87%). Tributos pagos pela seguradora (PIS/Cofins, IRPJ/CSLL) não estão incluídos por falta de fonte.",
+      "verified": true
+    },
+    {
+      "key": "tarifas_bancarias",
+      "label": "Tarifas bancárias",
+      "unit": "percent_of_price",
+      "low": 6.65,
+      "central": 8.15,
+      "high": 9.65,
+      "method": "statutory_rates",
+      "scenario_mapping": "PIS 0,65% + Cofins 4% (bancos, regime cumulativo) + ISS municipal entre 2% (mínimo) e 5% (máximo). Conservador = ISS 2%; Elevado = ISS 5%; Provável = ponto médio (ISS 3,5%, cálculo derivado).",
+      "products": [
+        {
+          "name": "PIS (cumulativo)",
+          "percent": 0.65
+        },
+        {
+          "name": "Cofins bancos",
+          "percent": 4.0
+        },
+        {
+          "name": "ISS mínimo-máximo",
+          "percent_range": [
+            2.0,
+            5.0
+          ]
+        }
+      ],
+      "source_ids": [
+        "lei_9715_1998",
+        "lei_10684_2003",
+        "lc_116_2003"
+      ],
+      "reference_date": "legislação vigente",
+      "uf_variation": "ISS varia por município.",
+      "notes": "Tributos sobre a receita do banco (por dentro). IOF não incide sobre tarifas. A alíquota de ISS efetiva de cada município não foi levantada.",
+      "verified": true
+    }
+  ],
+  "income": {
+    "irpf_monthly": {
+      "2025_jan_apr": {
+        "legal_basis": "Lei 14.848/2024",
+        "source_ids": [
+          "rfb_tabelas_2025"
+        ],
+        "brackets": [
+          {
+            "up_to": 2259.2,
+            "rate": 0.0,
+            "deduction": 0.0
+          },
+          {
+            "up_to": 2826.65,
+            "rate": 7.5,
+            "deduction": 169.44
+          },
+          {
+            "up_to": 3751.05,
+            "rate": 15.0,
+            "deduction": 381.44
+          },
+          {
+            "up_to": 4664.68,
+            "rate": 22.5,
+            "deduction": 662.77
+          },
+          {
+            "up_to": null,
+            "rate": 27.5,
+            "deduction": 896.0
+          }
+        ],
+        "dependent_deduction": 189.59,
+        "simplified_discount_monthly": 564.8,
+        "exempt_pension_65plus": 1903.98
+      },
+      "2025_from_may": {
+        "legal_basis": "Lei 15.191/2025",
+        "source_ids": [
+          "rfb_tabelas_2025"
+        ],
+        "brackets": [
+          {
+            "up_to": 2428.8,
+            "rate": 0.0,
+            "deduction": 0.0
+          },
+          {
+            "up_to": 2826.65,
+            "rate": 7.5,
+            "deduction": 182.16
+          },
+          {
+            "up_to": 3751.05,
+            "rate": 15.0,
+            "deduction": 394.16
+          },
+          {
+            "up_to": 4664.68,
+            "rate": 22.5,
+            "deduction": 675.49
+          },
+          {
+            "up_to": null,
+            "rate": 27.5,
+            "deduction": 908.73
+          }
+        ],
+        "dependent_deduction": 189.59,
+        "simplified_discount_monthly": 607.2,
+        "exempt_pension_65plus": 1903.98
+      },
+      "2026": {
+        "legal_basis": "Lei 15.191/2025 (tabela) + Lei 15.270/2025 (redução)",
+        "source_ids": [
+          "rfb_tabelas_2026",
+          "lei_15270_2025"
+        ],
+        "brackets": [
+          {
+            "up_to": 2428.8,
+            "rate": 0.0,
+            "deduction": 0.0
+          },
+          {
+            "up_to": 2826.65,
+            "rate": 7.5,
+            "deduction": 182.16
+          },
+          {
+            "up_to": 3751.05,
+            "rate": 15.0,
+            "deduction": 394.16
+          },
+          {
+            "up_to": 4664.68,
+            "rate": 22.5,
+            "deduction": 675.49
+          },
+          {
+            "up_to": null,
+            "rate": 27.5,
+            "deduction": 908.73
+          }
+        ],
+        "dependent_deduction": 189.59,
+        "simplified_discount_monthly": 607.2,
+        "exempt_pension_65plus": 1903.98,
+        "reduction": {
+          "law": "Lei 15.270/2025, art. 2º (insere art. 3º-A na Lei 9.250/1995); efeitos a partir de 01/01/2026",
+          "rule_text": "Rendimentos tributáveis sujeitos à incidência mensal até R$ 5.000,00: redução de até R$ 312,89 (de modo que o imposto devido seja zero). De R$ 5.000,01 até R$ 7.350,00: redução = R$ 978,62 - (0,133145 x rendimentos tributáveis sujeitos à incidência mensal), decrescente linearmente até zerar a partir de R$ 7.350,00. Acima de R$ 7.350,00: sem redução. A redução fica limitada ao imposto calculado pela tabela progressiva (§ 1º) e também se aplica ao 13º salário (§ 3º).",
+          "formula": "income <= 5000: reduction = min(tax, 312.89); 5000 < income < 7350: reduction = min(tax, max(0, 978.62 - 0.133145*income)); income >= 7350: 0. 'income' = rendimentos tributáveis brutos do mês (antes das deduções); 'tax' = imposto da tabela progressiva sobre a base de cálculo após deduções.",
+          "check": "Com renda de R$ 5.000 e desconto simplificado (R$ 607,20): base 4.392,80 x 22,5% - 675,49 = 312,89, igual ao teto da redução."
+        }
+      }
+    },
+    "irpf_annual": {
+      "exercicio_2026_ano_calendario_2025": {
+        "source_ids": [
+          "rfb_tabelas_2025",
+          "lei_15270_2025",
+          "rfb_quem_deve_declarar"
+        ],
+        "brackets": [
+          {
+            "up_to": 28467.2,
+            "rate": 0.0,
+            "deduction": 0.0
+          },
+          {
+            "up_to": 33919.8,
+            "rate": 7.5,
+            "deduction": 2135.04
+          },
+          {
+            "up_to": 45012.6,
+            "rate": 15.0,
+            "deduction": 4679.03
+          },
+          {
+            "up_to": 55976.16,
+            "rate": 22.5,
+            "deduction": 8054.97
+          },
+          {
+            "up_to": null,
+            "rate": 27.5,
+            "deduction": 10853.78
+          }
+        ],
+        "dependent_deduction": 2275.08,
+        "education_limit": 3561.5,
+        "simplified_discount": "20% dos rendimentos tributáveis, limitado a R$ 16.754,34",
+        "simplified_discount_limit": 16754.34,
+        "filing_thresholds": {
+          "rendimentos_tributaveis": 35584.0,
+          "isentos_exclusivos": 200000.0,
+          "atividade_rural_receita_bruta": 177920.0,
+          "bens_direitos": 800000.0,
+          "operacoes_bolsa": 40000.0,
+          "legal_basis": "IN RFB 2.312/2026"
+        },
+        "deadline": "23/03/2026 a 29/05/2026 (segundo FAQ da Receita citado em busca; não lido diretamente)"
+      },
+      "exercicio_2027_ano_calendario_2026": {
+        "source_ids": [
+          "rfb_tabelas_2026",
+          "lei_15270_2025"
+        ],
+        "brackets": [
+          {
+            "up_to": 29145.6,
+            "rate": 0.0,
+            "deduction": 0.0
+          },
+          {
+            "up_to": 33919.8,
+            "rate": 7.5,
+            "deduction": 2185.92
+          },
+          {
+            "up_to": 45012.6,
+            "rate": 15.0,
+            "deduction": 4729.91
+          },
+          {
+            "up_to": 55976.16,
+            "rate": 22.5,
+            "deduction": 8105.85
+          },
+          {
+            "up_to": null,
+            "rate": 27.5,
+            "deduction": 10904.66
+          }
+        ],
+        "dependent_deduction": 2275.08,
+        "education_limit": 3561.5,
+        "simplified_discount_limit": 17640.0,
+        "reduction": {
+          "law": "Lei 15.270/2025 (art. 11-A da Lei 9.250/1995)",
+          "rule_text": "Rendimentos tributáveis sujeitos ao ajuste anual até R$ 60.000,00: redução de até R$ 2.694,15 (imposto zero). De R$ 60.000,01 até R$ 88.200,00: R$ 8.429,73 - (0,095575 x rendimentos tributáveis sujeitos ao ajuste anual). Acima de R$ 88.200,00: sem redução. Limitada ao imposto anual calculado."
+        }
+      }
+    },
+    "thirteenth_salary": {
+      "source_ids": [
+        "lei_8134_1990",
+        "lei_7713_1988",
+        "lei_15270_2025"
+      ],
+      "rule": "Tributação exclusiva na fonte, separadamente dos demais rendimentos, sobre o valor integral, no mês da quitação; sem retenção nas antecipações; admitidas as deduções legais (dependentes, previdência); usa a tabela progressiva mensal. A partir de 2026 a redução do art. 3º-A (Lei 15.270) também se aplica ao 13º."
+    },
+    "high_income_2026": {
+      "source_ids": [
+        "lei_15270_2025"
+      ],
+      "dividends_withholding": "10% sobre lucros e dividendos pagos por uma mesma pessoa jurídica a uma mesma pessoa física acima de R$ 50.000,00 no mês, a partir de jan/2026 (com exceções para lucros apurados até 2025).",
+      "minimum_tax": "A partir do exercício 2027 (ano-calendário 2026), renda total anual acima de R$ 600.000: alíquota mínima crescendo linearmente de 0 a 10% (Alíquota % = REND/60.000 - 10) até R$ 1.200.000; 10% a partir de R$ 1.200.000; deduzidos IRPF devido, retenções e outros itens previstos."
+    }
+  },
+  "payroll": {
+    "inss_employee": {
+      "2025": {
+        "bands": [
+          {
+            "up_to": 1518.0,
+            "rate": 7.5
+          },
+          {
+            "up_to": 2793.88,
+            "rate": 9.0
+          },
+          {
+            "up_to": 4190.83,
+            "rate": 12.0
+          },
+          {
+            "up_to": 8157.41,
+            "rate": 14.0
+          }
+        ],
+        "ceiling": 8157.41,
+        "max_monthly_contribution_derived": 951.63,
+        "method": "progressiva por faixas (alíquota de cada faixa sobre a parcela do salário nela contida)",
+        "legal_basis": "Portaria Interministerial MPS/MF nº 6/2025, Anexo II",
+        "source_ids": [
+          "portaria_mps_mf_6_2025"
+        ]
+      },
+      "2026": {
+        "bands": [
+          {
+            "up_to": 1621.0,
+            "rate": 7.5
+          },
+          {
+            "up_to": 2902.84,
+            "rate": 9.0
+          },
+          {
+            "up_to": 4354.27,
+            "rate": 12.0
+          },
+          {
+            "up_to": 8475.55,
+            "rate": 14.0
+          }
+        ],
+        "ceiling": 8475.55,
+        "max_monthly_contribution_derived": 988.09,
+        "method": "progressiva por faixas",
+        "legal_basis": "Portaria Interministerial MPS/MF nº 13/2026",
+        "source_ids": [
+          "inss_tabela_2026"
+        ]
+      }
+    },
+    "minimum_wage": {
+      "2025": {
+        "monthly": 1518.0,
+        "daily": 50.6,
+        "hourly": 6.9,
+        "source_ids": [
+          "decreto_12342_2024"
+        ]
+      },
+      "2026": {
+        "monthly": 1621.0,
+        "daily": 54.04,
+        "hourly": 7.37,
+        "source_ids": [
+          "decreto_12797_2025"
+        ]
+      }
+    },
+    "employer_context": {
+      "inss_patronal_general_rate": 20.0,
+      "fgts_rate": 8.0,
+      "source_ids": [
+        "lei_8212_1991",
+        "lei_8036_1990"
+      ],
+      "notes": "Regra geral (empresas fora do Simples e sem desoneração). Não incluídos: RAT/SAT, terceiros (Sistema S, salário-educação, Incra) por não terem sido verificados nesta pesquisa. A Receita exclui FGTS e Sistema S da carga tributária oficial desde a nova metodologia."
+    }
+  },
+  "property": {},
+  "iof": [
+    {
+      "operation": "Compras com cartão de crédito/débito internacional e saques no exterior",
+      "rate": 3.5,
+      "since": "2025-05-23",
+      "history": [
+        {
+          "from": "2024-01-02",
+          "rate": 4.38
+        },
+        {
+          "from": "2025-01-02",
+          "rate": 3.38
+        },
+        {
+          "from": "2025-05-23",
+          "rate": 3.5
+        }
+      ],
+      "notes": "Cronograma do Decreto 10.997/2022 (art. 15-C: 3,38% em 2025, 2,38% em 2026...) foi revogado pelos Decretos 12.466 e 12.499/2025. STF (ADC 96) restabeleceu o Decreto 12.499 em 16/07/2025 com efeitos desde 11/06/2025; segundo o STF (18/07/2025), as alíquotas majoradas não se aplicam ao período entre a entrada em vigor do decreto legislativo do Congresso que sustou a cobrança (Decreto Legislativo 176/2025; data não confirmada) e 16/07/2025.",
+      "source_ids": [
+        "decreto_6306_2007_consolidado",
+        "decreto_12466_2025",
+        "decreto_12499_2025",
+        "stf_2025_07_04",
+        "stf_2025_07_16",
+        "stf_2025_07_18"
+      ]
+    },
+    {
+      "operation": "Carregamento de cartão internacional pré-pago e cheques de viagem",
+      "rate": 3.5,
+      "since": "2025-05-23",
+      "history": [
+        {
+          "from": "2024-01-02",
+          "rate": 4.38
+        },
+        {
+          "from": "2025-01-02",
+          "rate": 3.38
+        },
+        {
+          "from": "2025-05-23",
+          "rate": 3.5
+        }
+      ],
+      "source_ids": [
+        "decreto_6306_2007_consolidado",
+        "decreto_12499_2025"
+      ]
+    },
+    {
+      "operation": "Compra de moeda estrangeira em espécie",
+      "rate": 3.5,
+      "since": "2025-05-23",
+      "history": [
+        {
+          "from": "2016-05-03",
+          "rate": 1.1
+        },
+        {
+          "from": "2025-05-23",
+          "rate": 3.5
+        }
+      ],
+      "source_ids": [
+        "decreto_6306_2007_consolidado",
+        "decreto_12466_2025",
+        "decreto_12499_2025"
+      ]
+    },
+    {
+      "operation": "Transferência ao exterior para disponibilidade do residente (ou cônjuge/parente)",
+      "rate": 3.5,
+      "since": "2025-05-23",
+      "notes": "Para finalidade de investimento: 1,10% (inciso XXI-A).",
+      "source_ids": [
+        "decreto_12499_2025",
+        "decreto_12467_2025"
+      ]
+    },
+    {
+      "operation": "Demais remessas ao exterior não isentas",
+      "rate": 3.5,
+      "source_ids": [
+        "decreto_12499_2025"
+      ]
+    },
+    {
+      "operation": "Ingresso de recursos do exterior (demais operações)",
+      "rate": 0.38,
+      "source_ids": [
+        "decreto_12499_2025"
+      ]
+    },
+    {
+      "operation": "Crédito pessoa física (empréstimo, financiamento, rotativo, cheque especial)",
+      "daily_rate": 0.0082,
+      "additional_rate": 0.38,
+      "annual_cap_note": "Quando a base não é o saldo devedor diário, o IOF diário não excede a alíquota diária x 365 dias (0,0082% x 365 = 2,993%); somado ao adicional de 0,38%, o máximo é cerca de 3,37% do principal (cálculo derivado). No cheque especial e demais créditos sem principal definido, a base é a soma dos saldos devedores diários apurada no último dia de cada mês.",
+      "notes": "Alíquota PF inalterada em 2025 (Decreto 8.392/2015); os Decretos de 2025 elevaram as alíquotas de pessoa jurídica.",
+      "source_ids": [
+        "decreto_6306_2007_consolidado",
+        "decreto_12499_2025"
+      ]
+    },
+    {
+      "operation": "Seguros: vida e acidentes pessoais / seguro-saúde / demais (auto, residencial)",
+      "rates": {
+        "vida": 0.38,
+        "saude": 2.38,
+        "demais": 7.38
+      },
+      "notes": "VGBL (vida com cobertura por sobrevivência) pago por pessoa física a partir de 2026: isento até R$ 600 mil/ano; 5% sobre o excedente.",
+      "source_ids": [
+        "decreto_6306_2007_consolidado",
+        "decreto_12499_2025"
+      ]
+    }
+  ],
+  "context": {
+    "carga_tributaria_bruta": [
+      {
+        "year": 2025,
+        "percent_gdp": 32.4,
+        "publisher": "Tesouro Nacional (estimativa, preliminar)",
+        "source_ids": [
+          "tesouro_ctb_2025"
+        ],
+        "by_base_percent_gdp": {
+          "bens_e_servicos": 13.78,
+          "renda_lucros_ganhos_capital": 9.16,
+          "contribuicoes_rgps": 5.4
+        },
+        "notes": "Estimativa estatística do Tesouro (Manual GFS/FMI 2014); a Receita Federal publica o número oficial."
+      },
+      {
+        "year": 2024,
+        "percent_gdp": 32.22,
+        "publisher": "Tesouro Nacional (estimativa, derivada)",
+        "source_ids": [
+          "tesouro_ctb_2025"
+        ],
+        "notes": "Derivado: 32,40% (2025) menos o aumento de 0,18 p.p. informado na nota de 10/04/2026. A estimativa publicada em março/2025 era 32,32% (título de notícia do Ministério da Fazenda visto em busca); a diferença não é explicada nas fontes lidas."
+      },
+      {
+        "year": 2024,
+        "percent_gdp": 32.2,
+        "publisher": "Receita Federal (oficial)",
+        "source_ids": [
+          "rfb_ctb_2024"
+        ],
+        "notes": "Nova metodologia exclui FGTS e Sistema S; com eles seria 34,12%. Bens e serviços = 43,49% da arrecadação; folha de salários = 21,16%; renda acima de 28%."
+      }
+    ],
+    "reforma_tributaria_2026": {
+      "source_ids": [
+        "lc_214_2025"
+      ],
+      "text": "Em 2026 a CBS (0,9%) e o IBS (0,1%) são cobrados em caráter de teste, compensáveis com PIS/Cofins, e o recolhimento é dispensado para quem cumprir as obrigações acessórias; não há efeito líquido esperado sobre preços em 2026. A cobrança efetiva da CBS começa em 2027."
+    },
+    "lei_12741": {
+      "source_ids": [
+        "lei_12741_2012"
+      ],
+      "text": "A Lei 12.741/2012 obriga informar ao consumidor o valor aproximado dos tributos (ICMS, ISS, IPI, IOF, PIS/Pasep, Cofins, Cide; II e PIS/Cofins-Importação quando insumos importados superam 20% do preço; contribuição previdenciária quando a folha é custo direto), calculado semestralmente por instituição de âmbito nacional."
+    }
+  },
+  "unverified": [
+    "GNV: nenhum percentual de tributos encontrado em fonte oficial ou reconhecida.",
+    "Transporte por aplicativo: nenhum percentual encontrado.",
+    "Plano de saúde e consultas médicas: nenhum percentual encontrado (somente o IOF de 2,38% sobre seguro-saúde).",
+    "Streaming: sem valor próprio; usado o de TV por assinatura como aproximação.",
+    "Delivery: sem valor próprio; usada a faixa de refeições prontas como aproximação.",
+    "Energia elétrica: o ano dos dados da Abradee (18,14%) não é informado na matéria; o valor de 35,6% (PwC/Acende) é de 2021, anterior ao teto de ICMS da LC 194/2022.",
+    "Carga tributária 2024 pelo Tesouro: notícia de mar/2025 informou 32,32%; a nota de abr/2026 implica 32,22% (32,40 - 0,18). Não li a tabela revisada diretamente.",
+    "Data do Decreto Legislativo 176/2025 (sustação dos decretos do IOF): não confirmada em fonte lida.",
+    "Esclarecimento do STF de 18/07/2025 sobre o período de suspensão: confirmado só pelo título da notícia e por resumo de busca.",
+    "Prazo da declaração 2026 (23/03 a 29/05/2026): visto em resumo de busca de FAQ da Receita, não lido diretamente.",
+    "Contribuições patronais além de 20% INSS e 8% FGTS (RAT/SAT, terceiros): não verificadas."
+  ]
+}

@@ -1,0 +1,564 @@
+# Sources (all accessed on 10/17/2026)
+
+Single table of the sources used in br.json, us.json and eu.json. 'Type' says whether the source is primary (official body, law, publishing entity) or secondary (press quoting the original source).
+
+- ``ibge_scn_tru_2021``
+  - **File:** br
+  - **Publisher:** IBGE (Instituto Brasileiro de Geografia e Estatística)
+  - **Title:** National Accounts System: 2021 Supply and Use Tables, 68-activity and 128-product level (taxes on products and household consumption)
+  - **URL:** https://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2021/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2021_xls.zip
+  - **Published / updated:** 2023-11-09
+  - **Accessed:** 2026-11-18
+  - **Supports:** Taxes on products and household consumption by product (basis of Brazil's consumption percentages)
+- ``lei_12741_2012``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 12.741, de 8 de dezembro de 2012
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm
+  - **Published / updated:** 2012-12-10 (DOU)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Taxes that make up the 'approximate value of taxes' (ICMS, ISS, IPI, IOF, PIS/Pasep, Cofins, Cide; II and PIS/Cofins-Importação when imported inputs > 20%; social security contribution when payroll is a direct cost)
+- ``petrobras_gasolina_br``
+  - **File:** br
+  - **Publisher:** Petrobras
+  - **Title:** Consumer price composition – Gasoline (Brazil)
+  - **URL:** https://precos.petrobras.com.br/w/gasolina/br
+  - **Published / updated:** collected 2026-10-04 to 2026-10-10
+  - **Accessed:** 2026-10-17
+  - **Supports:** Share of federal taxes and ICMS in the average price of gasoline C
+- ``petrobras_diesel_br``
+  - **File:** br
+  - **Publisher:** Petrobras
+  - **Title:** Consumer price composition – Diesel (Brazil)
+  - **URL:** https://precos.petrobras.com.br/w/diesel/br
+  - **Published / updated:** collected 2026-10-04 to 2026-10-10
+  - **Accessed:** 2026-10-17
+  - **Supports:** Share of federal taxes and ICMS in the average price of diesel B
+- ``petrobras_glp_br``
+  - **File:** br
+  - **Publisher:** Petrobras
+  - **Title:** Consumer price composition – LPG 13 kg (Brazil)
+  - **URL:** https://precos.petrobras.com.br/w/glp/br
+  - **Published / updated:** collected 2026-10-04 to 2026-10-10
+  - **Accessed:** 2026-10-17
+  - **Supports:** Share of ICMS in the average price of the 13 kg cylinder; federal taxes zeroed
+- ``decreto_13134_2026``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 13.134, de 9 de outubro de 2026
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13134.htm
+  - **Published / updated:** 2026-10-09 (DOU extra edition)
+  - **Accessed:** 2026-10-17
+  - **Supports:** PIS/Cofins and Cide on gasoline zeroed and PIS/Cofins on hydrous ethanol zeroed from 10/10/2026 to 09/11/2026; PIS/Cofins on gasoline R$ 28.49 + R$ 131.51/m³ from 10/09 to 09/10/2026
+- ``lc_235_2026``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 235, de 27 de agosto de 2026
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/Lcp235.htm
+  - **Published / updated:** 2026-08-27
+  - **Accessed:** 2026-10-17
+  - **Supports:** Authorizes in 2026 reductions of federal taxes on diesel, biodiesel, gasoline, ethanol and jet fuel (energy shock)
+- ``lc_194_2022``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 194, de 23 de junho de 2022
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp194.htm
+  - **Published / updated:** 2022-06-23
+  - **Accessed:** 2026-10-17
+  - **Supports:** Fuels, natural gas, electricity, communications and public transport are essential: ICMS cannot exceed the rate on operations in general
+- ``lei_9715_1998``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 9.715, de 25 de novembro de 1998 (art. 8º, I)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/l9715.htm
+  - **Published / updated:** 1998-11-26
+  - **Accessed:** 2026-10-17
+  - **Supports:** Cumulative PIS/Pasep of 0.65% on revenue
+- ``lei_10684_2003``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 10.684, de 30 de maio de 2003 (art. 18)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/2003/l10.684.htm
+  - **Published / updated:** 2003-05-31
+  - **Accessed:** 2026-10-17
+  - **Supports:** Cofins of 4% for banks and financial institutions (art. 3º, §§ 6º and 8º, of Lei 9.718)
+- ``lc_116_2003``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 116, de 31 de julho de 2003 (arts. 8º e 8º-A)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp116.htm
+  - **Published / updated:** 2003-08-01
+  - **Accessed:** 2026-10-17
+  - **Supports:** ISS: maximum rate 5%, minimum 2% (LC 157/2016)
+- ``decreto_6306_2007_consolidado``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 6.306, de 14 de dezembro de 2007 – IOF Regulation (compiled text)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/decreto/d6306.htm
+  - **Published / updated:** compiled text consulted on 2026-10-17
+  - **Accessed:** 2026-10-17
+  - **Supports:** IOF on individual credit 0.0082% per day + 0.38% additional; 365-day limit; IOF on insurance (life 0.38%, health 2.38%, others 7.38%); foreign exchange (history 15-B and 15-C)
+- ``decreto_12466_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 12.466, de 22 de maio de 2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12466.htm
+  - **Published / updated:** 2025-05-22 (DOU extra edition)
+  - **Accessed:** 2026-10-17
+  - **Supports:** IOF on foreign exchange 3.5% (cards, prepaid, cash, remittances) effective from 05/23/2025; revoked by Decreto 12.499
+- ``decreto_12467_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 12.467, de 23 de maio de 2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12467.htm
+  - **Published / updated:** 2025-05-23 (DOU extra edition)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Remittance for investment abroad 1.10%; revoked by Decreto 12.499
+- ``decreto_12499_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 12.499, de 11 de junho de 2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12499.htm
+  - **Published / updated:** 2025-06-11 (DOU extra edition)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Current text of IOF on foreign exchange 3.5% (international card, withdrawals abroad, prepaid, cash currency, transfers to funds abroad), 1.10% (investment), 0.38% inflow; revokes 15-C (reduction schedule)
+- ``stf_2025_07_04``
+  - **File:** br
+  - **Publisher:** Supremo Tribunal Federal
+  - **Title:** Supreme Court suspends IOF decrees and schedules a conciliation hearing
+  - **URL:** https://noticias.stf.jus.br/postsnoticias/stf-suspende-decretos-sobre-iof-e-marca-audiencia-de-conciliacao/
+  - **Published / updated:** 2025-07-04
+  - **Accessed:** 2026-10-17
+  - **Supports:** Suspension of the presidential decrees and the legislative decree (ADC 96, ADIs 7827 and 7839)
+- ``stf_2025_07_16``
+  - **File:** br
+  - **Publisher:** Supremo Tribunal Federal
+  - **Title:** Supreme Court partially reinstates decree raising IOF rates
+  - **URL:** https://noticias.stf.jus.br/postsnoticias/stf-restabelece-parcialmente-decreto-que-eleva-aliquotas-do-iof/
+  - **Published / updated:** 2025-07-16
+  - **Accessed:** 2026-10-17
+  - **Supports:** Decree reinstated with effect since 06/11/2025, except 'risco sacado'; preliminary ruling to be reviewed by the Plenary
+- ``stf_2025_07_18``
+  - **File:** br
+  - **Publisher:** Supremo Tribunal Federal
+  - **Title:** Ruling that reinstated the IOF increase does not reach the suspension period, Supreme Court clarifies
+  - **URL:** https://noticias.stf.jus.br/postsnoticias/decisao-que-restabeleceu-aumento-do-iof-nao-alcanca-periodo-de-suspensao-esclarece-stf/
+  - **Published / updated:** 2025-07-18
+  - **Accessed:** 2026-10-17
+  - **Supports:** Increased rates do not apply to the period in which the decree was suspended (news headline; text not read in full)
+- ``rfb_tabelas_2026``
+  - **File:** br
+  - **Publisher:** Receita Federal do Brasil
+  - **Title:** Tabelas 2026 (IRPF)
+  - **URL:** https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026
+  - **Published / updated:** updated 2026-04-27
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2026 monthly progressive table, monthly and annual reduction table (Lei 15.270), monthly and annual deductions and limits
+- ``rfb_tabelas_2025``
+  - **File:** br
+  - **Publisher:** Receita Federal do Brasil
+  - **Title:** Tabelas 2025 (IRPF)
+  - **URL:** https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2025
+  - **Published / updated:** not informed
+  - **Accessed:** 2026-10-17
+  - **Supports:** Monthly tables Jan-Apr/2025 (Lei 14.848/2024) and from May/2025 (Lei 15.191/2025); annual table for tax year 2026
+- ``lei_15270_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 15.270, de 26 de novembro de 2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15270.htm
+  - **Published / updated:** 2025-11-27 (DOU)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Monthly (art. 3º-A of Lei 9.250) and annual (art. 11-A) IRPF reduction, application to the 13th salary, annual simplified discount R$ 17,640, minimum taxation of high incomes, 10% withholding on dividends > R$ 50 thousand/month
+- ``lei_8134_1990``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 8.134, de 27 de dezembro de 1990 (art. 16)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/l8134.htm
+  - **Published / updated:** 1990-12-28
+  - **Accessed:** 2026-10-17
+  - **Supports:** 13th salary: exclusive taxation at source, separately, on the full amount, in the month of payment
+- ``lei_7713_1988``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 7.713, de 22 de dezembro de 1988 (art. 26)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/l7713.htm
+  - **Published / updated:** 1988-12-23
+  - **Accessed:** 2026-10-17
+  - **Supports:** Original basis for the taxation of the Christmas bonus
+- ``rfb_quem_deve_declarar``
+  - **File:** br
+  - **Publisher:** Receita Federal do Brasil
+  - **Title:** Who must file (tax year 2026, calendar year 2025)
+  - **URL:** https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/quem
+  - **Published / updated:** 2026 (IN RFB 2.312/2026)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Thresholds that make filing the 2026 return mandatory
+- ``inss_tabela_2026``
+  - **File:** br
+  - **Publisher:** Instituto Nacional do Seguro Social (gov.br/inss)
+  - **Title:** Monthly contribution table
+  - **URL:** https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal
+  - **Published / updated:** in force from the January/2026 competence (Portaria Interministerial MPS/MF nº 13, de 09/01/2026)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Brackets and rates for the employee, domestic and casual insured in 2026
+- ``portaria_mps_mf_6_2025``
+  - **File:** br
+  - **Publisher:** Ministério da Previdência Social / Ministério da Fazenda
+  - **Title:** Portaria Interministerial MPS/MF nº 6, de 10 de janeiro de 2025 (DOU 13/01/2025; revoked by Portaria MPS/MF nº 13/2026)
+  - **URL:** https://www.gov.br/previdencia/pt-br/assuntos/rpps/legislacao-dos-rpps/2025/PortariaInterministerialMPSMFn6de10jan2025Revogada.pdf
+  - **Published / updated:** 2025-01-13 (DOU)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Brackets and rates for the employee insured in 2025 (Annex II); maximum limit R$ 8,157.41
+- ``decreto_12342_2024``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 12.342, de 30 de dezembro de 2024
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/decreto/D12342.htm
+  - **Published / updated:** 2024-12-31 (DOU)
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2025 minimum wage = R$ 1,518.00
+- ``decreto_12797_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Decreto nº 12.797, de 23 de dezembro de 2025
+  - **URL:** https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/D12797.htm
+  - **Published / updated:** 2025-12-24 (DOU)
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2026 minimum wage = R$ 1,621.00
+- ``lei_8212_1991``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 8.212, de 24 de julho de 1991 (art. 22, I) – compiled text
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm
+  - **Published / updated:** compiled text
+  - **Accessed:** 2026-10-17
+  - **Supports:** Employer contribution of 20% on payroll (general rule)
+- ``lei_8036_1990``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei nº 8.036, de 11 de maio de 1990 (art. 15) – compiled text
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/l8036consol.htm
+  - **Published / updated:** compiled text
+  - **Accessed:** 2026-10-17
+  - **Supports:** FGTS deposit of 8% of pay
+- ``tesouro_ctb_2025``
+  - **File:** br
+  - **Publisher:** Tesouro Nacional (STN)
+  - **Title:** Gross tax burden of the General Government reaches 32.40% of GDP in 2025
+  - **URL:** https://www.gov.br/tesouronacional/pt-br/noticias/carga-tributaria-bruta-do-governo-geral-atinge-32-40-do-pib-em-2025
+  - **Published / updated:** 2026-04-10
+  - **Accessed:** 2026-10-17
+  - **Supports:** CTB 2025 = 32.40% of GDP (preliminary); composition by economic base
+- ``rfb_ctb_2024``
+  - **File:** br
+  - **Publisher:** Receita Federal do Brasil
+  - **Title:** Tax Burden in Brazil 2024
+  - **URL:** https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/estudos/carga-tributaria/carga-tributaria-no-brasil-2024/@@download/file
+  - **Published / updated:** 2025-12-02
+  - **Accessed:** 2026-10-17
+  - **Supports:** Official CTB 2024 = 32.20% of GDP (34.12% with FGTS and Sistema S); share by tax base
+- ``lc_214_2025``
+  - **File:** br
+  - **Publisher:** Presidência da República (Planalto)
+  - **Title:** Lei Complementar nº 214, de 16 de janeiro de 2025 (arts. 343, 346 e 348)
+  - **URL:** https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm
+  - **Published / updated:** 2025-01-16
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2026: CBS 0.9% and IBS 0.1%, offsettable against PIS/Cofins; payment waived for those who meet the ancillary obligations
+- ``irs_ir_2024_273``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** IRS releases tax inflation adjustments for tax year 2025 (IR-2024-273; Rev. Proc. 2024-40)
+  - **URL:** https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2025
+  - **Published / updated:** 2024-10-22
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2025 federal brackets (single, MFJ); original 2025 standard deduction before OBBBA ($15,000 / $30,000 / $22,500).
+- ``irs_brackets_page``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** Federal income tax rates and brackets
+  - **URL:** https://www.irs.gov/filing/federal-income-tax-rates-and-brackets
+  - **Published / updated:** page last reviewed 2026-07-27
+  - **Accessed:** 2026-10-17
+  - **Supports:** Confirms the 2025 brackets (single, MFJ) still apply after OBBBA.
+- ``irs_ir_2025_103``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill (IR-2025-103; Rev. Proc. 2025-32)
+  - **URL:** https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill
+  - **Published / updated:** 2025-10-09
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2026 federal brackets and 2026 standard deduction; 2025 standard deduction as raised by OBBBA ($15,750 / $31,500 / $23,625).
+- ``irs_obbb_individuals``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** One, Big, Beautiful Bill provisions - Individuals and workers
+  - **URL:** https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers
+  - **Published / updated:** page last reviewed 2026-08-27
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2025 standard deduction under OBBBA; senior deduction ($6,000, 2025-2028); tips deduction (max $25,000); overtime deduction (max $12,500 / $25,000 MFJ).
+- ``irs_pub15_2025``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** Publication 15 (2025), (Circular E), Employer's Tax Guide
+  - **URL:** https://www.irs.gov/pub/irs-prior/p15--2025.pdf
+  - **Published / updated:** 2024-12-17
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2025 Social Security wage base $176,100; Social Security 6.2% each (employee/employer); Medicare 1.45% each, no wage base.
+- ``irs_pub15_2026``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** Publication 15 (2026), (Circular E), Employer's Tax Guide
+  - **URL:** https://www.irs.gov/publications/p15
+  - **Published / updated:** 2026 edition (accessed online)
+  - **Accessed:** 2026-10-17
+  - **Supports:** 2026 Social Security wage base $184,500; Social Security 6.2% and Medicare 1.45% each for employee and employer.
+- ``irs_tc751``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** Topic no. 751, Social Security and Medicare withholding rates
+  - **URL:** https://www.irs.gov/taxtopics/tc751
+  - **Published / updated:** page last reviewed 2026-09-24
+  - **Accessed:** 2026-10-17
+  - **Supports:** Employee 6.2% Social Security and 1.45% Medicare; 2026 wage base $184,500; employers withhold 0.9% Additional Medicare Tax on wages over $200,000.
+- ``irs_addl_medicare_qa``
+  - **File:** us
+  - **Publisher:** Internal Revenue Service (IRS)
+  - **Title:** Questions and answers for the Additional Medicare Tax
+  - **URL:** https://www.irs.gov/businesses/small-businesses-self-employed/questions-and-answers-for-the-additional-medicare-tax
+  - **Published / updated:** page last reviewed 2026-08-11
+  - **Accessed:** 2026-10-17
+  - **Supports:** Additional Medicare Tax 0.9%; thresholds $250,000 MFJ, $125,000 MFS, $200,000 single/HoH/qualifying widow(er).
+- ``tf_sales_2026_midyear``
+  - **File:** us
+  - **Publisher:** Tax Foundation
+  - **Title:** State and Local Sales Tax Rates, Midyear 2026 (Abir Mandal)
+  - **URL:** https://taxfoundation.org/data/all/state/2026-sales-tax-rates-midyear/
+  - **Published / updated:** 2026-07-06
+  - **Accessed:** 2026-10-17
+  - **Supports:** State, average local, max local and combined sales tax rates for 50 states + DC as of 2026-07-01; population-weighted national average 7.53%; Illinois ended its 1% state grocery tax on 2026-01-01.
+- ``tf_income_2026``
+  - **File:** us
+  - **Publisher:** Tax Foundation
+  - **Title:** State Individual Income Tax Rates and Brackets, 2026 (Janelle Fritts, Katherine Loughead)
+  - **URL:** https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/
+  - **Published / updated:** 2026-02-17
+  - **Accessed:** 2026-10-17
+  - **Supports:** State individual income tax rates and brackets as of 2026-01-01 (top marginal rates, flat/graduated/none); local income tax note.
+- ``tf_state_changes_2026``
+  - **File:** us
+  - **Publisher:** Tax Foundation
+  - **Title:** 2026 State Tax Changes Taking Effect January 1st (Nicole Fox, Jacob Macumber-Rosin)
+  - **URL:** https://taxfoundation.org/research/all/state/2026-state-tax-changes/
+  - **Published / updated:** 2025-12-18 (updated 2026-01-06)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Arkansas and Illinois state grocery tax repealed 2026-01-01 (local taxes may still apply); state income tax rate cuts for 2026.
+- ``tf_state_changes_2025``
+  - **File:** us
+  - **Publisher:** Tax Foundation
+  - **Title:** 2025 State Tax Changes Taking Effect January 1st
+  - **URL:** https://taxfoundation.org/research/all/state/2025-state-tax-changes/
+  - **Published / updated:** 2024-12-19 (updated 2025-06-25)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Kansas state grocery tax cut from 2% to 0% on 2025-01-01.
+- ``tf_grocery_2020``
+  - **File:** us
+  - **Publisher:** Tax Foundation
+  - **Title:** Halloween Candy Tax: Sales Tax Treatment of Groceries, Candy, and Soda (Janelle Fritts) - table 'as of January 1, 2020'
+  - **URL:** https://taxfoundation.org/data/all/state/halloween-candy-tax-groceries-soda-sales-tax/
+  - **Published / updated:** 2020-10-28 (updated 2023-07-24)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Baseline state grocery treatment (full / reduced / exempt) as of 2020-01-01; used only where no newer verified change exists.
+- ``ok_otc_grocery``
+  - **File:** us
+  - **Publisher:** Oklahoma Tax Commission
+  - **Title:** State Sales Tax on Food and Food Ingredients
+  - **URL:** https://oklahoma.gov/tax/businesses/state-sales-tax-on-food-and-food-ingredients.html
+  - **Published / updated:** n/d (effective 2024-08-29)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Oklahoma state sales tax on food eliminated from 2024-08-29 (HB 1955); local sales taxes still apply.
+- ``ms_dor_grocery``
+  - **File:** us
+  - **Publisher:** Mississippi Department of Revenue
+  - **Title:** Reduced Sales Tax on Groceries Begins July 1
+  - **URL:** https://www.dor.ms.gov/news/reduced-sales-tax-groceries-begins-july-1
+  - **Published / updated:** 2025-05-01
+  - **Accessed:** 2026-10-17
+  - **Supports:** Mississippi grocery sales tax reduced from 7% to 5% effective 2025-07-01 (HB 1, 2025).
+- ``al_dor_food``
+  - **File:** us
+  - **Publisher:** Alabama Department of Revenue
+  - **Title:** NOTICE: State Sales and Use Tax Rate Reduced on Food Beginning September 1, 2025
+  - **URL:** https://www.revenue.alabama.gov/notice-state-sales-and-use-tax-rate-reduced-on-food-beginning-september-1-2025/
+  - **Published / updated:** 2025-07-02
+  - **Accessed:** 2026-10-17
+  - **Supports:** Alabama state sales tax on food reduced from 3% to 2% effective 2025-09-01 (Act 2025-305).
+- ``tn_dor_rates``
+  - **File:** us
+  - **Publisher:** Tennessee Department of Revenue
+  - **Title:** Due Dates and Tax Rates (Sales and Use Tax)
+  - **URL:** https://www.tn.gov/revenue/taxes/sales-and-use-tax/due-dates-and-tax-rates.html
+  - **Published / updated:** n/d
+  - **Accessed:** 2026-10-17
+  - **Supports:** Tennessee general state rate 7%; food and food ingredients 4%; local rate cap 2.75%.
+- ``va_tax_grocery``
+  - **File:** us
+  - **Publisher:** Virginia Department of Taxation
+  - **Title:** Grocery Tax; and news 'Grocery Tax Reduced to 1% Beginning Jan. 1, 2023'
+  - **URL:** https://www.tax.virginia.gov/grocery-tax
+  - **Published / updated:** n/d (rate effective 2023-01-01)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Food for home consumption taxed at a reduced 1% throughout Virginia (from 2023-01-01).
+- ``oecd_taxing_wages_db``
+  - **File:** us
+  - **Publisher:** OECD
+  - **Title:** Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API
+  - **URL:** https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions
+  - **Published / updated:** data through 2025 (Taxing Wages 2026 edition, published April 2026)
+  - **Accessed:** 2026-10-17
+  - **Supports:** US tax wedge and components for a single worker at 100% of the average wage, 2024 and 2025 (context only).
+- ``youreurope_vat``
+  - **File:** eu
+  - **Publisher:** European Union - Your Europe (European Commission)
+  - **Title:** VAT rules and rates: standard, special & reduced rates - 'List of VAT rates applied in EU member countries'
+  - **URL:** https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_en.htm
+  - **Published / updated:** page last checked 2026-07-13
+  - **Accessed:** 2026-10-17
+  - **Supports:** Standard, reduced, super-reduced and parking VAT rates for all 27 Member States (excludes region-specific rates).
+- ``ec_taxud_vat_rates``
+  - **File:** eu
+  - **Publisher:** European Commission - DG Taxation and Customs Union (DG TAXUD)
+  - **Title:** VAT Rates
+  - **URL:** https://taxation-customs.ec.europa.eu/taxation/vat/vat-directive/vat-rates_en
+  - **Published / updated:** page modified 2025-11-13
+  - **Accessed:** 2026-10-17
+  - **Supports:** EU rules: standard rate at least 15% (Art. 97); up to two reduced rates >= 5% for Annex III categories; one super-reduced rate < 5% and one zero rate for up to seven basic-needs categories (e.g., foodstuffs, medicines); parking rate >= 12%; points to TEDB for country rates.
+- ``ec_taxud_vat_rates_pdf_2020``
+  - **File:** eu
+  - **Publisher:** European Commission - DG TAXUD
+  - **Title:** VAT rates applied in the Member States of the European Union - Situation at 1st January 2020 (taxud.c.1(2020))
+  - **URL:** https://taxation-customs.ec.europa.eu/document/download/82a38bdb-d724-472d-8e02-325b271e0d88_en?filename=vat_rates_en.pdf
+  - **Published / updated:** 2020 (situation at 2020-01-01)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Historical only: the downloadable DG TAXUD PDF is still the 2020 edition; the Commission now points to TEDB / Your Europe. Not used for current figures.
+- ``ec_a2m_vat_changes_2025``
+  - **File:** eu
+  - **Publisher:** European Commission - Access2Markets
+  - **Title:** Recent VAT changes in certain EU Member States
+  - **URL:** https://trade.ec.europa.eu/access-to-markets/en/news/recent-vat-changes-certain-eu-member-states
+  - **Published / updated:** 2025-01-15
+  - **Accessed:** 2026-10-17
+  - **Supports:** Slovakia 20%->23% standard, 10%->19% reduced (other food, electricity), 5% super-reduced (basic food, medicines, books) from 2025-01-01; Spain basic foods back to 4% and seed oils/pasta to 10% from 2025-01-01; Cyprus temporary zero rate until 2025-12-31.
+- ``vero_fi_changes``
+  - **File:** eu
+  - **Publisher:** Finnish Tax Administration (Vero Skatt)
+  - **Title:** The changes to VAT rates
+  - **URL:** https://www.vero.fi/en/businesses-and-corporations/taxes-and-charges/vat/rates-of-vat/the-changes-to-VAT-rates/
+  - **Published / updated:** page updated 2026-01-01
+  - **Accessed:** 2026-10-17
+  - **Supports:** Finland standard rate 24%->25.5% from 2024-09-01; 14% reduced rate cut to 13.5% from 2026-01-01; books moved 10%->14% (2025)->13.5% (2026); passenger transport, accommodation, cultural events at 13.5% from 2026.
+- ``emta_ee_standard``
+  - **File:** eu
+  - **Publisher:** Estonian Tax and Customs Board (EMTA)
+  - **Title:** Standard VAT rate
+  - **URL:** https://emta.ee/en/business-client/taxes-and-payment/value-added-tax/vat-rates-and-supply-exempt-tax/standard-vat-rate
+  - **Published / updated:** n/d
+  - **Accessed:** 2026-10-17
+  - **Supports:** Estonia standard VAT 24% from 2025-07-01; VAT Act rates 24%, 13%, 9%, 0%.
+- ``emta_ee_vat``
+  - **File:** eu
+  - **Publisher:** Estonian Tax and Customs Board (EMTA)
+  - **Title:** Value added tax
+  - **URL:** https://www.emta.ee/en/business-client/taxes-and-payment/value-added-tax
+  - **Published / updated:** n/d
+  - **Accessed:** 2026-10-17
+  - **Supports:** Estonia standard VAT 22% -> 24% from 2025-07-01; accommodation (incl. with breakfast) 9% -> 13% from 2025-01-01; press publications 5% -> 9% from 2025-01-01.
+- ``ey_romania_2025``
+  - **File:** eu
+  - **Publisher:** EY (Ernst & Young) Global Tax Alert
+  - **Title:** Romanian tax changes introduced by new fiscal and budgetary measures
+  - **URL:** https://www.ey.com/en_gl/technical/tax-alerts/romanian-tax-changes-introduced-by-new-fiscal-and-budgetary-measures
+  - **Published / updated:** 2025-07-30
+  - **Accessed:** 2026-10-17
+  - **Supports:** Romania standard VAT 19%->21% from 2025-08-01; 5% and 9% merged into single 11% reduced rate (food, medicines, books, water, restaurants, hotels, etc.) under Law 141/2025 (Official Monitor 2025-07-25).
+- ``usp_at_49``
+  - **File:** eu
+  - **Publisher:** Austria - Unternehmensserviceportal (USP), Federal Ministry of Finance
+  - **Title:** Neuer Umsatzsteuersatz von 4,9 Prozent
+  - **URL:** https://www.usp.gv.at/aktuelles/newsliste/neuer_ustsatz.html
+  - **Published / updated:** last updated 2026-07-10
+  - **Accessed:** 2026-10-17
+  - **Supports:** Austria: new 4.9% VAT rate on selected basic foods (Annex 3 UStG, by CN code) from 2026-07-01; restaurant/catering excluded; non-listed foods stay at 10%.
+- ``de_ustg_12``
+  - **File:** eu
+  - **Publisher:** Germany - Federal Ministry of Justice (gesetze-im-internet.de)
+  - **Title:** Umsatzsteuergesetz (UStG) § 12 Steuersätze, and Anlage 2
+  - **URL:** https://www.gesetze-im-internet.de/ustg_1980/__12.html
+  - **Published / updated:** consolidated law (accessed online)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Germany 19% standard, 7% reduced for Anlage 2 goods (most foods, coffee/tea, books, newspapers), local passenger transport, short-term accommodation, restaurant/catering services excluding beverages; 0% on residential solar panels. Anlage 2: https://www.gesetze-im-internet.de/ustg_1980/anlage_2.html
+- ``de_breg_gastro_2026``
+  - **File:** eu
+  - **Publisher:** Bundesregierung (German Federal Government)
+  - **Title:** Entlastungen für Pendler und Gastronomie
+  - **URL:** https://www.bundesregierung.de/breg-de/aktuelles/steueraenderungsgesetz-bundesrat-2383684
+  - **Published / updated:** 2026-01-01
+  - **Accessed:** 2026-10-17
+  - **Supports:** Germany: VAT on restaurant food cut from 19% to 7% since 2026-01-01 (beverages excluded).
+- ``fr_sp_food``
+  - **File:** eu
+  - **Publisher:** Service-Public.fr (Entreprendre) - French administration
+  - **Title:** Taux de TVA sur les produits alimentaires et les boissons (F22399)
+  - **URL:** https://entreprendre.service-public.gouv.fr/vosdroits/F22399
+  - **Published / updated:** verified 2025-12-03
+  - **Accessed:** 2026-10-17
+  - **Supports:** France: 5.5% food for deferred consumption (shops/supermarkets); 10% food and soft drinks for immediate consumption (restaurants, takeaway sandwiches); 20% alcohol.
+- ``fr_sp_health``
+  - **File:** eu
+  - **Publisher:** Service-Public.fr (Entreprendre) - French administration
+  - **Title:** Taux de TVA dans le secteur de l'hygiène et de la santé (F23567)
+  - **URL:** https://entreprendre.service-public.gouv.fr/vosdroits/F23567
+  - **Published / updated:** verified 2025-06-18
+  - **Accessed:** 2026-10-17
+  - **Supports:** France: 2.1% medicines reimbursed by social security; 10% non-reimbursed medicines; 5.5% feminine hygiene products and condoms.
+- ``es_aeat_2026``
+  - **File:** eu
+  - **Publisher:** Agencia Tributaria (Spain)
+  - **Title:** Tipos impositivos en el IVA 2026
+  - **URL:** https://sede.agenciatributaria.gob.es/static_files/Sede/Tema/IVA/IVA_reperc/Tipos_IVA_2026_26_02_2026.pdf
+  - **Published / updated:** 2026-02-26
+  - **Accessed:** 2026-10-17
+  - **Supports:** Spain: 21% general; 10% food in general, water, passenger transport, restaurants/hotels; 4% bread, milk, cheese, eggs, fruit, vegetables, olive oil, books/newspapers, human medicines; electricity/gas/fuels 21% from 2026-01-01 to 2026-03-21 and 10% from 2026-03-22 to 2026-06-30 (temporary, conditional).
+- ``it_ade_aliquote``
+  - **File:** eu
+  - **Publisher:** Agenzia delle Entrate (Italy)
+  - **Title:** IVA - Norme generali e aliquote
+  - **URL:** https://www.agenziaentrate.gov.it/portale/iva-regole-generali-aliquote-esenzioni-pagamento/norme-generali-e-aliquote
+  - **Published / updated:** page last updated 2020-12-12
+  - **Accessed:** 2026-10-17
+  - **Supports:** Italy: 22% ordinary; 10% domestic electricity and gas, medicines, building renovation; 5% certain foods; 4% foods, beverages, agricultural products (full list in Tabella A, DPR 633/1972).
+- ``pt_at_civa``
+  - **File:** eu
+  - **Publisher:** Autoridade Tributária e Aduaneira - Portal das Finanças (Portugal)
+  - **Title:** Código do IVA (VAT Code), article 18.º (Rates) and attached Lists I and II
+  - **URL:** https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/c-iva-listas.aspx
+  - **Published / updated:** consolidated code (accessed online)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Portugal (mainland): 6% List I (bread, milk, fruit/vegetables, water, medicines, books/newspapers, electricity consumption within limits, passenger transport, hotels); 13% List II (restaurant/food services excl. alcohol and soft drinks, ordinary wine, edible oils); 23% other. Art. 18: https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/iva18.aspx
+- ``nl_bd_9``
+  - **File:** eu
+  - **Publisher:** Belastingdienst (Netherlands Tax Administration)
+  - **Title:** Goederen met 9% btw; and news 'Vanaf 1 januari 2026: btw-tarief logies omhoog naar 21%' (2025-10-30)
+  - **URL:** https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/tarieven_en_vrijstellingen/goederen_9_btw/goederen_met_9_btw
+  - **Published / updated:** n/d; news item 2025-10-30
+  - **Accessed:** 2026-10-17
+  - **Supports:** Netherlands: 9% for food, water, ornamental plants, medicines and aids, art/antiques, books and periodicals; accommodation moved to 21% from 2026-01-01.
+- ``oecd_taxing_wages_db``
+  - **File:** eu
+  - **Publisher:** OECD
+  - **Title:** Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API
+  - **URL:** https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions
+  - **Published / updated:** data through 2025 (Taxing Wages 2026 edition, published April 2026)
+  - **Accessed:** 2026-10-17
+  - **Supports:** Average tax wedge and components (income tax, employee and employer SSC) for a single worker, no children, at 100% of the average wage, 2024 and 2025, for 22 EU-OECD members, the EU-22 average and the OECD average.

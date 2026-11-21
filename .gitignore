@@ -1,0 +1,72 @@
+# Rust
+/target/
+**/target/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+
+# Tauri
+apps/desktop/src-tauri/gen/schemas/
+
+# Local dev data (never commit vaults)
+*.db
+*.db.enc
+*.db-journal
+.treasury-dev/
+
+# Documentos pessoais: ficam fora do repositório (~/Treasury-privado). Fixtures inventadas
+# entram só nas pastas fixtures/ (docs/development.md, "Dados pessoais").
+private/
+*.pdf
+*.ofx
+*.qfx
+*.qif
+*.xls
+*.xlsx
+*.ods
+*.heic
+*.eml
+*.msg
+!**/fixtures/**
+
+# Segredos e assinaturas: chaves e arquivos de ambiente nunca entram, nem em fixtures
+# (as chaves da atualização ficam em ~/Treasury-privado; docs/auto-update.md).
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.age
+*.sig
+
+# Logs
+*.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.cursor/
+.vscode/*
+!.vscode/extensions.json
+
+# Cofre de referência da 0.1.0 (teste de upgrade do esquema; cifrado com senha de teste).
+!crates/treasury-core/tests/fixtures/*.db
+
+# Ferramentas locais dos agentes de código (worktrees, ajustes, skills, MCP): nunca no
+# repositório.
+skills-lock.json
+.agents/
+.claude/
+.mcp.json
+
+# Notas internas de avaliação (citam produtos de terceiros e decisões em aberto): ficam fora do repositório.
+docs/avaliacoes/
+docs/PUBLICACAO.md

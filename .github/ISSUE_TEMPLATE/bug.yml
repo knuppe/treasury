@@ -1,0 +1,75 @@
+name: Bug · Erro
+description: Something doesn't work as it should. · Algo não funciona como deveria.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > **Never attach bank or card statements, payslips, brokerage notes, spreadsheets or screenshots showing amounts, names, ID or account numbers.** This issue is public and permanent. Reproduce the bug in the **demo vault** (when creating a vault, choose "Demo vault").
+        >
+        > **Nunca anexe extratos, faturas, holerites, notas de corretagem, planilhas ou prints com valores, nomes, CPF ou números de conta.** Este issue é público e fica para sempre. Reproduza o erro no **cofre de demonstração** (ao criar um cofre, escolha "Cofre de demonstração").
+
+        Security problem? Don't open an issue: use the [private report](https://github.com/knuppe/treasury/security/advisories/new). · Falha de segurança? Não abra issue: use o [relato privado](https://github.com/knuppe/treasury/security/advisories/new).
+
+        You can write in English, Portuguese or Spanish. · Pode escrever em inglês, português ou espanhol.
+  - type: checkboxes
+    id: privacidade
+    attributes:
+      label: Privacy · Privacidade
+      options:
+        - label: This report has no real financial or personal data. · Este relato não tem dados financeiros ou pessoais reais.
+          required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Treasury version · Versão do Treasury
+      description: Settings › About and support. · Ajustes › Sobre e apoio.
+      placeholder: "0.9.12"
+    validations:
+      required: true
+  - type: dropdown
+    id: sistema
+    attributes:
+      label: System · Sistema
+      options:
+        - macOS (Apple Silicon)
+        - Linux
+        - Windows
+    validations:
+      required: true
+  - type: input
+    id: versao-sistema
+    attributes:
+      label: System version · Versão do sistema
+      placeholder: "macOS 15.4, Ubuntu 24.04, Windows 11…"
+  - type: textarea
+    id: o-que-aconteceu
+    attributes:
+      label: What happened · O que aconteceu
+      description: And what you expected to happen. · E o que você esperava que acontecesse.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Steps to reproduce · Passos para reproduzir
+      description: Preferably in the demo vault. · De preferência no cofre de demonstração.
+      placeholder: |
+        1. Open Transactions · Abrir Lançamentos
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: arquivo
+    attributes:
+      label: Imported file (if any) · Arquivo importado (se for o caso)
+      description: >-
+        Describe only the format: bank or broker, type (OFX, CSV, PDF…), what differs from what was expected. Don't paste the content.
+        Descreva só o formato: banco ou corretora, tipo (OFX, CSV, PDF…), o que difere do esperado. Não cole o conteúdo.
+  - type: textarea
+    id: log
+    attributes:
+      label: Error message or log · Mensagem de erro ou log
+      description: Check first that it has no amounts, names or emails. · Confira antes que não há valores, nomes ou e-mails.
+      render: text

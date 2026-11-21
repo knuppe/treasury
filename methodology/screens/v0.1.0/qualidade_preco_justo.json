@@ -1,0 +1,13 @@
+{
+  "key": "qualidade_preco_justo",
+  "version": "0.1.0",
+  "classes": ["stock_br", "fii"],
+  "exclude_sectors": [],
+  "hygiene": { "min_liquidity": 1000000, "min_liquidity_fii": 500000 },
+  "criteria": [
+    { "id": "saude", "field": "health", "op": "gte", "value": 75 },
+    { "id": "confianca", "field": "confidence", "op": "gte", "value": 0.7 },
+    { "id": "sem_red_flag", "field": "red_flags", "op": "missing" }
+  ],
+  "order": { "field": "attractiveness", "dir": "desc" }
+}

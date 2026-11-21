@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Idiomas do app (docs/i18n-design.md): os diálogos do sistema (abrir arquivo, Touch ID,
+	     Keychain) saem num deles. -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pt-BR</string>
+		<string>en</string>
+		<string>es</string>
+		<string>pt-PT</string>
+	</array>
+	<!-- Ajustes › Preferências › Pasta Downloads (desligado por padrão): o Treasury olha a
+	     pasta para oferecer a importação de extratos e notas que acabaram de chegar. -->
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Com o ajuste "Acompanhar a pasta Downloads" ligado, o Treasury olha a pasta para oferecer a importação de extratos, faturas e notas de corretagem que você baixar. Nada sai do seu computador.</string>
+</dict>
+</plist>

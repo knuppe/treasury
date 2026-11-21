@@ -1,0 +1,15 @@
+{
+  "key": "fii_desconto",
+  "version": "0.1.0",
+  "classes": ["fii"],
+  "exclude_sectors": [],
+  "hygiene": { "min_liquidity": 500000 },
+  "criteria": [
+    { "id": "pvp", "field": "pvp", "op": "between", "value": [0.8, 1.0] },
+    { "id": "dy", "field": "dy", "op": "gte", "value": 0.08, "adapted": true },
+    { "id": "cotistas", "field": "holders", "op": "gte", "value": 5000 },
+    { "id": "vacancia", "field": "vacancy", "op": "lte", "value": 0.1, "optional": true },
+    { "id": "score", "field": "score", "op": "gte", "value": 60, "optional": true }
+  ],
+  "order": { "field": "dy", "dir": "desc" }
+}

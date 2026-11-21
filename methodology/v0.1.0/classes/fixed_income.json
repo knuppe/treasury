@@ -1,0 +1,240 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Renda fixa (§3, §7.2, §10.2): Tesouro Direto (fi_sovereign), bancária com FGC (fi_bank: CDB, LC, LCI, LCA, poupança) e crédito privado (fi_corporate: debêntures, CRI, CRA). Pesos da especificação com a saúde do emissor limitada a 35 (teto por dimensão): os 5 pontos foram para o FGC (bancária; risco de crédito total segue 65) e para o spread (crédito privado). Premissas em methodology/ASSUMPTIONS.md › Renda fixa.",
+  "dimensions": {
+    "fi_credit": "Risco de crédito",
+    "fi_rate": "Atratividade da taxa",
+    "fi_horizon": "Horizonte e duration",
+    "fi_liquidity": "Liquidez",
+    "fi_costs": "Custos",
+    "fi_issuer": "Saúde do emissor",
+    "fi_fgc": "Cobertura do FGC",
+    "fi_structure": "Estrutura (garantias, subordinação, covenants)",
+    "fi_spread": "Spread vs risco",
+    "fi_tax": "Isenção fiscal"
+  },
+  "metrics": {
+    "fi_sovereign_credit": {
+      "label": "Risco soberano",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Premissa: título do Tesouro Nacional em reais (1 = soberano em moeda local, sem risco de conversão); não há feed gratuito de rating",
+      "anchor": [[0, 0], [1, 90]],
+      "absolute_only": true
+    },
+    "fi_rate_percentile": {
+      "label": "Taxa de hoje no histórico de 10 anos",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Percentil (0–100) da taxa de compra do título hoje entre as medianas diárias da família (IPCA+ ou prefixados) nos últimos 10 anos (Tesouro Transparente); Tesouro Selic: juro real da Selic (Selic meta ÷ IPCA de 12 meses) no histórico mensal de 10 anos",
+      "anchor": [[0, 0], [50, 50], [100, 100]],
+      "absolute_only": true
+    },
+    "fi_real_rate": {
+      "label": "Taxa real",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "IPCA+: a taxa do título; prefixado: (1 + taxa) ÷ (1 + IPCA de 12 meses) − 1; Selic: (1 + Selic meta + ágio) ÷ (1 + IPCA de 12 meses) − 1",
+      "anchor": [[0, 0], [0.02, 15], [0.03, 30], [0.045, 55], [0.06, 80], [0.07, 95], [0.08, 100]],
+      "absolute_only": true
+    },
+    "fi_duration": {
+      "label": "Duration",
+      "unit": "years",
+      "direction": "lower",
+      "formula": "Duration de Macaulay em anos: pós-fixados ≈ 0; sem cupom: prazo até o vencimento; com cupom semestral, Renda+ e Educa+: fluxo do título descontado pela taxa",
+      "anchor": [[0, 100], [1, 95], [3, 80], [5, 65], [10, 45], [20, 25], [30, 15]],
+      "absolute_only": true
+    },
+    "fi_price_volatility": {
+      "label": "Volatilidade do preço (12 meses)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão dos retornos diários do PU de venda × √252 (preços do Tesouro Transparente gravados para o ativo)",
+      "anchor": [[0, 100], [0.02, 90], [0.05, 70], [0.1, 45], [0.2, 15], [0.3, 0]],
+      "absolute_only": true
+    },
+    "fi_liquidity_days": {
+      "label": "Prazo para ter o dinheiro",
+      "unit": "days",
+      "direction": "lower",
+      "formula": "Liquidez diária: 1 dia; com carência: dias até o fim da carência; no vencimento: dias até o vencimento",
+      "anchor": [[0, 100], [1, 100], [30, 90], [90, 80], [365, 60], [730, 45], [1825, 25], [3650, 10]],
+      "absolute_only": true
+    },
+    "fi_custody_fee": {
+      "label": "Taxa de custódia",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Taxa da B3 ao ano sobre o saldo; no Tesouro Selic, só sobre o que passa da faixa isenta (parâmetros em fixed_income.custody)",
+      "anchor": [[0, 100], [0.001, 85], [0.002, 70], [0.005, 40], [0.01, 10]],
+      "absolute_only": true
+    },
+    "fi_exit_cost": {
+      "label": "Custo de sair hoje",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "1 − PU de venda ÷ PU de compra do dia (comprar e vender de volta ao Tesouro no mesmo dia)",
+      "anchor": [[0, 100], [0.002, 90], [0.005, 80], [0.01, 65], [0.03, 35], [0.06, 10]],
+      "absolute_only": true
+    },
+    "fgc_coverage": {
+      "label": "Cobertura do FGC",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Parte da posição coberta pelo FGC: até R$ 250 mil por CPF por instituição (conglomerado), somando todos os títulos garantidos da família nela, e teto de R$ 1 milhão por CPF; conta conjunta dividida entre os titulares",
+      "anchor": [[0, 0], [0.5, 30], [0.8, 60], [0.95, 85], [1, 100]],
+      "absolute_only": true
+    },
+    "fi_rate_vs_cdi": {
+      "label": "Taxa em % do CDI (equivalente tributado)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Pós-fixado: % do CDI contratado; prefixado e IPCA+: taxa diária ÷ taxa diária do Tesouro de prazo parecido (sem curva: CDI de hoje); isentos: ÷ (1 − IR do prazo); poupança pela regra de remuneração",
+      "anchor": [[0.85, 0], [0.95, 25], [1.0, 45], [1.05, 60], [1.1, 75], [1.2, 90], [1.3, 100]],
+      "absolute_only": true
+    },
+    "fi_issuer_health": {
+      "label": "Saúde do emissor (score da ação)",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Sub-score Saúde do score de ações do emissor (demonstrações da CVM, sem valuation e momentum, com as red flags)",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true
+    },
+    "fi_guarantees": {
+      "label": "Garantias",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Garantia real, fidejussória ou quirografária (escritura de emissão)",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true,
+      "unavailable": "sem fonte estruturada gratuita: as garantias estão só na escritura de emissão (PDF)"
+    },
+    "fi_covenants": {
+      "label": "Folga dos covenants",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Folga dos covenants financeiros (ex.: DL/EBITDA máximo) sobre o último balanço",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true,
+      "unavailable": "sem fonte estruturada gratuita: os covenants estão só na escritura de emissão (PDF)"
+    },
+    "fi_subordination": {
+      "label": "Subordinação",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Série sênior ou subordinada; patrimônio separado e coobrigação (CRI e CRA)",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true,
+      "unavailable": "sem fonte estruturada gratuita: subordinação e coobrigação estão só no termo de securitização ou na escritura (PDF)"
+    },
+    "fi_rating": {
+      "label": "Rating de crédito",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Rating em escala nacional (S&P, Moody's, Fitch) e tendência",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true,
+      "unavailable": "sem fonte gratuita: as agências de rating (S&P, Moody's, Fitch) não publicam feed aberto"
+    },
+    "fi_credit_spread": {
+      "label": "Spread sobre o Tesouro",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Taxa contratada − taxa do Tesouro de prazo parecido e mesmo indexador (IPCA+ ou prefixado); pós-fixado em % do CDI: (% − 100%) × CDI de 12 meses. Faixa: pouco prêmio não paga o risco; prêmio muito alto é o mercado cobrando risco",
+      "anchor": [[-0.01, 0], [0, 20], [0.01, 60], [0.02, 90], [0.03, 100], [0.05, 70], [0.08, 30], [0.12, 0]]
+    },
+    "fi_tax_exempt": {
+      "label": "Isenção de IR",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "1 = isento para pessoa física (Lei 12.431, CRI, CRA); 0 = tributado pela tabela regressiva",
+      "anchor": [[0, 20], [1, 100]],
+      "absolute_only": true
+    }
+  },
+  "profiles": {
+    "fi_sovereign/default": {
+      "label": "Tesouro Direto",
+      "attractiveness": ["fi_rate"],
+      "critical": ["fi_rate_percentile", "fi_duration"],
+      "dimension_labels": {"fi_credit": "Risco de crédito (soberano)"},
+      "dimensions": {
+        "fi_credit": {"weight": 20, "metrics": {"fi_sovereign_credit": 1}},
+        "fi_rate": {"weight": 30, "metrics": {"fi_rate_percentile": 3, "fi_real_rate": 2}},
+        "fi_horizon": {"weight": 25, "metrics": {"fi_duration": 2, "fi_price_volatility": 1}},
+        "fi_liquidity": {"weight": 15, "metrics": {"fi_liquidity_days": 1}},
+        "fi_costs": {"weight": 10, "metrics": {"fi_custody_fee": 1, "fi_exit_cost": 1}}
+      }
+    },
+    "fi_bank/default": {
+      "label": "Renda fixa bancária",
+      "attractiveness": ["fi_rate"],
+      "critical": ["basel_ratio", "fgc_coverage"],
+      "dimension_labels": {"fi_rate": "Taxa vs CDI", "fi_liquidity": "Liquidez e prazo"},
+      "dimensions": {
+        "fi_issuer": {"weight": 35, "metrics": {"basel_ratio": 3, "cet1_ratio": 1.5, "leverage_ratio": 1.5, "npl90": 1.5, "coverage": 1, "roe": 1, "efficiency_ratio": 0.5}},
+        "fi_fgc": {"weight": 30, "metrics": {"fgc_coverage": 1}},
+        "fi_rate": {"weight": 20, "metrics": {"fi_rate_vs_cdi": 1}},
+        "fi_liquidity": {"weight": 15, "metrics": {"fi_liquidity_days": 1}}
+      }
+    },
+    "fi_corporate/default": {
+      "label": "Crédito privado",
+      "attractiveness": ["fi_spread"],
+      "critical": ["fi_issuer_health"],
+      "dimension_labels": {"fi_horizon": "Duration e liquidez"},
+      "dimensions": {
+        "fi_issuer": {"weight": 35, "metrics": {"fi_issuer_health": 1}},
+        "fi_structure": {"weight": 20, "metrics": {"fi_guarantees": 1, "fi_covenants": 1, "fi_subordination": 1}},
+        "fi_spread": {"weight": 25, "metrics": {"fi_credit_spread": 2, "fi_rating": 1}},
+        "fi_horizon": {"weight": 10, "metrics": {"fi_duration": 1, "fi_liquidity_days": 1}},
+        "fi_tax": {"weight": 10, "metrics": {"fi_tax_exempt": 1}}
+      }
+    }
+  },
+  "flags": {
+    "fi_fgc_over_limit": {"label": "Exposição acima do limite do FGC", "penalty": 5, "severity": "medium"},
+    "fi_issuer_inactive": {"label": "Instituição emissora fora de funcionamento no cadastro do Banco Central (liquidação, intervenção ou incorporação)", "cap": 20, "severity": "critical"},
+    "fi_matured": {"label": "Vencimento já passou (título deveria ter sido resgatado)", "cap": 50, "severity": "high"}
+  },
+  "segments": {
+    "fi_sovereign": {
+      "default_segment": "ipca",
+      "segments": {
+        "selic": {"label": "Tesouro Selic", "profile": "fi_sovereign/default"},
+        "prefixado": {"label": "Tesouro Prefixado", "profile": "fi_sovereign/default"},
+        "ipca": {"label": "Tesouro IPCA+, Renda+ e Educa+", "profile": "fi_sovereign/default"}
+      }
+    },
+    "fi_bank": {
+      "default_segment": "cdb",
+      "segments": {
+        "cdb": {"label": "CDB, LC e outros", "profile": "fi_bank/default"},
+        "lci_lca": {"label": "LCI e LCA", "profile": "fi_bank/default"},
+        "poupanca": {"label": "Poupança", "profile": "fi_bank/default"}
+      }
+    },
+    "fi_corporate": {
+      "default_segment": "debenture",
+      "segments": {
+        "debenture": {"label": "Debêntures", "profile": "fi_corporate/default"},
+        "debenture_incentivada": {"label": "Debêntures incentivadas", "profile": "fi_corporate/default"},
+        "cri_cra": {"label": "CRI e CRA", "profile": "fi_corporate/default"}
+      }
+    }
+  },
+  "fixed_income": {
+    "_comment": "Parâmetros (regras do FGC, da B3 e dos títulos); lidos por score::fixed_income.",
+    "fgc": {"per_cpf_per_institution": "250000", "per_cpf_global": "1000000"},
+    "custody": {"b3_fee": 0.002, "selic_exempt_upto": "10000"},
+    "coupons": {"prefixado_juros": 0.10, "ipca_juros": 0.06, "igpm_juros": 0.06},
+    "amortizing_months": {"renda": 240, "educa": 60},
+    "rate_history_years": 10,
+    "rate_history_min_points": 250,
+    "rates_refresh_days": 4,
+    "poupanca": {"selic_threshold": 0.085, "monthly_rate": 0.005, "selic_share": 0.7, "ir_equivalent": 0.225},
+    "issuer_stopwords": ["banco", "bco", "s", "a", "sa", "prudencial", "conglomerado", "financeiro", "multiplo", "cia", "companhia", "de", "do", "da", "em", "liquidacao", "extrajudicial", "ordinaria"]
+  }
+}

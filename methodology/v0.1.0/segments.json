@@ -1,0 +1,83 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Taxonomia: classe → segmento → perfil de pesos. Ações BR usam o setor de atividade do FCA (CVM); holdings ('Emp. Adm. Part. - X') herdam o setor X. O leiaute das demonstrações (banco, seguradora) vence o setor. FIIs são classificados pela composição do ativo no informe mensal. O usuário pode trocar o segmento de um ativo (override manual).",
+  "classes": {
+    "equity_br": "Ações (Brasil)",
+    "reit": "Fundos imobiliários",
+    "equity_intl": "Ações no exterior e BDRs",
+    "fi_sovereign": "Tesouro Direto",
+    "fi_bank": "Renda fixa bancária",
+    "fi_corporate": "Crédito privado",
+    "etf": "ETFs",
+    "fund": "Fundos de investimento",
+    "crypto": "Criptoativos",
+    "commodity": "Commodities"
+  },
+  "equity_br": {
+    "default_segment": "default",
+    "layout_segments": { "bank": "banks", "insurance": "insurance" },
+    "layout_required": { "banks": "bank" },
+    "holding_segment": "holdings",
+    "segments": {
+      "default": { "label": "Não financeiras (geral)", "profile": "equity_br/default" },
+      "banks": { "label": "Bancos e financeiras", "profile": "equity_br/banks" },
+      "insurance": { "label": "Seguradoras", "profile": "equity_br/insurance" },
+      "cyclicals": { "label": "Commodities (mineração, siderurgia, óleo e gás, papel e celulose)", "profile": "equity_br/cyclicals" },
+      "utilities": { "label": "Utilities (energia elétrica e saneamento)", "profile": "equity_br/utilities" },
+      "retail": { "label": "Varejo e consumo", "profile": "equity_br/retail" },
+      "tech": { "label": "Tecnologia e comunicação", "profile": "equity_br/tech" },
+      "health": { "label": "Saúde", "profile": "equity_br/health" },
+      "construction": { "label": "Construção civil e incorporação", "profile": "equity_br/construction" },
+      "industrials": { "label": "Indústria, bens de capital, transporte e infraestrutura", "profile": "equity_br/default" },
+      "telecom": { "label": "Telecomunicações", "profile": "equity_br/default" },
+      "agro": { "label": "Agronegócio e alimentos", "profile": "equity_br/default" },
+      "holdings": { "label": "Holdings de participações (demonstrações de empresa comum)", "profile": "equity_br/default" }
+    },
+    "sector_map": [
+      { "segment": "banks", "sectors": ["bancos", "intermediacao financeira", "arrendamento mercantil", "credito imobiliario"] },
+      { "segment": "insurance", "sectors": ["seguradoras e corretoras"] },
+      { "segment": "cyclicals", "sectors": ["extracao mineral", "metalurgia e siderurgia", "petroleo e gas", "papel e celulose", "petroquimicos e borracha", "reflorestamento"] },
+      { "segment": "utilities", "sectors": ["energia eletrica", "saneamento serv agua e gas"] },
+      { "segment": "retail", "sectors": ["comercio atacado e varejo", "textil e vestuario", "brinquedos e lazer", "hospedagem e turismo", "bebidas e fumo", "farmaceutico e higiene"] },
+      { "segment": "tech", "sectors": ["comunicacao e informatica"] },
+      { "segment": "telecom", "sectors": ["telecomunicacoes"] },
+      { "segment": "health", "sectors": ["servicos medicos"] },
+      { "segment": "construction", "sectors": ["construcao civil mat constr e decoracao", "const civil mat const e decoracao"] },
+      { "segment": "industrials", "sectors": ["maquinas equipamentos veiculos e pecas", "maqs equip veic e pecas", "servicos transporte e logistica", "embalagens", "educacao", "bolsas de valores mercadorias e futuros", "securitizacao de recebiveis"] },
+      { "segment": "agro", "sectors": ["agricultura acucar alcool e cana", "alimentos"] }
+    ],
+    "sector_aliases": {
+      "maqs equip veic e pecas": "maquinas equipamentos veiculos e pecas",
+      "const civil mat const e decoracao": "construcao civil mat constr e decoracao"
+    },
+    "listing_scores": {
+      "novo mercado": 100,
+      "nivel 2 de governanca corporativa": 80,
+      "bovespa mais": 70,
+      "bovespa mais nivel 2": 75,
+      "nivel 1 de governanca corporativa": 60,
+      "basico": 40,
+      "tradicional": 40
+    }
+  },
+  "reit": {
+    "default_segment": "hibrido",
+    "composition": {
+      "papel_min_cri_share": 0.5,
+      "fof_min_fii_share": 0.5,
+      "tijolo_min_real_estate_share": 0.5
+    },
+    "segments": {
+      "tijolo": { "label": "Tijolo", "profile": "reit/tijolo" },
+      "papel": { "label": "Papel (CRI)", "profile": "reit/papel" },
+      "fof": { "label": "Fundo de fundos", "profile": "reit/fof" },
+      "hibrido": { "label": "Híbrido", "profile": "reit/hibrido" }
+    },
+    "noisy_subsegments": ["multicategoria", "outros", "titulos e val mob"]
+  },
+  "peer_levels": [
+    { "key": "sector", "label": "mesmo setor" },
+    { "key": "segment", "label": "mesmo segmento" },
+    { "key": "class", "label": "toda a classe" }
+  ]
+}

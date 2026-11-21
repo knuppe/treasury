@@ -1,0 +1,49 @@
+# Atualizações de dependências (docs/distribution.md): uma rodada por mês, agrupada, com no
+# máximo 3 PRs abertos por ecossistema; correções de segurança chegam a qualquer momento (alertas
+# do Dependabot). Os commits seguem a regra em inglês (`build(deps): …`). Um crate ou pacote npm
+# novo na árvore faz o deps-check do CI falhar: entra só com a aprovação do mantenedor
+# (docs/development.md, "Dependencies").
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns: ['*']
+
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 3
+    groups:
+      cargo-minor:
+        update-types: [minor, patch]
+    ignore:
+      # 0.23 quebra o modelo de detecção do PaddleOCR (ocr-paddle); ficar na 0.22.
+      - dependency-name: tract-onnx
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      # O refinery 0.10 aceita só rusqlite até 0.41.
+      - dependency-name: rusqlite
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+
+  - package-ecosystem: npm
+    directory: /apps/desktop
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 3
+    groups:
+      npm-minor:
+        update-types: [minor, patch]

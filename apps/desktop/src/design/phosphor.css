@@ -1,0 +1,196 @@
+/*
+ * Treasury · peças do tema Fósforo
+ *
+ * As cores ficam em tokens.css ([data-theme='matrix']); aqui fica o que é só deste tema:
+ *
+ * - a chuva de código (components/PhosphorRain.tsx): um canvas fixo atrás de tudo, que
+ *   parado mostra só a faixa do topo (~180px, com fade) e, com alguma tarefa em andamento
+ *   (state/activity.ts), fica mais forte e desce até o fim da tela em ~600ms;
+ * - o chip `▮ PROCESSANDO_` da barra superior (components/PhosphorActivity.tsx), com o cursor
+ *   piscando a cada 500ms;
+ * - o decode dos valores que chegam (components/Decode.tsx);
+ * - o flash de borda ao terminar uma tarefa (`activity-flash-ok` e `-error`);
+ * - a linha `> agente conectado...` e o texto novo do agente em verde mais claro;
+ * - números, tabelas e títulos em mono, títulos em maiúsculas;
+ * - o ponto dos indicadores "ao vivo" vira um cursor de terminal.
+ *
+ * Fora do Fósforo nada daqui aparece (`--phosphor-display` e `--phosphor-hide` em tokens.css).
+ * Com movimento reduzido (fim do arquivo) não há chuva nem decode (o JS nem monta) e o
+ * cursor fica parado. `phosphor.test.ts` verifica.
+ */
+
+@property --phosphor-reach {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 180px;
+}
+
+/* ── Chuva de código ── */
+.phosphor-rain {
+  display: var(--phosphor-display);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.15;
+  --phosphor-reach: 180px;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0,
+    #000 calc(var(--phosphor-reach) * 0.45),
+    transparent var(--phosphor-reach)
+  );
+  mask-image: linear-gradient(
+    180deg,
+    #000 0,
+    #000 calc(var(--phosphor-reach) * 0.45),
+    transparent var(--phosphor-reach)
+  );
+  transition:
+    opacity 600ms var(--ease-out),
+    --phosphor-reach 600ms var(--ease-out);
+}
+.phosphor-rain[data-active='true'] {
+  opacity: 0.35;
+  --phosphor-reach: 130vh;
+}
+
+/* ── Chip de atividade na barra superior ── */
+.phosphor-activity {
+  display: var(--phosphor-display);
+}
+.phosphor-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  margin-right: 4px;
+  padding: 0 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-xs);
+  background: var(--accent-faint);
+  color: var(--accent);
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: var(--glow);
+  white-space: nowrap;
+}
+/* O bloco do terminal antes do texto e o cursor depois (no CSS, fora do texto lido). */
+.phosphor-chip::before {
+  content: '▮\00a0';
+}
+.phosphor-cursor::after {
+  content: '_';
+}
+.phosphor-chip[data-state='failed'] {
+  border-color: color-mix(in srgb, var(--negative) 60%, transparent);
+  background: var(--negative-soft);
+  color: var(--negative);
+  text-shadow: none;
+}
+.phosphor-cursor {
+  animation: phosphor-blink 1s steps(1) infinite;
+}
+@keyframes phosphor-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── Decode: o texto real fica, transparente, e o embaralhado vai por cima ── */
+.decode {
+  position: relative;
+}
+.decode.decoding {
+  -webkit-text-fill-color: transparent;
+}
+.decode.decoding::after {
+  content: attr(data-scramble);
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+
+/* ── Flash de borda ao terminar ── */
+[data-theme='matrix'] .activity-flash-ok {
+  animation: phosphor-flash-ok 300ms var(--ease-out);
+}
+[data-theme='matrix'] .activity-flash-error {
+  animation: phosphor-flash-error 300ms var(--ease-out);
+}
+@keyframes phosphor-flash-ok {
+  from {
+    box-shadow:
+      0 0 0 1px var(--accent),
+      0 0 18px rgb(0 255 65 / 0.45);
+  }
+}
+@keyframes phosphor-flash-error {
+  from {
+    box-shadow:
+      0 0 0 1px var(--negative),
+      0 0 18px rgb(255 59 59 / 0.45);
+  }
+}
+
+/* ── Agente: a linha do terminal enquanto pensa e o texto que acabou de chegar ── */
+.phosphor-only {
+  display: var(--phosphor-display);
+}
+.phosphor-hide {
+  display: var(--phosphor-hide, inline);
+}
+.phosphor-terminal {
+  font-family: var(--font-numeric);
+  color: var(--accent);
+  text-shadow: var(--glow);
+}
+::highlight(agent-fresh) {
+  color: #e6ffec;
+  background-color: rgb(0 255 65 / 0.12);
+}
+
+/* ── Tipografia: números, tabelas e títulos em mono; títulos em maiúsculas ── */
+[data-theme='matrix'] .num,
+[data-theme='matrix'] table,
+[data-theme='matrix'] [role='grid'] {
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+[data-theme='matrix'] h1,
+[data-theme='matrix'] h2,
+[data-theme='matrix'] h3,
+[data-theme='matrix'] h4 {
+  font-family: var(--font-numeric);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* O ponto pulsante dos indicadores "ao vivo" vira o cursor do terminal. */
+[data-theme='matrix'] .live-dot {
+  width: 0.55em;
+  height: 0.95em;
+  border-radius: 0;
+  animation: phosphor-blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phosphor-cursor,
+  [data-theme='matrix'] .live-dot {
+    animation: none;
+  }
+  .phosphor-chip::before,
+  .phosphor-cursor {
+    display: none;
+  }
+  .phosphor-rain {
+    transition: none;
+  }
+}

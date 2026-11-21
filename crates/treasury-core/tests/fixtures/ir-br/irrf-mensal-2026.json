@@ -1,0 +1,16 @@
+{
+  "fonte": {
+    "titulo": "Receita Federal: exemplos de aplicação da Lei 15.270/2025 (salário pago em 02/01/2026)",
+    "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/exemplos-de-aplicacao-da-lei-15-270-2025",
+    "consulta": "2026-10-20",
+    "nota": "Só os números, reescritos como dados (a página é CC BY-ND 3.0). O INSS é entrada: os exemplos usam a tabela de 2025. Valores em centavos; sem dependentes."
+  },
+  "mes": "2026-01",
+  "casos": [
+    { "bruto": 303600, "inss": 25773, "irrf": 0 },
+    { "bruto": 400000, "inss": 37341, "irrf": 0 },
+    { "bruto": 500000, "inss": 50960, "irrf": 0 },
+    { "bruto": 600000, "inss": 64960, "irrf": 38288 },
+    { "bruto": 760720, "inss": 0, "irrf": 101627 }
+  ]
+}

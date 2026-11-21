@@ -1,0 +1,14 @@
+{
+  "key": "bazin",
+  "version": "0.1.0",
+  "classes": ["stock_br"],
+  "exclude_sectors": [],
+  "hygiene": { "min_liquidity": 1000000 },
+  "criteria": [
+    { "id": "dy", "field": "dy", "op": "gte", "value": 0.06 },
+    { "id": "proventos", "field": "dividend_years", "op": "gte", "value": 5 },
+    { "id": "divida", "field": "net_debt_equity", "op": "lte", "value": 1, "optional": true },
+    { "id": "sem_prejuizo", "field": "loss_years_10y", "op": "eq", "value": 0, "adapted": true }
+  ],
+  "order": { "field": "bazin_upside", "dir": "desc" }
+}

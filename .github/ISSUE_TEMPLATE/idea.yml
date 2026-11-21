@@ -1,0 +1,32 @@
+name: Idea · Ideia
+description: A new feature or an improvement. · Uma função nova ou uma melhoria.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > **Don't include real financial or personal data**, not even in screenshots. Use the demo vault. · **Não inclua dados financeiros ou pessoais reais**, nem em prints. Use o cofre de demonstração.
+  - type: textarea
+    id: problema
+    attributes:
+      label: What problem does this solve · Qual problema isto resolve
+      description: Describe the everyday situation where you missed this. · Conte a situação do dia a dia em que você sentiu falta disto.
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: How you picture it · Como você imagina
+      description: Screen, flow or example. · Tela, fluxo ou exemplo.
+    validations:
+      required: true
+  - type: input
+    id: pais
+    attributes:
+      label: Country (if the idea depends on a country's rules) · País (se a ideia depende das regras de um país)
+      placeholder: "Brazil, Portugal, Argentina…"
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternatives you considered · Alternativas que você considerou

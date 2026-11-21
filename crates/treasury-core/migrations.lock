@@ -1,0 +1,10 @@
+# Migrações publicadas: nunca mude nem apague estas (bancos de usuários já as aplicaram).
+# Migração nova = arquivo novo com número maior que o último daqui. Ao publicar uma versão,
+# acrescente as migrações novas abaixo do cabeçalho dela (o teste
+# `storage::tests::released_migrations_are_frozen` confere os hashes e a ordem).
+# As 94 migrações de antes da 1.0.0 (V1 a V164) foram juntadas na V1; um cofre gravado por elas
+# troca o histórico ao abrir (storage::LEGACY_HISTORY).
+#
+# versão  arquivo  sha256
+# 1.0.0
+1 V1__esquema.sql 6a4af06c60cf4b2d7da2028afbe2256469af331624ee792b9a1a7356bf689f7b

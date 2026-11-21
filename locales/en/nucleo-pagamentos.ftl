@@ -1,0 +1,30 @@
+# Boletos, Pix "copia e cola" codes and payment receipts read on the computer
+# (docs/ocr-other-documents.md): core messages.
+nucleo-pagamentos-boleto = Boleto
+nucleo-pagamentos-boleto-do-banco = Boleto { $banco }
+nucleo-pagamentos-pix = Pix
+nucleo-pagamentos-transferencia = Transfer
+nucleo-pagamentos-seg-prefeitura = City hall (property tax or fee)
+nucleo-pagamentos-seg-agua = Water bill
+nucleo-pagamentos-seg-energia = Power or gas bill
+nucleo-pagamentos-seg-telefone = Phone or internet bill
+nucleo-pagamentos-seg-governo = Government tax or fee
+nucleo-pagamentos-seg-multa = Traffic fine
+nucleo-pagamentos-seg-conta = Bill to pay
+nucleo-pagamentos-aviso-sem-valor = The code has no amount; check and fill it in.
+nucleo-pagamentos-aviso-sem-vencimento = The due date wasn't read; check and fill it in.
+nucleo-pagamentos-aviso-pix-dinamico = Pix charge: the app doesn't query the payee's bank, it only uses what's in the code.
+nucleo-pagamentos-aviso-revisar = Check the amount and date: the receipt wasn't fully read.
+nucleo-pagamentos-nota-boleto = Payment line: { $linha }
+nucleo-pagamentos-nota-pix = Pix copy and paste: { $codigo }
+nucleo-pagamentos-erro-codigo = The boleto or Pix code doesn't check out.
+nucleo-pagamentos-erro-ja-lancado = This boleto or Pix is already recorded as planned.
+nucleo-pagamentos-erro-valor = Enter the amount to pay.
+nucleo-pagamentos-erro-sem-lancamento = Choose the transaction for this receipt or create one.
+nucleo-pagamentos-historico-previsto = Planned bill: { $descricao }
+nucleo-pagamentos-historico-comprovante = Receipt linked to the transaction: { $descricao }
+nucleo-pagamentos-nota-comprovante = Receipt
+nucleo-pagamentos-nota-comprovante-pix = Pix receipt
+nucleo-pagamentos-nota-comprovante-boleto = Paid boleto receipt
+nucleo-pagamentos-nota-comprovante-transferencia = Transfer receipt
+nucleo-pagamentos-aviso-agendamento = Scheduling receipt: the money hasn't left yet; the transaction stays planned.

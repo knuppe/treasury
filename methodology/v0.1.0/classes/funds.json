@@ -1,0 +1,361 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Fundos de investimento (classe fund: fundos e previdência) e ETFs (classe etf). Sem universo de pares: só âncoras absolutas. Retornos, volatilidade e drawdown vêm das cotas da CVM (informe diário) ou das cotações; cadastro, taxas e prazos da CVM (registro de fundos e classes; extrato). Em `etf` ficam as regras de domicílio e de índice de referência.",
+  "dimensions": {
+    "fund_retorno": "Retorno ajustado ao risco",
+    "fund_consistencia": "Consistência",
+    "fund_risco": "Risco",
+    "fund_custos": "Custos",
+    "fund_estrutura": "Gestor e estrutura",
+    "etf_eficiencia": "Eficiência",
+    "etf_liquidez": "Liquidez",
+    "etf_componentes": "Saúde dos componentes",
+    "etf_estrutura": "Estrutura",
+    "etf_concentracao": "Concentração",
+    "etf_risco": "Risco"
+  },
+  "metrics": {
+    "fund_sharpe": {
+      "label": "Índice de Sharpe",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "(retorno anualizado − CDI anualizado) ÷ volatilidade anualizada, na janela mais longa disponível até 36 meses (mínimo 12)",
+      "anchor": [[-1, 0], [0, 25], [0.5, 55], [1, 80], [2, 100]],
+      "absolute_only": true
+    },
+    "fund_sortino": {
+      "label": "Índice de Sortino",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "(retorno anualizado − CDI anualizado) ÷ desvio dos retornos diários abaixo do CDI do dia, anualizado",
+      "anchor": [[-1, 0], [0, 25], [0.75, 55], [1.5, 80], [3, 100]],
+      "absolute_only": true
+    },
+    "fund_excess_return": {
+      "label": "Retorno acima do benchmark (a.a.)",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Retorno anualizado do fundo − retorno anualizado do benchmark (CDI ou Ibovespa), na mesma janela do Sharpe",
+      "anchor": [[-0.05, 0], [-0.02, 25], [0, 50], [0.02, 75], [0.05, 100]],
+      "absolute_only": true
+    },
+    "fund_information_ratio": {
+      "label": "Information ratio",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Retorno acima do benchmark ÷ tracking error (desvio das diferenças diárias, anualizado); só quando o benchmark não é o CDI",
+      "anchor": [[-1, 0], [0, 35], [0.5, 70], [1, 100]],
+      "absolute_only": true
+    },
+    "fund_consistency": {
+      "label": "Janelas de 12 meses acima do benchmark",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Fração das janelas móveis de 12 meses (passo mensal, pelo menos 6) em que o fundo rendeu mais que o benchmark",
+      "anchor": [[0.2, 0], [0.4, 30], [0.6, 70], [0.8, 90], [1, 100]],
+      "absolute_only": true
+    },
+    "fund_max_drawdown": {
+      "label": "Maior queda (drawdown máximo)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior queda da cota em relação ao pico anterior, na janela de até 36 meses",
+      "anchor": [[0.02, 100], [0.05, 80], [0.1, 60], [0.2, 30], [0.4, 0]],
+      "absolute_only": true
+    },
+    "fund_recovery_days": {
+      "label": "Tempo de recuperação da maior queda",
+      "unit": "days",
+      "direction": "lower",
+      "formula": "Dias do fundo da maior queda até a cota voltar ao pico anterior (sem recuperação: dias desde o pico)",
+      "anchor": [[0, 100], [30, 85], [90, 65], [180, 40], [365, 15], [730, 0]],
+      "absolute_only": true
+    },
+    "fund_volatility": {
+      "label": "Volatilidade anual da cota",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão dos retornos diários de 12 meses × √(observações por ano)",
+      "anchor": [[0.02, 100], [0.05, 80], [0.1, 55], [0.15, 30], [0.25, 0]],
+      "absolute_only": true
+    },
+    "fund_admin_fee": {
+      "label": "Taxa de administração (a.a.)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Taxa de administração do último extrato da CVM (TAXA_ADM)",
+      "anchor": [[0.005, 100], [0.01, 80], [0.02, 50], [0.03, 20], [0.04, 0]],
+      "absolute_only": true
+    },
+    "fund_perf_fee": {
+      "label": "Taxa de performance",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Taxa de performance do último extrato da CVM (zero quando não há)",
+      "anchor": [[0, 100], [0.1, 75], [0.2, 45], [0.3, 15], [0.35, 0]],
+      "absolute_only": true
+    },
+    "fund_nav": {
+      "label": "Patrimônio líquido",
+      "unit": "money",
+      "direction": "range",
+      "formula": "Patrimônio líquido no último informe diário da CVM (abaixo de R$ 50 mi = risco operacional)",
+      "anchor": [[0, 0], [10000000, 15], [50000000, 45], [200000000, 80], [1000000000, 100], [100000000000, 100]]
+    },
+    "fund_age_years": {
+      "label": "Tempo de existência",
+      "unit": "years",
+      "direction": "higher",
+      "formula": "Anos desde a constituição (registro de fundos e classes da CVM); proxy do tempo de gestão",
+      "anchor": [[0, 0], [1, 20], [3, 50], [5, 75], [10, 100]],
+      "absolute_only": true
+    },
+    "fund_holders": {
+      "label": "Número de cotistas",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Cotistas no último informe diário da CVM",
+      "anchor": [[0, 0], [50, 20], [500, 50], [5000, 80], [50000, 100]],
+      "absolute_only": true
+    },
+    "fund_redemption_days": {
+      "label": "Prazo de resgate",
+      "unit": "days",
+      "direction": "lower",
+      "formula": "Dias de conversão da cota + dias de pagamento do resgate (extrato da CVM)",
+      "anchor": [[0, 100], [1, 95], [5, 80], [30, 50], [90, 20], [180, 0]],
+      "absolute_only": true
+    },
+    "fund_net_flow_12m": {
+      "label": "Captação líquida em 12 meses",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "(Aplicações − resgates dos últimos 12 meses) ÷ patrimônio líquido atual (informe diário da CVM)",
+      "anchor": [[-0.5, 0], [-0.2, 25], [0, 55], [0.2, 80], [0.5, 100]],
+      "absolute_only": true
+    },
+    "etf_ter": {
+      "label": "Taxa de administração (TER)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Taxa total de administração do ETF",
+      "anchor": [[0.001, 100], [0.003, 85], [0.006, 60], [0.01, 30], [0.02, 0]],
+      "unavailable": "A taxa dos ETFs só aparece nas páginas da B3 e dos gestores (a CVM não publica o extrato dos fundos de índice e o Yahoo exige sessão); não há fonte estruturada gratuita."
+    },
+    "etf_tracking_diff": {
+      "label": "Tracking difference (12 meses)",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Retorno do ETF em 12 meses − retorno do índice de referência no mesmo período (o ideal é perto de −taxa)",
+      "anchor": [[-0.06, 0], [-0.03, 35], [-0.01, 80], [0, 100], [0.01, 90], [0.03, 50], [0.06, 0]]
+    },
+    "etf_tracking_error": {
+      "label": "Tracking error",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão das diferenças diárias entre o ETF e o índice, anualizado (12 meses)",
+      "anchor": [[0.002, 100], [0.005, 85], [0.01, 65], [0.03, 30], [0.06, 0]],
+      "absolute_only": true
+    },
+    "etf_avg_volume": {
+      "label": "Volume médio diário",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "Volume financeiro médio dos últimos pregões (em reais; ETFs no exterior convertidos pela PTAX)",
+      "anchor": [[0, 0], [200000, 20], [1000000, 50], [10000000, 85], [50000000, 100]],
+      "absolute_only": true
+    },
+    "etf_aum": {
+      "label": "Patrimônio do ETF",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "Patrimônio líquido no registro de fundos e classes da CVM",
+      "anchor": [[0, 0], [20000000, 20], [100000000, 60], [500000000, 85], [2000000000, 100]],
+      "absolute_only": true
+    },
+    "etf_domicile": {
+      "label": "Domicílio e tributação",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Nota do domicílio para o investidor brasileiro (retenção sobre dividendos, regime da Lei 14.754/2023); tabela em classes/funds.json",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true
+    },
+    "etf_replication": {
+      "label": "Replicação (física ou sintética)",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Física e transparente = melhor",
+      "anchor": [[0, 0], [100, 100]],
+      "unavailable": "O método de replicação e o empréstimo de ativos estão só nos regulamentos e prospectos (PDF); não há fonte estruturada gratuita."
+    },
+    "etf_components_score": {
+      "label": "Score médio dos componentes",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Média dos scores de saúde das ações da carteira teórica do índice, ponderada pela participação (herança, §7.2)",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true
+    },
+    "etf_top10_weight": {
+      "label": "Peso das 10 maiores posições",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Soma da participação dos 10 maiores componentes na carteira teórica do índice (B3)",
+      "anchor": [[0.2, 100], [0.4, 80], [0.6, 50], [0.8, 20], [1, 0]],
+      "absolute_only": true
+    },
+    "etf_holdings": {
+      "label": "Número de componentes",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Ativos na carteira teórica do índice (B3)",
+      "anchor": [[1, 0], [10, 30], [30, 60], [80, 85], [300, 100]],
+      "absolute_only": true
+    },
+    "etf_volatility": {
+      "label": "Volatilidade anual",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão dos retornos diários de 12 meses × √(observações por ano)",
+      "anchor": [[0.1, 100], [0.15, 80], [0.22, 55], [0.3, 30], [0.45, 0]],
+      "absolute_only": true
+    },
+    "etf_max_drawdown": {
+      "label": "Maior queda (drawdown máximo)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior queda da cotação em relação ao pico anterior, na janela de até 36 meses",
+      "anchor": [[0.1, 100], [0.2, 75], [0.3, 50], [0.45, 20], [0.6, 0]],
+      "absolute_only": true
+    }
+  },
+  "profiles": {
+    "fund/renda_fixa": {
+      "label": "Fundo de renda fixa",
+      "critical": ["fund_sharpe", "fund_max_drawdown"],
+      "anchors": {
+        "fund_sharpe": [[-2, 0], [-0.5, 30], [0, 55], [1, 85], [2, 100]],
+        "fund_sortino": [[-2, 0], [-0.5, 30], [0, 55], [1.5, 85], [3, 100]],
+        "fund_excess_return": [[-0.03, 0], [-0.01, 30], [0, 60], [0.01, 80], [0.03, 100]],
+        "fund_max_drawdown": [[0.002, 100], [0.01, 80], [0.03, 50], [0.08, 15], [0.15, 0]],
+        "fund_volatility": [[0.003, 100], [0.01, 80], [0.02, 55], [0.04, 25], [0.08, 0]],
+        "fund_recovery_days": [[0, 100], [10, 85], [30, 65], [90, 35], [180, 10], [365, 0]],
+        "fund_admin_fee": [[0.002, 100], [0.005, 80], [0.01, 50], [0.015, 20], [0.02, 0]]
+      },
+      "dimensions": {
+        "fund_retorno": {"weight": 30, "metrics": {"fund_sharpe": 2, "fund_sortino": 1, "fund_excess_return": 1.5, "fund_information_ratio": 1}},
+        "fund_consistencia": {"weight": 20, "metrics": {"fund_consistency": 1}},
+        "fund_risco": {"weight": 15, "metrics": {"fund_max_drawdown": 2, "fund_volatility": 1.5, "fund_recovery_days": 1}},
+        "fund_custos": {"weight": 15, "metrics": {"fund_admin_fee": 2, "fund_perf_fee": 1}},
+        "fund_estrutura": {"weight": 20, "metrics": {"fund_nav": 2, "fund_age_years": 1.5, "fund_holders": 1, "fund_redemption_days": 1, "fund_net_flow_12m": 1}}
+      }
+    },
+    "fund/multimercado": {
+      "label": "Fundo multimercado",
+      "critical": ["fund_sharpe", "fund_max_drawdown"],
+      "dimensions": {
+        "fund_retorno": {"weight": 30, "metrics": {"fund_sharpe": 2, "fund_sortino": 1, "fund_excess_return": 1.5, "fund_information_ratio": 1}},
+        "fund_consistencia": {"weight": 20, "metrics": {"fund_consistency": 1}},
+        "fund_risco": {"weight": 15, "metrics": {"fund_max_drawdown": 2, "fund_volatility": 1.5, "fund_recovery_days": 1}},
+        "fund_custos": {"weight": 15, "metrics": {"fund_admin_fee": 2, "fund_perf_fee": 1}},
+        "fund_estrutura": {"weight": 20, "metrics": {"fund_nav": 2, "fund_age_years": 1.5, "fund_holders": 1, "fund_redemption_days": 1, "fund_net_flow_12m": 1}}
+      }
+    },
+    "fund/acoes": {
+      "label": "Fundo de ações",
+      "critical": ["fund_sharpe", "fund_max_drawdown"],
+      "anchors": {
+        "fund_sharpe": [[-0.5, 0], [0, 30], [0.3, 55], [0.7, 80], [1.2, 100]],
+        "fund_sortino": [[-0.5, 0], [0, 30], [0.5, 55], [1, 80], [2, 100]],
+        "fund_excess_return": [[-0.1, 0], [-0.04, 25], [0, 50], [0.04, 75], [0.1, 100]],
+        "fund_max_drawdown": [[0.1, 100], [0.2, 75], [0.3, 50], [0.45, 20], [0.6, 0]],
+        "fund_volatility": [[0.12, 100], [0.18, 80], [0.25, 55], [0.35, 25], [0.5, 0]],
+        "fund_recovery_days": [[0, 100], [90, 80], [180, 60], [365, 35], [730, 10], [1095, 0]],
+        "fund_admin_fee": [[0.005, 100], [0.01, 85], [0.02, 55], [0.03, 25], [0.04, 0]],
+        "fund_nav": [[0, 0], [10000000, 15], [50000000, 45], [300000000, 85], [1000000000, 100], [5000000000, 100], [20000000000, 75]]
+      },
+      "dimensions": {
+        "fund_retorno": {"weight": 30, "metrics": {"fund_sharpe": 2, "fund_sortino": 1, "fund_excess_return": 1.5, "fund_information_ratio": 1}},
+        "fund_consistencia": {"weight": 20, "metrics": {"fund_consistency": 1}},
+        "fund_risco": {"weight": 15, "metrics": {"fund_max_drawdown": 2, "fund_volatility": 1.5, "fund_recovery_days": 1}},
+        "fund_custos": {"weight": 15, "metrics": {"fund_admin_fee": 2, "fund_perf_fee": 1}},
+        "fund_estrutura": {"weight": 20, "metrics": {"fund_nav": 2, "fund_age_years": 1.5, "fund_holders": 1, "fund_redemption_days": 1, "fund_net_flow_12m": 1}}
+      }
+    },
+    "fund/previdencia": {
+      "label": "Fundo de previdência",
+      "critical": ["fund_sharpe", "fund_max_drawdown"],
+      "anchors": {
+        "fund_admin_fee": [[0.004, 100], [0.008, 80], [0.015, 50], [0.02, 20], [0.03, 0]]
+      },
+      "dimensions": {
+        "fund_retorno": {"weight": 30, "metrics": {"fund_sharpe": 2, "fund_sortino": 1, "fund_excess_return": 1.5, "fund_information_ratio": 1}},
+        "fund_consistencia": {"weight": 20, "metrics": {"fund_consistency": 1}},
+        "fund_risco": {"weight": 15, "metrics": {"fund_max_drawdown": 2, "fund_volatility": 1.5, "fund_recovery_days": 1}},
+        "fund_custos": {"weight": 15, "metrics": {"fund_admin_fee": 2, "fund_perf_fee": 1}},
+        "fund_estrutura": {"weight": 20, "metrics": {"fund_nav": 2, "fund_age_years": 1.5, "fund_holders": 1, "fund_redemption_days": 1, "fund_net_flow_12m": 1}}
+      }
+    },
+    "etf/acoes_br": {
+      "label": "ETF de ações (índice da B3)",
+      "critical": ["etf_avg_volume"],
+      "dimensions": {
+        "etf_eficiencia": {"weight": 30, "metrics": {"etf_ter": 1.5, "etf_tracking_diff": 2, "etf_tracking_error": 1}},
+        "etf_liquidez": {"weight": 20, "metrics": {"etf_avg_volume": 2, "etf_aum": 1}},
+        "etf_componentes": {"weight": 25, "metrics": {"etf_components_score": 1}},
+        "etf_estrutura": {"weight": 15, "metrics": {"etf_domicile": 3, "etf_replication": 0.8, "fund_age_years": 1}},
+        "etf_concentracao": {"weight": 10, "metrics": {"etf_top10_weight": 2, "etf_holdings": 1}}
+      }
+    },
+    "etf/default": {
+      "label": "ETF (sem composição)",
+      "critical": ["etf_avg_volume", "etf_volatility"],
+      "dimensions": {
+        "etf_eficiencia": {"weight": 30, "metrics": {"etf_ter": 1.5, "etf_tracking_diff": 2, "etf_tracking_error": 1}},
+        "etf_liquidez": {"weight": 25, "metrics": {"etf_avg_volume": 2, "etf_aum": 1}},
+        "etf_estrutura": {"weight": 20, "metrics": {"etf_domicile": 3, "etf_replication": 0.8, "fund_age_years": 1}},
+        "etf_risco": {"weight": 25, "metrics": {"etf_volatility": 1.5, "etf_max_drawdown": 1}}
+      }
+    }
+  },
+  "flags": {
+    "fund_small_nav": {"label": "Fundo pequeno (patrimônio abaixo de R$ 50 mi)", "threshold": 50000000, "severity": "low"},
+    "fund_heavy_outflows": {"label": "Resgates líquidos acima de 30% do patrimônio em 12 meses", "threshold": -0.3, "penalty": 3, "severity": "medium"},
+    "fund_deep_drawdown": {"label": "Queda da cota acima de 20% num fundo de renda fixa", "threshold": 0.2, "cap": 50, "severity": "high"},
+    "etf_low_liquidity": {"label": "Liquidez baixa (volume médio abaixo de R$ 1 mi/dia)", "threshold": 1000000, "severity": "info"},
+    "etf_small_aum": {"label": "ETF pequeno (patrimônio abaixo de R$ 100 mi)", "threshold": 100000000, "severity": "low"}
+  },
+  "segments": {
+    "fund": {
+      "default_segment": "multimercado",
+      "segments": {
+        "renda_fixa": {"label": "Renda fixa", "profile": "fund/renda_fixa"},
+        "multimercado": {"label": "Multimercado e outros", "profile": "fund/multimercado"},
+        "acoes": {"label": "Ações", "profile": "fund/acoes"},
+        "previdencia": {"label": "Previdência", "profile": "fund/previdencia"}
+      }
+    },
+    "etf": {
+      "default_segment": "outros",
+      "segments": {
+        "acoes_br": {"label": "Ações BR (índice da B3)", "profile": "etf/acoes_br"},
+        "exterior": {"label": "Listado no exterior", "profile": "etf/default"},
+        "outros": {"label": "Outros (renda fixa, exterior via B3…)", "profile": "etf/default"}
+      }
+    }
+  },
+  "etf": {
+    "_comment": "Domicílio: nota 0–100 para o investidor pessoa física brasileira. BR: IR de 15% sobre o ganho (ações) e nada a reter; EUA: 30% retidos sobre dividendos e risco de imposto sobre herança americano; UCITS na Irlanda: 15% sobre dividendos americanos, sem imposto sobre herança americano. Índices: palavras do nome do ativo ou do registro da CVM → carteira teórica da B3 e série de índice (indices) para o tracking.",
+    "domicile_scores": {"br": 80, "us": 40, "ucits": 70, "other": 55},
+    "ucits_exchanges": ["LSE", "XETRA", "EURONEXT", "AMS", "EPA", "MIL", "SWX", "SIX", "IRL"],
+    "indices": [
+      {"tickers": ["BOVA11", "BOVV11", "BOVB11", "BOVX11", "XBOV11", "BBOV11"], "keywords": ["IBOVESPA"], "b3_index": "IBOV", "series": "ibov", "currency": "BRL"},
+      {"tickers": ["BRAX11"], "keywords": ["IBRX-100", "IBRX 100", "INDICE BRASIL 100"], "b3_index": "IBXX", "currency": "BRL"},
+      {"tickers": ["PIBB11"], "keywords": ["IBRX-50", "IBRX 50", "INDICE BRASIL 50"], "b3_index": "IBXL", "currency": "BRL"},
+      {"tickers": ["SMAL11", "SMAC11"], "keywords": ["SMALL CAP", "SMLL"], "b3_index": "SMLL", "currency": "BRL"},
+      {"tickers": ["DIVO11"], "keywords": ["DIVIDENDOS", "IDIV"], "b3_index": "IDIV", "currency": "BRL"},
+      {"tickers": ["SPY", "IVV", "VOO", "SPLG", "CSPX", "VUSA", "SXR8"], "keywords": ["S&P 500", "SP 500"], "series": "sp500", "currency": "USD"}
+    ]
+  }
+}

@@ -1,0 +1,1691 @@
+{
+ "country": "US",
+ "name": "Estados Unidos",
+ "currency": "USD",
+ "version": "2026-11",
+ "updated": "2026-11-17",
+ "coverage": "esboço",
+ "sources": [
+  {
+   "id": "irs_ir_2024_273",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "IRS releases tax inflation adjustments for tax year 2025 (IR-2024-273; Rev. Proc. 2024-40)",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2025",
+   "published": "2024-10-22",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_brackets_page",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Federal income tax rates and brackets",
+   "url": "https://www.irs.gov/filing/federal-income-tax-rates-and-brackets",
+   "published": "page last reviewed 2026-07-27",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_ir_2025_103",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill (IR-2025-103; Rev. Proc. 2025-32)",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+   "published": "2025-10-09",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_obbb_individuals",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "One, Big, Beautiful Bill provisions - Individuals and workers",
+   "url": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+   "published": "page last reviewed 2026-08-27",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_pub15_2025",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Publication 15 (2025), (Circular E), Employer's Tax Guide",
+   "url": "https://www.irs.gov/pub/irs-prior/p15--2025.pdf",
+   "published": "2024-12-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_pub15_2026",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Publication 15 (2026), (Circular E), Employer's Tax Guide",
+   "url": "https://www.irs.gov/publications/p15",
+   "published": "2026 edition (accessed online)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_tc751",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Topic no. 751, Social Security and Medicare withholding rates",
+   "url": "https://www.irs.gov/taxtopics/tc751",
+   "published": "page last reviewed 2026-09-24",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "irs_addl_medicare_qa",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Questions and answers for the Additional Medicare Tax",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/questions-and-answers-for-the-additional-medicare-tax",
+   "published": "page last reviewed 2026-08-11",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tf_sales_2026_midyear",
+   "publisher": "Tax Foundation",
+   "title": "State and Local Sales Tax Rates, Midyear 2026 (Abir Mandal)",
+   "url": "https://taxfoundation.org/data/all/state/2026-sales-tax-rates-midyear/",
+   "published": "2026-07-06",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tf_income_2026",
+   "publisher": "Tax Foundation",
+   "title": "State Individual Income Tax Rates and Brackets, 2026 (Janelle Fritts, Katherine Loughead)",
+   "url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
+   "published": "2026-02-17",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tf_state_changes_2026",
+   "publisher": "Tax Foundation",
+   "title": "2026 State Tax Changes Taking Effect January 1st (Nicole Fox, Jacob Macumber-Rosin)",
+   "url": "https://taxfoundation.org/research/all/state/2026-state-tax-changes/",
+   "published": "2025-12-18 (updated 2026-01-06)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tf_state_changes_2025",
+   "publisher": "Tax Foundation",
+   "title": "2025 State Tax Changes Taking Effect January 1st",
+   "url": "https://taxfoundation.org/research/all/state/2025-state-tax-changes/",
+   "published": "2024-12-19 (updated 2025-06-25)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tf_grocery_2020",
+   "publisher": "Tax Foundation",
+   "title": "Halloween Candy Tax: Sales Tax Treatment of Groceries, Candy, and Soda (Janelle Fritts) - table 'as of January 1, 2020'",
+   "url": "https://taxfoundation.org/data/all/state/halloween-candy-tax-groceries-soda-sales-tax/",
+   "published": "2020-10-28 (updated 2023-07-24)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ok_otc_grocery",
+   "publisher": "Oklahoma Tax Commission",
+   "title": "State Sales Tax on Food and Food Ingredients",
+   "url": "https://oklahoma.gov/tax/businesses/state-sales-tax-on-food-and-food-ingredients.html",
+   "published": "n/d (effective 2024-08-29)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ms_dor_grocery",
+   "publisher": "Mississippi Department of Revenue",
+   "title": "Reduced Sales Tax on Groceries Begins July 1",
+   "url": "https://www.dor.ms.gov/news/reduced-sales-tax-groceries-begins-july-1",
+   "published": "2025-05-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "al_dor_food",
+   "publisher": "Alabama Department of Revenue",
+   "title": "NOTICE: State Sales and Use Tax Rate Reduced on Food Beginning September 1, 2025",
+   "url": "https://www.revenue.alabama.gov/notice-state-sales-and-use-tax-rate-reduced-on-food-beginning-september-1-2025/",
+   "published": "2025-07-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "tn_dor_rates",
+   "publisher": "Tennessee Department of Revenue",
+   "title": "Due Dates and Tax Rates (Sales and Use Tax)",
+   "url": "https://www.tn.gov/revenue/taxes/sales-and-use-tax/due-dates-and-tax-rates.html",
+   "published": "n/d",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "va_tax_grocery",
+   "publisher": "Virginia Department of Taxation",
+   "title": "Grocery Tax; and news 'Grocery Tax Reduced to 1% Beginning Jan. 1, 2023'",
+   "url": "https://www.tax.virginia.gov/grocery-tax",
+   "published": "n/d (rate effective 2023-01-01)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "oecd_taxing_wages_db",
+   "publisher": "OECD",
+   "title": "Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions",
+   "published": "data through 2025 (Taxing Wages 2026 edition, published April 2026)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ssa_cola_2026",
+   "publisher": "Social Security Administration (SSA)",
+   "title": "2026 Social Security Changes (COLA fact sheet): taxable maximum US$ 184.500",
+   "url": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "irs_tc560",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Topic no. 560, Additional Medicare tax",
+   "url": "https://www.irs.gov/taxtopics/tc560",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "irs_ctc",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Child Tax Credit (até US$ 2.200 por filho)",
+   "url": "https://www.irs.gov/credits-deductions/individuals/child-tax-credit",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "irs_rp_2025_32",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Rev. Proc. 2025-32: tabelas de 2026 (seção 4.01, tabelas 2 e 3), crédito por filho (4.05) e dedução padrão (4.14)",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+   "published": "2025-10-09",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "usc_26_24",
+   "publisher": "Office of the Law Revision Counsel (U.S. Code)",
+   "title": "26 U.S.C. § 24(b): o crédito por filho cai US$ 50 a cada US$ 1.000 (ou fração) acima de US$ 200 mil (US$ 400 mil na declaração conjunta)",
+   "url": "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section24&num=0&edition=prelim",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "irs_p15t_2026",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Publication 15-T (2026), Federal Income Tax Withholding Methods: Worksheet 1A e tabelas anuais por estado civil do formulário W-4 (passo 1(c) e caixa do passo 2)",
+   "url": "https://www.irs.gov/pub/irs-pdf/p15t.pdf",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "irs_p501",
+   "publisher": "Internal Revenue Service (IRS)",
+   "title": "Publication 501: Dependents, Standard Deduction, and Filing Information (requisitos de head of household)",
+   "url": "https://www.irs.gov/publications/p501",
+   "accessed": "2026-11-17"
+  }
+ ],
+ "consumption": [
+  {
+   "key": "alimentos_basicos",
+   "label": "Alimentos básicos",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "alimentos_industrializados",
+   "label": "Alimentos industrializados",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_nao_alcoolicas",
+   "label": "Bebidas não alcoólicas",
+   "low": "exempt",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_alcoolicas",
+   "label": "Bebidas alcoólicas",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "restaurantes",
+   "label": "Restaurantes, bares e delivery",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "gasolina",
+   "label": "Gasolina comum (gasolina C)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "diesel",
+   "label": "Óleo diesel (diesel B)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "etanol",
+   "label": "Etanol hidratado",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "gnv",
+   "label": "Gás natural veicular (GNV)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "glp",
+   "label": "Gás de cozinha (GLP, botijão 13 kg)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "energia_eletrica",
+   "label": "Energia elétrica (conta de luz residencial)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "agua_esgoto",
+   "label": "Água e esgoto",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "telefonia_internet",
+   "label": "Telefonia e internet",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "tv_assinatura_streaming",
+   "label": "TV por assinatura e streaming",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_nacionais",
+   "label": "Eletrônicos (fabricação nacional ou sem distinção)",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_importados",
+   "label": "Eletrônicos importados",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletrodomesticos",
+   "label": "Eletrodomésticos",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "moveis",
+   "label": "Móveis e colchões",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "vestuario",
+   "label": "Vestuário",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "calcados",
+   "label": "Calçados",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "medicamentos",
+   "label": "Medicamentos de uso humano",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "higiene_pessoal",
+   "label": "Higiene pessoal",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cosmeticos_perfumes",
+   "label": "Cosméticos e perfumes",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_pessoais",
+   "label": "Serviços pessoais (salão, academia/clube)",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_mensalidade",
+   "label": "Educação – mensalidade escolar",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_livros",
+   "label": "Educação – livros",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "saude_plano_consulta",
+   "label": "Saúde – plano de saúde e consultas",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_publico",
+   "label": "Transporte público",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_aplicativo",
+   "label": "Transporte por aplicativo",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "passagens_aereas",
+   "label": "Passagens aéreas",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "hotel_turismo",
+   "label": "Hotel e turismo",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "automovel_novo",
+   "label": "Automóvel novo",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "motocicleta",
+   "label": "Motocicleta",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "pecas_manutencao_veiculo",
+   "label": "Peças e manutenção de veículo",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "seguros",
+   "label": "Seguros (IOF sobre o prêmio)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "tarifas_bancarias",
+   "label": "Tarifas bancárias",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "brinquedos",
+   "label": "Brinquedos",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "pet",
+   "label": "Pet (ração, remédio, veterinário)",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "materiais_construcao",
+   "label": "Materiais de construção",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cigarros",
+   "label": "Cigarros",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "mercado",
+   "label": "Mercado (cesta mista)",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "aluguel",
+   "label": "Aluguel residencial",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "condominio",
+   "label": "Condomínio",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_domesticos",
+   "label": "Serviços domésticos (diarista, babá)",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "estacionamento",
+   "label": "Estacionamento",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "optica",
+   "label": "Óculos e lentes",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "material_escolar",
+   "label": "Material escolar",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "lazer",
+   "label": "Lazer (passeios, ingressos, festas)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "presentes",
+   "label": "Presentes (itens variados)",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "compras_diversas",
+   "label": "Compras diversas (sem detalhe)",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation). Alimentos de mercado e remédios: isentos na maioria dos estados (Conservador e Provável), tributados no Elevado. Serviços em geral fora do imposto sobre vendas. Não inclui impostos especiais (combustível, bebida, cigarro) nem tributos embutidos na cadeia.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "contas_diversas",
+   "label": "Contas e boletos (sem detalhe)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço (impostos especiais e de serviços públicos não levantados).",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "limpeza",
+   "label": "Material de limpeza",
+   "low": "sales_tax",
+   "central": "sales_tax",
+   "high": "sales_tax",
+   "basis": "Imposto estadual e local sobre vendas (média combinada do estado, Tax Foundation): produtos de limpeza pagam o imposto cheio.",
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ],
+   "icms_modal": false
+  }
+ ],
+ "regions": [
+  {
+   "code": "AL",
+   "name": "Alabama",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.46,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "AK",
+   "name": "Alaska",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 1.82,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "AZ",
+   "name": "Arizona",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.54,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "AR",
+   "name": "Arkansas",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.48,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "CA",
+   "name": "California",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.03,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "CO",
+   "name": "Colorado",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.89,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "CT",
+   "name": "Connecticut",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.35,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "DE",
+   "name": "Delaware",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 0.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "DC",
+   "name": "District of Columbia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "FL",
+   "name": "Florida",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.98,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "GA",
+   "name": "Georgia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.56,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "HI",
+   "name": "Hawaii",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 4.5,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "ID",
+   "name": "Idaho",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.03,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "IL",
+   "name": "Illinois",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.98,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "IN",
+   "name": "Indiana",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "IA",
+   "name": "Iowa",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.94,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "KS",
+   "name": "Kansas",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.71,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "KY",
+   "name": "Kentucky",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "LA",
+   "name": "Louisiana",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 10.13,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "ME",
+   "name": "Maine",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 5.5,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MD",
+   "name": "Maryland",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MA",
+   "name": "Massachusetts",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.25,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MI",
+   "name": "Michigan",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MN",
+   "name": "Minnesota",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.14,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MS",
+   "name": "Mississippi",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.06,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MO",
+   "name": "Missouri",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.44,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "MT",
+   "name": "Montana",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 0.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NE",
+   "name": "Nebraska",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.98,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NV",
+   "name": "Nevada",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.24,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NH",
+   "name": "New Hampshire",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 0.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NJ",
+   "name": "New Jersey",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.6,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NM",
+   "name": "New Mexico",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.68,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NY",
+   "name": "New York",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.54,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "NC",
+   "name": "North Carolina",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.1,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "ND",
+   "name": "North Dakota",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.09,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "OH",
+   "name": "Ohio",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.29,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "OK",
+   "name": "Oklahoma",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.06,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "OR",
+   "name": "Oregon",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 0.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "PA",
+   "name": "Pennsylvania",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.34,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "RI",
+   "name": "Rhode Island",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.0,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "SC",
+   "name": "South Carolina",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.49,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "SD",
+   "name": "South Dakota",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.11,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "TN",
+   "name": "Tennessee",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.61,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "TX",
+   "name": "Texas",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 8.2,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "UT",
+   "name": "Utah",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 7.42,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "VT",
+   "name": "Vermont",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.43,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "VA",
+   "name": "Virginia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 5.77,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "WA",
+   "name": "Washington",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 9.57,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "WV",
+   "name": "West Virginia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 6.6,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "WI",
+   "name": "Wisconsin",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 5.72,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  },
+  {
+   "code": "WY",
+   "name": "Wyoming",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": 5.39,
+   "vat_standard": null,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "tf_sales_2026_midyear"
+   ]
+  }
+ ],
+ "reference_icms": null,
+ "payroll": [
+  {
+   "from": "2026-01",
+   "legal_basis": "IRS Rev. Proc. 2025-32 (faixas e dedução padrão de 2026) pelo estado civil do cadastro da família, como no formulário W-4 (IRS, Publicação 15-T): single (US$ 16.100), head of household para quem sustenta dependentes sem cônjuge (US$ 24.150) e married filing jointly quando o cônjuge não tem renda (US$ 32.200); com os dois cônjuges com renda, a tabela individual · crédito por filho de US$ 2.200, reduzido em US$ 50 a cada US$ 1.000 de renda acima de US$ 200 mil (US$ 400 mil na conjunta; IRC § 24) · FICA: Social Security 6,2% até US$ 184.500 (SSA) e Medicare 1,45% + 0,9% acima de US$ 200 mil (IRS)",
+   "ir_monthly": [
+    {
+     "up_to": 103333,
+     "rate": 10.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 420000,
+     "rate": 12.0,
+     "deduction": 2067
+    },
+    {
+     "up_to": 880833,
+     "rate": 22.0,
+     "deduction": 44067
+    },
+    {
+     "up_to": 1681458,
+     "rate": 24.0,
+     "deduction": 61683
+    },
+    {
+     "up_to": 2135208,
+     "rate": 32.0,
+     "deduction": 196200
+    },
+    {
+     "up_to": 5338333,
+     "rate": 35.0,
+     "deduction": 260256
+    },
+    {
+     "up_to": null,
+     "rate": 37.0,
+     "deduction": 367023
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 134167,
+   "inss_bands": [
+    {
+     "up_to": 1537500,
+     "rate": 7.65
+    },
+    {
+     "up_to": 1666667,
+     "rate": 1.45
+    },
+    {
+     "up_to": 100000000000000,
+     "rate": 2.35
+    }
+   ],
+   "source_ids": [
+    "irs_ir_2025_103",
+    "ssa_cola_2026",
+    "irs_tc560",
+    "irs_ctc",
+    "irs_rp_2025_32",
+    "usc_26_24",
+    "irs_p15t_2026",
+    "irs_p501"
+   ],
+   "contribution_deductible": false,
+   "dependent_credit": 18333,
+   "periods": 12,
+   "single_parent": {
+    "ir_monthly": [
+     {
+      "up_to": 147500,
+      "rate": 10.0,
+      "deduction": 0
+     },
+     {
+      "up_to": 562083,
+      "rate": 12.0,
+      "deduction": 2950
+     },
+     {
+      "up_to": 880833,
+      "rate": 22.0,
+      "deduction": 59158
+     },
+     {
+      "up_to": 1681250,
+      "rate": 24.0,
+      "deduction": 76775
+     },
+     {
+      "up_to": 2135000,
+      "rate": 32.0,
+      "deduction": 211275
+     },
+     {
+      "up_to": 5338333,
+      "rate": 35.0,
+      "deduction": 275325
+     },
+     {
+      "up_to": null,
+      "rate": 37.0,
+      "deduction": 382092
+     }
+    ],
+    "simplified_discount": 201250
+   },
+   "dependent_credit_phase_out": {
+    "from": 20000000,
+    "step": 100000,
+    "cut": 5000
+   },
+   "joint": {
+    "ir_monthly": [
+     {
+      "up_to": 206667,
+      "rate": 10.0,
+      "deduction": 0
+     },
+     {
+      "up_to": 840000,
+      "rate": 12.0,
+      "deduction": 4133
+     },
+     {
+      "up_to": 1761667,
+      "rate": 22.0,
+      "deduction": 88133
+     },
+     {
+      "up_to": 3362917,
+      "rate": 24.0,
+      "deduction": 123367
+     },
+     {
+      "up_to": 4270417,
+      "rate": 32.0,
+      "deduction": 392400
+     },
+     {
+      "up_to": 6405833,
+      "rate": 35.0,
+      "deduction": 520512
+     },
+     {
+      "up_to": null,
+      "rate": 37.0,
+      "deduction": 648629
+     }
+    ],
+    "simplified_discount": 268333,
+    "dependent_credit_phase_out": {
+     "from": 40000000,
+     "step": 100000,
+     "cut": 5000
+    }
+   }
+  }
+ ],
+ "context": null,
+ "methodology": [
+  "Esboço: só o imposto estadual e local sobre vendas, pela alíquota combinada média do estado (Tax Foundation, meados de 2026), como fração do valor pago: alíquota / (100 + alíquota).",
+  "Renda: o imposto federal é estimado mês a mês pelas faixas de 2026 de quem declara sozinho (single), com a dedução padrão e o crédito por filho divididos por 12; o FICA é Social Security 6,2% até o teto anual (US$ 184.500, dividido por 12) e Medicare 1,45% (mais 0,9% acima de US$ 200 mil por ano). Imposto estadual e local sobre a renda não entram; com o W-2, lance o informe de rendimentos para usar os valores reais."
+ ],
+ "disclaimer": "Esboço de estimativa: considera só o imposto sobre vendas médio do estado e os impostos lançados ou informados. Os valores reais variam por cidade, produto e situação de cada pessoa. Fonte: Tax Foundation."
+}

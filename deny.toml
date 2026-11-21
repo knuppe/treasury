@@ -1,0 +1,73 @@
+# cargo-deny: verificação das dependências Rust no CI e na release (docs/trust.md).
+# O CI e o release.yml rodam `cargo deny check advisories bans sources licenses`: uma
+# vulnerabilidade conhecida (banco RustSec), uma licença fora da lista ou uma origem fora do
+# crates.io barra o merge e a release. Dependência nova pede também a aprovação do mantenedor
+# (scripts/deps-check.py e a política em docs/development.md).
+
+[graph]
+all-features = true
+
+[advisories]
+# Vulnerabilidades e crates retirados do crates.io barram. Uma exceção só entra aqui com o
+# motivo e o id do aviso, depois de conferir que o código afetado não é usado.
+yanked = "deny"
+# Crate sem manutenção só barra quando é dependência direta nossa; nas indiretas, a troca
+# depende do projeto que a usa (avisos do Tauri, do zbus etc.).
+unmaintained = "workspace"
+# Exceções aprovadas pelo mantenedor, sem correção que dê para instalar hoje. Tirar cada uma
+# assim que a correção sair (lista em docs/roadmap.md).
+ignore = [
+    # SQLite < 3.54 pode devolver memória não inicializada ao abrir um banco com um -wal ao
+    # lado de tamanho de página diferente. A correção é o sqlcipher-src 420 (libsqlite3-sys
+    # 0.40, rusqlite 0.42), e o refinery-core 0.10.1 aceita só rusqlite <= 0.41. O ataque é
+    # local e exige um par de arquivos adulterados na pasta do cofre.
+    { id = "RUSTSEC-2026-0502", reason = "sqlcipher-src 420 exige rusqlite 0.42, que o refinery 0.10.1 ainda não aceita; ataque local com arquivos adulterados" },
+    # chrono sem manutenção (aviso informativo, sem falha conhecida). O núcleo usa datas em
+    # todo lugar, e o rusqlite (campos de data), o rmcp (o MCP), o lopdf, o imap e o schemars
+    # dependem dele: trocar só o nosso uso não tira o chrono da árvore. Aprovada em
+    # 20/11/2026; a troca (jiff ou time) fica para quando essas dependências mudarem.
+    { id = "RUSTSEC-2026-0543", reason = "chrono sem manutenção, sem falha conhecida; rusqlite, rmcp, lopdf, imap e schemars dependem dele" },
+]
+
+# Licenças aceitas nas dependências (docs/trust.md): todas compatíveis com a AGPL-3.0-only.
+# Licença nova entra aqui só depois de conferida; uma dependência GPL-2.0-only, sem licença ou
+# com licença que não seja de código aberto barra o CI. Com alternativas ("MIT OR Apache-2.0"),
+# basta uma da lista. Os avisos de cada uma vão em THIRD_PARTY_LICENSES.md
+# (scripts/third-party-licenses.py).
+[licenses]
+confidence-threshold = 0.9
+allow = [
+    "0BSD",
+    "AGPL-3.0-only",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BlueOak-1.0.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "MIT",
+    "MIT-0",
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+    # SQLCipher (sqlcipher-src): o SQLite é domínio público ("blessing") e trechos da
+    # libtomcrypt são WTFPL; os dois permitem tudo.
+    "blessing",
+    "WTFPL",
+]
+
+[bans]
+# Versões repetidas de um crate acontecem com o Tauri e não são falha de segurança.
+multiple-versions = "allow"
+wildcards = "allow"
+
+[sources]
+# Dependências só do crates.io: nada de git nem de outro registro sem passar por aqui.
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

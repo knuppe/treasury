@@ -1,0 +1,2231 @@
+{
+  "country": "US",
+  "version": "2026-10",
+  "generated": "2026-10-17",
+  "currency": "USD",
+  "units": "Rates are percentages as decimals (6.2 = 6.2%). Money in USD.",
+  "sources": [
+    {
+      "id": "irs_ir_2024_273",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "IRS releases tax inflation adjustments for tax year 2025 (IR-2024-273; Rev. Proc. 2024-40)",
+      "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2025",
+      "published": "2024-10-22",
+      "accessed": "2026-10-17",
+      "supports": "2025 federal brackets (single, MFJ); original 2025 standard deduction before OBBBA ($15,000 / $30,000 / $22,500)."
+    },
+    {
+      "id": "irs_brackets_page",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "Federal income tax rates and brackets",
+      "url": "https://www.irs.gov/filing/federal-income-tax-rates-and-brackets",
+      "published": "page last reviewed 2026-07-27",
+      "accessed": "2026-10-17",
+      "supports": "Confirms the 2025 brackets (single, MFJ) still apply after OBBBA."
+    },
+    {
+      "id": "irs_ir_2025_103",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill (IR-2025-103; Rev. Proc. 2025-32)",
+      "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+      "published": "2025-10-09",
+      "accessed": "2026-10-17",
+      "supports": "2026 federal brackets and 2026 standard deduction; 2025 standard deduction as raised by OBBBA ($15,750 / $31,500 / $23,625)."
+    },
+    {
+      "id": "irs_obbb_individuals",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "One, Big, Beautiful Bill provisions - Individuals and workers",
+      "url": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+      "published": "page last reviewed 2026-08-27",
+      "accessed": "2026-10-17",
+      "supports": "2025 standard deduction under OBBBA; senior deduction ($6,000, 2025-2028); tips deduction (max $25,000); overtime deduction (max $12,500 / $25,000 MFJ)."
+    },
+    {
+      "id": "irs_pub15_2025",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "Publication 15 (2025), (Circular E), Employer's Tax Guide",
+      "url": "https://www.irs.gov/pub/irs-prior/p15--2025.pdf",
+      "published": "2024-12-17",
+      "accessed": "2026-10-17",
+      "supports": "2025 Social Security wage base $176,100; Social Security 6.2% each (employee/employer); Medicare 1.45% each, no wage base."
+    },
+    {
+      "id": "irs_pub15_2026",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "Publication 15 (2026), (Circular E), Employer's Tax Guide",
+      "url": "https://www.irs.gov/publications/p15",
+      "published": "2026 edition (accessed online)",
+      "accessed": "2026-10-17",
+      "supports": "2026 Social Security wage base $184,500; Social Security 6.2% and Medicare 1.45% each for employee and employer."
+    },
+    {
+      "id": "irs_tc751",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "Topic no. 751, Social Security and Medicare withholding rates",
+      "url": "https://www.irs.gov/taxtopics/tc751",
+      "published": "page last reviewed 2026-09-24",
+      "accessed": "2026-10-17",
+      "supports": "Employee 6.2% Social Security and 1.45% Medicare; 2026 wage base $184,500; employers withhold 0.9% Additional Medicare Tax on wages over $200,000."
+    },
+    {
+      "id": "irs_addl_medicare_qa",
+      "publisher": "Internal Revenue Service (IRS)",
+      "title": "Questions and answers for the Additional Medicare Tax",
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/questions-and-answers-for-the-additional-medicare-tax",
+      "published": "page last reviewed 2026-08-11",
+      "accessed": "2026-10-17",
+      "supports": "Additional Medicare Tax 0.9%; thresholds $250,000 MFJ, $125,000 MFS, $200,000 single/HoH/qualifying widow(er)."
+    },
+    {
+      "id": "tf_sales_2026_midyear",
+      "publisher": "Tax Foundation",
+      "title": "State and Local Sales Tax Rates, Midyear 2026 (Abir Mandal)",
+      "url": "https://taxfoundation.org/data/all/state/2026-sales-tax-rates-midyear/",
+      "published": "2026-07-06",
+      "accessed": "2026-10-17",
+      "supports": "State, average local, max local and combined sales tax rates for 50 states + DC as of 2026-07-01; population-weighted national average 7.53%; Illinois ended its 1% state grocery tax on 2026-01-01."
+    },
+    {
+      "id": "tf_income_2026",
+      "publisher": "Tax Foundation",
+      "title": "State Individual Income Tax Rates and Brackets, 2026 (Janelle Fritts, Katherine Loughead)",
+      "url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
+      "published": "2026-02-17",
+      "accessed": "2026-10-17",
+      "supports": "State individual income tax rates and brackets as of 2026-01-01 (top marginal rates, flat/graduated/none); local income tax note."
+    },
+    {
+      "id": "tf_state_changes_2026",
+      "publisher": "Tax Foundation",
+      "title": "2026 State Tax Changes Taking Effect January 1st (Nicole Fox, Jacob Macumber-Rosin)",
+      "url": "https://taxfoundation.org/research/all/state/2026-state-tax-changes/",
+      "published": "2025-12-18 (updated 2026-01-06)",
+      "accessed": "2026-10-17",
+      "supports": "Arkansas and Illinois state grocery tax repealed 2026-01-01 (local taxes may still apply); state income tax rate cuts for 2026."
+    },
+    {
+      "id": "tf_state_changes_2025",
+      "publisher": "Tax Foundation",
+      "title": "2025 State Tax Changes Taking Effect January 1st",
+      "url": "https://taxfoundation.org/research/all/state/2025-state-tax-changes/",
+      "published": "2024-12-19 (updated 2025-06-25)",
+      "accessed": "2026-10-17",
+      "supports": "Kansas state grocery tax cut from 2% to 0% on 2025-01-01."
+    },
+    {
+      "id": "tf_grocery_2020",
+      "publisher": "Tax Foundation",
+      "title": "Halloween Candy Tax: Sales Tax Treatment of Groceries, Candy, and Soda (Janelle Fritts) - table 'as of January 1, 2020'",
+      "url": "https://taxfoundation.org/data/all/state/halloween-candy-tax-groceries-soda-sales-tax/",
+      "published": "2020-10-28 (updated 2023-07-24)",
+      "accessed": "2026-10-17",
+      "supports": "Baseline state grocery treatment (full / reduced / exempt) as of 2020-01-01; used only where no newer verified change exists."
+    },
+    {
+      "id": "ok_otc_grocery",
+      "publisher": "Oklahoma Tax Commission",
+      "title": "State Sales Tax on Food and Food Ingredients",
+      "url": "https://oklahoma.gov/tax/businesses/state-sales-tax-on-food-and-food-ingredients.html",
+      "published": "n/d (effective 2024-08-29)",
+      "accessed": "2026-10-17",
+      "supports": "Oklahoma state sales tax on food eliminated from 2024-08-29 (HB 1955); local sales taxes still apply."
+    },
+    {
+      "id": "ms_dor_grocery",
+      "publisher": "Mississippi Department of Revenue",
+      "title": "Reduced Sales Tax on Groceries Begins July 1",
+      "url": "https://www.dor.ms.gov/news/reduced-sales-tax-groceries-begins-july-1",
+      "published": "2025-05-01",
+      "accessed": "2026-10-17",
+      "supports": "Mississippi grocery sales tax reduced from 7% to 5% effective 2025-07-01 (HB 1, 2025)."
+    },
+    {
+      "id": "al_dor_food",
+      "publisher": "Alabama Department of Revenue",
+      "title": "NOTICE: State Sales and Use Tax Rate Reduced on Food Beginning September 1, 2025",
+      "url": "https://www.revenue.alabama.gov/notice-state-sales-and-use-tax-rate-reduced-on-food-beginning-september-1-2025/",
+      "published": "2025-07-02",
+      "accessed": "2026-10-17",
+      "supports": "Alabama state sales tax on food reduced from 3% to 2% effective 2025-09-01 (Act 2025-305)."
+    },
+    {
+      "id": "tn_dor_rates",
+      "publisher": "Tennessee Department of Revenue",
+      "title": "Due Dates and Tax Rates (Sales and Use Tax)",
+      "url": "https://www.tn.gov/revenue/taxes/sales-and-use-tax/due-dates-and-tax-rates.html",
+      "published": "n/d",
+      "accessed": "2026-10-17",
+      "supports": "Tennessee general state rate 7%; food and food ingredients 4%; local rate cap 2.75%."
+    },
+    {
+      "id": "va_tax_grocery",
+      "publisher": "Virginia Department of Taxation",
+      "title": "Grocery Tax; and news 'Grocery Tax Reduced to 1% Beginning Jan. 1, 2023'",
+      "url": "https://www.tax.virginia.gov/grocery-tax",
+      "published": "n/d (rate effective 2023-01-01)",
+      "accessed": "2026-10-17",
+      "supports": "Food for home consumption taxed at a reduced 1% throughout Virginia (from 2023-01-01)."
+    },
+    {
+      "id": "oecd_taxing_wages_db",
+      "publisher": "OECD",
+      "title": "Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions",
+      "published": "data through 2025 (Taxing Wages 2026 edition, published April 2026)",
+      "accessed": "2026-10-17",
+      "supports": "US tax wedge and components for a single worker at 100% of the average wage, 2024 and 2025 (context only)."
+    }
+  ],
+  "income": {
+    "federal": {
+      "2025": {
+        "tax_year": 2025,
+        "brackets": {
+          "single": [
+            {
+              "rate": 10,
+              "over": 0,
+              "up_to": 11925
+            },
+            {
+              "rate": 12,
+              "over": 11925,
+              "up_to": 48475
+            },
+            {
+              "rate": 22,
+              "over": 48475,
+              "up_to": 103350
+            },
+            {
+              "rate": 24,
+              "over": 103350,
+              "up_to": 197300
+            },
+            {
+              "rate": 32,
+              "over": 197300,
+              "up_to": 250525
+            },
+            {
+              "rate": 35,
+              "over": 250525,
+              "up_to": 626350
+            },
+            {
+              "rate": 37,
+              "over": 626350,
+              "up_to": null
+            }
+          ],
+          "married_filing_jointly": [
+            {
+              "rate": 10,
+              "over": 0,
+              "up_to": 23850
+            },
+            {
+              "rate": 12,
+              "over": 23850,
+              "up_to": 96950
+            },
+            {
+              "rate": 22,
+              "over": 96950,
+              "up_to": 206700
+            },
+            {
+              "rate": 24,
+              "over": 206700,
+              "up_to": 394600
+            },
+            {
+              "rate": 32,
+              "over": 394600,
+              "up_to": 501050
+            },
+            {
+              "rate": 35,
+              "over": 501050,
+              "up_to": 751600
+            },
+            {
+              "rate": 37,
+              "over": 751600,
+              "up_to": null
+            }
+          ]
+        },
+        "brackets_source_ids": [
+          "irs_ir_2024_273",
+          "irs_brackets_page"
+        ],
+        "standard_deduction": {
+          "single": 15750,
+          "married_filing_jointly": 31500,
+          "head_of_household": 23625,
+          "married_filing_separately": 15750
+        },
+        "standard_deduction_source_ids": [
+          "irs_ir_2025_103",
+          "irs_obbb_individuals"
+        ],
+        "standard_deduction_pre_obbba": {
+          "single": 15000,
+          "married_filing_jointly": 30000,
+          "head_of_household": 22500,
+          "source_ids": [
+            "irs_ir_2024_273"
+          ],
+          "note": "Original Rev. Proc. 2024-40 amounts, superseded for 2025 by the One Big Beautiful Bill Act (P.L. 119-21, signed 2025-07-04)."
+        },
+        "note": "Taxable income = income minus standard (or itemized) deduction. Brackets are applied to taxable income. The IRS brackets page (reviewed 2026-07-27) still shows these 2025 brackets after OBBBA."
+      },
+      "2026": {
+        "tax_year": 2026,
+        "brackets": {
+          "single": [
+            {
+              "rate": 10,
+              "over": 0,
+              "up_to": 12400
+            },
+            {
+              "rate": 12,
+              "over": 12400,
+              "up_to": 50400
+            },
+            {
+              "rate": 22,
+              "over": 50400,
+              "up_to": 105700
+            },
+            {
+              "rate": 24,
+              "over": 105700,
+              "up_to": 201775
+            },
+            {
+              "rate": 32,
+              "over": 201775,
+              "up_to": 256225
+            },
+            {
+              "rate": 35,
+              "over": 256225,
+              "up_to": 640600
+            },
+            {
+              "rate": 37,
+              "over": 640600,
+              "up_to": null
+            }
+          ],
+          "married_filing_jointly": [
+            {
+              "rate": 10,
+              "over": 0,
+              "up_to": 24800
+            },
+            {
+              "rate": 12,
+              "over": 24800,
+              "up_to": 100800
+            },
+            {
+              "rate": 22,
+              "over": 100800,
+              "up_to": 211400
+            },
+            {
+              "rate": 24,
+              "over": 211400,
+              "up_to": 403550
+            },
+            {
+              "rate": 32,
+              "over": 403550,
+              "up_to": 512450
+            },
+            {
+              "rate": 35,
+              "over": 512450,
+              "up_to": 768700
+            },
+            {
+              "rate": 37,
+              "over": 768700,
+              "up_to": null
+            }
+          ]
+        },
+        "brackets_source_ids": [
+          "irs_ir_2025_103"
+        ],
+        "standard_deduction": {
+          "single": 16100,
+          "married_filing_jointly": 32200,
+          "head_of_household": 24150,
+          "married_filing_separately": 16100
+        },
+        "standard_deduction_source_ids": [
+          "irs_ir_2025_103"
+        ],
+        "note": "Rev. Proc. 2025-32 (IR-2025-103, 2025-10-09), reflecting OBBBA amendments."
+      }
+    },
+    "federal_obbba_deductions": {
+      "source_ids": [
+        "irs_obbb_individuals"
+      ],
+      "senior_deduction": {
+        "amount_per_person": 6000,
+        "years": "2025-2028",
+        "phaseout_starts_magi": {
+          "single": 75000,
+          "married_filing_jointly": 150000
+        },
+        "note": "Age 65+; $12,000 for a married couple where both qualify."
+      },
+      "tips_deduction": {
+        "max": 25000,
+        "years": "2025-2028",
+        "phaseout_starts_magi": {
+          "single": 150000,
+          "married_filing_jointly": 300000
+        }
+      },
+      "overtime_deduction": {
+        "max": {
+          "single": 12500,
+          "married_filing_jointly": 25000
+        },
+        "years": "2025-2028",
+        "phaseout_starts_magi": {
+          "single": 150000,
+          "married_filing_jointly": 300000
+        }
+      },
+      "note": "Deductions that can lower federal income tax for some users; relevant to the 'Conservador' (lower tax) scenario only if the user qualifies."
+    },
+    "state": {
+      "as_of": "2026-01-01",
+      "source_ids": [
+        "tf_income_2026"
+      ],
+      "note": "Top marginal statutory rate on taxable income for single and married-filing-jointly filers, with the bracket threshold where it starts (0 = applies from the first dollar). Local income taxes are excluded (TF footnote a: ten states have county/city income taxes; average effective local rates as % of AGI, 2023 data: AL 0.07, IN 0.35, IA 0.08, KY 0.93, MD 2.4, MI 0.16, MO 0.18, NY 1.60, OH 1.2, OR 0.18, PA 0.99). Some bracket widths in the TF table are 2025 inflation-adjusted values (TF footnote j).",
+      "local_income_tax_avg_effective_pct_agi_2023": {
+        "AL": 0.07,
+        "IN": 0.35,
+        "IA": 0.08,
+        "KY": 0.93,
+        "MD": 2.4,
+        "MI": 0.16,
+        "MO": 0.18,
+        "NY": 1.6,
+        "OH": 1.2,
+        "OR": 0.18,
+        "PA": 0.99
+      },
+      "states": [
+        {
+          "state": "Alabama",
+          "type": "graduated",
+          "top_rate_single": 5.0,
+          "top_threshold_single": 3000.0,
+          "top_rate_mfj": 5.0,
+          "top_threshold_mfj": 6000.0,
+          "brackets_single": 3
+        },
+        {
+          "state": "Alaska",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Arizona",
+          "type": "flat",
+          "top_rate_single": 2.5,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 2.5,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Arkansas",
+          "type": "graduated",
+          "top_rate_single": 3.9,
+          "top_threshold_single": 4600.0,
+          "top_rate_mfj": 3.9,
+          "top_threshold_mfj": 4600.0,
+          "brackets_single": 2
+        },
+        {
+          "state": "California",
+          "type": "graduated",
+          "top_rate_single": 13.3,
+          "top_threshold_single": 1000000.0,
+          "top_rate_mfj": 13.3,
+          "top_threshold_mfj": 1485906.0,
+          "brackets_single": 10,
+          "note": "Top rate includes the 1% mental health services tax on taxable income over $1M. Rates exclude the SDI payroll tax (TF footnote says 1.3% with no wage ceiling; TF intro text says 1.1% - see unverified)."
+        },
+        {
+          "state": "Colorado",
+          "type": "flat",
+          "top_rate_single": 4.4,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 4.4,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Connecticut",
+          "type": "graduated",
+          "top_rate_single": 6.99,
+          "top_threshold_single": 500000.0,
+          "top_rate_mfj": 6.99,
+          "top_threshold_mfj": 1000000.0,
+          "brackets_single": 7
+        },
+        {
+          "state": "Delaware",
+          "type": "graduated",
+          "top_rate_single": 6.6,
+          "top_threshold_single": 60000.0,
+          "top_rate_mfj": 6.6,
+          "top_threshold_mfj": 60000.0,
+          "brackets_single": 6
+        },
+        {
+          "state": "Florida",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Georgia",
+          "type": "flat",
+          "top_rate_single": 5.19,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 5.19,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1,
+          "note": "Flat 5.19% as of 2026-01-01 per TF; later 2026 legislation not checked."
+        },
+        {
+          "state": "Hawaii",
+          "type": "graduated",
+          "top_rate_single": 11.0,
+          "top_threshold_single": 325000.0,
+          "top_rate_mfj": 11.0,
+          "top_threshold_mfj": 650000.0,
+          "brackets_single": 12
+        },
+        {
+          "state": "Idaho",
+          "type": "flat",
+          "top_rate_single": 5.3,
+          "top_threshold_single": 4811.0,
+          "top_rate_mfj": 5.3,
+          "top_threshold_mfj": 9622.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Illinois",
+          "type": "flat",
+          "top_rate_single": 4.95,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 4.95,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1,
+          "note": "Flat 4.95%."
+        },
+        {
+          "state": "Indiana",
+          "type": "flat",
+          "top_rate_single": 2.95,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 2.95,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Iowa",
+          "type": "flat",
+          "top_rate_single": 3.8,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 3.8,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Kansas",
+          "type": "graduated",
+          "top_rate_single": 5.58,
+          "top_threshold_single": 23000.0,
+          "top_rate_mfj": 5.58,
+          "top_threshold_mfj": 46000.0,
+          "brackets_single": 2
+        },
+        {
+          "state": "Kentucky",
+          "type": "flat",
+          "top_rate_single": 3.5,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 3.5,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Louisiana",
+          "type": "flat",
+          "top_rate_single": 3.0,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 3.0,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Maine",
+          "type": "graduated",
+          "top_rate_single": 7.15,
+          "top_threshold_single": 64849.0,
+          "top_rate_mfj": 7.15,
+          "top_threshold_mfj": 129749.0,
+          "brackets_single": 3
+        },
+        {
+          "state": "Maryland",
+          "type": "graduated",
+          "top_rate_single": 6.5,
+          "top_threshold_single": 1000000.0,
+          "top_rate_mfj": 6.5,
+          "top_threshold_mfj": 1200000.0,
+          "brackets_single": 10
+        },
+        {
+          "state": "Massachusetts",
+          "type": "graduated",
+          "top_rate_single": 9.0,
+          "top_threshold_single": 1083150.0,
+          "top_rate_mfj": 9.0,
+          "top_threshold_mfj": 1083150.0,
+          "brackets_single": 2,
+          "note": "5% flat plus 4% surtax on income over $1,083,150 (shown as 9% top bracket). Excludes PFML payroll contribution (0.46% employee withholding)."
+        },
+        {
+          "state": "Michigan",
+          "type": "flat",
+          "top_rate_single": 4.25,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 4.25,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Minnesota",
+          "type": "graduated",
+          "top_rate_single": 9.85,
+          "top_threshold_single": 203150.0,
+          "top_rate_mfj": 9.85,
+          "top_threshold_mfj": 337930.0,
+          "brackets_single": 4
+        },
+        {
+          "state": "Mississippi",
+          "type": "flat",
+          "top_rate_single": 4.0,
+          "top_threshold_single": 10000.0,
+          "top_rate_mfj": 4.0,
+          "top_threshold_mfj": 10000.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Missouri",
+          "type": "graduated",
+          "top_rate_single": 4.7,
+          "top_threshold_single": 9436.0,
+          "top_rate_mfj": 4.7,
+          "top_threshold_mfj": 9436.0,
+          "brackets_single": 7
+        },
+        {
+          "state": "Montana",
+          "type": "graduated",
+          "top_rate_single": 5.65,
+          "top_threshold_single": 47500.0,
+          "top_rate_mfj": 5.65,
+          "top_threshold_mfj": 95000.0,
+          "brackets_single": 2
+        },
+        {
+          "state": "Nebraska",
+          "type": "graduated",
+          "top_rate_single": 4.55,
+          "top_threshold_single": 24760.0,
+          "top_rate_mfj": 4.55,
+          "top_threshold_mfj": 49530.0,
+          "brackets_single": 3
+        },
+        {
+          "state": "Nevada",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "New Hampshire",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax (interest and dividends tax repealed as of 2025)."
+        },
+        {
+          "state": "New Jersey",
+          "type": "graduated",
+          "top_rate_single": 10.75,
+          "top_threshold_single": 1000000.0,
+          "top_rate_mfj": 10.75,
+          "top_threshold_mfj": 1000000.0,
+          "brackets_single": 7
+        },
+        {
+          "state": "New Mexico",
+          "type": "graduated",
+          "top_rate_single": 5.9,
+          "top_threshold_single": 210000.0,
+          "top_rate_mfj": 5.9,
+          "top_threshold_mfj": 315000.0,
+          "brackets_single": 6
+        },
+        {
+          "state": "New York",
+          "type": "graduated",
+          "top_rate_single": 10.9,
+          "top_threshold_single": 25000000.0,
+          "top_rate_mfj": 10.9,
+          "top_threshold_mfj": 25000000.0,
+          "brackets_single": 9,
+          "note": "Local income taxes (e.g., New York City) excluded; NY has 'tax benefit recapture' for high incomes."
+        },
+        {
+          "state": "North Carolina",
+          "type": "flat",
+          "top_rate_single": 3.99,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 3.99,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "North Dakota",
+          "type": "graduated",
+          "top_rate_single": 2.5,
+          "top_threshold_single": 244825.0,
+          "top_rate_mfj": 2.5,
+          "top_threshold_mfj": 298075.0,
+          "brackets_single": 2
+        },
+        {
+          "state": "Ohio",
+          "type": "flat",
+          "top_rate_single": 2.75,
+          "top_threshold_single": 26050.0,
+          "top_rate_mfj": 2.75,
+          "top_threshold_mfj": 26050.0,
+          "brackets_single": 1,
+          "note": "Single 2.75% rate on income over $26,050 (Ohio moved to a single rate in 2026); local income taxes excluded."
+        },
+        {
+          "state": "Oklahoma",
+          "type": "graduated",
+          "top_rate_single": 4.5,
+          "top_threshold_single": 7200.0,
+          "top_rate_mfj": 4.5,
+          "top_threshold_mfj": 14400.0,
+          "brackets_single": 3
+        },
+        {
+          "state": "Oregon",
+          "type": "graduated",
+          "top_rate_single": 9.9,
+          "top_threshold_single": 125000.0,
+          "top_rate_mfj": 9.9,
+          "top_threshold_mfj": 250000.0,
+          "brackets_single": 4
+        },
+        {
+          "state": "Pennsylvania",
+          "type": "flat",
+          "top_rate_single": 3.07,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 3.07,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1,
+          "note": "Flat 3.07%; local earned income taxes excluded (TF: avg local effective rate 0.99% of AGI, 2023 data)."
+        },
+        {
+          "state": "Rhode Island",
+          "type": "graduated",
+          "top_rate_single": 5.99,
+          "top_threshold_single": 186450.0,
+          "top_rate_mfj": 5.99,
+          "top_threshold_mfj": 186450.0,
+          "brackets_single": 3
+        },
+        {
+          "state": "South Carolina",
+          "type": "graduated",
+          "top_rate_single": 6.0,
+          "top_threshold_single": 18230.0,
+          "top_rate_mfj": 6.0,
+          "top_threshold_mfj": 18230.0,
+          "brackets_single": 3,
+          "note": "TF footnote: top rate scheduled to revert to 6.2% on 2026-07-01."
+        },
+        {
+          "state": "South Dakota",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Tennessee",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Texas",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Utah",
+          "type": "flat",
+          "top_rate_single": 4.5,
+          "top_threshold_single": 0.0,
+          "top_rate_mfj": 4.5,
+          "top_threshold_mfj": 0.0,
+          "brackets_single": 1
+        },
+        {
+          "state": "Vermont",
+          "type": "graduated",
+          "top_rate_single": 8.75,
+          "top_threshold_single": 249700.0,
+          "top_rate_mfj": 8.75,
+          "top_threshold_mfj": 304000.0,
+          "brackets_single": 4
+        },
+        {
+          "state": "Virginia",
+          "type": "graduated",
+          "top_rate_single": 5.75,
+          "top_threshold_single": 17000.0,
+          "top_rate_mfj": 5.75,
+          "top_threshold_mfj": 17000.0,
+          "brackets_single": 4
+        },
+        {
+          "state": "Washington",
+          "type": "capital_gains_only",
+          "top_rate_single": 9.0,
+          "top_threshold_single": 1000000.0,
+          "top_rate_mfj": 9.0,
+          "top_threshold_mfj": 1000000.0,
+          "brackets_single": 2,
+          "wage_income_top_rate": 0.0,
+          "note": "No tax on wage income; 7% / 9% tax on capital gains only (TF footnote tt). Excludes 0.58% WA Cares payroll tax."
+        },
+        {
+          "state": "West Virginia",
+          "type": "graduated",
+          "top_rate_single": 4.82,
+          "top_threshold_single": 60000.0,
+          "top_rate_mfj": 4.82,
+          "top_threshold_mfj": 60000.0,
+          "brackets_single": 5
+        },
+        {
+          "state": "Wisconsin",
+          "type": "graduated",
+          "top_rate_single": 7.65,
+          "top_threshold_single": 332720.0,
+          "top_rate_mfj": 7.65,
+          "top_threshold_mfj": 443630.0,
+          "brackets_single": 4
+        },
+        {
+          "state": "Wyoming",
+          "type": "none",
+          "top_rate_single": 0.0,
+          "top_threshold_single": null,
+          "top_rate_mfj": 0.0,
+          "top_threshold_mfj": null,
+          "brackets_single": 0,
+          "note": "No individual income tax."
+        },
+        {
+          "state": "Washington DC",
+          "type": "graduated",
+          "top_rate_single": 10.75,
+          "top_threshold_single": 1000000.0,
+          "top_rate_mfj": 10.75,
+          "top_threshold_mfj": 1000000.0,
+          "brackets_single": 7,
+          "note": "District of Columbia."
+        }
+      ]
+    }
+  },
+  "payroll": {
+    "social_security": {
+      "employee_rate": 6.2,
+      "employer_rate": 6.2,
+      "wage_base": {
+        "2025": 176100,
+        "2026": 184500
+      },
+      "source_ids": [
+        "irs_pub15_2025",
+        "irs_pub15_2026",
+        "irs_tc751"
+      ],
+      "note": "Applies to wages up to the wage base. SSA fact sheets (ssa.gov) returned HTTP 403 to automated fetches; figures verified from IRS Publication 15 instead."
+    },
+    "medicare": {
+      "employee_rate": 1.45,
+      "employer_rate": 1.45,
+      "wage_base": null,
+      "source_ids": [
+        "irs_pub15_2025",
+        "irs_pub15_2026",
+        "irs_tc751"
+      ],
+      "note": "No wage base limit."
+    },
+    "additional_medicare": {
+      "employee_rate": 0.9,
+      "thresholds": {
+        "single": 200000,
+        "married_filing_jointly": 250000,
+        "married_filing_separately": 125000,
+        "head_of_household": 200000,
+        "qualifying_surviving_spouse": 200000
+      },
+      "employer_withholding_threshold": 200000,
+      "years": "2025 and 2026 (same thresholds)",
+      "source_ids": [
+        "irs_addl_medicare_qa",
+        "irs_tc751"
+      ],
+      "note": "Employee-only tax on wages above the threshold for the filing status; employers withhold 0.9% on wages over $200,000 regardless of filing status."
+    },
+    "self_employment_note": "Not researched in this pass (self-employment tax 15.3% etc.) - see unverified."
+  },
+  "consumption": [
+    {
+      "state": "Alabama",
+      "code": "AL",
+      "state_rate": 4.0,
+      "avg_local_rate": 5.46,
+      "max_local_rate": 8.0,
+      "combined_rate": 9.46,
+      "combined_rank": 5,
+      "state_rank": 40,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 2.0,
+        "note": "State rate on food reduced from 3% to 2% on 2025-09-01; local food rates vary.",
+        "source_ids": [
+          "al_dor_food"
+        ]
+      }
+    },
+    {
+      "state": "Alaska",
+      "code": "AK",
+      "state_rate": 0.0,
+      "avg_local_rate": 1.82,
+      "max_local_rate": 7.85,
+      "combined_rate": 1.82,
+      "combined_rank": 46,
+      "state_rank": 46,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "no_state_sales_tax",
+        "state_rate_on_groceries": 0.0,
+        "note": "No statewide sales tax. Local sales taxes may apply (Alaska allows local sales taxes).",
+        "source_ids": [
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "Arizona",
+      "code": "AZ",
+      "state_rate": 5.6,
+      "avg_local_rate": 2.94,
+      "max_local_rate": 5.3,
+      "combined_rate": 8.54,
+      "combined_rank": 11,
+      "state_rank": 28,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Arkansas",
+      "code": "AR",
+      "state_rate": 6.5,
+      "avg_local_rate": 2.98,
+      "max_local_rate": 6.13,
+      "combined_rate": 9.48,
+      "combined_rank": 4,
+      "state_rank": 9,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt_state_local_may_apply",
+        "state_rate_on_groceries": 0.0,
+        "note": "State grocery tax repealed 2026-01-01 (HB1685); local sales taxes still apply to food.",
+        "source_ids": [
+          "tf_state_changes_2026"
+        ]
+      }
+    },
+    {
+      "state": "California",
+      "code": "CA",
+      "state_rate": 7.25,
+      "avg_local_rate": 1.78,
+      "max_local_rate": 5.25,
+      "combined_rate": 9.03,
+      "combined_rank": 7,
+      "state_rank": 1,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Colorado",
+      "code": "CO",
+      "state_rate": 2.9,
+      "avg_local_rate": 4.99,
+      "max_local_rate": 9.1,
+      "combined_rate": 7.89,
+      "combined_rank": 16,
+      "state_rank": 45,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Connecticut",
+      "code": "CT",
+      "state_rate": 6.35,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.35,
+      "combined_rank": 33,
+      "state_rank": 12,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Delaware",
+      "code": "DE",
+      "state_rate": 0.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 0.0,
+      "combined_rank": 47,
+      "state_rank": 46,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "no_state_sales_tax",
+        "state_rate_on_groceries": 0.0,
+        "note": "No statewide sales tax.",
+        "source_ids": [
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "District of Columbia",
+      "code": "DC",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.0,
+      "combined_rank": 38,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Florida",
+      "code": "FL",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.98,
+      "max_local_rate": 2.0,
+      "combined_rate": 6.98,
+      "combined_rank": 28,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Georgia",
+      "code": "GA",
+      "state_rate": 4.0,
+      "avg_local_rate": 3.56,
+      "max_local_rate": 5.0,
+      "combined_rate": 7.56,
+      "combined_rank": 18,
+      "state_rank": 40,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Hawaii",
+      "code": "HI",
+      "state_rate": 4.0,
+      "avg_local_rate": 0.5,
+      "max_local_rate": 0.5,
+      "combined_rate": 4.5,
+      "combined_rank": 45,
+      "state_rank": 40,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "full_rate",
+        "state_rate_on_groceries": 4.0,
+        "note": "Groceries in the general excise tax base (TF 2020 table); not re-verified for 2026.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Idaho",
+      "code": "ID",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.03,
+      "max_local_rate": 3.0,
+      "combined_rate": 6.03,
+      "combined_rank": 37,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "full_rate",
+        "state_rate_on_groceries": 6.0,
+        "note": "Groceries in the base at the full state rate (TF 2020 table); Idaho offers a grocery credit (not researched). Not re-verified for 2026.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Illinois",
+      "code": "IL",
+      "state_rate": 6.25,
+      "avg_local_rate": 2.73,
+      "max_local_rate": 4.75,
+      "combined_rate": 8.98,
+      "combined_rank": 8,
+      "state_rank": 13,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt_state_local_may_apply",
+        "state_rate_on_groceries": 0.0,
+        "note": "1% state grocery tax ended 2026-01-01; many counties/municipalities imposed their own 1% local grocery tax.",
+        "source_ids": [
+          "tf_state_changes_2026",
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "Indiana",
+      "code": "IN",
+      "state_rate": 7.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 7.0,
+      "combined_rank": 25,
+      "state_rank": 2,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Iowa",
+      "code": "IA",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.94,
+      "max_local_rate": 1.0,
+      "combined_rate": 6.94,
+      "combined_rank": 29,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Kansas",
+      "code": "KS",
+      "state_rate": 6.5,
+      "avg_local_rate": 2.21,
+      "max_local_rate": 4.25,
+      "combined_rate": 8.71,
+      "combined_rank": 9,
+      "state_rank": 9,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt_state_local_may_apply",
+        "state_rate_on_groceries": 0.0,
+        "note": "State grocery rate cut from 2% to 0% on 2025-01-01; local treatment not verified.",
+        "source_ids": [
+          "tf_state_changes_2025"
+        ]
+      }
+    },
+    {
+      "state": "Kentucky",
+      "code": "KY",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.0,
+      "combined_rank": 38,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Louisiana",
+      "code": "LA",
+      "state_rate": 5.0,
+      "avg_local_rate": 5.13,
+      "max_local_rate": 7.0,
+      "combined_rate": 10.13,
+      "combined_rank": 1,
+      "state_rank": 32,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Maine",
+      "code": "ME",
+      "state_rate": 5.5,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 5.5,
+      "combined_rank": 43,
+      "state_rank": 29,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Maryland",
+      "code": "MD",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.0,
+      "combined_rank": 38,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Massachusetts",
+      "code": "MA",
+      "state_rate": 6.25,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.25,
+      "combined_rank": 35,
+      "state_rank": 13,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Michigan",
+      "code": "MI",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 6.0,
+      "combined_rank": 38,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Minnesota",
+      "code": "MN",
+      "state_rate": 6.88,
+      "avg_local_rate": 1.26,
+      "max_local_rate": 3.0,
+      "combined_rate": 8.14,
+      "combined_rank": 15,
+      "state_rank": 6,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Mississippi",
+      "code": "MS",
+      "state_rate": 7.0,
+      "avg_local_rate": 0.06,
+      "max_local_rate": 1.0,
+      "combined_rate": 7.06,
+      "combined_rank": 24,
+      "state_rank": 2,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 5.0,
+        "note": "Reduced from 7% to 5% on 2025-07-01.",
+        "source_ids": [
+          "ms_dor_grocery"
+        ]
+      }
+    },
+    {
+      "state": "Missouri",
+      "code": "MO",
+      "state_rate": 4.23,
+      "avg_local_rate": 4.22,
+      "max_local_rate": 6.25,
+      "combined_rate": 8.44,
+      "combined_rank": 12,
+      "state_rank": 38,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 1.225,
+        "note": "State reduced food rate per TF 2020 table; Missouri DOR page returned HTTP 403 - not re-verified for 2026. Local taxes apply.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Montana",
+      "code": "MT",
+      "state_rate": 0.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 0.0,
+      "combined_rank": 47,
+      "state_rank": 46,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "no_state_sales_tax",
+        "state_rate_on_groceries": 0.0,
+        "note": "No statewide sales tax.",
+        "source_ids": [
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "Nebraska",
+      "code": "NE",
+      "state_rate": 5.5,
+      "avg_local_rate": 1.48,
+      "max_local_rate": 2.0,
+      "combined_rate": 6.98,
+      "combined_rank": 27,
+      "state_rank": 29,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Nevada",
+      "code": "NV",
+      "state_rate": 6.85,
+      "avg_local_rate": 1.39,
+      "max_local_rate": 1.53,
+      "combined_rate": 8.24,
+      "combined_rank": 13,
+      "state_rank": 7,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "New Hampshire",
+      "code": "NH",
+      "state_rate": 0.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 0.0,
+      "combined_rank": 47,
+      "state_rank": 46,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "no_state_sales_tax",
+        "state_rate_on_groceries": 0.0,
+        "note": "No statewide sales tax.",
+        "source_ids": [
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "New Jersey",
+      "code": "NJ",
+      "state_rate": 6.63,
+      "avg_local_rate": -0.02,
+      "max_local_rate": 3.31,
+      "combined_rate": 6.6,
+      "combined_rank": 30,
+      "state_rank": 8,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "New Mexico",
+      "code": "NM",
+      "state_rate": 4.88,
+      "avg_local_rate": 2.8,
+      "max_local_rate": 4.56,
+      "combined_rate": 7.68,
+      "combined_rank": 17,
+      "state_rank": 35,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "New York",
+      "code": "NY",
+      "state_rate": 4.0,
+      "avg_local_rate": 4.54,
+      "max_local_rate": 4.88,
+      "combined_rate": 8.54,
+      "combined_rank": 10,
+      "state_rank": 40,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "North Carolina",
+      "code": "NC",
+      "state_rate": 4.75,
+      "avg_local_rate": 2.35,
+      "max_local_rate": 3.5,
+      "combined_rate": 7.1,
+      "combined_rank": 22,
+      "state_rank": 36,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "North Dakota",
+      "code": "ND",
+      "state_rate": 5.0,
+      "avg_local_rate": 2.09,
+      "max_local_rate": 3.75,
+      "combined_rate": 7.09,
+      "combined_rank": 23,
+      "state_rank": 32,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Ohio",
+      "code": "OH",
+      "state_rate": 5.75,
+      "avg_local_rate": 1.54,
+      "max_local_rate": 2.25,
+      "combined_rate": 7.29,
+      "combined_rank": 21,
+      "state_rank": 27,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Oklahoma",
+      "code": "OK",
+      "state_rate": 4.5,
+      "avg_local_rate": 4.56,
+      "max_local_rate": 7.0,
+      "combined_rate": 9.06,
+      "combined_rank": 6,
+      "state_rank": 37,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt_state_local_may_apply",
+        "state_rate_on_groceries": 0.0,
+        "note": "State tax on food eliminated 2024-08-29; local sales taxes still apply.",
+        "source_ids": [
+          "ok_otc_grocery"
+        ]
+      }
+    },
+    {
+      "state": "Oregon",
+      "code": "OR",
+      "state_rate": 0.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 0.0,
+      "combined_rank": 47,
+      "state_rank": 46,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "no_state_sales_tax",
+        "state_rate_on_groceries": 0.0,
+        "note": "No statewide sales tax.",
+        "source_ids": [
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "Pennsylvania",
+      "code": "PA",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.34,
+      "max_local_rate": 2.0,
+      "combined_rate": 6.34,
+      "combined_rank": 34,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Rhode Island",
+      "code": "RI",
+      "state_rate": 7.0,
+      "avg_local_rate": 0.0,
+      "max_local_rate": 0.0,
+      "combined_rate": 7.0,
+      "combined_rank": 25,
+      "state_rank": 2,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "South Carolina",
+      "code": "SC",
+      "state_rate": 6.0,
+      "avg_local_rate": 1.49,
+      "max_local_rate": 3.0,
+      "combined_rate": 7.49,
+      "combined_rank": 19,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "South Dakota",
+      "code": "SD",
+      "state_rate": 4.2,
+      "avg_local_rate": 1.91,
+      "max_local_rate": 4.5,
+      "combined_rate": 6.11,
+      "combined_rank": 36,
+      "state_rank": 39,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "full_rate",
+        "state_rate_on_groceries": 4.2,
+        "note": "Groceries in the base (TF 2020 table); general state rate is 4.2% (temporary cut, set to sunset June 2027 per TF midyear 2026).",
+        "source_ids": [
+          "tf_grocery_2020",
+          "tf_sales_2026_midyear"
+        ]
+      }
+    },
+    {
+      "state": "Tennessee",
+      "code": "TN",
+      "state_rate": 7.0,
+      "avg_local_rate": 2.61,
+      "max_local_rate": 2.75,
+      "combined_rate": 9.61,
+      "combined_rank": 2,
+      "state_rank": 2,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 4.0,
+        "note": "State rate on food and food ingredients 4% (general 7%), plus local rate (cap 2.75%).",
+        "source_ids": [
+          "tn_dor_rates"
+        ]
+      }
+    },
+    {
+      "state": "Texas",
+      "code": "TX",
+      "state_rate": 6.25,
+      "avg_local_rate": 1.95,
+      "max_local_rate": 2.0,
+      "combined_rate": 8.2,
+      "combined_rank": 14,
+      "state_rank": 13,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Utah",
+      "code": "UT",
+      "state_rate": 6.1,
+      "avg_local_rate": 1.32,
+      "max_local_rate": 4.7,
+      "combined_rate": 7.42,
+      "combined_rank": 20,
+      "state_rank": 16,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 1.75,
+        "note": "Per TF 2020 table; Utah has a mandatory local add-on - whether 1.75 includes it is not stated. Not re-verified for 2026.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Vermont",
+      "code": "VT",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.43,
+      "max_local_rate": 1.0,
+      "combined_rate": 6.43,
+      "combined_rank": 32,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Virginia",
+      "code": "VA",
+      "state_rate": 5.3,
+      "avg_local_rate": 0.47,
+      "max_local_rate": 2.7,
+      "combined_rate": 5.77,
+      "combined_rank": 41,
+      "state_rank": 31,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "reduced_rate",
+        "state_rate_on_groceries": 1.0,
+        "note": "Food for home consumption taxed at a reduced 1% throughout Virginia since 2023-01-01 (combined rate; state vs local split not stated on the page read).",
+        "source_ids": [
+          "va_tax_grocery"
+        ]
+      }
+    },
+    {
+      "state": "Washington",
+      "code": "WA",
+      "state_rate": 6.5,
+      "avg_local_rate": 3.07,
+      "max_local_rate": 4.2,
+      "combined_rate": 9.57,
+      "combined_rank": 3,
+      "state_rank": 9,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "West Virginia",
+      "code": "WV",
+      "state_rate": 6.0,
+      "avg_local_rate": 0.6,
+      "max_local_rate": 1.4,
+      "combined_rate": 6.6,
+      "combined_rank": 31,
+      "state_rank": 17,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Wisconsin",
+      "code": "WI",
+      "state_rate": 5.0,
+      "avg_local_rate": 0.72,
+      "max_local_rate": 2.9,
+      "combined_rate": 5.72,
+      "combined_rank": 42,
+      "state_rank": 32,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    },
+    {
+      "state": "Wyoming",
+      "code": "WY",
+      "state_rate": 4.0,
+      "avg_local_rate": 1.39,
+      "max_local_rate": 3.0,
+      "combined_rate": 5.39,
+      "combined_rank": 44,
+      "state_rank": 40,
+      "as_of": "2026-07-01",
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ],
+      "groceries": {
+        "treatment": "exempt",
+        "state_rate_on_groceries": 0.0,
+        "note": "Exempt from state sales tax per TF 2020 table; not re-verified for 2026; local treatment not verified.",
+        "source_ids": [
+          "tf_grocery_2020"
+        ]
+      }
+    }
+  ],
+  "context": {
+    "sales_tax_meta": {
+      "edition": "Tax Foundation, State and Local Sales Tax Rates, Midyear 2026 (published 2026-07-06; rates as of 2026-07-01)",
+      "national_population_weighted_avg_combined_rate": 7.53,
+      "states_with_statewide_sales_tax": 45,
+      "states_allowing_local_sales_taxes": 38,
+      "highest_combined": [
+        {
+          "state": "Louisiana",
+          "rate": 10.13
+        },
+        {
+          "state": "Tennessee",
+          "rate": 9.61
+        },
+        {
+          "state": "Washington",
+          "rate": 9.57
+        },
+        {
+          "state": "Arkansas",
+          "rate": 9.48
+        },
+        {
+          "state": "Alabama",
+          "rate": 9.46
+        }
+      ],
+      "footnotes": [
+        "CA (1.25%), UT (1.25%) and VA (1%) mandatory statewide local add-ons are included in the state rate.",
+        "HI, NM and SD sales taxes have broad bases that include many business-to-business services.",
+        "Special local resort-area taxes are not counted.",
+        "NJ: Salem County and Urban Enterprise Zones collect 3.3125%; shown as a negative average local rate (-0.02).",
+        "Average local rates are population-weighted; the rate at a specific address can differ.",
+        "New Mexico: if gross receipts tax revenue in any FY 2026-2029 falls below 95% of the prior year, the rate returns to 5.125% on the following July 1."
+      ],
+      "source_ids": [
+        "tf_sales_2026_midyear"
+      ]
+    },
+    "groceries_note": {
+      "text": "Most states exempt groceries from the sales tax; some tax them at a reduced rate and a few at the full rate (Tax Foundation, Midyear 2026). Per-state grocery treatment in 'consumption[].groceries' combines the Tax Foundation table as of 2020-01-01 with later changes verified from state revenue departments / Tax Foundation: Kansas (0% from 2025), Oklahoma (state 0% from 2024-08-29), Arkansas and Illinois (state 0% from 2026), Alabama (2% from 2025-09-01), Mississippi (5% from 2025-07-01), Virginia (1%), Tennessee (4%). 'Exempt' refers to state-level treatment; local taxes on groceries may apply in some states.",
+      "full_rate_states": [
+        "Hawaii",
+        "Idaho",
+        "South Dakota"
+      ],
+      "reduced_rate_states": {
+        "Alabama": 2.0,
+        "Mississippi": 5.0,
+        "Tennessee": 4.0,
+        "Missouri": 1.225,
+        "Utah": 1.75,
+        "Virginia": 1.0
+      },
+      "state_exempt_local_may_apply": [
+        "Arkansas",
+        "Illinois",
+        "Kansas",
+        "Oklahoma"
+      ],
+      "source_ids": [
+        "tf_sales_2026_midyear",
+        "tf_grocery_2020",
+        "tf_state_changes_2025",
+        "tf_state_changes_2026",
+        "ok_otc_grocery",
+        "ms_dor_grocery",
+        "al_dor_food",
+        "tn_dor_rates",
+        "va_tax_grocery"
+      ]
+    },
+    "oecd_tax_wedge_us": {
+      "household": "single, no children, 100% of average wage",
+      "2024": {
+        "tax_wedge_pct_labour_cost": 30.07,
+        "income_tax_plus_employee_ssc_pct_gross_wage": 24.4,
+        "income_tax_pct_gross_wage": 16.75,
+        "employee_ssc_pct_gross_wage": 7.65,
+        "employer_ssc_pct_gross_wage": 8.1,
+        "average_wage_usd": 70695
+      },
+      "2025": {
+        "tax_wedge_pct_labour_cost": 29.98,
+        "income_tax_plus_employee_ssc_pct_gross_wage": 24.31,
+        "income_tax_pct_gross_wage": 16.66,
+        "employee_ssc_pct_gross_wage": 7.65,
+        "employer_ssc_pct_gross_wage": 8.09,
+        "average_wage_usd": 73520
+      },
+      "oecd_average_tax_wedge": {
+        "2024": 34.93,
+        "2025": 35.08
+      },
+      "note": "OECD 'income tax' includes federal + state + local income taxes for the OECD's representative US worker; useful as a sanity check for the 'Provável' scenario of a single average earner.",
+      "source_ids": [
+        "oecd_taxing_wages_db"
+      ]
+    },
+    "scenario_guidance": {
+      "status": "methodology suggestion, not a sourced figure",
+      "text": "Federal income tax and FICA are deterministic given income and filing status (same in all scenarios unless the user's deductions are unknown: Conservador could use the standard deduction plus any OBBBA deductions the user plausibly qualifies for; Elevado the standard deduction only). State income tax: Conservador = user's state with local income tax ignored; Provável = state top/brackets plus TF average local effective rate where listed; Elevado = add the max local income tax. Sales tax on taxable spending: Conservador = state rate only and groceries treated per state rule; Provável = combined (state + population-weighted avg local) rate; Elevado = state rate + max local rate."
+    }
+  },
+  "unverified": [
+    {
+      "item": "SSA COLA fact sheets 2025/2026 and SSA contribution-base page",
+      "reason": "ssa.gov returned HTTP 403 to automated fetches. The wage bases ($176,100 for 2025, $184,500 for 2026) were verified from IRS Publication 15 (2025 and 2026) and IRS Topic 751 instead."
+    },
+    {
+      "item": "Additional Medicare Tax thresholds are not indexed for inflation",
+      "reason": "Widely understood (statutory amounts), but the IRS Q&A page read does not state it; thresholds shown are those on the page (reviewed 2026-08-11)."
+    },
+    {
+      "item": "Grocery treatment for Hawaii, Idaho, South Dakota (full rate), Missouri (1.225%), Utah (1.75%) and all 'exempt' states",
+      "reason": "Taken from the Tax Foundation table as of 2020-01-01; not re-verified against 2026 state sources (Missouri DOR and Utah Tax Commission pages returned HTTP 403). Changes since 2020 were checked only for KS, OK, AR, IL, AL, MS, VA, TN."
+    },
+    {
+      "item": "Utah grocery rate composition",
+      "reason": "Unclear whether the TF 1.75% figure includes Utah's mandatory 1.25% local add-on; the commonly cited combined grocery rate (3%) was not verified from a read source."
+    },
+    {
+      "item": "Local grocery taxes in AR, IL, KS, OK, AK and elsewhere",
+      "reason": "Local rates on food vary by jurisdiction and were not compiled."
+    },
+    {
+      "item": "California SDI payroll tax rate",
+      "reason": "Tax Foundation 2026 page is internally inconsistent: intro text mentions a 1.1% payroll tax, footnote (l) says 1.3% with no wage ceiling. Not checked against the California EDD."
+    },
+    {
+      "item": "Tax Foundation Midyear 2026 text inconsistencies",
+      "reason": "Article text says Louisiana combined rate is 10.11% in one paragraph while the table and key findings say 10.13%; text says local averages are 'as of January 1, 2026' while the table header says 'as of July 1, 2026'. JSON uses the table values."
+    },
+    {
+      "item": "State income tax changes after the TF 2026 table (published 2026-02-17)",
+      "reason": "Mid-2026 legislation (e.g., Georgia, South Carolina's scheduled reversion to 6.2% on 2026-07-01) not checked; table reflects rates as of 2026-01-01, with some 2025 bracket widths."
+    },
+    {
+      "item": "Self-employment tax, state payroll taxes (CA SDI, NY PFL, NJ, WA Cares, MA PFML), and itemized deductions",
+      "reason": "Out of scope for this pass; not researched."
+    },
+    {
+      "item": "OECD Taxing Wages 2026 report and press release pages",
+      "reason": "oecd.org returned HTTP 403; US/OECD wedge values read directly from the OECD SDMX database instead. Publication month (April 2026) inferred from the OECD URL path in search results."
+    }
+  ]
+}

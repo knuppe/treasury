@@ -1,0 +1,613 @@
+{
+ "version": "2026-10",
+ "note": "ICMS modal 2026 por UF (com o fundo de pobreza geral em RJ, AL e SE), extraído do levantamento de 17/10/2026.",
+ "sources": [
+  {
+   "id": "contmatic_icms_2026",
+   "publisher": "Contmatic Phoenix (blog Simplifique)",
+   "title": "Tabela ICMS 2026: Alíquotas Interestaduais, por Estado e Como Calcular",
+   "url": "https://simplifique.contmatic.com.br/blogs/tabela-icms-2026",
+   "published": "2026-04-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "barbieri_icms_2026",
+   "publisher": "Barbieri Advogados",
+   "title": "Tabela ICMS: alíquotas internas, interestaduais e por estado (alíquotas da legislação vigente em maio de 2026)",
+   "url": "https://barbieriadvogados.com/tabela-icms-2026",
+   "published": "2026-07-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ncmbrasil_icms_2026",
+   "publisher": "NCM Brasil",
+   "title": "Tabela ICMS 2026 — alíquotas internas e interestaduais por estado (revisão de 22/08/2026)",
+   "url": "https://www.ncmbrasil.com.br/icms",
+   "published": "2026-08-22",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "simtax_icms_2026",
+   "publisher": "Simtax",
+   "title": "Tabela de ICMS 2026: alíquotas internas atualizadas de todos os estados",
+   "url": "https://simtax.com.br/tabela-icms-2026-aliquotas-de-todos-estados-atualizada/",
+   "published": "2026-04-24",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "fiergs_icms_2023",
+   "publisher": "FIERGS/CONTEC (fonte IOB), publicado no site do SESI-RS",
+   "title": "Remessa Geral nº 01 – ICMS nacional: Estados alteram alíquotas internas para as operações em geral para 2023",
+   "url": "https://www.sesirs.org.br/sites/default/files/paragraph--files/remessa_geral_n_01_-_estados_alteram_al_quotas_internas_para_as_opera_es_em_geral_para_2023.pdf",
+   "published": "2023-01-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "fiemg_icms_2024",
+   "publisher": "FIEMG – Gerência de Assuntos Tributários",
+   "title": "Informação Estratégica Tributário nº 08: Estados iniciam o ano de 2024 com elevação da alíquota de ICMS",
+   "url": "https://www.fiemg.com.br/wp-content/uploads/2024/01/IE-08-Aumento-do-ICMS.pdf",
+   "published": "2024-01-15",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "st_icms_2025",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Confira os estados que majoraram e modificaram suas alíquotas (ICMS 2025)",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/07/02/2025/veja-as-alteracoes-das-aliquotas-do-icms-para-o-ano-de-2025",
+   "published": "2025-02-07",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "sp_ricms_art52",
+   "publisher": "Secretaria da Fazenda e Planejamento de São Paulo",
+   "title": "RICMS/SP (Decreto 45.490/2000), art. 52 – alíquotas",
+   "url": "https://legislacao.fazenda.sp.gov.br/Paginas/art052.aspx",
+   "published": "2025-06-04 (última atualização da página)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "mg_lei6763",
+   "publisher": "Assembleia Legislativa de Minas Gerais",
+   "title": "Lei nº 6.763/1975 (texto atualizado), art. 12, I, 'd'",
+   "url": "https://www.almg.gov.br/legislacao-mineira/texto/LEI/6763/1975/",
+   "published": "texto consolidado (sem data na página)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "mg_fem_2024",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "MG estabelece cobrança do Fundo de Combate à Pobreza em 2024 (Lei 24.471/2023)",
+   "url": "https://substituicaotributaria.com/SST/substituicao-tributaria/noticia/02/10/2023/mg-estabelece-cobranca-do-fundo-de-combate-a-pobreza-em-2024",
+   "published": "2023-10-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rj_sefaz_aliquotas",
+   "publisher": "Secretaria de Estado de Fazenda do Rio de Janeiro",
+   "title": "Alíquotas Internas (página 'Atualizada em 23/06/26')",
+   "url": "https://portal.fazenda.rj.gov.br/pagamentos/aliquotas-internas/",
+   "published": "2026-06-23",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rj_simtax_2026",
+   "publisher": "Simtax",
+   "title": "Tabela de ICMS Rio de Janeiro 2026: alíquotas e regras",
+   "url": "https://simtax.com.br/tabela-de-icms-rio-de-janeiro-2026-aliquotas-e-regras/",
+   "published": "2026-06-02",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "rs_gov_2024",
+   "publisher": "Governo do Estado do Rio Grande do Sul",
+   "title": "RS não aumentará alíquota de ICMS sobre importados por remessas postais e expressas",
+   "url": "https://estado.rs.gov.br/rs-nao-aumentara-aliquota-de-icms-sobre-importados-por-remessas-postais-e-expressas",
+   "published": "2024-12-13",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ba_lei14629",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Majorada alíquota geral de ICMS na Bahia (Lei 14.629/2023)",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/09/11/2023/majorada-aliquota-geral-de-icms-na-bahia",
+   "published": "2023-11-09",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "pr_lei21850",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Paraná majorou alíquota geral do ICMS (Lei 21.850/2023, art. 14, VIII da Lei 11.580/1996)",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/18/12/2023/parana-majorou-aliquota-geral-do-icms",
+   "published": "2023-12-18",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "pr_efeitos_2024",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Alíquota majorada do PR produz efeitos em 18-3-2024",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/13/03/2024/aliquota-majorada-do-pr-produz-efeitos-em-18--3--2024",
+   "published": "2024-03-13",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "pe_rotinafiscal",
+   "publisher": "Rotina Fiscal",
+   "title": "Estado: Pernambuco (Lei 15.730/2016, art. 15, VII – 20,5% a partir de 1º/01/2024, Lei 18.305/2023)",
+   "url": "https://www.rotinafiscal.com.br/tributos-e-declaracoes/estadual/difal-e-st-estados/pernambuco",
+   "published": "atualizações encerradas em 2024-12-31",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ce_lei18305",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Ceará aumentou alíquota do ICMS (Lei 18.305/2023, art. 44 da Lei 12.670/1996)",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/16/02/2023/ceara-aumentou-aliquota-do-icms-",
+   "published": "2023-02-16",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "go_lei22460",
+   "publisher": "Secretaria de Estado da Economia de Goiás",
+   "title": "Lei nº 22.460, de 12 de dezembro de 2023 (altera art. 27, I, da Lei 11.651/1991)",
+   "url": "https://appasp.economia.go.gov.br/legislacao/arquivos/Leis/L_22460.htm",
+   "published": "2023-12-12",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "df_adi_surec_1_2024",
+   "publisher": "LegisWeb (reprodução de ato da SEEC-DF)",
+   "title": "Ato Declaratório Interpretativo SUREC nº 1 de 15/01/2024 (Lei 7.326/2023: 20% a partir de 22/01/2024)",
+   "url": "https://www.legisweb.com.br/legislacao/?id=454884",
+   "published": "2024-01-15",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "al_lei9776",
+   "publisher": "SubstituicaoTributaria.com",
+   "title": "Majorada a alíquota geral do ICMS em Alagoas (Lei 9.776/2025, art. 17, I, 'b' da Lei 5.900/1996)",
+   "url": "https://www.substituicaotributaria.com/SST/substituicao-tributaria/noticia/26/12/2025/majorada-a-aliquota-geral-do-icms-em-alagoas",
+   "published": "2025-12-26",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "al_in_sef_1_2026",
+   "publisher": "LegisWeb (reprodução de ato da SEFAZ-AL)",
+   "title": "Instrução Normativa SEF nº 1 de 19/01/2026 (considerando: alíquota modal 20,5% a partir de 1º/04/2026)",
+   "url": "https://www.legisweb.com.br/legislacao/?id=489700",
+   "published": "2026-01-19",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "al_lei6558",
+   "publisher": "LegisWeb (texto consolidado)",
+   "title": "Lei nº 6.558/2004 de Alagoas (FECOEP), art. 2º-A – adicional de 1%",
+   "url": "https://www.legisweb.com.br/legislacao/?id=117212",
+   "published": "consolidado (sem data)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "al_sure_176_2026",
+   "publisher": "LegisWeb (reprodução de ato da SEFAZ-AL)",
+   "title": "Solução de Consulta SURE nº 176 de 16/07/2026 (aplica 20,5% + adicional FECOEP de 1%)",
+   "url": "https://www.legisweb.com.br/legislacao/?id=498219",
+   "published": "2026-07-16",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "se_rotinafiscal",
+   "publisher": "Rotina Fiscal",
+   "title": "Estado: Sergipe (RICMS art. 40, I – 19% a partir de 1º/04/2023, Lei 9.176/2023; adicional FECOEP 1% desde 1º/05/2023)",
+   "url": "https://www.rotinafiscal.com.br/tributos-e-declaracoes/estadual/difal-e-st-estados/sergipe",
+   "published": "atualizações encerradas em 2024-12-31",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "se_lei9348",
+   "publisher": "LegisWeb",
+   "title": "Lei nº 9.348 de 26/12/2023 de Sergipe (altera Lei 4.731/2002 – adicional de 1% do FECOEP)",
+   "url": "https://www.legisweb.com.br/legislacao/?id=453941",
+   "published": "2023-12-26",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ac_doe_lc481",
+   "publisher": "Diário Oficial do Estado do Acre nº 13.927 (cópia publicada pelo Comsefaz)",
+   "title": "Lei Complementar nº 481, de 17/12/2024 (art. 18, XI: 20% só nas importações por remessas postais ou expressas)",
+   "url": "https://comsefaz.org.br/novo/wp-content/uploads/2025/01/AC_Lei-Complementar-n.-481_2024.pdf",
+   "published": "2024-12-18",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "mt_lei7098",
+   "publisher": "LegisWeb (texto consolidado)",
+   "title": "Lei nº 7.098/1998 de Mato Grosso, art. 14, I – 17%",
+   "url": "https://www.legisweb.com.br/legislacao/?id=131447",
+   "published": "consolidado (sem data)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ap_lei400",
+   "publisher": "Normas Brasil (texto consolidado)",
+   "title": "Lei nº 400/1997 do Amapá, art. 37, III, 'i' – 18% (redação da Lei 1.949/2015)",
+   "url": "https://www.normasbrasil.com.br/norma/lei-400-1997-ap_118020.html",
+   "published": "consolidado (sem data)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ms_rotinafiscal",
+   "publisher": "Rotina Fiscal",
+   "title": "Estado: Mato Grosso do Sul (17%, art. 41 da Lei 1.810/1997; FECOMP 2% só sobre mercadorias sujeitas ao adicional)",
+   "url": "https://www.rotinafiscal.com.br/tributos-e-declaracoes/estadual/difal-e-st-estados/mato-grosso-do-sul",
+   "published": "atualizações encerradas em 2024-12-31",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "es_rotinafiscal",
+   "publisher": "Rotina Fiscal",
+   "title": "Estado: Espírito Santo (17%, RICMS art. 71; Lei 12.020/2023 revogou o aumento para 19,5% da Lei 11.981/2023)",
+   "url": "https://www.rotinafiscal.com.br/tributos-e-declaracoes/estadual/difal-e-st-estados/espírito-santo",
+   "published": "atualizações encerradas em 2024-12-31",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "sc_rotinafiscal",
+   "publisher": "Rotina Fiscal",
+   "title": "Estado: Santa Catarina (17%, RICMS/SC art. 26)",
+   "url": "https://www.rotinafiscal.com.br/tributos-e-declaracoes/estadual/difal-e-st-estados/santa-catarina",
+   "published": "atualizações encerradas em 2024-12-31",
+   "accessed": "2026-10-17"
+  }
+ ],
+ "regions": [
+  {
+   "code": "AC",
+   "name": "Acre",
+   "icms_general_effective": 19.0,
+   "icms_source_ids": [
+    "ac_doe_lc481",
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "AL",
+   "name": "Alagoas",
+   "icms_general_effective": 21.5,
+   "icms_source_ids": [
+    "al_in_sef_1_2026",
+    "al_lei6558",
+    "al_lei9776",
+    "al_sure_176_2026",
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "AP",
+   "name": "Amapá",
+   "icms_general_effective": 18.0,
+   "icms_source_ids": [
+    "ap_lei400",
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "AM",
+   "name": "Amazonas",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "BA",
+   "name": "Bahia",
+   "icms_general_effective": 20.5,
+   "icms_source_ids": [
+    "ba_lei14629",
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "CE",
+   "name": "Ceará",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "ce_lei18305",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "DF",
+   "name": "Distrito Federal",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "df_adi_surec_1_2024",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "ES",
+   "name": "Espírito Santo",
+   "icms_general_effective": 17.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "es_rotinafiscal",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "GO",
+   "name": "Goiás",
+   "icms_general_effective": 19.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "go_lei22460",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "MA",
+   "name": "Maranhão",
+   "icms_general_effective": 23.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026",
+    "st_icms_2025"
+   ]
+  },
+  {
+   "code": "MT",
+   "name": "Mato Grosso",
+   "icms_general_effective": 17.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "mt_lei7098",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "MS",
+   "name": "Mato Grosso do Sul",
+   "icms_general_effective": 17.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "ms_rotinafiscal",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "MG",
+   "name": "Minas Gerais",
+   "icms_general_effective": 18.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "mg_fem_2024",
+    "mg_lei6763",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "PA",
+   "name": "Pará",
+   "icms_general_effective": 19.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "PB",
+   "name": "Paraíba",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "PR",
+   "name": "Paraná",
+   "icms_general_effective": 19.5,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "pr_efeitos_2024",
+    "pr_lei21850",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "PE",
+   "name": "Pernambuco",
+   "icms_general_effective": 20.5,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "pe_rotinafiscal",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "PI",
+   "name": "Piauí",
+   "icms_general_effective": 22.5,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026",
+    "st_icms_2025"
+   ]
+  },
+  {
+   "code": "RJ",
+   "name": "Rio de Janeiro",
+   "icms_general_effective": 22.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "rj_sefaz_aliquotas",
+    "rj_simtax_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "RN",
+   "name": "Rio Grande do Norte",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026",
+    "st_icms_2025"
+   ]
+  },
+  {
+   "code": "RS",
+   "name": "Rio Grande do Sul",
+   "icms_general_effective": 17.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "ncmbrasil_icms_2026",
+    "rs_gov_2024",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "RO",
+   "name": "Rondônia",
+   "icms_general_effective": 19.5,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "RR",
+   "name": "Roraima",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "SC",
+   "name": "Santa Catarina",
+   "icms_general_effective": 17.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "ncmbrasil_icms_2026",
+    "sc_rotinafiscal",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "SP",
+   "name": "São Paulo",
+   "icms_general_effective": 18.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026",
+    "sp_ricms_art52"
+   ]
+  },
+  {
+   "code": "SE",
+   "name": "Sergipe",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "se_lei9348",
+    "se_rotinafiscal",
+    "simtax_icms_2026"
+   ]
+  },
+  {
+   "code": "TO",
+   "name": "Tocantins",
+   "icms_general_effective": 20.0,
+   "icms_source_ids": [
+    "barbieri_icms_2026",
+    "contmatic_icms_2026",
+    "fiemg_icms_2024",
+    "fiergs_icms_2023",
+    "ncmbrasil_icms_2026",
+    "simtax_icms_2026"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,52 @@
+[workspace]
+resolver = "3"
+members = ["crates/treasury-core", "crates/treasury-dev", "apps/desktop/src-tauri"]
+default-members = ["crates/treasury-core", "crates/treasury-dev"]
+
+[workspace.package]
+# Versão do núcleo e das ferramentas: fica fixa entre releases (a versão no metadado da
+# compilação invalidaria o cache do núcleo a cada release). A versão do app fica em
+# apps/desktop/src-tauri/Cargo.toml e é a que o núcleo mostra (config::app_version).
+version = "0.6.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+rust-version = "1.92"
+
+[workspace.dependencies]
+treasury-core = { path = "crates/treasury-core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+anyhow = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "io-util", "io-std", "net", "fs"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap = { version = "4", features = ["derive"] }
+rmcp = { version = "3.10", features = ["server", "macros", "transport-io", "transport-streamable-http-server", "client", "transport-child-process", "transport-streamable-http-client-reqwest", "reqwest"] }
+schemars = "1"
+keyring = "4"
+# Mesmo ecossistema do `keyring` (já é dependência dele): busca por atributos sem ler o segredo.
+keyring-core = "1"
+base64 = "0.23"
+getrandom = "0.4"
+axum = "0.8"
+tower-http = { version = "0.7", features = ["cors"] }
+
+[profile.dev]
+# Menos informação de depuração: builds bem menores em disco.
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+opt-level = 2
+debug = false
+
+[profile.release]
+# Release local (o que vai para /Applications): LTO fina e compilação paralela.
+lto = "thin"
+strip = true
+
+[profile.dist]
+# Distribuição (instalador público): binário menor e mais rápido, compilação bem mais lenta.
+inherits = "release"
+lto = "fat"
+codegen-units = 1

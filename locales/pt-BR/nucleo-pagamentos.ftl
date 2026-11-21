@@ -1,0 +1,30 @@
+# Boletos, Pix "copia e cola" e comprovantes lidos no computador (docs/ocr-other-documents.md):
+# mensagens do núcleo. pt-BR é o idioma de origem.
+nucleo-pagamentos-boleto = Boleto
+nucleo-pagamentos-boleto-do-banco = Boleto { $banco }
+nucleo-pagamentos-pix = Pix
+nucleo-pagamentos-transferencia = Transferência
+nucleo-pagamentos-seg-prefeitura = Prefeitura (IPTU ou taxa)
+nucleo-pagamentos-seg-agua = Conta de água
+nucleo-pagamentos-seg-energia = Conta de luz ou gás
+nucleo-pagamentos-seg-telefone = Conta de telefone ou internet
+nucleo-pagamentos-seg-governo = Tributo ou taxa do governo
+nucleo-pagamentos-seg-multa = Multa de trânsito
+nucleo-pagamentos-seg-conta = Conta a pagar
+nucleo-pagamentos-aviso-sem-valor = O código não traz o valor; confira e preencha.
+nucleo-pagamentos-aviso-sem-vencimento = O vencimento não foi lido; confira e preencha.
+nucleo-pagamentos-aviso-pix-dinamico = Pix de cobrança: o app não consulta o banco do recebedor, só usa o que está no código.
+nucleo-pagamentos-aviso-revisar = Confira o valor e a data: o comprovante não foi lido por inteiro.
+nucleo-pagamentos-nota-boleto = Linha digitável: { $linha }
+nucleo-pagamentos-nota-pix = Pix copia e cola: { $codigo }
+nucleo-pagamentos-erro-codigo = O código do boleto ou do Pix não confere.
+nucleo-pagamentos-erro-ja-lancado = Este boleto ou Pix já está lançado como previsto.
+nucleo-pagamentos-erro-valor = Informe o valor a pagar.
+nucleo-pagamentos-erro-sem-lancamento = Escolha o lançamento do comprovante ou crie um.
+nucleo-pagamentos-historico-previsto = Conta a pagar prevista: { $descricao }
+nucleo-pagamentos-historico-comprovante = Comprovante ligado ao lançamento: { $descricao }
+nucleo-pagamentos-nota-comprovante = Comprovante
+nucleo-pagamentos-nota-comprovante-pix = Comprovante de Pix
+nucleo-pagamentos-nota-comprovante-boleto = Comprovante de boleto pago
+nucleo-pagamentos-nota-comprovante-transferencia = Comprovante de transferência
+nucleo-pagamentos-aviso-agendamento = Comprovante de agendamento: o dinheiro ainda não saiu; o lançamento fica previsto.

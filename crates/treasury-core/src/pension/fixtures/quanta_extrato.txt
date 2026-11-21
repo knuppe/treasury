@@ -1,0 +1,24 @@
+                                   Extrato Financeiro do Participante
+ Matrícula:           Adesão:                       Plano:
+ 00012345             14/03/2022 00:00:00           PLANOPREV-Arrojado
+ CPF:                 CNPB Plano:                   CNPJ Plano
+ 000.000.000-00       2010.0042-19                  11.444.777/0001-61
+ Nome:                Situação:                     Instituidor:
+ PARTICIPANTE TESTE   Ativo                         Cooperativa Exemplo
+ Taxa de Administração 0,25% a.a      Taxa de Carregamento 0,00%       Regime Tributário Regressivo
+ Período Inicial      Período Final
+ 01/03/2022           14/10/2026
+ Data Competência Data Vencimento Data Pagamento Histórico Valor Pago Aposentadoria Valor Rentabilizado Rentabilidade Financeira Rentabilidade (%) Número de Cotas Invalidez Pensão Multa
+ 03/2022 15/03/2022 15/03/2022 Contribuição Mensal para Aposentadoria 180,00 180,00 228,80 48,80 27,11% 140,12345678 0,00 0,00 0,00
+ 03/2022 15/03/2022 15/03/2022 Contribuição Risco Invalidez 14,00 0,00 0,00 0,00 0,00% 0,00000000 14,00 0,00 0,00
+ 03/2022 15/03/2022 15/03/2022 Contribuição Risco Morte 11,00 0,00 0,00 0,00 0,00% 0,00000000 0,00 11,00 0,00
+                                      Contribuições Extras
+ 07/2022 12/08/2022 12/08/2022                                  216,00 216,00 262,08 46,08 21,33% 160,50432109 0,00 0,00 0,00
+                                      Empregador
+ 08/2022 16/08/2022 12/08/2022 Contribuição Mensal para Aposentadoria 900,00 900,00 1.062,96 162,96 18,11% 650,98765432 0,00 0,00 0,00
+ TOTAL - CONTRIBUIÇÕES PARA APOSENTADORIA 1.080,00
+ TOTAL - CONTRIBUIÇÕES EXTRAS - EMPREGADOR/INSTITUIDOR 216,00
+ SALDO DE COTAS 951,615432       Data da Cota 14/10/2026
+ SALDO PARTICIPANTE 1.553,84       Valor da Cota 1,6328401700
+ OUTRAS INFORMAÇÕES
+ Capital Segurado 90000,00

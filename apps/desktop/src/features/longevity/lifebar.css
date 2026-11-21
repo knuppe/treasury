@@ -1,0 +1,70 @@
+/*
+ * Treasury · linha da vida (LifeBar.tsx)
+ *
+ * A barra enche uma vez ao abrir (só transform, da esquerda até a idade de hoje). No Knight
+ * Rider, uma varredura vermelha cruza a barra uma vez, como o scanner (`--scanner-display`
+ * esconde a peça nos outros temas). No Lo-fi, nada além do enchimento. Nenhuma animação é
+ * infinita. Com movimento reduzido (fim do arquivo), nada se move e a varredura some.
+ * `lifebar.test.tsx` verifica.
+ */
+.life-bar[data-motion='fill'] .life-bar-fill {
+  transform-origin: left center;
+  animation: life-bar-fill 900ms var(--ease-emphasis) 120ms both;
+}
+
+.life-bar-sweep {
+  display: var(--scanner-display);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 14%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 80%, white 20%),
+    transparent
+  );
+}
+.life-bar[data-motion='fill'] .life-bar-sweep {
+  animation: life-bar-sweep 1400ms var(--ease-out) 450ms 1 both;
+}
+
+@keyframes life-bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes life-bar-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(720%);
+  }
+}
+
+/* Movimento reduzido: a barra aparece já cheia, sem a varredura. */
+@media (prefers-reduced-motion: reduce) {
+  .life-bar-fill,
+  .life-bar-sweep {
+    animation: none !important;
+  }
+  .life-bar-sweep {
+    display: none;
+  }
+}

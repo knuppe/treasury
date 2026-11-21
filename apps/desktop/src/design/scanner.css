@@ -1,0 +1,287 @@
+/*
+ * Treasury · tema Scanner
+ *
+ * As peças animadas do tema (componentes em components/ScannerParts.tsx e o ponto do
+ * LiveIndicator): o scanner vermelho que vai e volta na frente do carro (a borda de
+ * baixo da barra superior, só enquanto há tarefa do agente em andamento, e a tela de
+ * espera), o mini scanner no lugar do ponto pulsante dos indicadores e a caixa de
+ * voz do agente. Tudo se esconde fora do tema por `--scanner-display` (tokens.css). Como
+ * em motion.css, só opacidade e transform se movem; com movimento reduzido (fim do
+ * arquivo), a luz fica parada no meio.
+ * `scanner.test.tsx` verifica.
+ */
+
+/* ── Scanner: oito lâmpadas, uma luz com dois rastros e o brilho que vaza ── */
+.scanner-sweep {
+  display: var(--scanner-display);
+  pointer-events: none;
+  --scanner-sweep: 1.5s;
+  transform-origin: center;
+  transition:
+    opacity 360ms var(--ease-out),
+    transform 420ms var(--ease-emphasis);
+}
+/*
+ * Sem atividade (nenhuma tarefa do agente em andamento), o scanner desliga como uma
+ * TV de tubo: encolhe para um traço no meio e some; liga ao contrário.
+ */
+.scanner-sweep[data-active='false'] {
+  opacity: 0;
+  transform: scale(0.03, 0.4);
+}
+.scanner-sweep[data-active='false'] * {
+  animation-play-state: paused;
+}
+.scanner-sweep[data-variant='bar'] {
+  position: absolute;
+  z-index: 5;
+  bottom: -4px;
+  left: 50%;
+  width: clamp(200px, 36%, 520px);
+  height: 8px;
+  translate: -50% 0;
+}
+.scanner-sweep[data-variant='inline'] {
+  position: relative;
+  width: 240px;
+  height: 11px;
+}
+
+/* Na miniatura do seletor de tema: mais fino, dentro da moldura. */
+.scanner-sweep[data-variant='bar'].scanner-sweep-preview {
+  bottom: 4px;
+  left: 61%;
+  width: 46%;
+  height: 4px;
+}
+
+/*
+ * As lâmpadas: o fundo apagado e as luzes vistos por oito janelas da máscara. Cada
+ * janela escurece nas pontas (nada de retângulo perfeito), e por cima vêm o vidro
+ * (brilho em cima, sombra embaixo), as linhas de varredura e a grade de fósforo de
+ * uma TV de tubo, com uma tremulação leve.
+ */
+.scanner-lamps {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 120% at 50% 40%, rgb(255 60 40 / 0.1), transparent 70%), var(--scanner-lamp);
+  -webkit-mask-image: linear-gradient(90deg, transparent 5%, #000 24% 76%, transparent 95%);
+  mask-image: linear-gradient(90deg, transparent 5%, #000 24% 76%, transparent 95%);
+  -webkit-mask-size: 12.5% 100%;
+  mask-size: 12.5% 100%;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  animation: scanner-flicker 4.2s steps(1, end) infinite;
+}
+.scanner-lamps::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.18),
+      transparent 38%,
+      transparent 62%,
+      rgb(0 0 0 / 0.5)
+    ),
+    repeating-linear-gradient(180deg, rgb(0 0 0 / 0.4) 0 1px, transparent 1px 2px),
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.24) 0 1px, transparent 1px 3px);
+}
+@keyframes scanner-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0.93;
+  }
+  33% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 0.96;
+  }
+  68% {
+    opacity: 1;
+  }
+}
+
+/*
+ * A luz cobre duas lâmpadas e vai do centro da primeira ao centro da última: miolo
+ * quase branco, como o fósforo saturado, que escurece até o vinho nas bordas.
+ */
+.scanner-beam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #7a0b05 14%,
+    var(--scanner-red) 32%,
+    #ffb4a0 50%,
+    var(--scanner-red) 68%,
+    #7a0b05 86%,
+    transparent
+  );
+  animation: scanner-sweep var(--scanner-sweep) ease-in-out infinite alternate both;
+  will-change: transform;
+}
+/* Rastro: as mesmas luzes atrasadas e mais fracas, como lâmpadas que demoram a apagar. */
+.scanner-trail {
+  opacity: 0.5;
+  animation-delay: 90ms;
+}
+.scanner-trail + .scanner-trail {
+  opacity: 0.25;
+  animation-delay: 180ms;
+}
+
+/* Brilho vermelho que vaza para fora da faixa, acompanhando a luz. */
+.scanner-halo {
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: 0;
+  width: 25%;
+  background: radial-gradient(closest-side, rgb(255 43 28 / 0.42), transparent);
+  animation: scanner-sweep var(--scanner-sweep) ease-in-out infinite alternate both;
+  will-change: transform;
+}
+
+@keyframes scanner-sweep {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(325%);
+  }
+}
+
+/* ── Mini scanner: o ponto pulsante dos indicadores vira quatro lâmpadas ── */
+.live-dot {
+  display: var(--scanner-hide, inline-block);
+}
+.scanner-mini {
+  display: var(--scanner-display);
+  position: relative;
+  overflow: hidden;
+  width: 16px;
+  height: 4px;
+  border-radius: 1px;
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  -webkit-mask-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 0.75px,
+    #000 0.75px calc(25% - 0.75px),
+    transparent calc(25% - 0.75px) 25%
+  );
+  mask-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 0.75px,
+    #000 0.75px calc(25% - 0.75px),
+    transparent calc(25% - 0.75px) 25%
+  );
+}
+.scanner-mini::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, currentColor 35% 65%, transparent);
+  animation: scanner-sweep-mini 0.9s ease-in-out infinite alternate both;
+}
+@keyframes scanner-sweep-mini {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(125%);
+  }
+}
+
+/* ── Caixa de voz: três colunas de barras que pulsam do centro quando o agente fala ── */
+.scanner-voice {
+  display: var(--scanner-display);
+  width: 16px;
+  height: 16px;
+}
+.scanner-voice-bars {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.scanner-voice-bars > span {
+  width: 4px;
+  height: 70%;
+  background: var(--scanner-red);
+  -webkit-mask-image: repeating-linear-gradient(180deg, #000 0 2px, transparent 2px 3px);
+  mask-image: repeating-linear-gradient(180deg, #000 0 2px, transparent 2px 3px);
+  transform: scaleY(0.3);
+  opacity: 0.55;
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    opacity var(--duration-slow) var(--ease-out);
+}
+.scanner-voice-bars > span:nth-child(2) {
+  height: 100%;
+}
+.scanner-voice[data-speaking] .scanner-voice-bars > span {
+  opacity: 1;
+  animation: scanner-voice 0.38s ease-in-out infinite alternate;
+}
+.scanner-voice[data-speaking] .scanner-voice-bars > span:nth-child(2) {
+  animation-duration: 0.27s;
+}
+.scanner-voice[data-speaking] .scanner-voice-bars > span:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.scanner-swap {
+  display: var(--scanner-hide, inline-flex);
+}
+@keyframes scanner-voice {
+  0% {
+    transform: scaleY(0.25);
+  }
+  45% {
+    transform: scaleY(0.9);
+  }
+  70% {
+    transform: scaleY(0.55);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+/* Movimento reduzido: a luz para no centro, sem rastro nem tremulação; a voz não pulsa. */
+@media (prefers-reduced-motion: reduce) {
+  .scanner-lamps,
+  .scanner-beam,
+  .scanner-halo,
+  .scanner-mini::after,
+  .scanner-voice-bars > span {
+    animation: none !important;
+  }
+  .scanner-beam,
+  .scanner-halo {
+    transform: translateX(150%);
+  }
+  .scanner-mini::after {
+    transform: translateX(50%);
+  }
+  .scanner-trail {
+    display: none;
+  }
+  .scanner-sweep {
+    transition: none;
+  }
+}

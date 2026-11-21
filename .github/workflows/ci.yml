@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # À mão: roda tudo, inclusive os pacotes, também no repositório privado.
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Só leitura: o CI não publica nada (a release é o release.yml, docs/distribution.md).
+permissions:
+  contents: read
+
+jobs:
+  # Vulnerabilidades conhecidas nas dependências (docs/trust.md): RustSec pelo cargo-deny
+  # (deny.toml) e o npm audit das dependências de produção da interface. Barra o merge.
+  audit:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Dependência nova só com aprovação (docs/development.md)
+        run: python3 -I scripts/deps-check.py
+      - uses: EmbarkStudios/cargo-deny-action@70f81531115945ba6eb6b941ec9d39d063438eb9 # v2.1.2
+        with:
+          command: check advisories bans sources licenses
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: npm audit (dependências de produção)
+        working-directory: apps/desktop
+        run: npm audit --omit=dev --audit-level=moderate
+
+  # Repositório privado (plano Free): só Linux, porque o minuto de macOS conta 10 vezes na cota
+  # mensal de Actions. Público: macOS e Linux (minutos sem custo).
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(github.event.repository.private && '["ubuntu-22.04"]' || '["macos-latest", "ubuntu-22.04"]') }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Dependências do sistema (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+
+      - name: Interface
+        working-directory: apps/desktop
+        run: |
+          npm ci
+          npm run lint
+          npm run format:check
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Núcleo
+        run: |
+          cargo fmt --all --check
+          cargo clippy --workspace --all-targets -- -D warnings
+          cargo test --workspace
+
+      - name: E2E (interface + núcleo real)
+        if: runner.os == 'Linux'
+        working-directory: apps/desktop
+        run: |
+          npx playwright install --with-deps chromium webkit
+          npm run e2e
+          npm run e2e:webkit
+
+      - name: Tipos TS gerados estão atualizados
+        run: git diff --exit-code -- apps/desktop/src/api/generated
+
+      - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
+        if: runner.os == 'Linux'
+        run: python3 -I scripts/third-party-licenses.py --check
+
+  # Pacotes de teste do main, sem assinatura e sem atualização automática (o endereço só entra no
+  # build da release). macOS só Apple Silicon: Intel não é suportado. No repositório privado só
+  # à mão (workflow_dispatch), pelos minutos de macOS e Windows.
+  bundle:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.ref == 'refs/heads/main' && !github.event.repository.private)
+    needs: check
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            args: --target aarch64-apple-darwin --bundles app,dmg
+          - os: ubuntu-22.04
+            args: --bundles appimage,deb,rpm
+          - os: windows-latest
+            args: --bundles msi,nsis
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Dependências do sistema (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+          targets: ${{ runner.os == 'macOS' && 'aarch64-apple-darwin' || '' }}
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Pacotes (.dmg / .AppImage / .deb / .rpm / .msi / .exe)
+        shell: bash
+        working-directory: apps/desktop
+        run: |
+          npm ci
+          npx tauri build ${{ matrix.args }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: treasury-${{ matrix.os }}
+          path: target/**/release/bundle/**

@@ -1,0 +1,6 @@
+# Versão do Rust fixada (docs/development.md): a mesma na máquina de quem desenvolve e no CI,
+# para um lint novo de uma versão estável mais nova não quebrar o CI sem aviso. Subir é uma
+# mudança como outra qualquer: trocar aqui e nos workflows, e rodar clippy e testes.
+[toolchain]
+channel = "1.99.0"
+components = ["clippy", "rustfmt"]

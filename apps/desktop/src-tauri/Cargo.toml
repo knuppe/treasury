@@ -1,0 +1,57 @@
+[package]
+name = "treasury-desktop"
+# Versão do app (a que sobe a cada release, junto de tauri.conf.json e package.json). O núcleo
+# fica na versão do workspace, fixa: subir a do app não recompila o núcleo.
+version = "1.0.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Treasury: finanças da família e investimentos, local-first e cifrado"
+default-run = "treasury"
+
+[[bin]]
+name = "treasury"
+path = "src/main.rs"
+
+[lib]
+name = "treasury_desktop"
+path = "src/lib.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+treasury-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tauri = { version = "2", features = [] }
+tauri-plugin-single-instance = "2"
+tauri-plugin-dialog = "2"
+tokio = { workspace = true }
+base64.workspace = true
+hex = "0.4"
+getrandom.workspace = true
+zeroize = "1"
+ctap-hid-fido2 = "3.6.0"
+# Atualização automática (src/updater): o `latest.json` e o pacote por https, a versão, e as
+# duas assinaturas (minisign: Ed25519 e BLAKE2b; YubiKey: SSHSIG sk-ssh-ed25519 ou
+# sk-ecdsa-sha2-nistp256). Todos já vêm no Cargo.lock pelo núcleo e pelo Tauri.
+ureq = { version = "3", default-features = false, features = ["rustls"] }
+semver = "1"
+ring = "0.17"
+sha2 = "0.11"
+blake2 = "0.11"
+
+[dev-dependencies]
+# Runtime simulado do Tauri: confere a ACL (só a webview `main` chama comandos).
+tauri = { version = "2", features = ["test"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6.2"
+objc2 = "0.6.5"
+objc2-foundation = { version = "0.3.2", features = ["NSError", "NSString", "NSURL", "NSFileManager", "NSData", "NSArray", "NSDictionary"] }
+objc2-local-authentication = "0.3.2"
+# QR e texto do cupom na foto (VNDetectBarcodesRequest, VNRecognizeTextRequest).
+objc2-vision = { version = "0.3.2", default-features = false, features = ["std", "VNRequestHandler", "VNDetectBarcodesRequest", "VNRecognizeTextRequest", "VNRequest", "VNObservation", "VNTypes", "VNDefines", "objc2-core-foundation"] }

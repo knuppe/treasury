@@ -1,0 +1,277 @@
+{
+  "methodology_version": "0.1.0",
+  "_comment": "Criptoativos (classe crypto): o score mede a robustez dentro da classe e não se compara com o de ações. Mercado, oferta e desenvolvimento pela CoinGecko (API pública); TVL das redes, valor de mercado, preços em dólar e lastro das stablecoins pela DefiLlama; volatilidade pelas cotações do app. Sem universo de pares: só âncoras absolutas (valores em reais convertidos pela PTAX). Em `crypto` ficam as stablecoins conhecidas, os ids da CoinGecko dos símbolos mais comuns e a nota do tipo de lastro.",
+  "dimensions": {
+    "crypto_rede": "Rede e adoção",
+    "crypto_tokenomics": "Tokenomics",
+    "crypto_mercado": "Liquidez e mercado",
+    "crypto_seguranca": "Segurança e descentralização",
+    "crypto_dev": "Desenvolvimento",
+    "crypto_risco": "Risco",
+    "stable_reservas": "Reservas e transparência",
+    "stable_paridade": "Histórico de paridade",
+    "stable_liquidez": "Liquidez",
+    "stable_regulacao": "Regulação"
+  },
+  "metrics": {
+    "crypto_market_cap": {
+      "label": "Valor de mercado",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "Oferta em circulação × preço (CoinGecko ou DefiLlama), em reais pela PTAX",
+      "anchor": [[0, 0], [1000000000, 20], [10000000000, 45], [100000000000, 75], [1000000000000, 100]],
+      "absolute_only": true
+    },
+    "crypto_rank": {
+      "label": "Posição por valor de mercado",
+      "unit": "count",
+      "direction": "lower",
+      "formula": "Ranking por valor de mercado na CoinGecko (top 20 = menor risco de desaparecer)",
+      "anchor": [[1, 100], [10, 90], [20, 80], [50, 60], [100, 40], [300, 15], [1000, 0]],
+      "absolute_only": true
+    },
+    "crypto_volume": {
+      "label": "Volume em 24 horas",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "Volume negociado nas últimas 24 horas (CoinGecko), em reais pela PTAX",
+      "anchor": [[0, 0], [10000000, 20], [100000000, 50], [1000000000, 80], [10000000000, 100]],
+      "absolute_only": true
+    },
+    "crypto_turnover": {
+      "label": "Giro diário (volume ÷ valor de mercado)",
+      "unit": "percent",
+      "direction": "range",
+      "formula": "Volume de 24 horas ÷ valor de mercado (muito baixo = ilíquido; muito alto = especulativo)",
+      "anchor": [[0, 0], [0.005, 40], [0.02, 85], [0.05, 100], [0.15, 80], [0.5, 30], [1, 0]]
+    },
+    "crypto_fdv_to_mcap": {
+      "label": "FDV ÷ valor de mercado",
+      "unit": "multiple",
+      "direction": "lower",
+      "formula": "Valor totalmente diluído ÷ valor de mercado (acima de 3 = muita oferta a liberar)",
+      "anchor": [[1, 100], [1.2, 85], [1.5, 65], [2, 45], [3, 20], [5, 0]],
+      "absolute_only": true
+    },
+    "crypto_supply_emitted": {
+      "label": "Oferta já emitida",
+      "unit": "percent",
+      "direction": "higher",
+      "formula": "Oferta em circulação ÷ oferta máxima (sem oferta máxima: não se aplica, vale a inflação)",
+      "anchor": [[0.1, 0], [0.3, 25], [0.5, 50], [0.8, 80], [0.95, 100]],
+      "absolute_only": true
+    },
+    "crypto_supply_inflation": {
+      "label": "Inflação da oferta (12 meses)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Crescimento da oferta em circulação em 12 meses (valor de mercado ÷ preço, histórico da CoinGecko)",
+      "anchor": [[0, 100], [0.02, 80], [0.05, 55], [0.1, 30], [0.25, 0]],
+      "absolute_only": true
+    },
+    "crypto_holder_concentration": {
+      "label": "Concentração nas 10 maiores carteiras",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Fração da oferta nas 10 maiores carteiras, sem corretoras e contratos",
+      "anchor": [[0.05, 100], [0.2, 70], [0.4, 30], [0.6, 0]],
+      "unavailable": "A distribuição por carteira exige exploradores de blocos pagos ou com chave (Etherscan, Glassnode); não há fonte estruturada gratuita."
+    },
+    "crypto_unlocks": {
+      "label": "Agenda de desbloqueios",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Oferta a desbloquear nos próximos 12 meses ÷ oferta em circulação; moedas de prova de trabalho (categorias da CoinGecko) não têm alocações com desbloqueio (0). Tokens: agendas só em serviços pagos (Token Unlocks, Messari), a métrica fica sem dado",
+      "anchor": [[0, 100], [0.05, 70], [0.2, 30], [0.5, 0]]
+    },
+    "crypto_tvl": {
+      "label": "Valor travado na rede (TVL)",
+      "unit": "money",
+      "direction": "higher",
+      "formula": "TVL dos protocolos da rede (DefiLlama), em reais pela PTAX; só para redes (camada 1 e 2)",
+      "anchor": [[0, 0], [100000000, 25], [1000000000, 50], [10000000000, 80], [100000000000, 100]],
+      "absolute_only": true
+    },
+    "crypto_watchlist_users": {
+      "label": "Usuários que acompanham",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Usuários da CoinGecko com o ativo na watchlist ou carteira (proxy de adoção)",
+      "anchor": [[0, 0], [10000, 25], [100000, 50], [1000000, 80], [2000000, 100]],
+      "absolute_only": true
+    },
+    "crypto_active_addresses": {
+      "label": "Endereços ativos",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Média de endereços ativos por dia em 30 dias (Coin Metrics, API Community aberta, CC BY-NC 4.0); redes fora da API aberta ficam sem dado",
+      "anchor": [[0, 0], [10000, 30], [100000, 60], [1000000, 100]]
+    },
+    "crypto_age_years": {
+      "label": "Tempo de rede",
+      "unit": "years",
+      "direction": "higher",
+      "formula": "Anos desde o bloco gênese (CoinGecko); histórico sem falha é a medida de segurança disponível",
+      "anchor": [[0, 0], [1, 15], [3, 45], [5, 70], [10, 100]],
+      "absolute_only": true
+    },
+    "crypto_hacks": {
+      "label": "Histórico de ataques e incidentes",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "100 − 50 por ataque à própria rede (51%, prova forjada, chave de validador…) na lista de ataques da DefiLlama (`targetType` Chain, pelo nome da rede); ataques a protocolos da rede não contam",
+      "anchor": [[0, 0], [100, 100]]
+    },
+    "crypto_nakamoto": {
+      "label": "Coeficiente de Nakamoto",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Menor número de validadores ou pools que controla mais de 1/3 (PoS) ou 1/2 (PoW) da rede; só bitcoin, pelos blocos da semana por pool de mineração (mempool.space); outras redes sem fonte gratuita",
+      "anchor": [[1, 0], [3, 30], [10, 70], [30, 100]]
+    },
+    "crypto_commits_4w": {
+      "label": "Commits em 4 semanas",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Commits no repositório principal nas últimas 4 semanas (CoinGecko, dados do GitHub)",
+      "anchor": [[0, 0], [10, 30], [50, 60], [150, 85], [400, 100]],
+      "absolute_only": true
+    },
+    "crypto_github_stars": {
+      "label": "Estrelas no GitHub",
+      "unit": "count",
+      "direction": "higher",
+      "formula": "Estrelas do repositório principal (CoinGecko, dados do GitHub)",
+      "anchor": [[0, 0], [500, 30], [2000, 55], [10000, 80], [50000, 100]],
+      "absolute_only": true
+    },
+    "crypto_volatility": {
+      "label": "Volatilidade anual",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Desvio-padrão dos retornos diários de 12 meses × √(observações por ano) (cotações do app; sem elas, preços em dólar da DefiLlama)",
+      "anchor": [[0.3, 100], [0.5, 75], [0.7, 50], [1, 25], [1.5, 0]],
+      "absolute_only": true
+    },
+    "crypto_max_drawdown": {
+      "label": "Maior queda em 12 meses",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior queda em relação ao pico anterior nos últimos 12 meses",
+      "anchor": [[0.2, 100], [0.35, 75], [0.5, 50], [0.7, 20], [0.9, 0]],
+      "absolute_only": true
+    },
+    "crypto_ath_drawdown": {
+      "label": "Distância da máxima histórica",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "1 − preço ÷ máxima histórica em dólar (CoinGecko)",
+      "anchor": [[0.1, 100], [0.3, 75], [0.5, 50], [0.8, 15], [0.95, 0]],
+      "absolute_only": true
+    },
+    "stable_backing": {
+      "label": "Tipo de lastro",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Nota do mecanismo de lastro declarado (DefiLlama: moeda fiduciária, cripto, algorítmico); tabela em classes/crypto.json",
+      "anchor": [[0, 0], [100, 100]],
+      "absolute_only": true
+    },
+    "stable_attestation": {
+      "label": "Atestação e auditoria das reservas",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Frequência e qualidade das atestações (auditoria completa = melhor)",
+      "anchor": [[0, 0], [100, 100]],
+      "unavailable": "Atestações e auditorias de reservas são PDFs dos emissores; não há fonte estruturada gratuita."
+    },
+    "stable_max_deviation": {
+      "label": "Maior desvio da paridade (12 meses)",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Maior |preço ÷ paridade − 1| nos fechamentos diários em dólar dos últimos 12 meses",
+      "anchor": [[0.002, 100], [0.005, 90], [0.01, 75], [0.03, 40], [0.1, 0]],
+      "absolute_only": true
+    },
+    "stable_depeg_days": {
+      "label": "Dias fora da paridade",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Fração dos dias dos últimos 12 meses com desvio acima de 0,5%",
+      "anchor": [[0, 100], [0.01, 85], [0.05, 55], [0.15, 20], [0.3, 0]],
+      "absolute_only": true
+    },
+    "stable_mean_deviation": {
+      "label": "Desvio médio da paridade",
+      "unit": "percent",
+      "direction": "lower",
+      "formula": "Média de |preço ÷ paridade − 1| nos últimos 12 meses",
+      "anchor": [[0.0005, 100], [0.001, 90], [0.003, 65], [0.01, 25], [0.03, 0]],
+      "absolute_only": true
+    },
+    "stable_regulation": {
+      "label": "Situação regulatória do emissor",
+      "unit": "score",
+      "direction": "higher",
+      "formula": "Emissor regulado (MiCA, NYDFS, licença de moeda eletrônica) = melhor",
+      "anchor": [[0, 0], [100, 100]],
+      "unavailable": "Licenças e regulação dos emissores não têm base estruturada gratuita."
+    }
+  },
+  "profiles": {
+    "crypto/default": {
+      "label": "Criptoativo",
+      "critical": ["crypto_market_cap", "crypto_volatility"],
+      "dimensions": {
+        "crypto_rede": {"weight": 25, "metrics": {"crypto_tvl": 2, "crypto_watchlist_users": 1.5, "crypto_active_addresses": 1.5}},
+        "crypto_tokenomics": {"weight": 20, "metrics": {"crypto_fdv_to_mcap": 2, "crypto_supply_inflation": 2, "crypto_supply_emitted": 1, "crypto_holder_concentration": 1, "crypto_unlocks": 1}},
+        "crypto_mercado": {"weight": 20, "metrics": {"crypto_market_cap": 2, "crypto_rank": 1, "crypto_volume": 1.5, "crypto_turnover": 1}},
+        "crypto_seguranca": {"weight": 15, "metrics": {"crypto_age_years": 2, "crypto_hacks": 0.5, "crypto_nakamoto": 0.5}},
+        "crypto_dev": {"weight": 10, "metrics": {"crypto_commits_4w": 2, "crypto_github_stars": 1}},
+        "crypto_risco": {"weight": 10, "metrics": {"crypto_volatility": 2, "crypto_max_drawdown": 1, "crypto_ath_drawdown": 1}}
+      }
+    },
+    "crypto/stablecoin": {
+      "label": "Stablecoin",
+      "critical": ["stable_max_deviation"],
+      "anchors": {
+        "crypto_market_cap": [[0, 0], [500000000, 20], [5000000000, 50], [50000000000, 80], [500000000000, 100]]
+      },
+      "dimensions": {
+        "stable_reservas": {"weight": 35, "metrics": {"stable_backing": 2, "stable_attestation": 1}},
+        "stable_paridade": {"weight": 30, "metrics": {"stable_max_deviation": 2, "stable_depeg_days": 1.5, "stable_mean_deviation": 1}},
+        "stable_liquidez": {"weight": 25, "metrics": {"crypto_market_cap": 2, "crypto_volume": 1, "crypto_rank": 1}},
+        "stable_regulacao": {"weight": 10, "metrics": {"stable_regulation": 1}}
+      }
+    }
+  },
+  "flags": {
+    "crypto_high_fdv": {"label": "Muita oferta a liberar (FDV acima de 3× o valor de mercado)", "threshold": 3, "penalty": 3, "severity": "medium"},
+    "crypto_small_cap": {"label": "Valor de mercado pequeno (abaixo de R$ 1 bi)", "threshold": 1000000000, "severity": "low"},
+    "stable_depeg": {"label": "Perdeu a paridade em mais de 3% nos últimos 12 meses", "threshold": 0.03, "cap": 50, "severity": "high"},
+    "stable_algorithmic": {"label": "Stablecoin algorítmica (sem reservas)", "cap": 40, "severity": "high"}
+  },
+  "segments": {
+    "crypto": {
+      "default_segment": "default",
+      "segments": {
+        "default": {"label": "Criptoativo", "profile": "crypto/default"},
+        "stablecoin": {"label": "Stablecoin", "profile": "crypto/stablecoin"}
+      }
+    }
+  },
+  "crypto": {
+    "_comment": "Stablecoins reconhecidas pelo símbolo quando a coleta ainda não trouxe a lista da DefiLlama ou as categorias da CoinGecko; ids da CoinGecko dos símbolos mais comuns (o resto vem da busca por símbolo, pelo maior valor de mercado; o ativo pode fixar o id com fonte de cotação `coingecko` e o id no símbolo do provedor); nota do lastro declarado.",
+    "stablecoins": ["USDT", "USDC", "DAI", "USDS", "USDE", "FDUSD", "PYUSD", "TUSD", "USDP", "BRZ", "BRLA", "EURC", "USD1", "RLUSD", "FRAX", "GUSD"],
+    "known_ids": {
+      "BTC": "bitcoin", "ETH": "ethereum", "USDT": "tether", "USDC": "usd-coin", "BNB": "binancecoin", "SOL": "solana",
+      "XRP": "ripple", "ADA": "cardano", "DOGE": "dogecoin", "TRX": "tron", "AVAX": "avalanche-2", "DOT": "polkadot",
+      "LINK": "chainlink", "MATIC": "matic-network", "POL": "polygon-ecosystem-token", "LTC": "litecoin", "BCH": "bitcoin-cash",
+      "ATOM": "cosmos", "UNI": "uniswap", "XLM": "stellar", "TON": "the-open-network", "DAI": "dai", "USDS": "usds",
+      "USDE": "ethena-usde", "FDUSD": "first-digital-usd", "PYUSD": "paypal-usd", "TUSD": "true-usd", "EURC": "euro-coin",
+      "BRZ": "brz", "NEAR": "near", "ARB": "arbitrum", "OP": "optimism", "AAVE": "aave", "SUI": "sui", "APT": "aptos"
+    },
+    "backing_scores": {"fiat-backed": 75, "crypto-backed": 55, "algorithmic": 10},
+    "depeg_threshold": 0.005
+  }
+}

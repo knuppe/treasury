@@ -1,0 +1,1703 @@
+{
+ "country": "EU",
+ "name": "União Europeia",
+ "currency": "EUR",
+ "version": "2026-11",
+ "updated": "2026-11-17",
+ "coverage": "esboço",
+ "sources": [
+  {
+   "id": "youreurope_vat",
+   "publisher": "European Union - Your Europe (European Commission)",
+   "title": "VAT rules and rates: standard, special & reduced rates - 'List of VAT rates applied in EU member countries'",
+   "url": "https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_en.htm",
+   "published": "page last checked 2026-07-13",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ec_taxud_vat_rates",
+   "publisher": "European Commission - DG Taxation and Customs Union (DG TAXUD)",
+   "title": "VAT Rates",
+   "url": "https://taxation-customs.ec.europa.eu/taxation/vat/vat-directive/vat-rates_en",
+   "published": "page modified 2025-11-13",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ec_taxud_vat_rates_pdf_2020",
+   "publisher": "European Commission - DG TAXUD",
+   "title": "VAT rates applied in the Member States of the European Union - Situation at 1st January 2020 (taxud.c.1(2020))",
+   "url": "https://taxation-customs.ec.europa.eu/document/download/82a38bdb-d724-472d-8e02-325b271e0d88_en?filename=vat_rates_en.pdf",
+   "published": "2020 (situation at 2020-01-01)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ec_a2m_vat_changes_2025",
+   "publisher": "European Commission - Access2Markets",
+   "title": "Recent VAT changes in certain EU Member States",
+   "url": "https://trade.ec.europa.eu/access-to-markets/en/news/recent-vat-changes-certain-eu-member-states",
+   "published": "2025-01-15",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "vero_fi_changes",
+   "publisher": "Finnish Tax Administration (Vero Skatt)",
+   "title": "The changes to VAT rates",
+   "url": "https://www.vero.fi/en/businesses-and-corporations/taxes-and-charges/vat/rates-of-vat/the-changes-to-VAT-rates/",
+   "published": "page updated 2026-01-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "emta_ee_standard",
+   "publisher": "Estonian Tax and Customs Board (EMTA)",
+   "title": "Standard VAT rate",
+   "url": "https://emta.ee/en/business-client/taxes-and-payment/value-added-tax/vat-rates-and-supply-exempt-tax/standard-vat-rate",
+   "published": "n/d",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "emta_ee_vat",
+   "publisher": "Estonian Tax and Customs Board (EMTA)",
+   "title": "Value added tax",
+   "url": "https://www.emta.ee/en/business-client/taxes-and-payment/value-added-tax",
+   "published": "n/d",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "ey_romania_2025",
+   "publisher": "EY (Ernst & Young) Global Tax Alert",
+   "title": "Romanian tax changes introduced by new fiscal and budgetary measures",
+   "url": "https://www.ey.com/en_gl/technical/tax-alerts/romanian-tax-changes-introduced-by-new-fiscal-and-budgetary-measures",
+   "published": "2025-07-30",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "usp_at_49",
+   "publisher": "Austria - Unternehmensserviceportal (USP), Federal Ministry of Finance",
+   "title": "Neuer Umsatzsteuersatz von 4,9 Prozent",
+   "url": "https://www.usp.gv.at/aktuelles/newsliste/neuer_ustsatz.html",
+   "published": "last updated 2026-07-10",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "de_ustg_12",
+   "publisher": "Germany - Federal Ministry of Justice (gesetze-im-internet.de)",
+   "title": "Umsatzsteuergesetz (UStG) § 12 Steuersätze, and Anlage 2",
+   "url": "https://www.gesetze-im-internet.de/ustg_1980/__12.html",
+   "published": "consolidated law (accessed online)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "de_breg_gastro_2026",
+   "publisher": "Bundesregierung (German Federal Government)",
+   "title": "Entlastungen für Pendler und Gastronomie",
+   "url": "https://www.bundesregierung.de/breg-de/aktuelles/steueraenderungsgesetz-bundesrat-2383684",
+   "published": "2026-01-01",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "fr_sp_food",
+   "publisher": "Service-Public.fr (Entreprendre) - French administration",
+   "title": "Taux de TVA sur les produits alimentaires et les boissons (F22399)",
+   "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F22399",
+   "published": "verified 2025-12-03",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "fr_sp_health",
+   "publisher": "Service-Public.fr (Entreprendre) - French administration",
+   "title": "Taux de TVA dans le secteur de l'hygiène et de la santé (F23567)",
+   "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23567",
+   "published": "verified 2025-06-18",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "es_aeat_2026",
+   "publisher": "Agencia Tributaria (Spain)",
+   "title": "Tipos impositivos en el IVA 2026",
+   "url": "https://sede.agenciatributaria.gob.es/static_files/Sede/Tema/IVA/IVA_reperc/Tipos_IVA_2026_26_02_2026.pdf",
+   "published": "2026-02-26",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "it_ade_aliquote",
+   "publisher": "Agenzia delle Entrate (Italy)",
+   "title": "IVA - Norme generali e aliquote",
+   "url": "https://www.agenziaentrate.gov.it/portale/iva-regole-generali-aliquote-esenzioni-pagamento/norme-generali-e-aliquote",
+   "published": "page last updated 2020-12-12",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "pt_at_civa",
+   "publisher": "Autoridade Tributária e Aduaneira - Portal das Finanças (Portugal)",
+   "title": "Código do IVA, artigo 18.º (Taxas) and Listas I e II anexas",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/c-iva-listas.aspx",
+   "published": "consolidated code (accessed online)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "nl_bd_9",
+   "publisher": "Belastingdienst (Netherlands Tax Administration)",
+   "title": "Goederen met 9% btw; and news 'Vanaf 1 januari 2026: btw-tarief logies omhoog naar 21%' (2025-10-30)",
+   "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/tarieven_en_vrijstellingen/goederen_9_btw/goederen_met_9_btw",
+   "published": "n/d; news item 2025-10-30",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "oecd_taxing_wages_db",
+   "publisher": "OECD",
+   "title": "Taxing Wages database - 'Labour taxation - OECD comparative country indicators' (dataflow OECD.CTP.TPS DSD_TAX_WAGES_COMP@DF_TW_COMP v2.1), read via the OECD SDMX API",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COMP@DF_TW_COMP,/all?startPeriod=2023&dimensionAtObservation=AllDimensions",
+   "published": "data through 2025 (Taxing Wages 2026 edition, published April 2026)",
+   "accessed": "2026-10-17"
+  },
+  {
+   "id": "pt_cirs_68",
+   "publisher": "Autoridade Tributária e Aduaneira (Portal das Finanças)",
+   "title": "CIRS, artigo 68.º (taxas gerais do IRS), tabela na redação do Decreto-Lei n.º 212/2026, de 4 de novembro",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs68.aspx",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "pt_gov_irs_2026",
+   "publisher": "Governo de Portugal",
+   "title": "Conselho de Ministros de 17/09/2026: redução do IRS do 1.º ao 6.º escalão, retroativa a 01/01/2026 (Proposta de Lei 108/XVII)",
+   "url": "https://portugal.gov.pt/api/media/edge/Project/Portal-do-Governo/Portal-do-Governo/gc25/documentos/Financas/20260917_IRS_Set2026_simulacoes.pdf",
+   "published": "2026-09-17",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "pt_cirs_25",
+   "publisher": "Autoridade Tributária e Aduaneira (Portal das Finanças)",
+   "title": "CIRS, artigo 25.º (dedução específica da categoria A: 8,54 × IAS = 4 587,09 €)",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs25.aspx",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "pt_cirs_70",
+   "publisher": "Autoridade Tributária e Aduaneira (Portal das Finanças)",
+   "title": "CIRS, artigo 70.º (mínimo de existência: 12 880 € em 2026)",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs70.aspx",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "pt_cirs_78a",
+   "publisher": "Autoridade Tributária e Aduaneira (Portal das Finanças)",
+   "title": "CIRS, artigo 78.º-A (dedução à coleta de 600 € por dependente)",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs78a.aspx",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "pt_seg_social",
+   "publisher": "Segurança Social",
+   "title": "Trabalhadores por conta de outrem: taxa contributiva de 11% do trabalhador",
+   "url": "https://www.seg-social.pt/trabalhadores-por-conta-de-outrem",
+   "accessed": "2026-10-19"
+  },
+  {
+   "id": "es_lirpf",
+   "publisher": "Agencia Estatal Boletín Oficial del Estado (España)",
+   "title": "Ley 35/2006 del IRPF (texto consolidado): arts. 19, 20, 57, 58, 63 y 74",
+   "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "es_rirpf_83",
+   "publisher": "Agencia Tributaria (España)",
+   "title": "Reducción por obtención de rendimientos del trabajo (manual de la renta)",
+   "url": "https://sede.agenciatributaria.gob.es/Sede/en_gb/ayuda/manuales-videos-folletos/manuales-ayuda-presentacion/irpf-2025/7-cumplimentacion-irpf/7_1-rendimientos-trabajo-personal/7_1_6-reduccion-obtencion-rendimientos-trabajo.html",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "es_orden_cotizacion_2026",
+   "publisher": "Ministerio de Inclusión, Seguridad Social y Migraciones (España)",
+   "title": "Orden PJC/297/2026: bases y tipos de cotización de 2026 (base máxima 5.101,20 €; trabajador 4,70% + 1,55% + 0,15% + 0,10%)",
+   "url": "https://www.seg-social.es/wps/portal/wss/internet/Trabajadores/CotizacionRecaudacionTrabajadores/36537",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "fr_bareme_2026",
+   "publisher": "Service-Public.fr (República Francesa)",
+   "title": "Impôt sur le revenu : barème 2026 sur les revenus 2025 (tranches de 11 600 €, 29 579 €, 84 577 € et 181 917 €)",
+   "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1419",
+   "published": "2026-11-12",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "fr_cotisations_2026",
+   "publisher": "CLEISS (França)",
+   "title": "Les cotisations de sécurité sociale en France 2026",
+   "url": "https://www.cleiss.fr/docs/cotisations/france.html",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "de_estg_32a_2026",
+   "publisher": "Bundesministerium der Justiz (Gesetze im Internet)",
+   "title": "§ 32a EStG, Einkommensteuertarif ab Veranlagungszeitraum 2026",
+   "url": "https://www.gesetze-im-internet.de/estg/__32a.html",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "de_sv_rechengroessen_2026",
+   "publisher": "Deutsche Rentenversicherung (Alemanha)",
+   "title": "Sozialversicherungs-Rechengrößenverordnung 2026",
+   "url": "https://www.deutsche-rentenversicherung.de/DRV/DE/Ueber-uns-und-Presse/Presse/Meldungen/2025/250910-sv-rechengroessen-vo-2026.html",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "es_rdl_5_2026",
+   "publisher": "Agencia Tributaria (España)",
+   "title": "Real Decreto-ley 5/2026, art. 28: deducción por obtención de rendimientos del trabajo (disposición adicional 61.ª de la Ley 35/2006), 590,89 € hasta 17.094 € y retirada del 20% hasta 20.048,45 €",
+   "url": "https://sede.agenciatributaria.gob.es/static_files/Sede/Actualidad/Novedades/2026/BOLINFORM%20_RDL_5_2026.pdf",
+   "published": "2026-02-19",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "fr_decote_2026",
+   "publisher": "BOFiP-Impôts (Direction générale des Finances publiques)",
+   "title": "BOI-IR-LIQ-20-20-30: décote, revenus de 2025 (897 € et 45,25 %, impôt brut inférieur à 1 982 €)",
+   "url": "https://bofip.impots.gouv.fr/bofip/2495-PGP.html/identifiant=BOI-IR-LIQ-20-20-30-20260407",
+   "published": "2026-04-07",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "fr_deduction_10_2026",
+   "publisher": "Legifiscal (França)",
+   "title": "Revenus 2025 : déduction forfaitaire de 10 % des traitements et salaires (minimum de 509 €, plafond de 14 555 €; CGI art. 83, 3°)",
+   "url": "https://www.legifiscal.fr/actualites-fiscales/4427-revenus-2025-deduction-forfaitaire-traitements-salaires.html",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "fr_agirc_arrco_2026",
+   "publisher": "Lefebvre Dalloz (França)",
+   "title": "Retraite complémentaire Agirc-Arrco 2026: tranche 1 (3,15 % + CEG 0,86 %), tranche 2 (8,64 % + CEG 1,08 %), CET 0,14 %",
+   "url": "https://open.lefebvre-dalloz.fr/baremes-taux/droit-social/retraites-retraite-complementaire-agirc-arrco_social-retraites-compl-retraite-agirc-arrco-2",
+   "published": "2026-01-16",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "de_solzg_2026",
+   "publisher": "Bundesministerium der Justiz (Gesetze im Internet)",
+   "title": "Solidaritätszuschlaggesetz 1995, § 3 (Freigrenze de 20.350 €) e § 4 (5,5%, limitado a 11,9% do excedente)",
+   "url": "https://www.gesetze-im-internet.de/solzg_1995/__3.html",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "de_estg_10",
+   "publisher": "Bundesministerium der Justiz (Gesetze im Internet)",
+   "title": "§ 10 EStG, Sonderausgaben: contribuições de aposentadoria, saúde (menos 4% pelo auxílio-doença) e Pflege",
+   "url": "https://www.gesetze-im-internet.de/estg/__10.html",
+   "accessed": "2026-11-17"
+  },
+  {
+   "id": "pt_cirs_78b",
+   "publisher": "Autoridade Tributária e Aduaneira (Portal das Finanças)",
+   "title": "CIRS, artigo 78.º-B (dedução das despesas gerais familiares: 35% até 250 € por sujeito passivo; 45% até 335 € nas famílias monoparentais)",
+   "url": "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs78b.aspx",
+   "accessed": "2026-11-17"
+  }
+ ],
+ "consumption": [
+  {
+   "key": "alimentos_basicos",
+   "label": "Alimentos básicos",
+   "low": "vat_super_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "alimentos_industrializados",
+   "label": "Alimentos industrializados",
+   "low": "vat_super_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_nao_alcoolicas",
+   "label": "Bebidas não alcoólicas",
+   "low": "vat_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "bebidas_alcoolicas",
+   "label": "Bebidas alcoólicas",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "restaurantes",
+   "label": "Restaurantes, bares e delivery",
+   "low": "vat_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "gasolina",
+   "label": "Gasolina comum (gasolina C)",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "diesel",
+   "label": "Óleo diesel (diesel B)",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "etanol",
+   "label": "Etanol hidratado",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "gnv",
+   "label": "Gás natural veicular (GNV)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "glp",
+   "label": "Gás de cozinha (GLP, botijão 13 kg)",
+   "low": "vat_reduced",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "energia_eletrica",
+   "label": "Energia elétrica (conta de luz residencial)",
+   "low": "vat_reduced",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "agua_esgoto",
+   "label": "Água e esgoto",
+   "low": "vat_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "telefonia_internet",
+   "label": "Telefonia e internet",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "tv_assinatura_streaming",
+   "label": "TV por assinatura e streaming",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_nacionais",
+   "label": "Eletrônicos (fabricação nacional ou sem distinção)",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletronicos_importados",
+   "label": "Eletrônicos importados",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "eletrodomesticos",
+   "label": "Eletrodomésticos",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "moveis",
+   "label": "Móveis e colchões",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "vestuario",
+   "label": "Vestuário",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "calcados",
+   "label": "Calçados",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "medicamentos",
+   "label": "Medicamentos de uso humano",
+   "low": "vat_super_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "higiene_pessoal",
+   "label": "Higiene pessoal",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cosmeticos_perfumes",
+   "label": "Cosméticos e perfumes",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_pessoais",
+   "label": "Serviços pessoais (salão, academia/clube)",
+   "low": "vat_reduced",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_mensalidade",
+   "label": "Educação – mensalidade escolar",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "educacao_livros",
+   "label": "Educação – livros",
+   "low": "vat_super_reduced",
+   "central": "vat_reduced",
+   "high": "vat_reduced",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "saude_plano_consulta",
+   "label": "Saúde – plano de saúde e consultas",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_publico",
+   "label": "Transporte público",
+   "low": "vat_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "transporte_aplicativo",
+   "label": "Transporte por aplicativo",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "passagens_aereas",
+   "label": "Passagens aéreas",
+   "low": "exempt",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "hotel_turismo",
+   "label": "Hotel e turismo",
+   "low": "vat_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "automovel_novo",
+   "label": "Automóvel novo",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "motocicleta",
+   "label": "Motocicleta",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "pecas_manutencao_veiculo",
+   "label": "Peças e manutenção de veículo",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "seguros",
+   "label": "Seguros (IOF sobre o prêmio)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "tarifas_bancarias",
+   "label": "Tarifas bancárias",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "brinquedos",
+   "label": "Brinquedos",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "pet",
+   "label": "Pet (ração, remédio, veterinário)",
+   "low": "vat_reduced",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "materiais_construcao",
+   "label": "Materiais de construção",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "cigarros",
+   "label": "Cigarros",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "mercado",
+   "label": "Mercado (cesta mista)",
+   "low": "vat_super_reduced",
+   "central": "vat_reduced",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "aluguel",
+   "label": "Aluguel residencial",
+   "low": "exempt",
+   "central": "exempt",
+   "high": "exempt",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "condominio",
+   "label": "Condomínio",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "servicos_domesticos",
+   "label": "Serviços domésticos (diarista, babá)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "estacionamento",
+   "label": "Estacionamento",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "optica",
+   "label": "Óculos e lentes",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "material_escolar",
+   "label": "Material escolar",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "lazer",
+   "label": "Lazer (passeios, ingressos, festas)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "presentes",
+   "label": "Presentes (itens variados)",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "compras_diversas",
+   "label": "Compras diversas (sem detalhe)",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota). Conservador usa a alíquota mais baixa que costuma valer para o grupo; Elevado, a padrão. Não inclui impostos especiais (combustível, bebida, tabaco, energia).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  },
+  {
+   "key": "contas_diversas",
+   "label": "Contas e boletos (sem detalhe)",
+   "low": null,
+   "central": null,
+   "high": null,
+   "basis": "Sem dado confiável neste esboço.",
+   "source_ids": [],
+   "icms_modal": false
+  },
+  {
+   "key": "limpeza",
+   "label": "Material de limpeza",
+   "low": "vat_standard",
+   "central": "vat_standard",
+   "high": "vat_standard",
+   "basis": "IVA padrão do país escolhido (tabela da Comissão Europeia), como fração do valor pago: alíquota / (100 + alíquota).",
+   "source_ids": [
+    "youreurope_vat"
+   ],
+   "icms_modal": false
+  }
+ ],
+ "regions": [
+  {
+   "code": "AT",
+   "name": "Austria",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 20.0,
+   "vat_reduced": 10.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "BE",
+   "name": "Belgium",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 6.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "BG",
+   "name": "Bulgaria",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 20.0,
+   "vat_reduced": 9.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "CY",
+   "name": "Cyprus",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 19.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": 3.0,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "CZ",
+   "name": "Czechia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 12.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "DE",
+   "name": "Germany",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 19.0,
+   "vat_reduced": 7.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "DK",
+   "name": "Denmark",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 25.0,
+   "vat_reduced": null,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "EE",
+   "name": "Estonia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 24.0,
+   "vat_reduced": 9.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "EL",
+   "name": "Greece",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 24.0,
+   "vat_reduced": 6.0,
+   "vat_super_reduced": 4.0,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "ES",
+   "name": "Spain",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 10.0,
+   "vat_super_reduced": 4.0,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "FI",
+   "name": "Finland",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 25.5,
+   "vat_reduced": 10.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "FR",
+   "name": "France",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 20.0,
+   "vat_reduced": 5.5,
+   "vat_super_reduced": 2.1,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "HR",
+   "name": "Croatia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 25.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "HU",
+   "name": "Hungary",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 27.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "IE",
+   "name": "Ireland",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 23.0,
+   "vat_reduced": 9.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "IT",
+   "name": "Italy",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 22.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": 4.0,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "LT",
+   "name": "Lithuania",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "LU",
+   "name": "Luxembourg",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 17.0,
+   "vat_reduced": 8.0,
+   "vat_super_reduced": 3.0,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "LV",
+   "name": "Latvia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "MT",
+   "name": "Malta",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 18.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "NL",
+   "name": "Netherlands",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 9.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "PL",
+   "name": "Poland",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 23.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "PT",
+   "name": "Portugal",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 23.0,
+   "vat_reduced": 6.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "RO",
+   "name": "Romania",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 21.0,
+   "vat_reduced": 11.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "SE",
+   "name": "Sweden",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 25.0,
+   "vat_reduced": 6.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "SI",
+   "name": "Slovenia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 22.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  },
+  {
+   "code": "SK",
+   "name": "Slovakia",
+   "icms_modal": null,
+   "ipva_car": null,
+   "ipva_motorcycle": null,
+   "sales_tax": null,
+   "vat_standard": 23.0,
+   "vat_reduced": 5.0,
+   "vat_super_reduced": null,
+   "source_ids": [
+    "youreurope_vat"
+   ]
+  }
+ ],
+ "reference_icms": null,
+ "payroll": [
+  {
+   "from": "2026-01",
+   "region": "PT",
+   "legal_basis": "Portugal: CIRS art. 68.º na redação do Decreto-Lei n.º 212/2026, de 4 de novembro (taxas de 12,2% a 48%, com efeitos a 1 de janeiro de 2026), dedução específica de 4 587,09 € (art. 25.º), mínimo de existência como abatimento ao rendimento, com valor de referência de 12 880 € (art. 70.º), dedução de despesas gerais familiares no limite de 250 €, ou 335 € na família monoparental (art. 78.º-B; a fórmula do art. 70.º pressupõe os 250 €), 600 € por dependente (art. 78.º-A) e Segurança Social de 11%, em 14 pagamentos",
+   "ir_monthly": [
+    {
+     "up_to": 59586,
+     "rate": 12.2,
+     "deduction": 0
+    },
+    {
+     "up_to": 89907,
+     "rate": 15.2,
+     "deduction": 1788
+    },
+    {
+     "up_to": 127414,
+     "rate": 20.7,
+     "deduction": 6732
+    },
+    {
+     "up_to": 164921,
+     "rate": 23.6,
+     "deduction": 10427
+    },
+    {
+     "up_to": 209979,
+     "rate": 30.6,
+     "deduction": 21972
+    },
+    {
+     "up_to": 307786,
+     "rate": 34.6,
+     "deduction": 30371
+    },
+    {
+     "up_to": 332614,
+     "rate": 43.1,
+     "deduction": 56533
+    },
+    {
+     "up_to": 618814,
+     "rate": 44.6,
+     "deduction": 61522
+    },
+    {
+     "up_to": null,
+     "rate": 48.0,
+     "deduction": 82562
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 32765,
+   "inss_bands": [
+    {
+     "up_to": 100000000000000,
+     "rate": 11.0
+    }
+   ],
+   "source_ids": [
+    "pt_cirs_68",
+    "pt_gov_irs_2026",
+    "pt_cirs_25",
+    "pt_cirs_78a",
+    "pt_cirs_70",
+    "pt_seg_social",
+    "pt_cirs_78b"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 4286,
+   "periods": 14,
+   "existence": {
+    "reference": 1288000,
+    "general_expenses": 25000,
+    "slope": 2.6,
+    "upper_slope": 1.35,
+    "divisor": 3.6
+   },
+   "personal_credit": 1786,
+   "single_parent": {
+    "personal_credit": 2393
+   }
+  },
+  {
+   "from": "2026-01",
+   "region": "ES",
+   "legal_basis": "España: escala general del IRPF (estatal + autonómica común, 19% a 47%; LIRPF arts. 63 y 74), reducción por rendimientos del trabajo (art. 20), 2.000 € de otros gastos deducibles (art. 19.2.f), mínimo personal de 5.550 € y 2.400 € por descendiente (arts. 57 y 58), deducción por obtención de rendimientos del trabajo de 590,89 € hasta 17.094 € brutos, retirada al 20% hasta 20.048,45 € (disposición adicional 61.ª, Real Decreto-ley 5/2026) y Seguridad Social del trabajador de 6,50% hasta la base máxima de 5.101,20 € (Orden PJC/297/2026), en 14 pagas",
+   "ir_monthly": [
+    {
+     "up_to": 88929,
+     "rate": 19.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 144286,
+     "rate": 24.0,
+     "deduction": 4446
+    },
+    {
+     "up_to": 251429,
+     "rate": 30.0,
+     "deduction": 13103
+    },
+    {
+     "up_to": 428571,
+     "rate": 37.0,
+     "deduction": 30703
+    },
+    {
+     "up_to": 2142857,
+     "rate": 45.0,
+     "deduction": 64989
+    },
+    {
+     "up_to": null,
+     "rate": 47.0,
+     "deduction": 107846
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 437246,
+     "rate": 6.5
+    }
+   ],
+   "source_ids": [
+    "es_lirpf",
+    "es_rirpf_83",
+    "es_orden_cotizacion_2026",
+    "es_rdl_5_2026"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 3257,
+   "periods": 14,
+   "fixed_deduction": 14286,
+   "personal_credit": 7532,
+   "work_reduction": [
+    [
+     106086,
+     52157
+    ],
+    [
+     126239,
+     16888
+    ],
+    [
+     141054,
+     0
+    ]
+   ],
+   "earned_credit": [
+    [
+     122100,
+     4221
+    ],
+    [
+     143203,
+     0
+    ]
+   ]
+  },
+  {
+   "from": "2026-01",
+   "region": "FR",
+   "legal_basis": "França, 2026: barème do imposto de renda dos rendimentos de 2025 (0%, 11%, 30%, 41% e 45%; lei de finanças de 2026) para uma pessoa (1 parte), com a dedução de 10% das despesas profissionais (teto de 14.555 €) e a décote (897 € − 45,25% do imposto, até 1.982 € de imposto); cotizações do assalariado não executivo: velhice 6,90% + 0,40%, Agirc-Arrco 3,15% + 0,86% até o teto da Segurança Social (PASS de 48.060 €) e 8,64% + 1,08% + 0,14% acima, CSG e CRDS de 9,70% sobre 98,25% do bruto, dos quais 2,90% não saem da base do imposto",
+   "ir_monthly": [
+    {
+     "up_to": 159390,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 273880,
+     "rate": 14.37975,
+     "deduction": 22920
+    },
+    {
+     "up_to": 274013,
+     "rate": 39.2175,
+     "deduction": 90945
+    },
+    {
+     "up_to": 783120,
+     "rate": 27.0,
+     "deduction": 57467
+    },
+    {
+     "up_to": 1212917,
+     "rate": 36.9,
+     "deduction": 134996
+    },
+    {
+     "up_to": 1637267,
+     "rate": 41.0,
+     "deduction": 184725
+    },
+    {
+     "up_to": null,
+     "rate": 45.0,
+     "deduction": 250216
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 400500,
+     "rate": 20.8403
+    },
+    {
+     "up_to": 1602000,
+     "rate": 19.7903
+    },
+    {
+     "up_to": 3204000,
+     "rate": 19.96
+    },
+    {
+     "up_to": 100000000000000,
+     "rate": 10.1
+    }
+   ],
+   "source_ids": [
+    "fr_bareme_2026",
+    "fr_decote_2026",
+    "fr_deduction_10_2026",
+    "fr_cotisations_2026",
+    "fr_agirc_arrco_2026"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 0,
+   "periods": 12,
+   "non_deductible_bands": [
+    {
+     "up_to": 1602000,
+     "rate": 2.8493
+    },
+    {
+     "up_to": 100000000000000,
+     "rate": 2.9
+    }
+   ]
+  },
+  {
+   "from": "2026-01",
+   "region": "DE",
+   "legal_basis": "Alemanha, 2026: tarifa do § 32a EStG (Grundfreibetrag de 12.348 €, fórmula em trechos lineares) para a classe I, com o Arbeitnehmer-Pauschbetrag (1.230 €) e o Sonderausgaben-Pauschbetrag (36 €), mais o Solidaritätszuschlag (5,5% do imposto acima de 20.350 € de imposto no ano, limitado a 11,9% do excedente; SolzG §§ 3 e 4); Sozialversicherung do empregado: aposentadoria 9,3%, desemprego 1,3% (até 8.450 €/mês), saúde 7,3% + metade do Zusatzbeitrag médio (1,45%) e Pflege 1,8% (até 5.812,50 €/mês); o seguro-desemprego e 4% do seguro-saúde não saem da base do imposto (§ 10 EStG)",
+   "ir_monthly": [
+    {
+     "up_to": 102900,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 114258,
+     "rate": 15.2465,
+     "deduction": 15689
+    },
+    {
+     "up_to": 125617,
+     "rate": 17.7394,
+     "deduction": 18537
+    },
+    {
+     "up_to": 136967,
+     "rate": 20.2315,
+     "deduction": 21667
+    },
+    {
+     "up_to": 148325,
+     "rate": 22.7235,
+     "deduction": 25081
+    },
+    {
+     "up_to": 175450,
+     "rate": 24.5334,
+     "deduction": 27765
+    },
+    {
+     "up_to": 202575,
+     "rate": 25.6603,
+     "deduction": 29742
+    },
+    {
+     "up_to": 229700,
+     "rate": 26.7872,
+     "deduction": 32025
+    },
+    {
+     "up_to": 256825,
+     "rate": 27.9141,
+     "deduction": 34614
+    },
+    {
+     "up_to": 283950,
+     "rate": 29.041,
+     "deduction": 37508
+    },
+    {
+     "up_to": 311075,
+     "rate": 30.1678,
+     "deduction": 40708
+    },
+    {
+     "up_to": 338200,
+     "rate": 31.2947,
+     "deduction": 44213
+    },
+    {
+     "up_to": 365317,
+     "rate": 32.4214,
+     "deduction": 48024
+    },
+    {
+     "up_to": 392442,
+     "rate": 33.5481,
+     "deduction": 52140
+    },
+    {
+     "up_to": 419567,
+     "rate": 34.675,
+     "deduction": 56562
+    },
+    {
+     "up_to": 446692,
+     "rate": 35.8019,
+     "deduction": 61290
+    },
+    {
+     "up_to": 473817,
+     "rate": 36.9288,
+     "deduction": 66324
+    },
+    {
+     "up_to": 500942,
+     "rate": 38.0557,
+     "deduction": 71663
+    },
+    {
+     "up_to": 528067,
+     "rate": 39.1825,
+     "deduction": 77308
+    },
+    {
+     "up_to": 555192,
+     "rate": 40.3094,
+     "deduction": 83259
+    },
+    {
+     "up_to": 582317,
+     "rate": 41.4363,
+     "deduction": 89515
+    },
+    {
+     "up_to": 624715,
+     "rate": 42.0,
+     "deduction": 92797
+    },
+    {
+     "up_to": 971705,
+     "rate": 46.998,
+     "deduction": 124020
+    },
+    {
+     "up_to": 2315208,
+     "rate": 44.31,
+     "deduction": 97901
+    },
+    {
+     "up_to": null,
+     "rate": 47.475,
+     "deduction": 171177
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 581250,
+     "rate": 21.15
+    },
+    {
+     "up_to": 845000,
+     "rate": 10.6
+    }
+   ],
+   "source_ids": [
+    "de_estg_32a_2026",
+    "de_solzg_2026",
+    "de_estg_10",
+    "de_sv_rechengroessen_2026"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 0,
+   "periods": 12,
+   "fixed_deduction": 10550,
+   "non_deductible_bands": [
+    {
+     "up_to": 581250,
+     "rate": 1.65
+    },
+    {
+     "up_to": 845000,
+     "rate": 1.3
+    }
+   ]
+  }
+ ],
+ "context": null,
+ "methodology": [
+  "Esboço: só o IVA, pelas alíquotas padrão, reduzida (a menor) e super-reduzida do país escolhido (tabela \"Your Europe\" da Comissão Europeia, conferida em 13/07/2026).",
+  "Renda (só Portugal): o IRS é estimado pelo imposto anual dos escalões de 2026 do continente, dividido pelos 14 pagamentos do ano (12 salários e os subsídios de férias e de Natal), com a dedução específica (o maior entre 4 587,09 € e a Segurança Social), 600 € por dependente e o mínimo de existência; a Segurança Social é 11% do bruto. Não são as tabelas mensais de retenção (que retêm um pouco diferente e se acertam na declaração). Os outros países da União Europeia ainda não têm regras de renda: lance os informes de rendimentos."
+ ],
+ "disclaimer": "Esboço de estimativa: considera só o IVA do país escolhido e os impostos lançados ou informados. Alíquotas reduzidas variam por produto em cada país. Fonte: Comissão Europeia."
+}

@@ -1,0 +1,611 @@
+/*
+ * Treasury · tokens de design
+ *
+ * Fonte da verdade das cores, tipografia, forma, profundidade e movimento
+ * (docs/design.md). O tema é escolhido por `data-theme` no <html>: dark (padrão),
+ * light, mono, midnight, paper, glass e os divertidos kitt (Scanner), interstellar,
+ * bladerunner, lofi (Lo-fi) e matrix.
+ * O mesmo atributo num elemento qualquer aplica o tema só ali dentro (as
+ * miniaturas do seletor de tema usam isso).
+ *
+ * Cada tema tem duas camadas:
+ *
+ * 1. Cores sólidas (hex): --bg, --surface, --surface-2, --line, --line-strong,
+ *    --text, --text-dim, --accent, --accent-ink, --positive, --negative,
+ *    --warning. São as cores de referência: os gráficos leem estas, e os testes
+ *    de contraste também.
+ * 2. Material: como as superfícies são pintadas (--surface-fill, --pop-fill,
+ *    --chrome-fill, --panel-border, --panel-backdrop, sombras, brilho e a arte
+ *    de fundo --canvas-art). Nos temas opacos o material é a própria cor sólida;
+ *    no Vidro as superfícies são translúcidas sobre um fundo em malha de cor.
+ *
+ * Contraste: todo token de texto (--text, --text-dim, --accent, --positive,
+ * --negative, --warning) tem no mínimo 4,5:1 (WCAG AA) sobre --bg, --surface e
+ * --surface-2; --accent-ink tem 4,5:1 sobre --accent; --line-strong (bordas de
+ * campos e botões) tem 3:1 sobre os três fundos. No Vidro o teste compõe o
+ * vidro sobre o ponto mais claro de cada cor da malha (pior caso, sem o
+ * desfoque, que só aproxima as cores da média) e o vidro dos popovers sobre
+ * branco puro. `tokens.test.ts` verifica.
+ *
+ * No Mono, ganho e perda usam o mesmo matiz: a distinção vem do sinal (+/−) e do
+ * ícone (▲/▼), nunca só da cor.
+ */
+
+:root {
+  /* Tipografia */
+  --font-text:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    sans-serif;
+  --font-numeric:
+    'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, 'DejaVu Sans Mono', monospace;
+
+  --label-size: 11px;
+  --label-tracking: 0.12em;
+  --measure-md: 32px;
+  --measure-lg: 40px;
+  --measure-xl: 48px;
+  --measure-weight: 500;
+
+  /* Ritmo: passos de 4px; cabeçalho e corpo dos cards seguem a mesma grade. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --card-head: 40px;
+  --card-pad: 18px;
+
+  /* Forma: cards com cantos suaves, controles um passo abaixo. */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+
+  /* Movimento contido */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration: 180ms;
+  --duration-slow: 280ms;
+  --duration-arrive: 420ms;
+}
+
+/* Derivados: valem para qualquer tema e são recalculados onde houver `data-theme`. */
+:root,
+[data-theme] {
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-faint: color-mix(in srgb, var(--accent) 6%, transparent);
+  --positive-soft: color-mix(in srgb, var(--positive) 12%, transparent);
+  --negative-soft: color-mix(in srgb, var(--negative) 12%, transparent);
+  --warning-soft: color-mix(in srgb, var(--warning) 12%, transparent);
+  --overlay: color-mix(in srgb, var(--bg) 72%, transparent);
+  --focus-ring: color-mix(in srgb, var(--accent) 34%, transparent);
+
+  /* Abas, controles segmentados e chips (styles.css, "Abas e chips"): derivados do texto e do
+     destaque de cada tema, para a trilha, o hover e a aba ativa se verem em todos. */
+  --tab-track: color-mix(in srgb, var(--text) 5%, transparent);
+  --tab-hover: color-mix(in srgb, var(--text) 9%, transparent);
+  --tab-text: color-mix(in srgb, var(--text) 78%, transparent);
+  --tab-active: color-mix(in srgb, var(--accent) 16%, transparent);
+  --tab-border: color-mix(in srgb, var(--text) 14%, transparent);
+
+  /* Material padrão (opaco): os temas só sobrescrevem o que muda. */
+  --canvas: var(--bg);
+  --canvas-art: none;
+  --surface-fill: var(--surface);
+  --surface-2-fill: var(--surface-2);
+  --pop-fill: var(--surface-2);
+  --sticky-fill: var(--surface);
+  --chrome-fill: var(--surface);
+  --topbar-fill: color-mix(in srgb, var(--bg) 88%, transparent);
+  --panel-border: var(--line);
+  --panel-backdrop: none;
+  --pop-backdrop: none;
+  --chrome-backdrop: none;
+  --panel-sheen: none;
+  --glow: none;
+
+  /* Peças do Scanner (scanner.css): escondidas fora dele, mesmo dentro de uma
+     miniatura de outro tema num app em Scanner. */
+  --scanner-display: none;
+  --scanner-hide: initial;
+
+  /* Atividade dos temas de cinema e do Lo-fi (activity.css): cada tema mostra só a
+     sua peça, e nenhum outro (nem uma miniatura) mostra alguma. */
+  --activity-orbit-display: none;
+  --activity-neon-display: none;
+  --activity-lofi-display: none;
+
+  /* Peças do Fósforo (phosphor.css): a chuva de código, o chip de atividade e a linha do
+     terminal do agente; `--phosphor-hide` esconde no Fósforo o que elas substituem. */
+  --phosphor-display: none;
+  --phosphor-hide: initial;
+}
+
+/* ── Dark (padrão) ─────────────────────────────────────────────── */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #070b0f;
+  --surface: #0c1117;
+  --surface-2: #121921;
+  --line: #1a232d;
+  --line-strong: #5a6a7c;
+  --text: #e8eef4;
+  --text-dim: #8d9aa8;
+  --accent: #56c7ef;
+  --accent-ink: #061018;
+  --positive: #3fd69a;
+  --negative: #ff6b6b;
+  --warning: #f5b73b;
+  --demo: #b694ff;
+  --demo-ink: #0b0718;
+
+  --canvas-art:
+    radial-gradient(1200px 520px at 18% -8%, rgb(86 199 239 / 0.07), transparent 62%),
+    radial-gradient(900px 480px at 100% 0%, rgb(120 140 255 / 0.045), transparent 60%);
+  --chrome-fill: #0a0f14;
+  --panel-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 120px);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.7), 0 0 0 1px var(--line), inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+/* ── Light ─────────────────────────────────────────────────────── */
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --line: #e1e6ec;
+  --line-strong: #7a8795;
+  --text: #0d141c;
+  --text-dim: #525e6b;
+  --accent: #0b69c7;
+  --accent-ink: #ffffff;
+  --positive: #08794a;
+  --negative: #c0302f;
+  --warning: #8f5600;
+  --demo: #7a3fd1;
+  --demo-ink: #ffffff;
+
+  --canvas-art: radial-gradient(1200px 520px at 18% -8%, rgb(11 105 199 / 0.06), transparent 62%);
+  --chrome-fill: #fbfcfd;
+  --panel-sheen: none;
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  --shadow-card: 0 1px 2px rgb(13 20 28 / 0.05), 0 4px 16px -6px rgb(13 20 28 / 0.08);
+  --shadow-pop:
+    0 24px 48px -16px rgb(13 20 28 / 0.22), 0 4px 12px -4px rgb(13 20 28 / 0.08),
+    0 0 0 1px var(--line);
+}
+
+/* ── Meia-noite: azul-marinho profundo com destaque champanhe ───── */
+[data-theme='midnight'] {
+  color-scheme: dark;
+  --bg: #070c1c;
+  --surface: #0c1428;
+  --surface-2: #111b33;
+  --line: #1b2744;
+  --line-strong: #57699a;
+  --text: #e9edf8;
+  --text-dim: #96a2c0;
+  --accent: #e6c27a;
+  --accent-ink: #0a0f1f;
+  --positive: #5fd3a8;
+  --negative: #ff8f8f;
+  --warning: #f5a35c;
+  --demo: #9fb6ff;
+  --demo-ink: #0b0718;
+
+  --canvas-art:
+    radial-gradient(1100px 560px at 85% -10%, rgb(230 194 122 / 0.07), transparent 60%),
+    radial-gradient(1000px 600px at 0% 100%, rgb(60 90 200 / 0.12), transparent 65%);
+  --chrome-fill: #091025;
+  --panel-sheen: linear-gradient(180deg, rgb(230 194 122 / 0.03), transparent 120px);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.35), 0 10px 28px -14px rgb(0 0 0 / 0.7);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.75), 0 0 0 1px var(--line),
+    inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/* ── Papel: claro quente, tinta azul ───────────────────────────── */
+[data-theme='paper'] {
+  color-scheme: light;
+  --bg: #f3eee5;
+  --surface: #fbf8f2;
+  --surface-2: #efe8dc;
+  --line: #e3d9c8;
+  --line-strong: #93836c;
+  --text: #231d17;
+  --text-dim: #66594b;
+  --accent: #2d4f86;
+  --accent-ink: #ffffff;
+  --positive: #2e6b3c;
+  --negative: #b3261e;
+  --warning: #845000;
+  --demo: #8a3d6b;
+  --demo-ink: #ffffff;
+
+  --canvas-art:
+    radial-gradient(1200px 600px at 10% -10%, rgb(255 255 255 / 0.55), transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, rgb(180 150 100 / 0.08), transparent 60%);
+  --chrome-fill: #f7f2ea;
+  --panel-sheen: none;
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.8);
+  --shadow-card: 0 1px 2px rgb(60 40 20 / 0.06), 0 6px 18px -8px rgb(60 40 20 / 0.12);
+  --shadow-pop:
+    0 24px 48px -16px rgb(60 40 20 / 0.25), 0 4px 12px -4px rgb(60 40 20 / 0.1),
+    0 0 0 1px var(--line);
+}
+
+/*
+ * ── Vidro: superfícies foscas sobre uma malha de cor ──────────────
+ * As cores sólidas são o vidro composto sobre --bg (referência para gráficos e
+ * para o fallback sem backdrop-filter). --mesh-* são os pontos mais claros da
+ * malha, já com a opacidade com que ela é pintada.
+ */
+[data-theme='glass'] {
+  color-scheme: dark;
+  --bg: #070914;
+  --surface: #11162e;
+  --surface-2: #1a213e;
+  --line: #2a3356;
+  --line-strong: #8292c2;
+  --text: #f3f6fc;
+  --text-dim: #bcc4dc;
+  --accent: #a3c4ff;
+  --accent-ink: #0a0e1c;
+  --positive: #6ee8b0;
+  --negative: #ffa6ae;
+  --warning: #ffcf85;
+  --demo: #e4c4ff;
+  --demo-ink: #0b0718;
+
+  --mesh-1: #3341a8;
+  --mesh-2: #0c4d60;
+  --mesh-3: #5b2a8c;
+  --glass-tint: #1b2347;
+  --glass-alpha: 50%;
+  --glass-tint-2: #262f58;
+  --glass-alpha-2: 62%;
+  --glass-pop: #111730;
+  --glass-pop-alpha: 88%;
+
+  --canvas: transparent;
+  --canvas-art:
+    radial-gradient(52% 60% at 14% 18%, var(--mesh-1), transparent 72%),
+    radial-gradient(48% 58% at 88% 26%, var(--mesh-3), transparent 72%),
+    radial-gradient(56% 62% at 62% 96%, var(--mesh-2), transparent 72%),
+    radial-gradient(
+      40% 40% at 40% 50%,
+      color-mix(in srgb, var(--mesh-1) 45%, transparent),
+      transparent 75%
+    );
+  --surface-fill: color-mix(in srgb, var(--glass-tint) var(--glass-alpha), transparent);
+  --surface-2-fill: color-mix(in srgb, var(--glass-tint-2) var(--glass-alpha-2), transparent);
+  --pop-fill: color-mix(in srgb, var(--glass-pop) var(--glass-pop-alpha), transparent);
+  --sticky-fill: var(--pop-fill);
+  --chrome-fill: color-mix(in srgb, var(--glass-tint) 45%, transparent);
+  --topbar-fill: color-mix(in srgb, var(--glass-tint) 30%, transparent);
+  --panel-border: rgb(255 255 255 / 0.09);
+  --panel-backdrop: blur(14px) saturate(150%);
+  --pop-backdrop: blur(20px) saturate(170%);
+  --chrome-backdrop: blur(18px) saturate(140%);
+  --panel-sheen: linear-gradient(
+    160deg,
+    rgb(255 255 255 / 0.07),
+    rgb(255 255 255 / 0.015) 40%,
+    transparent 70%
+  );
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.02);
+  --shadow-card: 0 12px 32px -16px rgb(0 0 0 / 0.6);
+  --shadow-pop:
+    0 32px 64px -16px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+/* ── Mono ──────────────────────────────────────────────────────── */
+[data-theme='mono'] {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #191919;
+  --line: #2a2a2a;
+  --line-strong: #6b6b6b;
+  --text: #ececec;
+  --text-dim: #9c9c9c;
+  --accent: #ffffff;
+  --accent-ink: #0a0a0a;
+  --positive: #ececec;
+  --negative: #c4c4c4;
+  --warning: #d6d6d6;
+  --demo: #a8a8a8;
+  --demo-ink: #0b0718;
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --shadow-card: 0 8px 24px -12px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 12px 32px rgb(0 0 0 / 0.6), 0 0 0 1px var(--line);
+}
+
+/*
+ * ── Scanner: o preto lustroso e o vermelho do scanner ───────────
+ * Fundo de pintura de carro com um reflexo diagonal; o vermelho do scanner é o
+ * destaque. Ganho fica no verde e alerta no âmbar das luzes do painel; perda num
+ * vermelho-rosado, para não se confundir com o destaque. O scanner que varre a
+ * barra superior, o mini scanner dos indicadores e a caixa de voz do agente ficam
+ * em scanner.css e só aparecem aqui (--scanner-display).
+ */
+[data-theme='kitt'] {
+  color-scheme: dark;
+  --bg: #050506;
+  --surface: #0c0c0e;
+  --surface-2: #141417;
+  --line: #232327;
+  --line-strong: #6f6870;
+  --text: #f4f0f0;
+  --text-dim: #a69e9f;
+  --accent: #ff2b1c;
+  --accent-ink: #0a0101;
+  --positive: #3ddc84;
+  --negative: #ff7083;
+  --warning: #ffb627;
+  --demo: #ffb000;
+  --demo-ink: #0b0718;
+
+  --scanner-red: #ff2b1c;
+  --scanner-lamp: #3d0b07;
+  --scanner-display: block;
+  --scanner-hide: none;
+
+  --canvas-art:
+    radial-gradient(900px 320px at 50% -8%, rgb(255 43 28 / 0.11), transparent 65%),
+    linear-gradient(115deg, transparent 32%, rgb(255 255 255 / 0.025) 44%, transparent 54%),
+    radial-gradient(1200px 700px at 100% 110%, rgb(255 43 28 / 0.04), transparent 60%);
+  --chrome-fill: #08080a;
+  --panel-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.045), transparent 96px);
+  --glow: 0 0 14px rgb(255 43 28 / 0.18);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.07);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.5), 0 10px 28px -14px rgb(0 0 0 / 0.8);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.8), 0 0 0 1px var(--line), 0 0 32px -12px rgb(255 43 28 / 0.25),
+    inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/*
+ * ── Órbita: o espaço perto do buraco negro ─────────────────────
+ * Preto-azulado com estrelas e o buraco negro no alto à direita: a sombra, o anel
+ * de fótons, o disco de acreção dourado cruzando na frente e os arcos que a lente
+ * gravitacional joga por cima e por baixo. O disco gira devagar (cinema.css). Os
+ * cards são opacos e sem desfoque: com a arte se movendo atrás, um desfoque teria
+ * de ser refeito a cada quadro.
+ */
+[data-theme='interstellar'] {
+  color-scheme: dark;
+  --bg: #04060a;
+  --surface: #0a0e15;
+  --surface-2: #10151e;
+  --line: #1c2330;
+  --line-strong: #77828f;
+  --text: #efe9de;
+  --text-dim: #a3a8b0;
+  --accent: #f0b25a;
+  --accent-ink: #140b00;
+  --positive: #6fd8a4;
+  --negative: #ff7c8a;
+  --warning: #ffa45c;
+  --demo: #8fc7ff;
+  --demo-ink: #0b0718;
+  --activity-orbit-display: block;
+
+  --canvas-art:
+    radial-gradient(
+      17% 1.6% at 88% 11%,
+      rgb(255 236 200 / 0.7),
+      rgb(250 180 90 / 0.35) 45%,
+      transparent
+    ),
+    radial-gradient(5.5% 8.8% at 88% 11%, #000 0 91%, transparent),
+    radial-gradient(
+      6.1% 9.7% at 88% 11%,
+      transparent 84%,
+      rgb(255 220 160 / 0.9) 89%,
+      rgb(240 160 70 / 0.35) 95%,
+      transparent
+    ),
+    radial-gradient(
+      8.6% 13.6% at 88% 11%,
+      transparent 60%,
+      rgb(240 170 80 / 0.3) 70%,
+      rgb(200 110 40 / 0.1) 85%,
+      transparent
+    ),
+    radial-gradient(27% 3.2% at 88% 11%, rgb(240 170 90 / 0.22), transparent),
+    radial-gradient(32% 40% at 88% 11%, rgb(240 160 70 / 0.1), transparent 70%),
+    radial-gradient(60% 50% at 0% 100%, rgb(60 90 160 / 0.12), transparent 70%),
+    radial-gradient(1px 1px at 6% 12%, rgb(255 255 255 / 0.8), transparent),
+    radial-gradient(1px 1px at 14% 38%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 23% 8%, rgb(255 255 255 / 0.7), transparent),
+    radial-gradient(1px 1px at 31% 61%, rgb(255 255 255 / 0.45), transparent),
+    radial-gradient(1px 1px at 38% 22%, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 47% 84%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1px 1px at 53% 11%, rgb(255 255 255 / 0.55), transparent),
+    radial-gradient(1px 1px at 59% 47%, rgb(255 255 255 / 0.4), transparent),
+    radial-gradient(1px 1px at 66% 70%, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 71% 6%, rgb(255 255 255 / 0.75), transparent),
+    radial-gradient(1px 1px at 77% 58%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1px 1px at 88% 79%, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1px 1px at 93% 14%, rgb(255 255 255 / 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 96% 48%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1px 1px at 11% 77%, rgb(255 255 255 / 0.55), transparent),
+    radial-gradient(1px 1px at 19% 93%, rgb(255 255 255 / 0.45), transparent),
+    radial-gradient(1px 1px at 42% 46%, rgb(255 255 255 / 0.35), transparent),
+    radial-gradient(1px 1px at 63% 93%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1px 1px at 85% 64%, rgb(255 255 255 / 0.4), transparent),
+    radial-gradient(1px 1px at 3% 55%, rgb(255 255 255 / 0.5), transparent);
+  --canvas: transparent;
+  --chrome-fill: #06090e;
+  --topbar-fill: color-mix(in srgb, var(--bg) 90%, transparent);
+  --panel-sheen: linear-gradient(180deg, rgb(255 226 176 / 0.035), transparent 110px);
+  --glow: 0 0 16px rgb(240 178 90 / 0.14);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.5), 0 14px 32px -16px rgb(0 0 0 / 0.85);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.8), 0 0 0 1px var(--line), inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/*
+ * ── Neon: a cidade à noite ───────────────────
+ * Noite violeta com névoa, o fogo laranja das torres no horizonte, neon rosa e
+ * ciano dos letreiros e chuva caindo sem parar (cinema.css). O destaque é o neon
+ * rosa; ganho no ciano-esverdeado, perda no laranja. Os cards são opacos e sem
+ * desfoque (a chuva atrás obrigaria a refazer o desfoque a cada quadro).
+ */
+[data-theme='bladerunner'] {
+  color-scheme: dark;
+  --bg: #07050d;
+  --surface: #0e0a17;
+  --surface-2: #151021;
+  --line: #251c33;
+  --line-strong: #7a6b92;
+  --text: #f1ecf7;
+  --text-dim: #a89fb8;
+  --accent: #ff4fb0;
+  --accent-ink: #14000b;
+  --positive: #3ff0d0;
+  --negative: #ff8a5c;
+  --warning: #ffd24a;
+  --demo: #3fe6ff;
+  --demo-ink: #0b0718;
+  --activity-neon-display: block;
+
+  --canvas-art:
+    linear-gradient(180deg, rgb(30 22 48 / 0.55), transparent 38%),
+    radial-gradient(70% 38% at 50% 106%, rgb(255 120 40 / 0.32), transparent 70%),
+    radial-gradient(30% 22% at 22% 100%, rgb(255 150 60 / 0.22), transparent 70%),
+    radial-gradient(42% 52% at 0% 28%, rgb(255 60 170 / 0.26), transparent 70%),
+    radial-gradient(40% 56% at 100% 58%, rgb(40 200 255 / 0.22), transparent 70%),
+    radial-gradient(90% 60% at 50% 50%, rgb(90 60 140 / 0.1), transparent 75%);
+  --canvas: transparent;
+  --chrome-fill: #09060f;
+  --topbar-fill: color-mix(in srgb, var(--bg) 90%, transparent);
+  --panel-border: #2b2140;
+  --panel-sheen: linear-gradient(180deg, rgb(255 79 176 / 0.04), transparent 100px);
+  --glow: 0 0 14px rgb(255 79 176 / 0.32);
+  --highlight: inset 0 1px 0 rgb(255 140 210 / 0.07);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.5), 0 12px 30px -14px rgb(0 0 0 / 0.85);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.8), 0 0 0 1px var(--line),
+    0 0 36px -14px rgb(255 79 176 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/*
+ * ── Lo-fi: tarde calma no Japão ────────────────────────────────────
+ * Papel washi quente de fundo, tinta sumi (com um toque de violeta, a cor do fim de
+ * tarde dos vídeos lo-fi) no texto e o índigo ai-iro como destaque. Ganho no verde
+ * matcha, perda no vermelho beni e alerta no ocre kincha. No alto, um sol baixo e
+ * pálido; embaixo, colinas em lilás. Folhas de bordo e de ginkgo passam com o vento
+ * pelos vãos entre os cards (cinema.css), que são opacos.
+ */
+[data-theme='lofi'] {
+  color-scheme: light;
+  --bg: #f1ebe0;
+  --surface: #fbf8f2;
+  --surface-2: #efe8db;
+  --line: #e2d9c8;
+  --line-strong: #8f8270;
+  --text: #2b2833;
+  --text-dim: #5e5763;
+  --accent: #3a5f8f;
+  --accent-ink: #ffffff;
+  --positive: #3d6833;
+  --negative: #a3302a;
+  --warning: #855608;
+  --demo: #973c5f;
+  --demo-ink: #ffffff;
+  --activity-lofi-display: block;
+
+  --canvas: transparent;
+  --canvas-art:
+    radial-gradient(7% 11% at 84% 13%, rgb(244 180 150 / 0.55), transparent 70%),
+    radial-gradient(30% 40% at 84% 13%, rgb(240 175 160 / 0.22), transparent 70%),
+    radial-gradient(70% 22% at 18% 108%, rgb(150 140 180 / 0.22), transparent 70%),
+    radial-gradient(60% 18% at 75% 110%, rgb(170 150 190 / 0.18), transparent 70%),
+    linear-gradient(180deg, rgb(236 214 214 / 0.45), transparent 45%);
+  --chrome-fill: #f6f1e8;
+  --topbar-fill: color-mix(in srgb, #f6f1e8 92%, transparent);
+  --panel-sheen: none;
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.85);
+  --shadow-card: 0 1px 2px rgb(60 40 50 / 0.05), 0 8px 22px -12px rgb(60 40 50 / 0.18);
+  --shadow-pop:
+    0 24px 48px -16px rgb(60 40 50 / 0.25), 0 4px 12px -4px rgb(60 40 50 / 0.1),
+    0 0 0 1px var(--line);
+}
+
+/*
+ * ── Fósforo: o terminal antigo ─────────────────────────────────────
+ * Preto puro, verde fósforo no destaque e nos ganhos e o vermelho nas perdas.
+ * Números, tabelas e títulos em mono (phosphor.css); a chuva de código cai devagar na
+ * faixa do topo e acelera enquanto alguma tarefa roda (components/PhosphorRain.tsx).
+ * Os cards são opacos, para a chuva só aparecer nos vãos.
+ */
+[data-theme='matrix'] {
+  color-scheme: dark;
+  --bg: #000000;
+  --surface: #050a06;
+  --surface-2: #0a140c;
+  --line: #0f2a14;
+  --line-strong: #3a7a48;
+  --text: #b8ffc8;
+  --text-dim: #4e9a5e;
+  --accent: #00ff41;
+  --accent-ink: #000000;
+  --positive: #00ff41;
+  --negative: #ff3b3b;
+  --warning: #e5ff00;
+  --demo: #7dffa0;
+  --demo-ink: #000000;
+  --phosphor-display: block;
+  --phosphor-hide: none;
+
+  --canvas-art:
+    radial-gradient(80% 40% at 50% -10%, rgb(0 255 65 / 0.06), transparent 70%),
+    radial-gradient(60% 50% at 100% 100%, rgb(0 179 45 / 0.04), transparent 70%);
+  --canvas: transparent;
+  --chrome-fill: #020503;
+  --topbar-fill: color-mix(in srgb, var(--bg) 92%, transparent);
+  --panel-border: #0f2a14;
+  --panel-sheen: linear-gradient(180deg, rgb(0 255 65 / 0.03), transparent 90px);
+  --glow: 0 0 6px rgb(0 255 65 / 0.35);
+  --highlight: inset 0 1px 0 rgb(0 255 65 / 0.06);
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.6), 0 12px 30px -14px rgb(0 0 0 / 0.9);
+  --shadow-pop:
+    0 24px 48px -12px rgb(0 0 0 / 0.85), 0 0 0 1px var(--line), 0 0 32px -14px rgb(0 255 65 / 0.3),
+    inset 0 1px 0 rgb(0 255 65 / 0.06);
+}
+
+/*
+ * Vidro sem backdrop-filter (WebView antiga) ou com transparência reduzida pelo
+ * sistema: as superfícies voltam às cores sólidas de referência.
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  [data-theme='glass'] {
+    --surface-fill: var(--surface);
+    --surface-2-fill: var(--surface-2);
+    --pop-fill: var(--surface-2);
+    --chrome-fill: var(--surface);
+    --topbar-fill: var(--bg);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  [data-theme='glass'] {
+    --surface-fill: var(--surface);
+    --surface-2-fill: var(--surface-2);
+    --pop-fill: var(--surface-2);
+    --chrome-fill: var(--surface);
+    --topbar-fill: var(--bg);
+    --panel-backdrop: none;
+    --pop-backdrop: none;
+    --chrome-backdrop: none;
+  }
+}

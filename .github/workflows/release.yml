@@ -1,0 +1,202 @@
+name: Release
+
+# Compila os pacotes de uma versão nos três sistemas, numa máquina limpa, e os anexa a uma
+# release em RASCUNHO, com a atestação de proveniência de cada arquivo (Sigstore). Este workflow
+# não assina nada e não publica nada: as assinaturas que o app confere (minisign e YubiKey) são
+# feitas no Mac do mantenedor pelo scripts/sign-release.sh, depois de conferir as atestações, e
+# a release só é publicada à mão. Por que assim: docs/trust.md. Passo a passo:
+# docs/distribution.md.
+#
+# Dispara com a tag assinada da versão (vX.Y.Z, no commit "release: X.Y.Z") ou à mão, com a tag.
+
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag da versão (ex.: v1.0.0)'
+        required: true
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  TAG: ${{ github.event.inputs.tag || github.ref_name }}
+  # Onde os apps desta versão procuram as próximas (src-tauri/src/updater/).
+  TREASURY_UPDATE_ENDPOINT: https://github.com/${{ github.repository }}/releases/latest/download/latest.json
+
+jobs:
+  # Antes de compilar: a tag é a versão do app, o app tem as chaves da YubiKey (sem elas nenhuma
+  # atualização seria aceita) e as dependências não têm vulnerabilidade conhecida.
+  preflight:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      # A atestação de proveniência e a aprovação do ambiente `release` só existem no
+      # repositório público (no privado, só no plano Enterprise): sem elas, nada de release.
+      - name: Repositório público
+        if: github.event.repository.private
+        run: |
+          echo "o repositório é privado: a release só sai dele público (docs/distribution.md)"
+          exit 1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.TAG }}
+      - name: Versão da tag = versão do app
+        run: |
+          app="$(sed -n 's/^version = "\(.*\)"/\1/p' apps/desktop/src-tauri/Cargo.toml | head -1)"
+          [ "v$app" = "$TAG" ] || { echo "a tag $TAG não é a versão do app (v$app)"; exit 1; }
+      - name: Chaves da YubiKey no app
+        run: |
+          grep -Eq '^(secure-enclave )?sk-(ssh-ed25519|ecdsa-sha2-nistp256)@openssh\.com ' apps/desktop/src-tauri/update-keys.pub || {
+            echo "update-keys.pub sem chaves da YubiKey: nenhuma atualização seria aceita (docs/trust.md)"
+            exit 1
+          }
+          grep -Eq '^RW[A-Za-z0-9+/=]{54}$' apps/desktop/src-tauri/update-minisign.pub || {
+            echo "update-minisign.pub sem a chave minisign: nenhuma atualização seria aceita"
+            exit 1
+          }
+      - name: Vulnerabilidades (Rust, RustSec)
+        uses: EmbarkStudios/cargo-deny-action@70f81531115945ba6eb6b941ec9d39d063438eb9 # v2.1.2
+        with:
+          command: check advisories bans sources licenses
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Vulnerabilidades (npm, dependências de produção)
+        working-directory: apps/desktop
+        run: npm audit --omit=dev --audit-level=moderate
+
+  build:
+    needs: preflight
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            bundles: app
+            label: macos
+          - os: ubuntu-22.04
+            bundles: appimage,deb,rpm
+            label: linux
+          - os: windows-latest
+            bundles: msi,nsis
+            label: windows
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.TAG }}
+
+      - name: Dependências do sistema (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config rpm
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      # Sem cache de compilação na release: cada versão sai de uma máquina limpa.
+
+      # Perfil `dist` (LTO completa), com o endereço de atualização. Sem chave de assinatura:
+      # os pacotes saem sem a assinatura da atualização, que é feita no Mac.
+      - name: Pacotes
+        shell: bash
+        working-directory: apps/desktop
+        run: |
+          npm ci
+          npx tauri build --bundles ${{ matrix.bundles }} -- --profile dist --locked
+
+      # macOS: hardened runtime e entitlements vazios (docs/local-security.md, item 4), com
+      # assinatura ad hoc enquanto não há Developer ID; depois o .dmg e o pacote de atualização
+      # (.app.tar.gz) com o app já assinado.
+      - name: Assinatura ad hoc, .dmg e pacote de atualização (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          app="target/dist/bundle/macos/Treasury.app"
+          codesign --force --options runtime --timestamp=none \
+            --entitlements apps/desktop/src-tauri/release.entitlements --sign - "$app"
+          codesign --verify --strict --verbose=2 "$app"
+          codesign -dv "$app" 2>&1 | grep -q 'flags=.*runtime'
+          mkdir -p out
+          hdiutil create -quiet -volname Treasury -srcfolder "$app" -ov -format UDZO \
+            "out/Treasury_${version}_aarch64.dmg"
+          COPYFILE_DISABLE=1 tar -czf "out/Treasury_${version}_aarch64.app.tar.gz" \
+            -C "$(dirname "$app")" "$(basename "$app")"
+
+      - name: Reúne os pacotes (Linux e Windows)
+        if: runner.os != 'macOS'
+        shell: bash
+        run: |
+          mkdir -p out
+          shopt -s nullglob
+          for f in target/dist/bundle/appimage/*.AppImage target/dist/bundle/deb/*.deb \
+                   target/dist/bundle/rpm/*.rpm target/dist/bundle/msi/*.msi \
+                   target/dist/bundle/nsis/*-setup.exe; do
+            cp "$f" out/
+          done
+          [ -n "$(ls out)" ] || { echo "nenhum pacote gerado"; exit 1; }
+
+      - name: Hashes
+        shell: bash
+        run: |
+          cd out
+          ls -l
+          if command -v sha256sum >/dev/null; then sha256sum * ; else shasum -a 256 * ; fi
+
+      # Atestação de proveniência: diz, com assinatura do Sigstore e registro público, que cada
+      # arquivo saiu deste repositório, deste workflow e deste commit. O sign-release.sh confere
+      # antes de assinar; qualquer pessoa confere com `gh attestation verify`.
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: out/*
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: treasury-${{ env.TAG }}-${{ matrix.label }}
+          path: out/*
+          if-no-files-found: error
+
+  draft:
+    needs: build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    # Ambiente com aprovação do mantenedor (Settings › Environments › release).
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: out
+          merge-multiple: true
+      # Rascunho: não aparece em releases/latest (de onde o app instalado lê o latest.json) até
+      # ser publicado à mão, depois das assinaturas do Mac.
+      - name: Anexa à release em rascunho
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          ls -l out
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --draft --verify-tag --title "Treasury ${TAG#v}" \
+              --notes "Rascunho criado pelo CI. Falta assinar no Mac (scripts/sign-release.sh) e escrever as notas."
+          fi
+          gh release upload "$TAG" out/* --clobber

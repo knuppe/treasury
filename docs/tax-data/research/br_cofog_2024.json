@@ -1,0 +1,23 @@
+{
+ "source_id": "tesouro_cofog_2024",
+ "publisher": "Tesouro Nacional e Secretaria de Orçamento Federal",
+ "title": "Despesa por Função do Governo Geral: resultados de 2024 (classificação COFOG), Tabela 1",
+ "url": "https://www.tesourotransparente.gov.br/publicacoes/cofog-despesas-por-funcao-do-governo-geral/2024/114?ano_selecionado=2024",
+ "published": "2025-12-12",
+ "accessed": "2026-11-18",
+ "year": 2024,
+ "note": "Governo geral = União, estados e municípios, consolidados. Dados preliminares. Valores em R$ milhões correntes, % da despesa total e % do PIB, copiados da Tabela 1 do relatório, sem alteração. A função 701 inclui os juros da dívida pública.",
+ "total": {"code": "7", "amount": 5377521, "gdp_share": 45.79},
+ "functions": [
+  {"code": "701", "key": "servicos_publicos_gerais", "label": "Serviços públicos gerais (inclui juros da dívida)", "amount": 1301580, "share": 24.20, "gdp_share": 11.08},
+  {"code": "702", "key": "defesa", "label": "Defesa", "amount": 59397, "share": 1.10, "gdp_share": 0.51},
+  {"code": "703", "key": "ordem_publica_seguranca", "label": "Ordem pública e segurança", "amount": 346997, "share": 6.45, "gdp_share": 2.95},
+  {"code": "704", "key": "assuntos_economicos", "label": "Assuntos econômicos", "amount": 265604, "share": 4.94, "gdp_share": 2.26},
+  {"code": "705", "key": "protecao_ambiental", "label": "Proteção ambiental", "amount": 65313, "share": 1.21, "gdp_share": 0.56},
+  {"code": "706", "key": "habitacao_servicos_comunitarios", "label": "Habitação e serviços comunitários", "amount": 159650, "share": 2.97, "gdp_share": 1.36},
+  {"code": "707", "key": "saude", "label": "Saúde", "amount": 590982, "share": 10.99, "gdp_share": 5.03},
+  {"code": "708", "key": "lazer_cultura_religiao", "label": "Lazer, cultura e religião", "amount": 47214, "share": 0.88, "gdp_share": 0.40},
+  {"code": "709", "key": "educacao", "label": "Educação", "amount": 599178, "share": 11.14, "gdp_share": 5.10},
+  {"code": "710", "key": "protecao_social", "label": "Proteção social (previdência e assistência)", "amount": 1941604, "share": 36.11, "gdp_share": 16.53}
+ ]
+}

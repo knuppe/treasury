@@ -1,0 +1,332 @@
+{
+ "version": "2026-11-17",
+ "note": "Regras da folha dos países adaptados sem dados de impostos sobre consumo (docs/international.md): Reino Unido, Canadá (Ontário), Argentina e Chile.",
+ "sources": [
+  {
+   "id": "gb_hmrc_rates_2026",
+   "publisher": "HM Revenue & Customs (Reino Unido)",
+   "title": "Rates and thresholds for employers 2026 to 2027",
+   "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "ca_rcgt_on_2026",
+   "publisher": "Raymond Chabot Grant Thornton (Canadá)",
+   "title": "Individual taxation 2026 — Ontario (taxas federais e de Ontário, créditos)",
+   "url": "https://www.rcgt.com/contentassets/5142f7cf936d42d7aa7666314c21ccd1/individual_taxation_ontario_2026.pdf",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "ca_cpp_2026",
+   "publisher": "Investment Executive (Canadá)",
+   "title": "CRA announces CPP maximum pensionable earnings for 2026",
+   "url": "https://www.investmentexecutive.com/news/cra-announces-cpp-maximum-pensionable-earnings-for-2026/",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "ar_arca_art94_2026",
+   "publisher": "ARCA (Argentina)",
+   "title": "Tabla art. 94 LIG, liquidación anual 2026",
+   "url": "https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/declaracion-jurada/documentos/Tabla-Art-94-LIG-liquidacion-anual-y-final-2026.pdf",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "ar_arca_art30_2026",
+   "publisher": "ARCA (Argentina)",
+   "title": "Deducciones personales art. 30, liquidación anual 2026",
+   "url": "https://www.afip.gob.ar/gananciasYBienes/ganancias/personas-humanas-sucesiones-indivisas/deducciones/documentos/Deducciones-personales-art-30-liq-anual-2026.pdf",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "ar_tope_aportes_2026",
+   "publisher": "Blog del Contador (Argentina)",
+   "title": "Base imponible máxima de aportes, octubre de 2026",
+   "url": "https://siap.blogdelcontador.com.ar/?p=111782",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "cl_sii_iusc_2026",
+   "publisher": "Servicio de Impuestos Internos (Chile)",
+   "title": "Impuesto Único de Segunda Categoría 2026",
+   "url": "https://www.sii.cl/valores_y_fechas/impuesto_2da_categoria/impuesto2026.htm",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "cl_topes_2026",
+   "publisher": "Asociación de AFP (Chile)",
+   "title": "Alza de topes imponibles 2026: 90 UF",
+   "url": "https://www.aafp.cl/noticias/alza-topes-imponibles-2026-90-uf/",
+   "accessed": "2026-10-22"
+  },
+  {
+   "id": "gb_income_over_100k",
+   "publisher": "GOV.UK (Reino Unido)",
+   "title": "Income Tax rates and Personal Allowances: income over £100,000 (2026 to 2027)",
+   "url": "https://www.gov.uk/income-tax-rates/income-over-100000",
+   "accessed": "2026-11-17"
+  }
+ ],
+ "payroll": [
+  {
+   "from": "2026-01",
+   "region": "GB",
+   "legal_basis": "Reino Unido (Inglaterra, País de Gales e Irlanda do Norte), 2026/27: personal allowance de £12.570, 20% até £50.270, 40% até £125.140 e 45% acima; acima de £100.000 o allowance cai £1 a cada £2 de renda (60% efetivos até £125.140); National Insurance do empregado de 8% entre £12.570 e £50.270 e 2% acima",
+   "ir_monthly": [
+    {
+     "up_to": 314167,
+     "rate": 20.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 728583,
+     "rate": 40.0,
+     "deduction": 62833
+    },
+    {
+     "up_to": 938083,
+     "rate": 60.0,
+     "deduction": 208550
+    },
+    {
+     "up_to": null,
+     "rate": 45.0,
+     "deduction": 67838
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 104750,
+   "inss_bands": [
+    {
+     "up_to": 104750,
+     "rate": 0.0
+    },
+    {
+     "up_to": 418917,
+     "rate": 8.0
+    },
+    {
+     "up_to": 100000000000000,
+     "rate": 2.0
+    }
+   ],
+   "source_ids": [
+    "gb_hmrc_rates_2026",
+    "gb_income_over_100k"
+   ],
+   "contribution_deductible": false,
+   "dependent_credit": 0,
+   "periods": 12
+  },
+  {
+   "from": "2026-01",
+   "region": "CA",
+   "legal_basis": "Canadá, 2026, imposto federal (14% a 33%) e de Ontário (5,05% a 13,16%) somados, com os créditos do basic personal amount federal (16.452 $) e de Ontário (12.989 $) e do Canada employment amount (1.501 $); CPP de 5,95% acima de 3.500 $ até 74.600 $, CPP2 de 4% até 85.000 $ e EI de 1,63% até 68.900 $",
+   "ir_monthly": [
+    {
+     "up_to": 449092,
+     "rate": 19.05,
+     "deduction": 0
+    },
+    {
+     "up_to": 487692,
+     "rate": 23.15,
+     "deduction": 18413
+    },
+    {
+     "up_to": 898208,
+     "rate": 29.65,
+     "deduction": 50113
+    },
+    {
+     "up_to": 975375,
+     "rate": 31.66,
+     "deduction": 68167
+    },
+    {
+     "up_to": 1250000,
+     "rate": 37.16,
+     "deduction": 121813
+    },
+    {
+     "up_to": 1512000,
+     "rate": 38.16,
+     "deduction": 134313
+    },
+    {
+     "up_to": 1833333,
+     "rate": 41.16,
+     "deduction": 179673
+    },
+    {
+     "up_to": 2154017,
+     "rate": 42.16,
+     "deduction": 198006
+    },
+    {
+     "up_to": null,
+     "rate": 46.16,
+     "deduction": 284167
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 29167,
+     "rate": 1.63
+    },
+    {
+     "up_to": 574167,
+     "rate": 7.58
+    },
+    {
+     "up_to": 621667,
+     "rate": 5.95
+    },
+    {
+     "up_to": 708333,
+     "rate": 4.0
+    }
+   ],
+   "source_ids": [
+    "ca_rcgt_on_2026",
+    "ca_cpp_2026"
+   ],
+   "contribution_deductible": false,
+   "dependent_credit": 0,
+   "periods": 12,
+   "personal_credit": 26411
+  },
+  {
+   "from": "2026-01",
+   "region": "AR",
+   "legal_basis": "Argentina, 2026: Ganancias de 4ª categoria pela escala do art. 94 (5% a 35%), ganancia no imponible (6.019.671,36) e dedução especial (28.894.422,56), 2.859.060,31 por filho (art. 30), e aportes de 17% (jubilación 11%, Ley 19.032 3%, obra social 3%) até a base máxima de outubro de 2026, em 13 pagamentos (com o SAC)",
+   "ir_monthly": [
+    {
+     "up_to": 17976567,
+     "rate": 5.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 35953134,
+     "rate": 9.0,
+     "deduction": 719063
+    },
+    {
+     "up_to": 53929700,
+     "rate": 12.0,
+     "deduction": 1797657
+    },
+    {
+     "up_to": 80894551,
+     "rate": 15.0,
+     "deduction": 3415548
+    },
+    {
+     "up_to": 161789101,
+     "rate": 19.0,
+     "deduction": 6651330
+    },
+    {
+     "up_to": 242683652,
+     "rate": 23.0,
+     "deduction": 13122894
+    },
+    {
+     "up_to": 364025478,
+     "rate": 27.0,
+     "deduction": 22830240
+    },
+    {
+     "up_to": 546038217,
+     "rate": 31.0,
+     "deduction": 37391259
+    },
+    {
+     "up_to": null,
+     "rate": 35.0,
+     "deduction": 59232788
+    }
+   ],
+   "dependent_deduction": 21992772,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 476963149,
+     "rate": 17.0
+    }
+   ],
+   "source_ids": [
+    "ar_arca_art94_2026",
+    "ar_arca_art30_2026",
+    "ar_tope_aportes_2026"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 0,
+   "periods": 13,
+   "fixed_deduction": 268569953
+  },
+  {
+   "from": "2026-01",
+   "region": "CL",
+   "legal_basis": "Chile, 2026: Impuesto Único de Segunda Categoría mensal (isento até 13,5 UTM; 4% a 40%), com a UTM de outubro de 2026 (72.151 pesos), e cotizaciones do trabalhador de 18,7% (AFP 10% + comissão média de 1,1%, saúde 7%, seguro de cesantía 0,6%) até 90 UF (~41.150 pesos)",
+   "ir_monthly": [
+    {
+     "up_to": 974038,
+     "rate": 0.0,
+     "deduction": 0
+    },
+    {
+     "up_to": 2164530,
+     "rate": 4.0,
+     "deduction": 38962
+    },
+    {
+     "up_to": 3607550,
+     "rate": 8.0,
+     "deduction": 125543
+    },
+    {
+     "up_to": 5050570,
+     "rate": 13.5,
+     "deduction": 323958
+    },
+    {
+     "up_to": 6493590,
+     "rate": 23.0,
+     "deduction": 803762
+    },
+    {
+     "up_to": 8658120,
+     "rate": 30.4,
+     "deduction": 1284288
+    },
+    {
+     "up_to": 22366810,
+     "rate": 35.0,
+     "deduction": 1682562
+    },
+    {
+     "up_to": null,
+     "rate": 40.0,
+     "deduction": 2800902
+    }
+   ],
+   "dependent_deduction": 0,
+   "simplified_discount": 0,
+   "inss_bands": [
+    {
+     "up_to": 3703500,
+     "rate": 18.7
+    }
+   ],
+   "source_ids": [
+    "cl_sii_iusc_2026",
+    "cl_topes_2026"
+   ],
+   "contribution_deductible": true,
+   "dependent_credit": 0,
+   "periods": 12
+  }
+ ]
+}
