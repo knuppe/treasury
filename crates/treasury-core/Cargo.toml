@@ -61,7 +61,7 @@ lopdf = "0.42"
 mail-parser = { version = "0.11", features = ["full_encoding"] }
 imap = { version = "3.0.0-alpha.15", default-features = false }
 # Tipos das respostas do IMAP (marcas das pastas, capacidades), os mesmos do `imap`.
-imap-proto = "0.16"
+imap-proto = "0.17"
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
 webpki-roots = "1"
 # Catálogos de idioma (Fluent, docs/i18n-design.md): os .ftl de locales/ vêm embutidos pelo
