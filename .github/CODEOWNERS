@@ -6,6 +6,7 @@
 /scripts/sign-release.sh                    @knuppe
 /scripts/checksums.sh                       @knuppe
 /deny.toml                                  @knuppe
+/third_party/                               @knuppe
 /scripts/deps-check.py                      @knuppe
 /scripts/deps-approved.txt                  @knuppe
 /apps/desktop/src-tauri/tauri.conf.json     @knuppe

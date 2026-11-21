@@ -2,6 +2,8 @@
 resolver = "3"
 members = ["crates/treasury-core", "crates/treasury-dev", "apps/desktop/src-tauri"]
 default-members = ["crates/treasury-core", "crates/treasury-dev"]
+# Cópias de crates de terceiros com correção nossa (third_party/README.md): não são membros.
+exclude = ["third_party"]
 
 [workspace.package]
 # Versão do núcleo e das ferramentas: fica fixa entre releases (a versão no metadado da
@@ -50,3 +52,8 @@ strip = true
 inherits = "release"
 lto = "fat"
 codegen-units = 1
+
+# Crates de terceiros corrigidos por nós até a correção chegar pela dependência que os traz
+# (third_party/README.md).
+[patch.crates-io]
+glib = { path = "third_party/glib-0.18.5" }

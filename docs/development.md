@@ -202,6 +202,9 @@ to have only the necessary ones:
 - **Security advisories** block the CI and the release (`cargo deny`, `npm audit`). An exception in
   `deny.toml` only goes in with the maintainer's "yes", the reason beside it and an item in
   [roadmap.md](roadmap.md) to remove it.
+- **A fix that cannot wait** for the crate that pulls a dependency in goes in `third_party/`: a copy
+  of the published crate with the fix marked `Treasury:`, wired in through `[patch.crates-io]`,
+  and removed as soon as the tree reaches a fixed version ([third_party/README.md](../third_party/README.md)).
 
 ## Personal data
 

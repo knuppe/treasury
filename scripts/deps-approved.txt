@@ -209,7 +209,6 @@ cargo generic-array
 cargo getrandom
 cargo gio
 cargo gio-sys
-cargo glib
 cargo glib-macros
 cargo glib-sys
 cargo glob
