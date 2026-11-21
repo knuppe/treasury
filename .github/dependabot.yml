@@ -35,6 +35,9 @@ updates:
       # O refinery 0.10 aceita só rusqlite até 0.41.
       - dependency-name: rusqlite
         update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      # Os tipos das respostas do IMAP têm de ser os do imap 3.0 (que usa o imap-proto 0.16).
+      - dependency-name: imap-proto
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
 
   - package-ecosystem: npm
     directory: /apps/desktop
@@ -47,3 +50,10 @@ updates:
     groups:
       npm-minor:
         update-types: [minor, patch]
+    ignore:
+      # Os tipos do Node seguem a versão usada no CI e no build (Node 22).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # TypeScript 7 (o compilador novo) fica para uma migração própria.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']

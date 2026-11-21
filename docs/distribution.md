@@ -166,7 +166,7 @@ this, the fork's app looks for versions in `knuppe/treasury` and refuses all of 
   draft job writes, after approval in the `release` environment. No signing
   secret.
 - `dependabot.yml`: monthly, grouped updates of the actions, Cargo and npm (at most 3 open
-  pull requests each; `tract-onnx` and `rusqlite` stay on their pinned versions), with `build(deps):`
+  pull requests each; `tract-onnx`, `rusqlite` and `imap-proto` stay on their pinned versions, and the majors of `@types/node` and `typescript` wait for their own migration), with `build(deps):`
   commit messages; security fixes come at any time through Dependabot alerts. An update that brings a new crate or package fails the dependency check
   until the maintainer approves it.
 - `FUNDING.yml`: the repository's Sponsor button, pointing to GitHub Sponsors.
