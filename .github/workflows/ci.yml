@@ -15,6 +15,10 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Compilação incremental só atrapalha no CI: cada run é uma máquina nova, e o cache fica maior.
+  CARGO_INCREMENTAL: 0
+
 jobs:
   # Vulnerabilidades conhecidas nas dependências (docs/trust.md): RustSec pelo cargo-deny
   # (deny.toml) e o npm audit das dependências de produção da interface. Barra o merge.
@@ -35,36 +39,17 @@ jobs:
         working-directory: apps/desktop
         run: npm audit --omit=dev --audit-level=moderate
 
-  # Repositório privado (plano Free): só Linux, porque o minuto de macOS conta 10 vezes na cota
-  # mensal de Actions. Público: macOS e Linux (minutos sem custo).
-  check:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ${{ fromJSON(github.event.repository.private && '["ubuntu-22.04"]' || '["macos-latest", "ubuntu-22.04"]') }}
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
+  # Interface: lint, formatação, tipos e build. Os testes ficam no job ui-test, em paralelo.
+  ui:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Dependências do sistema (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
-            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
-
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
-        with:
-          toolchain: "1.99.0"
-          components: clippy, rustfmt
-      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: apps/desktop/package-lock.json
-
       - name: Interface
         working-directory: apps/desktop
         run: |
@@ -72,29 +57,109 @@ jobs:
           npm run lint
           npm run format:check
           npm run typecheck
-          npm test
           npm run build
 
-      - name: Núcleo
+  # Testes da interface (Vitest) em 3 partes paralelas: cada arquivo sobe um processo isolado, e
+  # numa máquina de 2 núcleos a suíte inteira levaria uns 15 minutos.
+  ui-test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - name: Testes da interface (parte ${{ matrix.shard }} de 3)
+        working-directory: apps/desktop
+        run: |
+          npm ci
+          npx vitest run --shard=${{ matrix.shard }}/3
+
+  # Núcleo. Repositório privado (plano Free): só Linux, porque o minuto de macOS conta 10 vezes
+  # na cota mensal de Actions. Público: macOS e Linux (minutos sem custo).
+  core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(github.event.repository.private && '["ubuntu-22.04"]' || '["macos-latest", "ubuntu-22.04"]') }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Dependências do sistema (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+          components: clippy, rustfmt
+      # Grava o cache também quando o run falha: sem isso, uma sequência de runs vermelhos
+      # recompila tudo do zero toda vez.
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: core
+          cache-on-failure: true
+      - name: Formatação e clippy
         run: |
           cargo fmt --all --check
           cargo clippy --workspace --all-targets -- -D warnings
-          cargo test --workspace
-
-      - name: E2E (interface + núcleo real)
-        if: runner.os == 'Linux'
-        working-directory: apps/desktop
-        run: |
-          npx playwright install --with-deps chromium webkit
-          npm run e2e
-          npm run e2e:webkit
-
+      - name: Testes do núcleo
+        run: cargo test --workspace
       - name: Tipos TS gerados estão atualizados
         run: git diff --exit-code -- apps/desktop/src/api/generated
-
       - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
         if: runner.os == 'Linux'
         run: python3 -I scripts/third-party-licenses.py --check
+
+  # Ponta a ponta: a interface contra o núcleo real (treasury-dev). Chromium sempre; WebKit, o
+  # motor da janela do macOS, só nos pushes da main (dobra o tempo do job).
+  e2e:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Dependências do sistema (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+          components: clippy, rustfmt
+      # Grava o cache também quando o run falha: sem isso, uma sequência de runs vermelhos
+      # recompila tudo do zero toda vez.
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: e2e
+          cache-on-failure: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - name: Dependências da interface e navegadores
+        working-directory: apps/desktop
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium ${{ github.event_name == 'push' && 'webkit' || '' }}
+      - name: E2E no Chromium
+        working-directory: apps/desktop
+        run: npm run e2e
+      - name: E2E no WebKit
+        if: github.event_name == 'push'
+        working-directory: apps/desktop
+        run: npm run e2e:webkit
 
   # Pacotes de teste do main, sem assinatura e sem atualização automática (o endereço só entra no
   # build da release). macOS só Apple Silicon: Intel não é suportado. No repositório privado só
@@ -103,7 +168,7 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.ref == 'refs/heads/main' && !github.event.repository.private)
-    needs: check
+    needs: [core, e2e]
     timeout-minutes: 90
     strategy:
       fail-fast: false
