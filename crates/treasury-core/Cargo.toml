@@ -69,7 +69,7 @@ webpki-roots = "1"
 fluent-bundle = "0.16"
 unic-langid = "0.9"
 # Motor do PaddleOCR (feature `ocr-paddle`): roda os modelos ONNX em Rust puro, sem ONNX Runtime.
-tract-onnx = { version = "0.22", optional = true }
+tract-onnx = { version = "0.23", optional = true }
 # Abre a foto do cupom para o PaddleOCR (JPEG, PNG e WebP, com a rotação EXIF).
 image = { version = "0.25", optional = true, default-features = false, features = ["jpeg", "png", "webp"] }
 
