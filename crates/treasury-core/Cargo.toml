@@ -55,7 +55,7 @@ keyring-core.workspace = true
 base64.workspace = true
 pdf-extract = "0.12.1"
 # Imagens das páginas de um PDF escaneado (`pdf::page_jpegs`); já vem com o `pdf-extract`.
-lopdf = "0.42"
+lopdf = "0.47"
 # E-mail de ingestão (docs/email-ingest.md): leitura de mensagens (.eml, MIME, RFC 2047) e
 # cliente IMAP sobre TLS (rustls, sem aceitar certificado inválido).
 mail-parser = { version = "0.11", features = ["full_encoding"] }

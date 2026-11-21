@@ -541,7 +541,7 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shlex",
- "syn 2.0.119",
+ "syn 3.0.9",
 ]
 
 [[package]]
@@ -1665,6 +1665,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a8bfa975b1aec2145850fcaa1c6fe269a16578c44705a532ae3edc92b8881c7"
 dependencies = [
  "cipher 0.4.4",
+]
+
+[[package]]
+name = "ecb"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "26f2a8b3e564eba0877223dc343703ad0385794e882e6d13f3a4dd5c6b1f41ac"
+dependencies = [
+ "cipher 0.5.2",
 ]
 
 [[package]]
@@ -3319,26 +3328,51 @@ dependencies = [
  "aes 0.8.4",
  "bitflags 2.13.2",
  "cbc 0.1.2",
- "chrono",
- "ecb",
+ "ecb 0.1.2",
  "encoding_rs",
  "flate2",
  "getrandom 0.4.3",
  "indexmap 2.14.2",
  "itoa",
- "jiff",
  "log",
- "md-5",
+ "md-5 0.10.6",
+ "nom 8.0.0",
+ "rand 0.10.3",
+ "rangemap",
+ "sha2 0.10.9",
+ "stringprep",
+ "thiserror 2.0.21",
+ "ttf-parser",
+ "weezl 0.1.12",
+]
+
+[[package]]
+name = "lopdf"
+version = "0.47.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c6ad532ff9262dd4bfd6e085400cbb39959d48cb8d08518b01b68f77bdf6feca"
+dependencies = [
+ "aes 0.9.3",
+ "bitflags 2.13.2",
+ "brotli-decompressor",
+ "cbc 0.2.1",
+ "chrono",
+ "ecb 0.2.1",
+ "encoding_rs",
+ "flate2",
+ "getrandom 0.4.3",
+ "indexmap 2.14.2",
+ "itoa",
+ "log",
+ "md-5 0.11.0",
  "nom 8.0.0",
  "rand 0.10.3",
  "rangemap",
  "rayon",
- "sha2 0.10.9",
+ "sha2 0.11.0",
  "stringprep",
  "thiserror 2.0.21",
- "time",
- "ttf-parser",
- "weezl",
+ "weezl 0.2.1",
 ]
 
 [[package]]
@@ -3407,6 +3441,16 @@ checksum = "d89e7ee0cfbedfc4da3340218492196241d89eefb6dab27de5df917a6d2e78cf"
 dependencies = [
  "cfg-if",
  "digest 0.10.7",
+]
+
+[[package]]
+name = "md-5"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69b6441f590336821bb897fb28fc622898ccceb1d6cea3fde5ea86b090c4de98"
+dependencies = [
+ "cfg-if",
+ "digest 0.11.3",
 ]
 
 [[package]]
@@ -4132,7 +4176,7 @@ dependencies = [
  "encoding_rs",
  "euclid",
  "log",
- "lopdf",
+ "lopdf 0.42.0",
  "postscript",
  "type1-encoding-parser",
  "unicode-normalization",
@@ -6938,7 +6982,7 @@ dependencies = [
  "keyring",
  "keyring-core",
  "libc",
- "lopdf",
+ "lopdf 0.47.0",
  "mail-parser",
  "pdf-extract",
  "refinery",
@@ -7589,6 +7633,12 @@ name = "weezl"
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a28ac98ddc8b9274cb41bb4d9d4d5c425b6020c50c46f25559911905610b4a88"
+
+[[package]]
+name = "weezl"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4ca08e5ef825b65b056d9efbd95c8750683f0a6d0466d02e96dc2e4e360f3d2"
 
 [[package]]
 name = "winapi"
