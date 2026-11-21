@@ -15,5 +15,7 @@ a fixed version.
   webkit2gtk), which is pinned to gtk-rs 0.18. Treasury does not use glib directly.
 - **The change:** `src/variant_iter.rs`, the same one-line fix as glib 0.20 (`let mut p` and
   `&mut p`).
+  `src/lib.rs` also allows warnings and Clippy lints: a path dependency does not get Cargo's lint
+  cap, so the workspace's `clippy -D warnings` would otherwise apply to this third-party code.
 - **Remove when:** Tauri moves to a glib at or above 0.20.
-- **License:** MIT (`LICENSE`, `COPYRIGHT`), as published.
+- **License:** MIT (`LICENSE`, `COPYRIGHT`), as published. The crate's own `README.md` comes along because `lib.rs` includes it as the crate documentation.

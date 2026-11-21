@@ -3,6 +3,9 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
 #![allow(renamed_and_removed_lints)]
+// Treasury: a path dependency does not get Cargo's lint cap like a registry crate, so the
+// workspace's `clippy -D warnings` would apply to this third-party code; keep it as published.
+#![allow(warnings, clippy::all)]
 #![doc = include_str!("../README.md")]
 
 pub use bitflags;
