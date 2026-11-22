@@ -10,7 +10,10 @@ b3-regra-manual = Evento a registar à mão
 b3-nota-nova-dica = será registada com os custos repartidos
 b3-nota-sem-ativo-dica = ativo não identificado: escolha o ativo para guardar
 b3-etapa-arquivos = Ficheiros
-b3-importados-toast = { $n } movimento(s) importado(s) da B3
+b3-importados-toast = { $n ->
+    [one] { $n } movimento importado da B3
+   *[other] { $n } movimentos importados da B3
+}
 b3-importar-n = Importar { $n } movimento(s)
 b3-relatorios-dica = Negociação, movimentação e posição, em Excel (.xlsx) ou CSV. Envie os do mesmo período juntos: a posição confere o resultado. Os ficheiros ficam só na memória da aplicação até importar.
 b3-lendo = A ler os relatórios…

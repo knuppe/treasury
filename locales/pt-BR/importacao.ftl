@@ -54,7 +54,10 @@ importacao-agente-analisar = { $n ->
        *[other] Analise os arquivos anexados ({ $nomes }) e me ajude a cadastrar no Treasury o que encontrar.
     }
 
-importacao-n-lixeira = { $n } arquivo(s) de Downloads foram para a Lixeira
+importacao-n-lixeira = { $n ->
+        [one] { $n } arquivo de Downloads foi para a Lixeira
+       *[other] { $n } arquivos de Downloads foram para a Lixeira
+    }
 importacao-erro-lixeira = Não foi possível apagar de Downloads
 
 ## Aviso da pasta Downloads
@@ -225,8 +228,18 @@ importacao-importar-n = Importar { $n } lançamento(s)
 
 ## Resultado
 
-importacao-n-importados = { $n } lançamento(s) importado(s)
-importacao-resultado = { $inseridos } lançamento(s) importado(s) em { $conta }; { $pulados } linha(s) ficaram de fora.
+importacao-n-importados = { $n ->
+        [one] { $n } lançamento importado
+       *[other] { $n } lançamentos importados
+    }
+importacao-resultado = { $inseridos ->
+        [one] { $inseridos } lançamento importado
+       *[other] { $inseridos } lançamentos importados
+    } em { $conta }; { $pulados ->
+        [0] nenhuma linha ficou de fora.
+        [one] { $pulados } linha ficou de fora.
+       *[other] { $pulados } linhas ficaram de fora.
+    }
 importacao-resultado-parcelas = { $n } parcela(s) de contrato marcada(s) como paga(s) pela categoria.
 importacao-resultado-transferencias = { $n } transferência(s) entre suas contas já ligada(s).
 importacao-resultado-previstos = { $n ->

@@ -91,9 +91,7 @@ describe('statement import', () => {
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Importar extrato' })).toBeNull(),
     );
-    expect(
-      await screen.findByText(/2 lançamento\(s\) importado\(s\) em Itaú Conta Corrente/),
-    ).toBeTruthy();
+    expect(await screen.findByText(/2 lançamentos importados em Itaú Conta Corrente/)).toBeTruthy();
     expect(await importedCount()).toBe(1);
     const renamed = (await mockCall('transactions.query', {
       text: 'livraria cultura viva',
@@ -166,9 +164,7 @@ describe('statement import', () => {
     await user.click(
       await within(dialog).findByRole('button', { name: 'Importar 1 lançamento(s)' }),
     );
-    expect(
-      await screen.findByText(/1 lançamento\(s\) importado\(s\) em Cartão Nubank/),
-    ).toBeTruthy();
+    expect(await screen.findByText(/1 lançamento importado em Cartão Nubank/)).toBeTruthy();
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Importar extrato' })).toBeNull(),
     );

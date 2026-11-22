@@ -114,6 +114,6 @@ describe('Downloads folder notice', () => {
     expect(simulatedTrash).toEqual([]);
     await user.click(gravar);
     await waitFor(() => expect(simulatedTrash).toEqual([note.path]));
-    expect(await screen.findByText(/foram para a Lixeira/)).toBeTruthy();
+    expect(await screen.findByText(/1 arquivo de Downloads foi para a Lixeira/)).toBeTruthy();
   });
 });

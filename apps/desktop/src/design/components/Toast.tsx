@@ -121,16 +121,18 @@ export function Toaster() {
                   {t.description}
                 </RToast.Description>
               ) : null}
+              {/* A ação fica embaixo do texto: ao lado, um rótulo longo (ex.: "Ver lançamentos
+                  importados") espremia o título e a descrição numa coluna estreita. */}
+              {t.action ? (
+                <RToast.Action
+                  altText={t.action.label}
+                  onClick={t.action.onClick}
+                  className="label-caps -ml-2 mt-1.5 inline-flex max-w-full rounded-control px-2 py-1 text-left text-accent hover:bg-surface"
+                >
+                  {t.action.label}
+                </RToast.Action>
+              ) : null}
             </div>
-            {t.action ? (
-              <RToast.Action
-                altText={t.action.label}
-                onClick={t.action.onClick}
-                className="label-caps shrink-0 self-center rounded-control px-2 py-1 text-accent hover:bg-surface"
-              >
-                {t.action.label}
-              </RToast.Action>
-            ) : null}
             <RToast.Close
               aria-label={tr('componentes-fechar-notificacao')}
               className="inline-flex size-6 shrink-0 items-center justify-center rounded-control text-dim hover:bg-surface hover:text-fg"

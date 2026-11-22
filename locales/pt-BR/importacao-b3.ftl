@@ -64,7 +64,10 @@ b3-etapa-previa = Prévia
 b3-etapa-resultado = Resultado
 b3-periodo = { $de } a { $ate }
 b3-origem-linha = { $aba } · linha { $linha }
-b3-importados-toast = { $n } lançamento(s) importado(s) da B3
+b3-importados-toast = { $n ->
+    [one] { $n } lançamento importado da B3
+   *[other] { $n } lançamentos importados da B3
+}
 b3-nao-importar = Não importar
 b3-sem-conta = sem conta
 b3-importar-operacao = Importar operação { $n }

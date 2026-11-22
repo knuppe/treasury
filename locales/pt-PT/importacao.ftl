@@ -23,7 +23,10 @@ importacao-agente-analisar = { $n ->
        *[other] Analise os ficheiros anexados ({ $nomes }) e ajude-me a registar no Treasury o que encontrar.
     }
 
-importacao-n-lixeira = { $n } ficheiro(s) de Transferências foram para o Lixo
+importacao-n-lixeira = { $n ->
+        [one] { $n } ficheiro de Transferências foi para o Lixo
+       *[other] { $n } ficheiros de Transferências foram para o Lixo
+    }
 importacao-erro-lixeira = Não foi possível eliminar de Transferências
 
 ## Aviso da pasta Transferências
