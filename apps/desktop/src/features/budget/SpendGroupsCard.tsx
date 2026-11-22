@@ -204,7 +204,7 @@ const toDraft = (targets: GroupTargets): Draft =>
 
 /** Texto do campo → fração (vazio = sem meta, `undefined` = inválido). */
 function parseTarget(text: string): number | null | undefined {
-  const s = text.trim().replace('%', '').replace(',', '.');
+  const s = text.trim().replaceAll('%', '').replaceAll(',', '.');
   if (!s) return null;
   const n = Number(s);
   if (!Number.isFinite(n) || n < 0 || n > 100) return undefined;

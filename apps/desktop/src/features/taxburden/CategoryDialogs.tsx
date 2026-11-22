@@ -70,7 +70,7 @@ export function groupOptions(ds: TaxDataset | undefined, withDefault?: string): 
 
 /** `12,5` → 12.5; `null` se vazio ou inválido. */
 export function parseRate(text: string): number | null {
-  const clean = text.trim().replace('%', '').replace(',', '.');
+  const clean = text.trim().replaceAll('%', '').replaceAll(',', '.');
   if (!clean) return null;
   const n = Number(clean);
   return Number.isFinite(n) ? n : null;

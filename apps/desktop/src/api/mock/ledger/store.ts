@@ -786,7 +786,7 @@ export function changeDetail(set: StoredChangeSet): ChangeSetDetail {
     table_name: it.table,
     row_id:
       it.table === 'account_member' || it.table === 'txn_tag'
-        ? it.rowId.replace('|', ':')
+        ? it.rowId.replaceAll('|', ':')
         : it.rowId,
     op: it.before == null ? 'insert' : it.after == null ? 'delete' : 'update',
     before: dbShape(it.table, it.before),
