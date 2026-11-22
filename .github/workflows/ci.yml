@@ -200,6 +200,12 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
+      # Windows: o OpenSSL do SQLCipher compila do fonte e precisa de um Perl completo; o do Git
+      # Bash não tem os módulos (IPC::Cmd). O Strawberry Perl já vem na máquina do GitHub.
+      - name: Perl para o OpenSSL (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo 'OPENSSL_SRC_PERL=C:\Strawberry\perl\bin\perl.exe' >> "$GITHUB_ENV"
       - name: Pacotes (.dmg / .AppImage / .deb / .rpm / .msi / .exe)
         shell: bash
         working-directory: apps/desktop

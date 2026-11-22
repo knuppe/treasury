@@ -113,6 +113,12 @@ jobs:
           node-version: 22
       # Sem cache de compilação na release: cada versão sai de uma máquina limpa.
 
+      # Windows: o OpenSSL do SQLCipher compila do fonte e precisa de um Perl completo; o do Git
+      # Bash não tem os módulos (IPC::Cmd). O Strawberry Perl já vem na máquina do GitHub.
+      - name: Perl para o OpenSSL (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo 'OPENSSL_SRC_PERL=C:\Strawberry\perl\bin\perl.exe' >> "$GITHUB_ENV"
       # Perfil `dist` (LTO completa), com o endereço de atualização. Sem chave de assinatura:
       # os pacotes saem sem a assinatura da atualização, que é feita no Mac.
       - name: Pacotes
