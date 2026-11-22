@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Verificação de dados pessoais antes do commit (docs/development.md, "Dados pessoais").
 # Olha só o que está sendo acrescentado (staged) e recusa:
-#   1. documentos e imagens (PDF, OFX, planilhas, fotos, e-mails) fora das pastas de fixtures e
-#      dos ícones;
+#   1. documentos e imagens (PDF, OFX, planilhas, fotos, e-mails) fora das pastas de fixtures,
+#      dos ícones e dos prints da documentação (docs/images/);
 #   2. CPF formatado com dígito verificador válido (fora os de exemplo);
 #   3. qualquer termo da lista privada, guardada fora do repositório em
 #      $TREASURY_PRIVATE_DIR/termos-privados.txt (padrão: ~/Treasury-privado), um por linha.
@@ -19,6 +19,12 @@ while IFS= read -r -d '' f; do
         */fixtures/* | apps/desktop/src-tauri/icons/* | crates/treasury-core/data/*) continue ;;
     esac
     shopt -s nocasematch
+    # docs/images/ guarda os prints públicos do README e da documentação, tirados só do cofre
+    # de demonstração: ali passam imagens (WebP, PNG, JPEG), nada mais e em nenhuma subpasta.
+    if [[ "$f" =~ ^docs/images/[^/]+\.(webp|png|jpe?g)$ ]]; then
+        shopt -u nocasematch
+        continue
+    fi
     if [[ "$f" =~ \.(pdf|ofx|qfx|qif|xls|xlsx|ods|png|jpe?g|heic|webp|gif|tiff?|eml|msg|db)$ ]]; then
         problems+=("$f: documento ou imagem fora de uma pasta fixtures/ (guarde em $private_dir)")
     fi
