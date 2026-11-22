@@ -72,7 +72,7 @@ export function BrandMark({
   );
 }
 
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.0.1';
 
 /** Nome do app no estilo técnico: `TREASURY  v0.2.1`. */
 export function Brand({ className, motion }: { className?: string; motion?: BrandMotion }) {
