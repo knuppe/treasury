@@ -10,6 +10,8 @@ contas, cartões, orçamento, dívidas, bens, investimentos e impostos. Os dados
 computador, num banco cifrado, e um agente de IA opcional ajuda a analisar e a cadastrar, sempre
 com aprovação.
 
+![Relatórios > Fluxo: para onde vai a renda de uma família de exemplo, do salário ao orçamento e a cada categoria de despesa](docs/images/sankey-pt-BR.webp)
+
 ## O que faz
 
 - **Fluxo de caixa**: contas, cartões de crédito (faturas, adicionais, limite, custos, cashback e

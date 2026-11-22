@@ -10,6 +10,8 @@ credit cards, budget, debts, property, investments and taxes. The data stays on 
 an encrypted database, and an optional AI agent helps analyze and record things, always asking for
 approval first.
 
+![Reports > Flow: where a sample family's income goes, from salary through the budget to each expense category](docs/images/sankey-en.webp)
+
 ## What it does
 
 - **Cash flow**: accounts, credit cards (statements, additional cards, limits, fees, cashback and
