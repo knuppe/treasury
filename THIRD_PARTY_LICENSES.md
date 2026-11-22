@@ -764,7 +764,7 @@ Usado por:
 - find-msvc-tools 0.1.14 (MIT OR Apache-2.0)
 - flate2 1.1.10 (MIT OR Apache-2.0), Alex Crichton <alex@alexcrichton.com>, Josh Triplett <josh@joshtriplett.org>
 - fnv 1.0.7 (Apache-2.0 / MIT), Alex Crichton <alex@alexcrichton.com>
-- form_urlencoded 1.2.2 (MIT OR Apache-2.0), The rust-url developers
+- form_urlencoded 1.2.3 (MIT OR Apache-2.0), The rust-url developers
 - futures-lite 2.6.1 (Apache-2.0 OR MIT), Stjepan Glavina <stjepang@gmail.com>, Contributors to futures-rs
 - glob 0.3.4 (MIT OR Apache-2.0), The Rust Project Developers
 - hashbrown 0.12.3 (MIT OR Apache-2.0), Amanieu d'Antras <amanieu@gmail.com>
@@ -886,7 +886,7 @@ Usado por:
 - unicode-properties 0.1.4 (MIT/Apache-2.0), Charles Lew <crlf0710@gmail.com>, Manish Goregaokar <manishsmail@gmail.com>
 - unicode-segmentation 1.13.3 (MIT OR Apache-2.0), kwantam <kwantam@gmail.com>, Manish Goregaokar <manishsmail@gmail.com>
 - unicode-width 0.1.14 (MIT OR Apache-2.0), kwantam <kwantam@gmail.com>, Manish Goregaokar <manishsmail@gmail.com>
-- url 2.5.8 (MIT OR Apache-2.0), The rust-url developers
+- url 2.5.9 (MIT OR Apache-2.0), The rust-url developers
 - uuid 1.29.3 (Apache-2.0 OR MIT)
 - vcpkg 0.2.15 (MIT/Apache-2.0), Jim McGrath <jimmc2@gmail.com>
 - version_check 0.9.5 (MIT/Apache-2.0), Sergio Benitez <sb@sergio.bz>
@@ -7074,7 +7074,7 @@ Usado por:
 
 - idna 1.1.0 (MIT OR Apache-2.0), The rust-url developers
 - percent-encoding 2.3.2 (MIT OR Apache-2.0), The rust-url developers
-- url 2.5.8 (MIT OR Apache-2.0), The rust-url developers
+- url 2.5.9 (MIT OR Apache-2.0), The rust-url developers
 
 ```text
 Copyright (c) 2013-2025 The rust-url developers
@@ -17783,7 +17783,7 @@ the following restrictions:
 
 Usado por:
 
-- form_urlencoded 1.2.2 (MIT OR Apache-2.0), The rust-url developers
+- form_urlencoded 1.2.3 (MIT OR Apache-2.0), The rust-url developers
 
 ```text
 Copyright (c) 2013-2016 The rust-url developers
