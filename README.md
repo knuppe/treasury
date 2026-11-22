@@ -59,11 +59,13 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md).
 | System | Package | Status |
 |---|---|---|
 | macOS (Apple Silicon) | `.dmg` | Used daily; automatic updates |
-| Linux (x86_64) | AppImage, `.deb`, `.rpm` | Built by CI; automatic updates; preview (not yet tested on a real install) |
+| Linux (x86_64) | AppImage, `.deb`, `.rpm` | Built by CI; automatic updates; install checked on Ubuntu 22.04/24.04, Debian 12/13 and Fedora 42 (update not yet tested) |
 | Windows (x64) | NSIS installer, `.msi` | Built by CI; automatic updates; preview, no code signing yet |
 
 The macOS build is not notarized yet: on first launch, allow it in System Settings › Privacy &
-Security. Check downloads against `SHA256SUMS.txt` ([docs/distribution.md](docs/distribution.md)).
+Security. Check downloads against `SHA256SUMS.txt` ([docs/distribution.md](docs/distribution.md)). The
+AppImage needs FUSE (`fuse3`) and the system EGL/GLES libraries (`libegl1`, `libgles2`), already
+present on most desktops.
 
 ## Build from source
 

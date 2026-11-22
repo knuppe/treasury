@@ -86,8 +86,9 @@ It does not protect against:
 On the release page:
 
 - **`SHA256SUMS.txt`** lists the hash of each file, and **`SHA256SUMS.txt.sig`** is its signature
-  by the YubiKey. The `allowed_signers` file carries the public keys; compare them with the
-  repository's `update-keys.pub` before trusting it.
+  by one of the hardware keys (the Mac's Secure Enclave or the YubiKey). The `allowed_signers`
+  file carries the public keys; compare them with the repository's `update-keys.pub` before
+  trusting it.
 - The **attestation** of each file lives on GitHub itself.
 
 ```bash

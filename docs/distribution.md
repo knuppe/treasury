@@ -21,13 +21,14 @@ hand. All packages come from `release.yml`; the signatures, from `scripts/sign-r
 | Windows (x64) | `Treasury_X.Y.Z_x64-setup.exe` (NSIS, current user only) | yes |
 | Windows | `Treasury_X.Y.Z_x64_en-US.msi` | yes |
 | all | `latest.json` | the index the apps read, with both signatures of each package |
-| all | `*.sig` (minisign) and `*.yubikey.sig` | signatures of each update package |
-| all | `SHA256SUMS.txt`, `SHA256SUMS.txt.sig`, `allowed_signers` | hashes of everything, signed by the YubiKey |
+| all | `*.sig` (minisign) and `*.yubikey.sig` | signatures of each update package (the `.yubikey.sig` comes from one of the hardware keys: the Mac's Secure Enclave or the YubiKey; the name is fixed because the app looks for it) |
+| all | `SHA256SUMS.txt`, `SHA256SUMS.txt.sig`, `allowed_signers` | hashes of everything, signed by one of the hardware keys |
 
-- Each package file has a provenance attestation on GitHub (`gh attestation verify`).
+- Each package file has a provenance attestation on GitHub (`gh attestation verify`). `latest.json`
+  only has the release attestation, so `gh attestation verify` does not apply to it.
 - Code signing: macOS ships with an ad hoc signature and hardened runtime, without notarization;
   Windows, without code signing; Linux has no system signature. Update security does not
-  depend on this (it is the YubiKey); the first install does (below).
+  depend on this (it is the hardware key); the first install does (below).
 - The names are the Tauri defaults; do not rename them, because `latest.json` points to them and the app
   only accepts packages from this repository's releases.
 - Intel macOS is not supported.
@@ -35,23 +36,15 @@ hand. All packages come from `release.yml`; the signatures, from `scripts/sign-r
   the app in the user's folder, without asking for an administrator. The `.msi` ships in English, for managed
   installation (the `upgradeCode` is fixed in `tauri.conf.json`).
 
-## Before the first public release
+## Maintainer setup
 
-These stay with the maintainer, because they need the physical keys or the account:
-
-1. **Update keys.** Create the FIDO2 keys on the two YubiKeys, the new minisign key encrypted
-   for them (and for the offline recovery key), replace the public one in `update-minisign.pub` and
-   fill in `update-keys.pub` ([auto-update.md](auto-update.md), "Criar as chaves"). Without this,
-   `release.yml` and `sign-release.sh` refuse to continue.
-2. **Sign tags with the YubiKey**: `git config gpg.format ssh`, `user.signingkey` with the
-   `sk-` key and `gpg.ssh.allowedSignersFile` with your keys, so the `git verify-tag` in
-   `sign-release.sh` passes.
-3. **Vulnerabilities**: fixed on 2026-11-13; the five with no fix available stay as an
-   exception in `deny.toml`, with the reason, until the fix is out ([roadmap.md](roadmap.md)). A new
-   vulnerability makes `release.yml` stop at the start.
-4. **Repository**: the protections in the list below, when creating the repository.
-5. **Real test**: an update from one version to the next on macOS, on an Ubuntu 24.04 VM
-   (AppImage and `.deb`) and on Windows 11 (NSIS).
+Done before 1.0.0 and kept with the maintainer, because it needs the physical keys or the account:
+the update keys (Secure Enclave and YubiKey, with the minisign key encrypted for them,
+[auto-update.md](auto-update.md), "Criar as chaves"), tags signed with an SSH key
+(`gpg.format ssh`, so the `git verify-tag` in `sign-release.sh` passes), the exceptions in
+`deny.toml` with their reason ([roadmap.md](roadmap.md)) and the repository protections below.
+Still pending: a real update from one version to the next on macOS, Ubuntu 24.04 (AppImage and
+`.deb`) and Windows 11 (NSIS), possible from 1.0.1 on.
 
 ## Repository protections on GitHub
 
@@ -71,14 +64,6 @@ Turn on when creating the repository (Settings):
 - Actions: allow only GitHub's and the ones used here; the workflows already pin them by SHA.
 - Secret scanning with push protection, Dependabot alerts and security updates, and "Private
   vulnerability reporting" (`SECURITY.md` and the Code of Conduct point to it).
-
-While the repository is private on the Free plan, GitHub does not offer rulesets, required
-reviewers on an environment, approval of fork workflows, private vulnerability reporting, push
-protection or build attestations. What is already on: squash merge only, branches deleted after
-merge, the Actions allow list with SHA pinning required, a read-only workflow token, Dependabot
-alerts and security updates, immutable releases, and the `release` environment limited to `v*`
-tags. The rest is turned on the day the repository becomes public. Until then `release.yml`
-stops at the first step, and no `v*` tag should be pushed.
 
 ## Step by step for a version
 
@@ -139,7 +124,9 @@ shasum -a 256 -c SHA256SUMS.txt --ignore-missing
 gh attestation verify Treasury_X.Y.Z_aarch64.dmg --repo knuppe/treasury
 ```
 
-On Linux, `sha256sum -c SHA256SUMS.txt --ignore-missing`. On Windows (PowerShell),
+On Linux, `sha256sum -c SHA256SUMS.txt --ignore-missing`. Compare the keys in `allowed_signers` with
+the repository's `apps/desktop/src-tauri/update-keys.pub` before trusting them, since both come from
+the same release page. On Windows (PowerShell),
 `Get-FileHash .\Treasury_X.Y.Z_x64-setup.exe` and compare with the line in `SHA256SUMS.txt`.
 
 ## No Developer ID and no Windows signature

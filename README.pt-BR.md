@@ -61,12 +61,13 @@ Para relatar uma falha, veja o [SECURITY.md](SECURITY.md).
 | Sistema | Pacote | Situação |
 |---|---|---|
 | macOS (Apple Silicon) | `.dmg` | Uso diário; atualização automática |
-| Linux (x86_64) | AppImage, `.deb`, `.rpm` | Gerado pelo CI; atualização automática; pré-visualização (ainda sem teste numa instalação real) |
+| Linux (x86_64) | AppImage, `.deb`, `.rpm` | Gerado pelo CI; atualização automática; instalação conferida no Ubuntu 22.04/24.04, Debian 12/13 e Fedora 42 (atualização ainda sem teste) |
 | Windows (x64) | instalador NSIS, `.msi` | Gerado pelo CI; atualização automática; pré-visualização, ainda sem assinatura de código |
 
 O app do macOS ainda não é notarizado: na primeira abertura, libere em Ajustes do Sistema ›
 Privacidade e Segurança. Confira os downloads com o `SHA256SUMS.txt`
-([docs/distribution.md](docs/distribution.md)).
+([docs/distribution.md](docs/distribution.md)). O AppImage precisa do FUSE (`fuse3`) e das
+bibliotecas EGL/GLES do sistema (`libegl1`, `libgles2`), que a maioria dos desktops já tem.
 
 ## Compilar
 
