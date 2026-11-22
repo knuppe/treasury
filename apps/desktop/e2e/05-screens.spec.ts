@@ -48,6 +48,10 @@ test('all screens open without an interface failure', async ({ page }) => {
     // WebKit reports this when a ResizeObserver callback changes the layout again; it is harmless
     // and the spec treats it as a warning, not as an application error.
     if (e.message.startsWith('ResizeObserver loop')) return;
+    // WebKit also reports a request to the E2E HTTP bridge that a navigation cancelled as an
+    // "access control" failure. The bridge exists only in tests; the app talks to the core over
+    // Tauri IPC.
+    if (e.message.endsWith('/api due to access control checks.')) return;
     errors.push(`${page.url()}: ${e.message}`);
   });
   await openVault(page);
