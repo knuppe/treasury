@@ -181,8 +181,9 @@ ssh-keygen -Y verify -f "$allowed" -I treasury -n treasury-release -s "$work/SHA
 rm -f "$allowed" "$signers_src"
 
 step "Envio ao rascunho"
+# O *.sig já inclui o SHA256SUMS.txt.sig; repetir o arquivo faz o GitHub recusar o envio (422).
 gh release upload "$tag" --repo "$repo" --clobber \
-  "$work"/*.sig "$work/latest.json" "$work/SHA256SUMS.txt" "$work/SHA256SUMS.txt.sig" "$work/allowed_signers"
+  "$work"/*.sig "$work/latest.json" "$work/SHA256SUMS.txt" "$work/allowed_signers"
 
 cat <<EOF
 
