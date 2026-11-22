@@ -21,6 +21,7 @@ use super::manifest::Installer;
 #[derive(Debug, PartialEq, Eq)]
 pub enum After {
     /// Reabrir (macOS e Linux).
+    #[cfg_attr(windows, allow(dead_code))]
     Restart,
     /// Sair já: o instalador do Windows reabre a versão nova.
     #[cfg_attr(not(windows), allow(dead_code))]
@@ -106,13 +107,13 @@ fn private_dir(parent: &Path, prefix: &str) -> io::Result<PathBuf> {
     let mut rnd = [0u8; 8];
     getrandom::fill(&mut rnd).map_err(|e| io::Error::other(e.to_string()))?;
     let dir = parent.join(format!("{prefix}{}", hex::encode(rnd)));
-    let mut b = std::fs::DirBuilder::new();
     #[cfg(unix)]
     {
         use std::os::unix::fs::DirBuilderExt;
-        b.mode(0o700);
+        std::fs::DirBuilder::new().mode(0o700).create(&dir)?;
     }
-    b.create(&dir)?;
+    #[cfg(not(unix))]
+    std::fs::DirBuilder::new().create(&dir)?;
     Ok(dir)
 }
 
