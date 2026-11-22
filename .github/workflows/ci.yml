@@ -58,6 +58,12 @@ jobs:
           npm run format:check
           npm run typecheck
           npm run build
+      # Só precisa do `cargo metadata` (sem compilar) e do node_modules que o passo acima instalou.
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          toolchain: "1.99.0"
+      - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
+        run: python3 -I scripts/third-party-licenses.py --check
 
   # Testes da interface (Vitest) em 3 partes paralelas: cada arquivo sobe um processo isolado, e
   # numa máquina de 2 núcleos a suíte inteira levaria uns 15 minutos.
@@ -116,9 +122,6 @@ jobs:
         run: cargo test --workspace
       - name: Tipos TS gerados estão atualizados
         run: git diff --exit-code -- apps/desktop/src/api/generated
-      - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
-        if: runner.os == 'Linux'
-        run: python3 -I scripts/third-party-licenses.py --check
 
   # Ponta a ponta: a interface contra o núcleo real (treasury-dev). Chromium sempre; WebKit, o
   # motor da janela do macOS, só nos pushes da main (dobra o tempo do job).

@@ -44,7 +44,12 @@ const ROUTES = [
 
 test('all screens open without an interface failure', async ({ page }) => {
   const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(`${page.url()}: ${e.message}`));
+  page.on('pageerror', (e) => {
+    // WebKit reports this when a ResizeObserver callback changes the layout again; it is harmless
+    // and the spec treats it as a warning, not as an application error.
+    if (e.message.startsWith('ResizeObserver loop')) return;
+    errors.push(`${page.url()}: ${e.message}`);
+  });
   await openVault(page);
   for (const route of ROUTES) {
     await page.goto(`/#${route}`);

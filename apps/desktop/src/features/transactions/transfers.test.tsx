@@ -154,7 +154,8 @@ describe('transfers between own accounts', () => {
       }),
       'estacionamento',
     );
-    await user.keyboard('{Enter}');
+    // On a slow machine Enter can arrive before the list filters; pick the option once it shows.
+    await user.click(await screen.findByRole('option', { name: /Estacionamento/ }));
     await waitFor(async () =>
       expect(((await mockCall('transactions.get', { id: t.id })) as TxnView).category_path).toMatch(
         /Estacionamento/,

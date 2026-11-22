@@ -157,11 +157,11 @@ this, the fork's app looks for versions in `knuppe/treasury` and refuses all of 
 
 - `ci.yml` (every push and PR), in parallel jobs: `audit` (new dependencies against the approved
   list with `scripts/deps-check.py`, `cargo deny` with `deny.toml` and `npm audit` of the
-  production dependencies), `ui` (lint, formatting, types and build), `ui-test` (Vitest in 3
-  shards), `core` (`fmt`, `clippy -D warnings`, tests, generated types and the third-party license
-  list) and `e2e` (Chromium on every run, WebKit only on pushes to `main`); on `main`, test packages
-  for the three systems as artifacts, with no automatic update. Read only. The Rust cache is kept
-  even when a run fails, and builds run without incremental compilation. While the repository is
+  production dependencies), `ui` (lint, formatting, types, build and the third-party license list),
+  `ui-test` (Vitest in 3 shards), `core` (`fmt`, `clippy -D warnings`, tests and generated types)
+  and `e2e` (Chromium on every run, WebKit only on pushes to `main`); on `main`, test packages for
+  the three systems as artifacts, with no automatic update. Read only. The Rust cache is kept even
+  when a run fails, and builds run without incremental compilation. While the repository is
   private, `core` runs on Linux only and the packages only by hand (`workflow_dispatch`), because a
   macOS minute counts ten times against the monthly Actions quota.
 - `release.yml` (tag `vX.Y.Z` or by hand): the preflight, the packages with attestation and the draft. Only the
