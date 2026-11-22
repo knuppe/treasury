@@ -60,7 +60,7 @@ Turn on when creating the repository (Settings):
 - Account: 2FA with a security key, no SMS; offline recovery codes; only fine-grained tokens
   with an expiry.
 - Rulesets:
-  - `main` with no force push or deletion, green CI and code owner review required;
+  - `main` with no force push or deletion, the `ci` status check and code owner review required;
   - `v*` tags created only by the maintainer, with no deletion or update;
   - signed commits and tags.
 - `.github/CODEOWNERS` already lists the files that decide what the app accepts; the "code owner
@@ -82,7 +82,8 @@ stops at the first step, and no `v*` tag should be pushed.
 
 ## Step by step for a version
 
-1. **Green main.** CI passed, no pending merge.
+1. **Main ready.** No pending merge. There is no need to wait for CI before tagging: the release
+   runs next to the CI of the same commit, and the draft only gets the packages if that CI passed.
 2. **Version.** `scripts/release.sh X.Y.Z` bumps the version and makes the commit "release: X.Y.Z" (it also
    builds on the Mac; use `--install` to install on the Mac itself).
 3. **Signed tag and push.**
@@ -100,7 +101,10 @@ stops at the first step, and no `v*` tag should be pushed.
      known vulnerability in the dependencies (`cargo deny` and `npm audit`);
    - `build`: builds macOS, Linux and Windows in the `dist` profile, from the tag, without cache, and generates
      the attestation of each file;
-   - `draft`: waits for your approval in the `release` environment and attaches everything to a draft.
+   - `draft`: waits for your approval in the `release` environment, checks that the `ci` check of
+     the tag's commit passed (waiting up to 30 minutes if it is still running) and attaches
+     everything to a draft. If CI failed there, nothing is attached: fix it, or run CI on that
+     commit (`gh workflow run ci.yml --ref vX.Y.Z`) and re-run the job.
 5. **Sign on the Mac**, with the YubiKey:
 
    ```bash
@@ -155,18 +159,36 @@ this, the fork's app looks for versions in `knuppe/treasury` and refuses all of 
 
 ## CI
 
-- `ci.yml` (every push and PR), in parallel jobs: `audit` (new dependencies against the approved
-  list with `scripts/deps-check.py`, `cargo deny` with `deny.toml` and `npm audit` of the
-  production dependencies), `ui` (lint, formatting, types, build and the third-party license list),
-  `ui-test` (Vitest in 3 shards), `core` (`fmt`, `clippy -D warnings`, tests and generated types)
-  and `e2e` (Chromium on every run, WebKit only on pushes to `main`); on `main`, test packages for
-  the three systems as artifacts, with no automatic update. Read only. The Rust cache is kept even
-  when a run fails, and builds run without incremental compilation. While the repository is
-  private, `core` runs on Linux only and the packages only by hand (`workflow_dispatch`), because a
-  macOS minute counts ten times against the monthly Actions quota.
+- `ci.yml` (every push to `main`, every PR, every night and by hand) runs only what the change
+  touches. The `changes` job (`.github/scripts/ci-changes.sh`) sorts the changed paths into Rust,
+  UI or neither, and a job is skipped only when every path is on a known list; a workflow or an
+  unknown path runs everything. A PR is compared with its base; a push to `main`, with the last
+  commit of `main` where CI passed, so a documentation commit on top of a broken one does not turn
+  `main` green.
+  - `audit`: new dependencies against the approved list (`scripts/deps-check.py`), `cargo deny`
+    with `deny.toml`, `npm audit` of the production dependencies and the third-party license list.
+  - `ui-lint`, `ui-build` (formatting, types, build) and `ui-test` (Vitest in 3 shards).
+  - `core-clippy` (`fmt`, `clippy -D warnings`) and `core-test` (tests and generated types), on
+    Linux.
+  - `core-macos`: clippy and the tests of the app and the tools. The free macOS machine has 7 GB
+    and one compiler process of the core needs about as much, so the full core suite, which Linux
+    already runs, runs there only at night and by hand.
+  - `e2e`: Chromium on every run, WebKit outside PRs.
+  - `ci`: the only required status check; it passes when every job above passed or was skipped.
+  - `bundle`: test packages for the three systems as artifacts, with no automatic update, in the
+    `ci` profile (release without LTO). It runs when the packaging changes on `main`, every night
+    and by hand, where `bundle_profile` picks another profile to compare time and size. It is not
+    part of the `ci` check.
+
+  Every night it runs everything if `main` changed since the last night that passed, and only
+  `audit` otherwise. Read only. Each job has one Rust cache, written only by `main` and kept even
+  when a run fails; builds run without incremental compilation. On `main` each commit gets its own
+  run to the end, because the release checks the CI of the tagged commit. While the repository is
+  private, the macOS job does not run and the packages only by hand (`workflow_dispatch`), because
+  a macOS minute counts ten times against the monthly Actions quota.
 - `release.yml` (tag `vX.Y.Z` or by hand): the preflight, the packages with attestation and the draft. Only the
-  draft job writes, after approval in the `release` environment. No signing
-  secret.
+  draft job writes, after approval in the `release` environment and with the `ci` check of the
+  tagged commit green. No signing secret.
 - `dependabot.yml`: monthly, grouped updates of the actions, Cargo and npm (at most 3 open
   pull requests each; `tract-onnx`, `rusqlite` and `imap-proto` stay on their pinned versions, and the majors of `@types/node` and `typescript` wait for their own migration), with `build(deps):`
   commit messages; security fixes come at any time through Dependabot alerts. An update that brings a new crate or package fails the dependency check

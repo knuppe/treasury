@@ -47,6 +47,12 @@ debug = false
 lto = "thin"
 strip = true
 
+[profile.ci]
+# Pacotes de teste do CI (job bundle do ci.yml): o mesmo build de release, sem a LTO, que é a
+# parte mais lenta e não muda o que esses pacotes provam (o empacotamento nos três sistemas).
+inherits = "release"
+lto = false
+
 [profile.dist]
 # Distribuição (instalador público): binário menor e mais rápido, compilação bem mais lenta.
 inherits = "release"

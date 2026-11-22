@@ -4,12 +4,24 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Toda noite (3h17 de Brasília): roda tudo, inclusive a suíte completa no macOS e os pacotes,
+  # se a main mudou desde a última noite que passou.
+  schedule:
+    - cron: '17 6 * * *'
   # À mão: roda tudo, inclusive os pacotes, também no repositório privado.
   workflow_dispatch:
+    inputs:
+      bundle_profile:
+        description: 'Perfil dos pacotes de teste (ci: sem LTO; release: LTO fina; dist: o da release)'
+        type: choice
+        options: [ci, release, dist]
+        default: ci
 
+# Um PR novo cancela a execução anterior do mesmo PR. Na main cada commit tem a sua execução até
+# o fim: a release confere o CI do commit da tag (release.yml, job draft).
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.event_name }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Só leitura: o CI não publica nada (a release é o release.yml, docs/distribution.md).
 permissions:
@@ -20,9 +32,40 @@ env:
   CARGO_INCREMENTAL: 0
 
 jobs:
+  # O que mudou decide o que roda (.github/scripts/ci-changes.sh): um commit só de documentação
+  # não compila nada, um só da interface não compila o núcleo. Na dúvida, roda tudo.
+  changes:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      # Lê as execuções anteriores do CI: o push na main compara com o último commit que passou.
+      actions: read
+    outputs:
+      rust: ${{ steps.changes.outputs.rust }}
+      ui: ${{ steps.changes.outputs.ui }}
+      e2e: ${{ steps.changes.outputs.e2e }}
+      audit: ${{ steps.changes.outputs.audit }}
+      bundle: ${{ steps.changes.outputs.bundle }}
+      full: ${{ steps.changes.outputs.full }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # O commit de merge de um PR e o seu primeiro pai, que é a base.
+          fetch-depth: 2
+      - name: O que mudou
+        id: changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: .github/scripts/ci-changes.sh
+
   # Vulnerabilidades conhecidas nas dependências (docs/trust.md): RustSec pelo cargo-deny
-  # (deny.toml) e o npm audit das dependências de produção da interface. Barra o merge.
+  # (deny.toml) e o npm audit das dependências de produção da interface; e a lista de licenças
+  # de terceiros, que sai do Cargo.lock e do package-lock.json.
   audit:
+    needs: changes
+    if: needs.changes.outputs.audit == 'true'
     runs-on: ubuntu-22.04
     timeout-minutes: 20
     steps:
@@ -35,12 +78,24 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
       - name: npm audit (dependências de produção)
         working-directory: apps/desktop
         run: npm audit --omit=dev --audit-level=moderate
+      # Só precisa do `cargo metadata` (sem compilar) e do node_modules.
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          toolchain: "1.99.0"
+      - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
+        run: |
+          (cd apps/desktop && npm ci)
+          python3 -I scripts/third-party-licenses.py --check
 
-  # Interface: lint, formatação, tipos e build. Os testes ficam no job ui-test, em paralelo.
-  ui:
+  # Interface: lint. Em paralelo com o job ui-build (o eslint sozinho leva mais de 2 minutos).
+  ui-lint:
+    needs: changes
+    if: needs.changes.outputs.ui == 'true'
     runs-on: ubuntu-22.04
     timeout-minutes: 20
     steps:
@@ -50,24 +105,39 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: apps/desktop/package-lock.json
-      - name: Interface
+      - name: Lint
         working-directory: apps/desktop
         run: |
           npm ci
           npm run lint
+
+  # Interface: formatação, tipos e build. O build chama o vite direto: o `tsc` do `npm run build`
+  # já rodou no passo dos tipos.
+  ui-build:
+    needs: changes
+    if: needs.changes.outputs.ui == 'true'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - name: Formatação, tipos e build
+        working-directory: apps/desktop
+        run: |
+          npm ci
           npm run format:check
           npm run typecheck
-          npm run build
-      # Só precisa do `cargo metadata` (sem compilar) e do node_modules que o passo acima instalou.
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
-        with:
-          toolchain: "1.99.0"
-      - name: Licenças de terceiros atualizadas (THIRD_PARTY_LICENSES.md)
-        run: python3 -I scripts/third-party-licenses.py --check
+          npx vite build
 
   # Testes da interface (Vitest) em 3 partes paralelas: cada arquivo sobe um processo isolado, e
   # numa máquina de 2 núcleos a suíte inteira levaria uns 15 minutos.
   ui-test:
+    needs: changes
+    if: needs.changes.outputs.ui == 'true'
     runs-on: ubuntu-22.04
     timeout-minutes: 20
     strategy:
@@ -87,19 +157,16 @@ jobs:
           npm ci
           npx vitest run --shard=${{ matrix.shard }}/3
 
-  # Núcleo. Repositório privado (plano Free): só Linux, porque o minuto de macOS conta 10 vezes
-  # na cota mensal de Actions. Público: macOS e Linux (minutos sem custo).
-  core:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ${{ fromJSON(github.event.repository.private && '["ubuntu-22.04"]' || '["macos-latest", "ubuntu-22.04"]') }}
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
+  # Núcleo no Linux: formatação e clippy. Em paralelo com o job core-test: cada um compila o
+  # núcleo duas vezes (biblioteca e testes), e em série os dois somavam quase 7 minutos.
+  core-clippy:
+    needs: changes
+    if: needs.changes.outputs.rust == 'true'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Dependências do sistema (Linux)
-        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
@@ -108,30 +175,98 @@ jobs:
         with:
           toolchain: "1.99.0"
           components: clippy, rustfmt
-      # Grava o cache também quando o run falha: sem isso, uma sequência de runs vermelhos
-      # recompila tudo do zero toda vez.
+      # Um cache por job, gravado só pela main (os PRs leem): os 10 GB do repositório não se
+      # perdem com caches de branches. Grava também quando o run falha: sem isso, uma sequência
+      # de runs vermelhos recompila tudo do zero toda vez.
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
-          shared-key: core
+          shared-key: clippy
           cache-on-failure: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Formatação e clippy
         run: |
           cargo fmt --all --check
           cargo clippy --workspace --all-targets -- -D warnings
+
+  # Núcleo no Linux: testes e os tipos TS que eles geram.
+  core-test:
+    needs: changes
+    if: needs.changes.outputs.rust == 'true'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Dependências do sistema (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
+            librsvg2-dev libssl-dev libdbus-1-dev pkg-config
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: test
+          cache-on-failure: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Testes do núcleo
         run: cargo test --workspace
       - name: Tipos TS gerados estão atualizados
         run: git diff --exit-code -- apps/desktop/src/api/generated
 
+  # macOS (só no repositório público: no privado o minuto de macOS conta 10 vezes na cota).
+  # A máquina tem 7 GB e um compilador do núcleo usa de 7 a 8: com dois ao mesmo tempo o job já
+  # levou 54 minutos em vez de 5. Por isso o clippy roda em dois passos (a biblioteca, depois os
+  # testes) e, no dia a dia, só os testes do app e das ferramentas, onde está o código próprio do
+  # macOS. A suíte completa do núcleo, que o Linux já roda, fica para a noite e para o disparo à
+  # mão (antes de uma release).
+  core-macos:
+    needs: changes
+    if: needs.changes.outputs.rust == 'true' && !github.event.repository.private
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Máquina (memória e núcleos)
+        run: |
+          sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize
+          sysctl vm.swapusage
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: "1.99.0"
+          components: clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: core
+          cache-on-failure: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Clippy (biblioteca e binários)
+        run: cargo clippy --workspace -- -D warnings
+      - name: Clippy (testes)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      # Com o treasury-dev junto o núcleo compila com o KDF de teste, como no `--workspace`.
+      - name: Testes do app e das ferramentas
+        if: needs.changes.outputs.full != 'true'
+        run: cargo test -p treasury-desktop -p treasury-dev
+      - name: Testes do núcleo (noite e disparo à mão)
+        if: needs.changes.outputs.full == 'true'
+        run: cargo test --workspace
+      - name: Memória ao fim
+        if: always()
+        run: |
+          sysctl vm.swapusage
+          vm_stat | head -12
+
   # Ponta a ponta: a interface contra o núcleo real (treasury-dev). Chromium sempre; WebKit, o
-  # motor da janela do macOS, só nos pushes da main (dobra o tempo do job).
+  # motor da janela do macOS, fora dos PRs (dobra o tempo do job).
   e2e:
+    needs: changes
+    if: needs.changes.outputs.e2e == 'true'
     runs-on: ubuntu-22.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Dependências do sistema (Linux)
-        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev libayatana-appindicator3-dev libudev-dev libhidapi-dev \
@@ -139,13 +274,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: "1.99.0"
-          components: clippy, rustfmt
-      # Grava o cache também quando o run falha: sem isso, uma sequência de runs vermelhos
-      # recompila tudo do zero toda vez.
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           shared-key: e2e
           cache-on-failure: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
@@ -155,23 +288,44 @@ jobs:
         working-directory: apps/desktop
         run: |
           npm ci
-          npx playwright install --with-deps chromium ${{ github.event_name == 'push' && 'webkit' || '' }}
+          npx playwright install --with-deps chromium ${{ github.event_name != 'pull_request' && 'webkit' || '' }}
       - name: E2E no Chromium
         working-directory: apps/desktop
         run: npm run e2e
       - name: E2E no WebKit
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         working-directory: apps/desktop
         run: npm run e2e:webkit
 
-  # Pacotes de teste do main, sem assinatura e sem atualização automática (o endereço só entra no
-  # build da release). macOS só Apple Silicon: Intel não é suportado. No repositório privado só
-  # à mão (workflow_dispatch), pelos minutos de macOS e Windows.
+  # O único check exigido pela regra da main: passa quando cada job acima passou ou foi pulado.
+  # Os pacotes (job bundle) ficam de fora: não seguram o merge nem a release.
+  ci:
+    if: always()
+    needs: [changes, audit, ui-lint, ui-build, ui-test, core-clippy, core-test, core-macos, e2e]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Todos os jobs passaram ou foram pulados
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          echo "$NEEDS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          echo "$NEEDS" | jq -e '.changes.result == "success" and all(.[]; .result == "success" or .result == "skipped")' >/dev/null
+
+  # Pacotes de teste, sem assinatura e sem atualização automática (o endereço só entra no build
+  # da release). Rodam quando o empacotamento muda na main, toda noite e à mão, não em todo push:
+  # são 3 builds de release, e quem prova o build de verdade é o release.yml. O commit de uma
+  # versão ("release: X.Y.Z") fica de fora, porque a tag já dispara a release. Perfil `ci`, sem
+  # LTO (Cargo.toml); à mão dá para escolher outro e comparar tempo e tamanho. macOS só Apple
+  # Silicon: Intel não é suportado. No repositório privado só à mão, pelos minutos de macOS e
+  # Windows.
   bundle:
+    needs: changes
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.ref == 'refs/heads/main' && !github.event.repository.private)
-    needs: [core, e2e]
+      needs.changes.outputs.bundle == 'true' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.ref == 'refs/heads/main' && !github.event.repository.private &&
+        !startsWith(github.event.head_commit.message, 'release: ')))
     timeout-minutes: 90
     strategy:
       fail-fast: false
@@ -184,6 +338,8 @@ jobs:
           - os: windows-latest
             args: --bundles msi,nsis
     runs-on: ${{ matrix.os }}
+    env:
+      BUNDLE_PROFILE: ${{ inputs.bundle_profile || 'ci' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Dependências do sistema (Linux)
@@ -197,6 +353,9 @@ jobs:
           toolchain: "1.99.0"
           targets: ${{ runner.os == 'macOS' && 'aarch64-apple-darwin' || '' }}
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: bundle-${{ env.BUNDLE_PROFILE }}
+          save-if: ${{ github.ref == 'refs/heads/main' && env.BUNDLE_PROFILE == 'ci' }}
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
@@ -211,8 +370,14 @@ jobs:
         working-directory: apps/desktop
         run: |
           npm ci
-          npx tauri build ${{ matrix.args }}
+          npx tauri build ${{ matrix.args }} -- --profile "$BUNDLE_PROFILE"
+      - name: Tamanho dos pacotes
+        shell: bash
+        run: |
+          find target -maxdepth 6 -type f -path '*/bundle/*' \
+            \( -name '*.dmg' -o -name '*.AppImage' -o -name '*.deb' -o -name '*.rpm' -o -name '*.msi' -o -name '*-setup.exe' \) \
+            -exec ls -l {} +
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: treasury-${{ matrix.os }}
-          path: target/**/release/bundle/**
+          path: target/**/${{ env.BUNDLE_PROFILE }}/bundle/**
