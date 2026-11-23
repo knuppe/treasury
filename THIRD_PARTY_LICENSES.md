@@ -14443,7 +14443,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Usado por:
 
-- cookie 0.18.2 (MIT OR Apache-2.0), Sergio Benitez <sb@sergio.bz>, Alex Crichton <alex@alexcrichton.com>
+- cookie 0.18.3 (MIT OR Apache-2.0), Sergio Benitez <sb@sergio.bz>, Alex Crichton <alex@alexcrichton.com>
 
 ```text
 Apache License
@@ -14654,7 +14654,7 @@ limitations under the License.
 
 Usado por:
 
-- cookie 0.18.2 (MIT OR Apache-2.0), Sergio Benitez <sb@sergio.bz>, Alex Crichton <alex@alexcrichton.com>
+- cookie 0.18.3 (MIT OR Apache-2.0), Sergio Benitez <sb@sergio.bz>, Alex Crichton <alex@alexcrichton.com>
 
 ```text
 Copyright (c) 2017 Sergio Benitez

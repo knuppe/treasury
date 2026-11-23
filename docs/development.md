@@ -241,12 +241,20 @@ Pull requests from outside follow [CONTRIBUTING.md](../CONTRIBUTING.md): each co
 
 ## Before a push
 
-Every push runs the security audit first, the same as the CI `audit` job: `cargo deny check
-advisories bans sources licenses`, the dependency approval list (`scripts/deps-check.py`) and
-`npm audit` of the production dependencies. The versioned hook is `.githooks/pre-push`; a local
-`.git/hooks/pre-push` calls it (the hooks folder of each clone is local). A new advisory then
-stops the push here instead of failing the CI after it. It needs `cargo-deny`
-(`cargo install cargo-deny --locked`).
+`scripts/pre-push-check.sh` runs on this machine what the CI would find, so a problem shows up
+before the push and the release cycle stays short:
+
+- **Every push** (the `.githooks/pre-push` hook, about 15 seconds): the whole CI `audit` job
+  (approved dependencies, `cargo deny`, `npm audit` of the production dependencies,
+  `THIRD_PARTY_LICENSES.md` up to date), `cargo fmt --check`, prettier, lint and types.
+- **Before pushing a release**, by hand: `scripts/pre-push-check.sh --full`, which adds clippy,
+  the workspace tests and the interface tests in UTC (the CI machines run in UTC), the generated
+  TS types, the build and the end-to-end scenarios.
+
+The hooks folder of each clone is local: a `.git/hooks/pre-push` that calls `.githooks/pre-push`
+turns the hook on. It needs `cargo-deny` (`cargo install cargo-deny --locked`). A dependency bump
+also changes `THIRD_PARTY_LICENSES.md`: regenerate it with `python3 -I
+scripts/third-party-licenses.py`.
 
 ## Release notes
 
