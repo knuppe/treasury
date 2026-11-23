@@ -2789,9 +2789,9 @@ Usado por:
 - anstyle-parse 1.0.0 (MIT OR Apache-2.0)
 - anstyle-query 1.1.5 (MIT OR Apache-2.0)
 - anstyle-wincon 3.0.11 (MIT OR Apache-2.0)
-- clap 4.6.8 (MIT OR Apache-2.0)
+- clap 4.6.9 (MIT OR Apache-2.0)
 - clap_builder 4.6.7 (MIT OR Apache-2.0)
-- clap_derive 4.6.8 (MIT OR Apache-2.0)
+- clap_derive 4.6.9 (MIT OR Apache-2.0)
 - clap_lex 1.1.1 (MIT OR Apache-2.0)
 - colorchoice 1.0.5 (MIT OR Apache-2.0)
 - is_terminal_polyfill 1.70.2 (MIT OR Apache-2.0)
@@ -3427,9 +3427,9 @@ library.
 
 Usado por:
 
-- clap 4.6.8 (MIT OR Apache-2.0)
+- clap 4.6.9 (MIT OR Apache-2.0)
 - clap_builder 4.6.7 (MIT OR Apache-2.0)
-- clap_derive 4.6.8 (MIT OR Apache-2.0)
+- clap_derive 4.6.9 (MIT OR Apache-2.0)
 - clap_lex 1.1.1 (MIT OR Apache-2.0)
 - serde_spanned 1.1.2 (MIT OR Apache-2.0)
 - toml 1.1.8+spec-1.1.0 (MIT OR Apache-2.0)
@@ -4539,7 +4539,7 @@ Usado por:
 
 - apple-native-keyring-store 1.0.2 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - keyring 4.2.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
-- keyring-core 1.0.1 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
+- keyring-core 1.1.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - windows-native-keyring-store 1.1.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - zbus-secret-service-keyring-store 1.0.1 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 
@@ -4753,7 +4753,7 @@ Usado por:
 
 - apple-native-keyring-store 1.0.2 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - keyring 4.2.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
-- keyring-core 1.0.1 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
+- keyring-core 1.1.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - windows-native-keyring-store 1.1.0 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 - zbus-secret-service-keyring-store 1.0.1 (MIT OR Apache-2.0), Daniel Brotsky <dev@brotsky.com>
 
@@ -28716,7 +28716,7 @@ DEALINGS IN THE SOFTWARE.
 
 Usado por:
 
-- zip 9.7.0 (MIT), Mathijs van de Nes <git@mathijs.vd-nes.nl>, Marli Frost <marli@frost.red>, Ryan Levick <ryan.levick@gmail.com>, Chris Hennick <hennickc@amazon.com>
+- zip 9.8.2 (MIT), Mathijs van de Nes <git@mathijs.vd-nes.nl>, Marli Frost <marli@frost.red>, Ryan Levick <ryan.levick@gmail.com>, Chris Hennick <hennickc@amazon.com>
 
 ```text
 The MIT License (MIT)
