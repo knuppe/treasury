@@ -62,7 +62,7 @@ registerMockHandlers({
 /** `app.info` (versão e pastas do app), mostrado em Ajustes. */
 registerMockHandlers({
   'app.info': () => ({
-    version: '1.0.1',
+    version: '1.1.0',
     schema_version: 51,
     db_path: MOCK_DB_PATH,
     backups_dir: '/Users/ana/.treasury/backups',
