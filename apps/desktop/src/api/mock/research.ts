@@ -154,6 +154,66 @@ const MARKET_DEFS: Def[] = [
     'Desvio padrão anualizado',
   ),
   D(
+    'p_ebit',
+    'P/EBIT',
+    'valuation',
+    'multiple',
+    false,
+    true,
+    'stock',
+    'Valor de mercado ÷ EBIT dos últimos 12 meses',
+  ),
+  D(
+    'p_working_capital',
+    'P/Capital de giro',
+    'valuation',
+    'multiple',
+    false,
+    true,
+    'stock',
+    'Valor de mercado ÷ (ativo circulante − passivo circulante)',
+  ),
+  D(
+    'p_ncav',
+    'P/Ativo circulante líquido',
+    'valuation',
+    'multiple',
+    false,
+    true,
+    'stock',
+    'Valor de mercado ÷ (ativo circulante − passivo total), o "net-net" de Graham',
+  ),
+  D(
+    'ebit_assets',
+    'EBIT/Ativo',
+    'profitability',
+    'percent',
+    true,
+    false,
+    'stock',
+    'EBIT dos últimos 12 meses ÷ ativo total',
+  ),
+  D(
+    'asset_turnover',
+    'Giro dos ativos',
+    'profitability',
+    'multiple',
+    true,
+    false,
+    'stock',
+    'Receita líquida dos últimos 12 meses ÷ ativo total',
+  ),
+  D(
+    'gross_debt_equity',
+    'Dívida bruta / PL',
+    'debt',
+    'multiple',
+    false,
+    false,
+    'stock',
+    'Empréstimos e financiamentos ÷ patrimônio líquido dos controladores',
+  ),
+  D(
     'earnings_yield',
     'EBIT/EV',
     'valuation',
@@ -1477,6 +1537,13 @@ function compute(s: Spec, settings: ResearchSettings): Entry {
       source: ok ? (opts.source ?? null) : null,
       estimated: Boolean(opts.estimated),
       unavailable_reason: ok ? null : (opts.reason ?? 'indisponível'),
+      check: ok ? (opts.estimated ? 'warning' : 'verified') : 'unchecked',
+      check_notes:
+        ok && opts.estimated && key === 'dy'
+          ? [
+              'sem proventos oficiais da B3 para o papel: estimativa pelos dividendos e JCP pagos no fluxo de caixa (fica fora dos rankings)',
+            ]
+          : [],
     });
   };
   const today = mockToday();
@@ -1566,10 +1633,41 @@ function compute(s: Spec, settings: ResearchSettings): Entry {
       push('net_debt_equity', null, { reason: BANK_NA });
       push('net_debt_ebitda', null, { reason: BANK_NA });
       push('current_ratio', null, { reason: BANK_NA });
+      for (const k of [
+        'p_ebit',
+        'p_working_capital',
+        'p_ncav',
+        'ebit_assets',
+        'asset_turnover',
+        'gross_debt_equity',
+      ])
+        push(k, null, { reason: BANK_NA });
     } else {
       push('net_debt_equity', netDebt / eq, { period: bal, source: balance });
       push('net_debt_ebitda', s.netDebtEbitda ?? null, { period: ltm, source: flows });
       push('current_ratio', s.currentRatio ?? null, { period: bal, source: balance });
+      // Saldos aproximados do exemplo: circulante = 40% do ativo, passivo total = 55%.
+      const ca = assets * 0.4;
+      const cl = s.currentRatio ? ca / s.currentRatio : null;
+      const liab = assets * 0.55;
+      push('p_ebit', ebit > 0 ? mc / ebit : null, {
+        period: ltm,
+        source: `${priceSrc}; ${flows}`,
+        reason: 'EBIT negativo',
+      });
+      push('p_working_capital', cl != null && ca > cl ? mc / (ca - cl) : null, {
+        period: bal,
+        source: `${priceSrc}; ${balance}`,
+        reason: 'capital de giro negativo ou zero',
+      });
+      push('p_ncav', ca > liab ? mc / (ca - liab) : null, {
+        period: bal,
+        source: `${priceSrc}; ${balance}`,
+        reason: 'ativo circulante menor que o passivo total',
+      });
+      push('ebit_assets', ebit / assets, { period: ltm, source: flows });
+      push('asset_turnover', rev / assets, { period: ltm, source: flows });
+      push('gross_debt_equity', (netDebt + assets * 0.05) / eq, { period: bal, source: balance });
     }
     const cagrPeriod = 'exercícios de 2020 a 2025';
     push('revenue_cagr_5y', s.revCagr, { period: cagrPeriod, source: 'DFP 2020 e DFP 2025' });

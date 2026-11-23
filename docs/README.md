@@ -135,6 +135,7 @@ A few more rules:
 | Document | Contents |
 |---|---|
 | [investments.md](investments.md) | Portfolio, indicators, exchanges, risk and retirement |
+| [indicators.md](indicators.md) | Fundamental indicators from official sources, input validation and the audit |
 | [real-return.md](real-return.md) | Real result on the cards |
 | [portfolio-compare.md](portfolio-compare.md) | Compare with any series, period and cards |
 | [sales-real-return.md](sales-real-return.md) | Sales ledger, nominal and real |

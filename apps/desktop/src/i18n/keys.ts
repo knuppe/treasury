@@ -14859,6 +14859,7 @@ export interface Messages {
   'nucleo-perfil-tom-tecnico': never;
   'nucleo-pesquisa-aviso-acoes-em-milhares': { companhias: string | number; n: string | number };
   'nucleo-pesquisa-aviso-alerta-tela': { erro: string | number };
+  'nucleo-pesquisa-aviso-lucro-controladores': { companhias: string | number; n: string | number };
   'nucleo-pesquisa-aviso-preco-justo': never;
   'nucleo-pesquisa-aviso-score-lote': { erro: string | number };
   'nucleo-pesquisa-aviso-sec': never;
@@ -14892,6 +14893,7 @@ export interface Messages {
   'nucleo-pesquisa-div-nota-sem-b3': never;
   'nucleo-pesquisa-div-nota-sem-par': { tipos: string | number };
   'nucleo-pesquisa-div-nota-valores-epoca': { agenda: string | number; b3: string | number };
+  'nucleo-pesquisa-doc-b3-capital': { data: string | number };
   'nucleo-pesquisa-doc-exercicio': { documento: string | number };
   'nucleo-pesquisa-doc-ltm': {
     ate: string | number;
@@ -14958,6 +14960,9 @@ export interface Messages {
   'nucleo-pesquisa-erro-token-recusado': { status: string | number };
   'nucleo-pesquisa-erro-valor-banco': { valor: string | number };
   'nucleo-pesquisa-erro-zip': { erro: string | number };
+  'nucleo-pesquisa-feedback-faixa-corpo': { lista: string | number; n: string | number };
+  'nucleo-pesquisa-feedback-faixa-resolvido': never;
+  'nucleo-pesquisa-feedback-faixa-titulo': never;
   'nucleo-pesquisa-filtro-between': never;
   'nucleo-pesquisa-filtro-comparacao': never;
   'nucleo-pesquisa-filtro-contains': never;
@@ -14996,6 +15001,9 @@ export interface Messages {
   'nucleo-pesquisa-ind-acoes-x-cotacao': { acoes: string | number };
   'nucleo-pesquisa-ind-altman_z': never;
   'nucleo-pesquisa-ind-altman_z-formula': never;
+  'nucleo-pesquisa-ind-asset_turnover': never;
+  'nucleo-pesquisa-ind-asset_turnover-formula': never;
+  'nucleo-pesquisa-ind-ativo-circulante-liquido-negativo': never;
   'nucleo-pesquisa-ind-attractiveness': never;
   'nucleo-pesquisa-ind-attractiveness-formula': never;
   'nucleo-pesquisa-ind-basel': never;
@@ -15007,7 +15015,67 @@ export interface Messages {
   'nucleo-pesquisa-ind-bazin_upside-formula': never;
   'nucleo-pesquisa-ind-beneish': never;
   'nucleo-pesquisa-ind-beneish-formula': never;
+  'nucleo-pesquisa-ind-bloqueado': { motivo: string | number };
+  'nucleo-pesquisa-ind-capital-giro-negativo': never;
   'nucleo-pesquisa-ind-capital-negativo': never;
+  'nucleo-pesquisa-ind-capital-pequeno': never;
+  'nucleo-pesquisa-ind-check-acoes-difere': {
+    b3: string | number;
+    cvm: string | number;
+    data: string | number;
+    diferenca: string | number;
+  };
+  'nucleo-pesquisa-ind-check-acoes-diverge': {
+    b3: string | number;
+    cvm: string | number;
+    data: string | number;
+    diferenca: string | number;
+  };
+  'nucleo-pesquisa-ind-check-acoes-escala': { b3: string | number; documento: string | number };
+  'nucleo-pesquisa-ind-check-acoes-evento': {
+    b3: string | number;
+    cvm: string | number;
+    data: string | number;
+    fator: string | number;
+  };
+  'nucleo-pesquisa-ind-check-acoes-total-liquido': {
+    b3: string | number;
+    cvm: string | number;
+    data: string | number;
+    tesouraria: string | number;
+  };
+  'nucleo-pesquisa-ind-check-balanco-antigo': { data: string | number };
+  'nucleo-pesquisa-ind-check-lucro-difere': {
+    consolidado: string | number;
+    diferenca: string | number;
+    individual: string | number;
+  };
+  'nucleo-pesquisa-ind-check-lucro-diverge': {
+    consolidado: string | number;
+    diferenca: string | number;
+    individual: string | number;
+  };
+  'nucleo-pesquisa-ind-check-lucro-individual': {
+    informado: string | number;
+    usado: string | number;
+  };
+  'nucleo-pesquisa-ind-check-lucro-total': { informado: string | number; usado: string | number };
+  'nucleo-pesquisa-ind-check-patrimonio-difere': {
+    consolidado: string | number;
+    diferenca: string | number;
+    individual: string | number;
+  };
+  'nucleo-pesquisa-ind-check-patrimonio-diverge': {
+    consolidado: string | number;
+    diferenca: string | number;
+    individual: string | number;
+  };
+  'nucleo-pesquisa-ind-check-proventos-estimados': never;
+  'nucleo-pesquisa-ind-check-reapresentado': {
+    diferenca: string | number;
+    item: string | number;
+    periodo: string | number;
+  };
   'nucleo-pesquisa-ind-confidence': never;
   'nucleo-pesquisa-ind-confidence-formula': never;
   'nucleo-pesquisa-ind-cotas-x-cotacao': { cotas: string | number };
@@ -15026,6 +15094,8 @@ export interface Messages {
   'nucleo-pesquisa-ind-earnings_yield': never;
   'nucleo-pesquisa-ind-earnings_yield-formula': never;
   'nucleo-pesquisa-ind-ebit-negativo': never;
+  'nucleo-pesquisa-ind-ebit_assets': never;
+  'nucleo-pesquisa-ind-ebit_assets-formula': never;
   'nucleo-pesquisa-ind-ebit_margin': never;
   'nucleo-pesquisa-ind-ebit_margin-formula': never;
   'nucleo-pesquisa-ind-ebitda-negativo': never;
@@ -15062,6 +15132,8 @@ export interface Messages {
   'nucleo-pesquisa-ind-graham-formula': never;
   'nucleo-pesquisa-ind-graham_upside': never;
   'nucleo-pesquisa-ind-graham_upside-formula': never;
+  'nucleo-pesquisa-ind-gross_debt_equity': never;
+  'nucleo-pesquisa-ind-gross_debt_equity-formula': never;
   'nucleo-pesquisa-ind-gross_margin': never;
   'nucleo-pesquisa-ind-gross_margin-formula': never;
   'nucleo-pesquisa-ind-health': never;
@@ -15090,10 +15162,12 @@ export interface Messages {
     anos: string | number;
     pedidos: string | number;
   };
+  'nucleo-pesquisa-ind-milhoes': { valor: string | number };
   'nucleo-pesquisa-ind-momentum_12_1': never;
   'nucleo-pesquisa-ind-momentum_12_1-formula': never;
   'nucleo-pesquisa-ind-nao-se-aplica-fii': never;
   'nucleo-pesquisa-ind-nao-se-aplica-financeiras': never;
+  'nucleo-pesquisa-ind-nao-se-aplica-holdings': never;
   'nucleo-pesquisa-ind-nav_per_share': never;
   'nucleo-pesquisa-ind-nav_per_share-formula': never;
   'nucleo-pesquisa-ind-net_debt_ebitda': never;
@@ -15103,6 +15177,10 @@ export interface Messages {
   'nucleo-pesquisa-ind-net_margin': never;
   'nucleo-pesquisa-ind-net_margin-formula': never;
   'nucleo-pesquisa-ind-nota-acoes-sec': never;
+  'nucleo-pesquisa-ind-nota-banco-padrao-bc': {
+    lucro: string | number;
+    patrimonio: string | number;
+  };
   'nucleo-pesquisa-ind-nota-classe': never;
   'nucleo-pesquisa-ind-nota-escala-acoes': {
     documento: string | number;
@@ -15111,11 +15189,18 @@ export interface Messages {
     pvp: string | number;
   };
   'nucleo-pesquisa-ind-nota-financeira': never;
+  'nucleo-pesquisa-ind-nota-holding': never;
   'nucleo-pesquisa-ind-nota-sem-demonstracoes': never;
   'nucleo-pesquisa-ind-nota-unit': { acoes: string | number };
   'nucleo-pesquisa-ind-on-pn-x-cotacao': never;
   'nucleo-pesquisa-ind-p_ativo': never;
   'nucleo-pesquisa-ind-p_ativo-formula': never;
+  'nucleo-pesquisa-ind-p_ebit': never;
+  'nucleo-pesquisa-ind-p_ebit-formula': never;
+  'nucleo-pesquisa-ind-p_ncav': never;
+  'nucleo-pesquisa-ind-p_ncav-formula': never;
+  'nucleo-pesquisa-ind-p_working_capital': never;
+  'nucleo-pesquisa-ind-p_working_capital-formula': never;
   'nucleo-pesquisa-ind-patrimonio-negativo': never;
   'nucleo-pesquisa-ind-payout': never;
   'nucleo-pesquisa-ind-payout-formula': never;
@@ -15182,6 +15267,7 @@ export interface Messages {
   'nucleo-pesquisa-ind-sem-lucro-12m': never;
   'nucleo-pesquisa-ind-sem-lucro-bruto-12m': never;
   'nucleo-pesquisa-ind-sem-passivo-circulante': never;
+  'nucleo-pesquisa-ind-sem-passivo-total': never;
   'nucleo-pesquisa-ind-sem-patrimonio': never;
   'nucleo-pesquisa-ind-sem-proventos': never;
   'nucleo-pesquisa-ind-sem-receita-12m': never;
@@ -15217,8 +15303,12 @@ export interface Messages {
   'nucleo-pesquisa-item-dps_declared': never;
   'nucleo-pesquisa-item-dy_month': never;
   'nucleo-pesquisa-item-ebit': never;
+  'nucleo-pesquisa-item-ebit_restated': never;
   'nucleo-pesquisa-item-ebt': never;
   'nucleo-pesquisa-item-equity': never;
+  'nucleo-pesquisa-item-equity_consolidated': never;
+  'nucleo-pesquisa-item-equity_income': never;
+  'nucleo-pesquisa-item-equity_individual': never;
   'nucleo-pesquisa-item-fii_acq_obligations': never;
   'nucleo-pesquisa-item-fii_admin_fee_pct': never;
   'nucleo-pesquisa-item-fii_cri': never;
@@ -15256,15 +15346,25 @@ export interface Messages {
   'nucleo-pesquisa-item-nav': never;
   'nucleo-pesquisa-item-nav_per_share': never;
   'nucleo-pesquisa-item-net_income': never;
+  'nucleo-pesquisa-item-net_income_consolidated': never;
+  'nucleo-pesquisa-item-net_income_individual': never;
+  'nucleo-pesquisa-item-net_income_restated': never;
+  'nucleo-pesquisa-item-net_income_total': never;
   'nucleo-pesquisa-item-ppe': never;
   'nucleo-pesquisa-item-receivables': never;
   'nucleo-pesquisa-item-retained': never;
   'nucleo-pesquisa-item-revenue': never;
+  'nucleo-pesquisa-item-revenue_restated': never;
   'nucleo-pesquisa-item-sga': never;
   'nucleo-pesquisa-item-share_issuance': never;
+  'nucleo-pesquisa-item-shares_b3': never;
+  'nucleo-pesquisa-item-shares_b3_on': never;
+  'nucleo-pesquisa-item-shares_b3_pn': never;
   'nucleo-pesquisa-item-shares_on': never;
   'nucleo-pesquisa-item-shares_outstanding': never;
   'nucleo-pesquisa-item-shares_pn': never;
+  'nucleo-pesquisa-item-shares_total': never;
+  'nucleo-pesquisa-item-shares_treasury': never;
   'nucleo-pesquisa-item-suppliers': never;
   'nucleo-pesquisa-item-total_assets': never;
   'nucleo-pesquisa-item-total_liabilities': never;
@@ -16090,6 +16190,7 @@ export interface Messages {
   'nucleo-score-beneish-sgai': never;
   'nucleo-score-beneish-sgi': never;
   'nucleo-score-beneish-tata': never;
+  'nucleo-score-conferencia-mesma-regra': { metrica: string | number };
   'nucleo-score-confianca-divergencia': never;
   'nucleo-score-confianca-dy-estimado': never;
   'nucleo-score-confianca-fonte-secundaria': { metricas: string | number };
@@ -17186,6 +17287,13 @@ export interface Messages {
   'pesquisa-condicao-no-grupo': never;
   'pesquisa-condicoes': never;
   'pesquisa-condicoes-grupo': { n: string | number };
+  'pesquisa-conferencia': never;
+  'pesquisa-conferencia-aviso': never;
+  'pesquisa-conferencia-bloqueado': never;
+  'pesquisa-conferencia-conferido': never;
+  'pesquisa-conferencia-corrigido': never;
+  'pesquisa-conferencia-marca-aviso': { indicador: string | number };
+  'pesquisa-conferencia-marca-corrigido': { indicador: string | number };
   'pesquisa-cotacao': never;
   'pesquisa-cotacao-anterior': { cotacao: string | number };
   'pesquisa-cotacao-em': { data: string | number; fonte: string | number; preco: string | number };
@@ -32450,6 +32558,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-perfil-tom-tecnico',
   'nucleo-pesquisa-aviso-acoes-em-milhares',
   'nucleo-pesquisa-aviso-alerta-tela',
+  'nucleo-pesquisa-aviso-lucro-controladores',
   'nucleo-pesquisa-aviso-preco-justo',
   'nucleo-pesquisa-aviso-score-lote',
   'nucleo-pesquisa-aviso-sec',
@@ -32476,6 +32585,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-div-nota-sem-b3',
   'nucleo-pesquisa-div-nota-sem-par',
   'nucleo-pesquisa-div-nota-valores-epoca',
+  'nucleo-pesquisa-doc-b3-capital',
   'nucleo-pesquisa-doc-exercicio',
   'nucleo-pesquisa-doc-ltm',
   'nucleo-pesquisa-doc-sec',
@@ -32532,6 +32642,9 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-erro-token-recusado',
   'nucleo-pesquisa-erro-valor-banco',
   'nucleo-pesquisa-erro-zip',
+  'nucleo-pesquisa-feedback-faixa-corpo',
+  'nucleo-pesquisa-feedback-faixa-resolvido',
+  'nucleo-pesquisa-feedback-faixa-titulo',
   'nucleo-pesquisa-filtro-between',
   'nucleo-pesquisa-filtro-comparacao',
   'nucleo-pesquisa-filtro-contains',
@@ -32566,6 +32679,9 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-acoes-x-cotacao',
   'nucleo-pesquisa-ind-altman_z',
   'nucleo-pesquisa-ind-altman_z-formula',
+  'nucleo-pesquisa-ind-asset_turnover',
+  'nucleo-pesquisa-ind-asset_turnover-formula',
+  'nucleo-pesquisa-ind-ativo-circulante-liquido-negativo',
   'nucleo-pesquisa-ind-attractiveness',
   'nucleo-pesquisa-ind-attractiveness-formula',
   'nucleo-pesquisa-ind-basel',
@@ -32577,7 +32693,24 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-bazin_upside-formula',
   'nucleo-pesquisa-ind-beneish',
   'nucleo-pesquisa-ind-beneish-formula',
+  'nucleo-pesquisa-ind-bloqueado',
+  'nucleo-pesquisa-ind-capital-giro-negativo',
   'nucleo-pesquisa-ind-capital-negativo',
+  'nucleo-pesquisa-ind-capital-pequeno',
+  'nucleo-pesquisa-ind-check-acoes-difere',
+  'nucleo-pesquisa-ind-check-acoes-diverge',
+  'nucleo-pesquisa-ind-check-acoes-escala',
+  'nucleo-pesquisa-ind-check-acoes-evento',
+  'nucleo-pesquisa-ind-check-acoes-total-liquido',
+  'nucleo-pesquisa-ind-check-balanco-antigo',
+  'nucleo-pesquisa-ind-check-lucro-difere',
+  'nucleo-pesquisa-ind-check-lucro-diverge',
+  'nucleo-pesquisa-ind-check-lucro-individual',
+  'nucleo-pesquisa-ind-check-lucro-total',
+  'nucleo-pesquisa-ind-check-patrimonio-difere',
+  'nucleo-pesquisa-ind-check-patrimonio-diverge',
+  'nucleo-pesquisa-ind-check-proventos-estimados',
+  'nucleo-pesquisa-ind-check-reapresentado',
   'nucleo-pesquisa-ind-confidence',
   'nucleo-pesquisa-ind-confidence-formula',
   'nucleo-pesquisa-ind-cotas-x-cotacao',
@@ -32596,6 +32729,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-earnings_yield',
   'nucleo-pesquisa-ind-earnings_yield-formula',
   'nucleo-pesquisa-ind-ebit-negativo',
+  'nucleo-pesquisa-ind-ebit_assets',
+  'nucleo-pesquisa-ind-ebit_assets-formula',
   'nucleo-pesquisa-ind-ebit_margin',
   'nucleo-pesquisa-ind-ebit_margin-formula',
   'nucleo-pesquisa-ind-ebitda-negativo',
@@ -32632,6 +32767,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-graham-formula',
   'nucleo-pesquisa-ind-graham_upside',
   'nucleo-pesquisa-ind-graham_upside-formula',
+  'nucleo-pesquisa-ind-gross_debt_equity',
+  'nucleo-pesquisa-ind-gross_debt_equity-formula',
   'nucleo-pesquisa-ind-gross_margin',
   'nucleo-pesquisa-ind-gross_margin-formula',
   'nucleo-pesquisa-ind-health',
@@ -32656,10 +32793,12 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-market_cap-formula',
   'nucleo-pesquisa-ind-media-anos',
   'nucleo-pesquisa-ind-media-anos-agenda',
+  'nucleo-pesquisa-ind-milhoes',
   'nucleo-pesquisa-ind-momentum_12_1',
   'nucleo-pesquisa-ind-momentum_12_1-formula',
   'nucleo-pesquisa-ind-nao-se-aplica-fii',
   'nucleo-pesquisa-ind-nao-se-aplica-financeiras',
+  'nucleo-pesquisa-ind-nao-se-aplica-holdings',
   'nucleo-pesquisa-ind-nav_per_share',
   'nucleo-pesquisa-ind-nav_per_share-formula',
   'nucleo-pesquisa-ind-net_debt_ebitda',
@@ -32669,14 +32808,22 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-net_margin',
   'nucleo-pesquisa-ind-net_margin-formula',
   'nucleo-pesquisa-ind-nota-acoes-sec',
+  'nucleo-pesquisa-ind-nota-banco-padrao-bc',
   'nucleo-pesquisa-ind-nota-classe',
   'nucleo-pesquisa-ind-nota-escala-acoes',
   'nucleo-pesquisa-ind-nota-financeira',
+  'nucleo-pesquisa-ind-nota-holding',
   'nucleo-pesquisa-ind-nota-sem-demonstracoes',
   'nucleo-pesquisa-ind-nota-unit',
   'nucleo-pesquisa-ind-on-pn-x-cotacao',
   'nucleo-pesquisa-ind-p_ativo',
   'nucleo-pesquisa-ind-p_ativo-formula',
+  'nucleo-pesquisa-ind-p_ebit',
+  'nucleo-pesquisa-ind-p_ebit-formula',
+  'nucleo-pesquisa-ind-p_ncav',
+  'nucleo-pesquisa-ind-p_ncav-formula',
+  'nucleo-pesquisa-ind-p_working_capital',
+  'nucleo-pesquisa-ind-p_working_capital-formula',
   'nucleo-pesquisa-ind-patrimonio-negativo',
   'nucleo-pesquisa-ind-payout',
   'nucleo-pesquisa-ind-payout-formula',
@@ -32739,6 +32886,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-ind-sem-lucro-12m',
   'nucleo-pesquisa-ind-sem-lucro-bruto-12m',
   'nucleo-pesquisa-ind-sem-passivo-circulante',
+  'nucleo-pesquisa-ind-sem-passivo-total',
   'nucleo-pesquisa-ind-sem-patrimonio',
   'nucleo-pesquisa-ind-sem-proventos',
   'nucleo-pesquisa-ind-sem-receita-12m',
@@ -32774,8 +32922,12 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-item-dps_declared',
   'nucleo-pesquisa-item-dy_month',
   'nucleo-pesquisa-item-ebit',
+  'nucleo-pesquisa-item-ebit_restated',
   'nucleo-pesquisa-item-ebt',
   'nucleo-pesquisa-item-equity',
+  'nucleo-pesquisa-item-equity_consolidated',
+  'nucleo-pesquisa-item-equity_income',
+  'nucleo-pesquisa-item-equity_individual',
   'nucleo-pesquisa-item-fii_acq_obligations',
   'nucleo-pesquisa-item-fii_admin_fee_pct',
   'nucleo-pesquisa-item-fii_cri',
@@ -32813,15 +32965,25 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-item-nav',
   'nucleo-pesquisa-item-nav_per_share',
   'nucleo-pesquisa-item-net_income',
+  'nucleo-pesquisa-item-net_income_consolidated',
+  'nucleo-pesquisa-item-net_income_individual',
+  'nucleo-pesquisa-item-net_income_restated',
+  'nucleo-pesquisa-item-net_income_total',
   'nucleo-pesquisa-item-ppe',
   'nucleo-pesquisa-item-receivables',
   'nucleo-pesquisa-item-retained',
   'nucleo-pesquisa-item-revenue',
+  'nucleo-pesquisa-item-revenue_restated',
   'nucleo-pesquisa-item-sga',
   'nucleo-pesquisa-item-share_issuance',
+  'nucleo-pesquisa-item-shares_b3',
+  'nucleo-pesquisa-item-shares_b3_on',
+  'nucleo-pesquisa-item-shares_b3_pn',
   'nucleo-pesquisa-item-shares_on',
   'nucleo-pesquisa-item-shares_outstanding',
   'nucleo-pesquisa-item-shares_pn',
+  'nucleo-pesquisa-item-shares_total',
+  'nucleo-pesquisa-item-shares_treasury',
   'nucleo-pesquisa-item-suppliers',
   'nucleo-pesquisa-item-total_assets',
   'nucleo-pesquisa-item-total_liabilities',
@@ -33429,6 +33591,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-score-beneish-sgai',
   'nucleo-score-beneish-sgi',
   'nucleo-score-beneish-tata',
+  'nucleo-score-conferencia-mesma-regra',
   'nucleo-score-confianca-divergencia',
   'nucleo-score-confianca-dy-estimado',
   'nucleo-score-confianca-fonte-secundaria',
@@ -34375,6 +34538,13 @@ export const KEYS: readonly MessageKey[] = [
   'pesquisa-condicao-no-grupo',
   'pesquisa-condicoes',
   'pesquisa-condicoes-grupo',
+  'pesquisa-conferencia',
+  'pesquisa-conferencia-aviso',
+  'pesquisa-conferencia-bloqueado',
+  'pesquisa-conferencia-conferido',
+  'pesquisa-conferencia-corrigido',
+  'pesquisa-conferencia-marca-aviso',
+  'pesquisa-conferencia-marca-corrigido',
   'pesquisa-cotacao',
   'pesquisa-cotacao-anterior',
   'pesquisa-cotacao-em',

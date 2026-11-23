@@ -37,6 +37,11 @@ const BASE: &str = "https://sistemaswebb3-listados.b3.com.br";
 pub const PAGE_SIZE: u32 = 120;
 /// Limite de páginas do histórico por emissor (as maiores têm ~3).
 pub const MAX_PAGES: u32 = 8;
+/// Companhias com o cadastro de papéis incompleto no FCA (`cvm::Incomplete`, gravado pela
+/// coleta do FCA): a B3 (`GetDetail`, pelo código CVM) completa os códigos de negociação.
+pub const INCOMPLETE_SETTING: &str = "research.fca_incomplete";
+/// O cadastro de uma companhia incompleta é consultado de novo depois de uma semana.
+pub const DETAIL_REFRESH_HOURS: i64 = 24 * 7;
 /// Ajuste técnico: quantos emissores e fundos do universo (fora os cadastrados) por dia.
 pub const BATCH_SETTING: &str = "research.b3_listados_batch";
 /// Lote padrão: 60 por dia, ou o necessário para o universo inteiro em ~7 dias.
@@ -150,6 +155,16 @@ pub struct Supplement {
     pub trading_name: Option<String>,
     pub cash: Vec<CashRow>,
     pub stock: Vec<StockRow>,
+    /// Ações do capital social (total, ordinárias, preferenciais), com as em tesouraria.
+    pub shares: Option<CapitalShares>,
+}
+
+/// Quantidade de ações do capital social informada pela B3.
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub struct CapitalShares {
+    pub total: Decimal,
+    pub on: Decimal,
+    pub pn: Decimal,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -206,6 +221,9 @@ struct RawSupplement {
     fund: Option<String>,
     cash_dividends: Option<Vec<RawCash>>,
     stock_dividends: Option<Vec<RawStock>>,
+    total_number_shares: Option<String>,
+    number_common_shares: Option<String>,
+    number_preferred_shares: Option<String>,
 }
 
 fn opt_date(s: &Option<String>) -> Option<NaiveDate> {
@@ -244,7 +262,16 @@ fn supplement(raw: RawSupplement) -> Supplement {
             })
         })
         .collect();
+    let num = |v: &Option<String>| v.as_deref().and_then(parse_num);
+    let shares = num(&raw.total_number_shares)
+        .filter(|t| *t > Decimal::ZERO)
+        .map(|total| CapitalShares {
+            total,
+            on: num(&raw.number_common_shares).unwrap_or_default(),
+            pn: num(&raw.number_preferred_shares).unwrap_or_default(),
+        });
     Supplement {
+        shares,
         code: raw.code.unwrap_or_default().trim().to_uppercase(),
         trading_name: raw
             .trading_name
@@ -829,6 +856,189 @@ pub fn store_events(conn: &Connection, rows: &[EventRec], now: &str) -> Result<u
     Ok(n)
 }
 
+/// Grava a quantidade de ações do capital social na B3 (só a consulta mais recente fica).
+pub fn store_shares(
+    conn: &Connection,
+    issuer_id: &str,
+    s: &CapitalShares,
+    day: NaiveDate,
+    now: &str,
+) -> Result<u64> {
+    use super::items;
+    conn.execute(
+        "DELETE FROM fundamental WHERE issuer_id = ?1 AND item IN (?2, ?3, ?4)",
+        params![
+            issuer_id,
+            items::SHARES_B3,
+            items::SHARES_B3_ON,
+            items::SHARES_B3_PN
+        ],
+    )?;
+    let document = crate::i18n::t_args(
+        "nucleo-pesquisa-doc-b3-capital",
+        &crate::i18n::args(&[("data", fmt_date(day).into())]),
+    );
+    let fact = |item: &str, value: Decimal| super::Fact {
+        item: item.to_string(),
+        period_type: super::PeriodType::Instant,
+        start: None,
+        end: day,
+        value,
+        currency: "shares".into(),
+        source: SOURCE.into(),
+        document: document.clone(),
+        priority: 2,
+    };
+    let facts = [
+        fact(items::SHARES_B3, s.total),
+        fact(items::SHARES_B3_ON, s.on),
+        fact(items::SHARES_B3_PN, s.pn),
+    ];
+    Ok(super::store::upsert_facts(conn, issuer_id, &facts, now)? as u64)
+}
+
+/// Emissor de um código da B3, pelos papéis conhecidos.
+fn issuer_of_code(conn: &Connection, known: &[Known]) -> Result<Option<String>> {
+    for k in known {
+        if let Some(s) = super::store::security(conn, &k.ticker)?
+            && s.class == "stock_br"
+        {
+            return Ok(Some(s.issuer_id));
+        }
+    }
+    Ok(None)
+}
+
+/// Papéis achados no cadastro da B3 de uma companhia incompleta no FCA.
+pub fn detail_securities(
+    issuer_id: &str,
+    detail: &crate::assets::lookup::B3Detail,
+    unit_composition: Option<&str>,
+) -> Vec<super::Security> {
+    let mut out: Vec<super::Security> = vec![];
+    for (ticker, isin) in &detail.isins {
+        let Some(kind) = super::cvm::share_kind_of_ticker(ticker) else {
+            continue;
+        };
+        if out.iter().any(|s| &s.ticker == ticker) {
+            continue;
+        }
+        out.push(super::Security {
+            ticker: ticker.clone(),
+            issuer_id: issuer_id.to_string(),
+            class: "stock_br".into(),
+            share_kind: Some(kind.into()),
+            unit_composition: (kind == "UNIT")
+                .then(|| unit_composition.map(str::to_string))
+                .flatten(),
+            isin: Some(isin.clone()),
+            listing_segment: None,
+            active: true,
+            source: "b3_detail".into(),
+        });
+    }
+    out
+}
+
+// ---------------------------------------------------------------------------------------
+// Consulta na hora (um papel)
+// ---------------------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Default, Deserialize, ts_rs::TS)]
+#[ts(export)]
+pub struct B3RefreshArgs {
+    pub ticker: String,
+}
+
+#[derive(Debug, Clone, Default, serde::Serialize, ts_rs::TS)]
+#[ts(export)]
+pub struct B3RefreshReport {
+    /// Houve consulta à B3 (falso: fonte desligada, consulta recente ou papel não é ação).
+    pub fetched: bool,
+    #[ts(type = "number")]
+    pub rows: u64,
+}
+
+/// Proventos, eventos em ações e capital de uma companhia, consultados na hora: o papel aberto
+/// fora da carteira ainda sem dado oficial (a coleta rolante cobre o universo em ~7 dias).
+/// Respeita a fonte desligada e o intervalo da coleta rolante; a rede não segura o banco.
+pub fn refresh_company(api: &crate::Api, a: &B3RefreshArgs) -> Result<B3RefreshReport> {
+    let ticker = a.ticker.trim().to_uppercase();
+    let Some(code) = code_of(&ticker) else {
+        return Ok(B3RefreshReport::default());
+    };
+    let target = Target {
+        code: code.clone(),
+        fund: false,
+        registered: false,
+    };
+    let now = Utc::now();
+    let (on, known, due_now) = api.with_session(|s, _| {
+        let c = s.db.conn();
+        let on = crate::sources::enabled(c, crate::sources::SourceId::B3);
+        let (_, known) = targets(c)?;
+        let log = load_log(c)?;
+        Ok((
+            on,
+            known.get(&code).cloned().unwrap_or_default(),
+            due(log.get(&target.key()), now),
+        ))
+    })?;
+    if !on || !due_now || known.is_empty() {
+        return Ok(B3RefreshReport::default());
+    }
+    use super::net::Fetcher as _;
+    let f = super::net::HttpFetcher::new();
+    let url = company_url(&code);
+    let res = f.get(&url, None, "");
+    let stamp = now_utc();
+    let parsed = match res {
+        Ok(Fetched::Body { bytes, .. }) if !bytes.iter().all(u8::is_ascii_whitespace) => {
+            parse_company(&bytes)
+        }
+        Ok(_) => Ok(None),
+        Err(e) => Err(e),
+    };
+    let today = crate::time::today_local();
+    api.with_session(|s, _| {
+        let c = s.db.conn();
+        match &parsed {
+            Err(e) => {
+                log_fetch(c, &target.key(), "error", Some(e), &stamp)?;
+                Ok(B3RefreshReport {
+                    fetched: true,
+                    rows: 0,
+                })
+            }
+            Ok(None) => {
+                log_fetch(c, &target.key(), "not_found", None, &stamp)?;
+                Ok(B3RefreshReport {
+                    fetched: true,
+                    rows: 0,
+                })
+            }
+            Ok(Some(sup)) => {
+                let tx = c.unchecked_transaction()?;
+                let cash = map_cash(&code, &sup.cash, &known, false);
+                let events = map_stock(&code, &sup.stock, &known);
+                let mut n = store_dividends(&tx, &cash, false, &stamp)?;
+                n += store_events(&tx, &events, &stamp)?;
+                if let Some(sh) = &sup.shares
+                    && let Some(issuer) = issuer_of_code(&tx, &known)?
+                {
+                    n += store_shares(&tx, &issuer, sh, today, &stamp)?;
+                }
+                log_fetch(&tx, &target.key(), "ok", None, &stamp)?;
+                tx.commit()?;
+                Ok(B3RefreshReport {
+                    fetched: true,
+                    rows: n,
+                })
+            }
+        }
+    })
+}
+
 // ---------------------------------------------------------------------------------------
 // Coleta
 // ---------------------------------------------------------------------------------------
@@ -1010,6 +1220,12 @@ pub(crate) fn sync(r: &mut Runner<'_>, today: NaiveDate) -> Result<Outcome> {
                     }
                     n += store_dividends(&tx, &cash, false, &stamp)?;
                     n += store_events(&tx, &events, &stamp)?;
+                    if !t.fund
+                        && let Some(sh) = &sup.shares
+                        && let Some(issuer) = issuer_of_code(&tx, known)?
+                    {
+                        n += store_shares(&tx, &issuer, sh, today, &stamp)?;
+                    }
                     log_fetch(
                         &tx,
                         &t.key(),
@@ -1051,6 +1267,60 @@ pub(crate) fn sync(r: &mut Runner<'_>, today: NaiveDate) -> Result<Outcome> {
                         rows: 0,
                         error: Some(e),
                     });
+                }
+            }
+        }
+    }
+    // Cadastro pela B3 das companhias que o FCA deixou sem código válido (ou só com a unit).
+    if consecutive < MAX_CONSECUTIVE_ERRORS {
+        let incomplete: Vec<super::cvm::Incomplete> = r
+            .with(|c| crate::settings::get(c, INCOMPLETE_SETTING))?
+            .unwrap_or_default();
+        for inc in incomplete {
+            let key = format!("detail:{}", inc.issuer_id);
+            let fresh = log
+                .get(&key)
+                .is_some_and(|e| (now - e.at).num_hours() < DETAIL_REFRESH_HOURS);
+            if fresh && !force {
+                continue;
+            }
+            let Some(cvm) = r
+                .with(|c| super::store::issuer(c, &inc.issuer_id))?
+                .and_then(|i| i.cvm_code)
+            else {
+                continue;
+            };
+            let url = crate::assets::lookup::b3_detail_url(&cvm);
+            out.requests += 1;
+            let stamp = now_utc();
+            let res = get(r, &url).and_then(|b| match b {
+                Got::Body(b) => crate::assets::lookup::parse_b3_detail(&b),
+                _ => Ok(None),
+            });
+            match res {
+                Ok(Some(d)) => {
+                    let secs =
+                        detail_securities(&inc.issuer_id, &d, inc.unit_composition.as_deref());
+                    r.with(|c| {
+                        for s in &secs {
+                            // Não troca um papel que o FCA já trouxe certo.
+                            if super::store::security(c, &s.ticker)?.is_none() {
+                                super::store::upsert_security(c, s, &stamp)?;
+                            }
+                        }
+                        log_fetch(c, &key, "ok", None, &stamp)
+                    })?;
+                    out.ok += 1;
+                    out.rows += secs.len() as u64;
+                }
+                Ok(None) => {
+                    r.with(|c| log_fetch(c, &key, "not_found", None, &stamp))?;
+                    out.not_found += 1;
+                }
+                Err(e) => {
+                    r.with(|c| log_fetch(c, &key, "error", Some(&e), &stamp))?;
+                    out.errors += 1;
+                    last_error = Some(e);
                 }
             }
         }
@@ -1208,6 +1478,56 @@ mod tests {
             String::from_utf8(back).unwrap(),
             r#"{"cnpj":"0","identifierFund":"HGLG","typeFund":7}"#
         );
+    }
+
+    #[test]
+    fn reads_capital_shares_and_completes_the_registry() {
+        let json = r#"[{"code":"VALE","tradingName":"VALE","totalNumberShares":"4.439.159.764",
+            "numberCommonShares":"4.439.159.764","numberPreferredShares":"0","cashDividends":[],"stockDividends":[]}]"#;
+        let s = parse_company(json.as_bytes()).unwrap().unwrap();
+        assert_eq!(
+            s.shares,
+            Some(CapitalShares {
+                total: Decimal::from(4_439_159_764u64),
+                on: Decimal::from(4_439_159_764u64),
+                pn: Decimal::ZERO,
+            })
+        );
+        // Without the totals (older answers): none.
+        let s = parse_company(br#"[{"code":"PETR","cashDividends":[]}]"#)
+            .unwrap()
+            .unwrap();
+        assert_eq!(s.shares, None);
+        // BTG: the FCA had "000000" as the code; the B3 registry lists the three classes.
+        let detail = crate::assets::lookup::B3Detail {
+            isins: vec![
+                ("BPAC3".into(), "BRBPACACNOR7".into()),
+                ("BPAC5".into(), "BRBPACACNPA0".into()),
+                ("BPAC11".into(), "BRBPACUNT006".into()),
+                ("BPAC11".into(), "BRBPACUNT006".into()),
+            ],
+            ..Default::default()
+        };
+        let secs = detail_securities("30306294000145", &detail, Some("1 ON E 2 PNA"));
+        let kinds: Vec<(&str, Option<&str>, Option<&str>)> = secs
+            .iter()
+            .map(|s| {
+                (
+                    s.ticker.as_str(),
+                    s.share_kind.as_deref(),
+                    s.unit_composition.as_deref(),
+                )
+            })
+            .collect();
+        assert_eq!(
+            kinds,
+            vec![
+                ("BPAC3", Some("ON"), None),
+                ("BPAC5", Some("PN"), None),
+                ("BPAC11", Some("UNIT"), Some("1 ON E 2 PNA")),
+            ]
+        );
+        assert!(secs.iter().all(|s| s.active && s.source == "b3_detail"));
     }
 
     #[test]

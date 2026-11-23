@@ -1427,6 +1427,7 @@ fn issuer_equity(
             siblings: vec![],
             dividends: vec![],
             dividends_source: None,
+            share_events: vec![],
             liquidity: None,
             today,
         },

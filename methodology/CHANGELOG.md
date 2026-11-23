@@ -1,5 +1,13 @@
 # Methodology changelog
 
+## Inputs of 2026-11 (no change of methodology version)
+
+Weights, thresholds and formulas of the score do not change; some inputs do ([indicators.md](../docs/indicators.md)):
+
+- Net income attributable to owners: when a company leaves the owners' line at zero in the consolidated statements (about one filing in five), the parent-only net income of the same period is used (before, the zero was used, and metrics like ROE and the earnings yield came out at zero). Banks use the parent-only statements (Central Bank standard) for net income and equity.
+- Share count checked against the B3 capital stock count (scale, treasury shares already excluded, stock events).
+- Cross-check with Fundamentus in its own convention: the confidence drops only when the data disagrees, no longer because of a formula difference (EBIT margin, net margin, EV/EBITDA).
+
 ## 0.1.0 (2026-10-16)
 
 First version, from Knuppe's specification (weights and thresholds from the literature, no backtest yet).

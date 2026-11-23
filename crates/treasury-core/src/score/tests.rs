@@ -839,3 +839,73 @@ fn closed_position_does_not_keep_a_missing_data_feedback() {
     e.api.call("score.get", json!({"asset_id": id})).unwrap();
     assert_eq!(open(&e.api), 0);
 }
+
+#[test]
+fn reconciliation_redoes_our_numbers_in_the_fundamentus_convention() {
+    use crate::research::indicators::{Data, Subject};
+    use crate::research::{PeriodType, items};
+    use rust_decimal::Decimal;
+    let f = |item: &str, pt: PeriodType, v: i64| Fact {
+        item: item.into(),
+        period_type: pt,
+        start: (pt == PeriodType::Ltm).then(|| d("2025-10-01")),
+        end: d("2026-09-30"),
+        value: Decimal::from(v),
+        currency: if item.starts_with("shares") {
+            "shares".into()
+        } else {
+            "BRL".into()
+        },
+        source: "cvm_itr".into(),
+        document: "ITR".into(),
+        priority: 2,
+    };
+    let facts = vec![
+        f(items::REVENUE, PeriodType::Ltm, 1000),
+        f(items::GROSS_PROFIT, PeriodType::Ltm, 400),
+        f(items::SGA, PeriodType::Ltm, 150),
+        f(items::DA, PeriodType::Ltm, 50),
+        f(items::NET_INCOME, PeriodType::Ltm, 100),
+        f(items::NET_INCOME_TOTAL, PeriodType::Ltm, 120),
+        f(items::GROSS_DEBT, PeriodType::Instant, 300),
+        f(items::CASH, PeriodType::Instant, 100),
+        f(items::EQUITY, PeriodType::Instant, 800),
+        f(items::SHARES, PeriodType::Instant, 95),
+        f(items::SHARES_TOTAL, PeriodType::Instant, 100),
+    ];
+    let data = Data {
+        subject: Subject {
+            asset_id: None,
+            ticker: Some("XMPL3".into()),
+            name: "X".into(),
+            class: crate::assets::AssetClass::StockBr,
+            currency: "BRL".into(),
+            issuer_id: None,
+            issuer_name: None,
+            issuer_code: None,
+            sector: None,
+            segment: None,
+            mandate: None,
+            layout: Some(Layout::Industrial),
+            share_kind: Some("ON".into()),
+        },
+        facts,
+        price: None,
+        per_unit: Some(Decimal::ONE),
+        siblings: vec![],
+        dividends: vec![],
+        dividends_source: None,
+        liquidity: None,
+        share_events: vec![],
+        today: d("2026-11-23"),
+    };
+    // Our market cap with 95 outstanding shares: 950; theirs counts the 100 with treasury.
+    let c = super::equity::fundamentus_convention(&data, Some(950.0));
+    let near = |k: &str, v: f64| assert!((c[k] - v).abs() < 1e-9, "{k}: {} != {v}", c[k]);
+    // EBIT = gross profit − selling − G&A = 250.
+    near("ebit_margin", 0.25);
+    near("net_margin", 0.12);
+    near("ev_ebitda", (1000.0 + 300.0 - 100.0) / 300.0);
+    near("pb", 1000.0 / 800.0);
+    near("earnings_to_price", 100.0 / 1000.0);
+}

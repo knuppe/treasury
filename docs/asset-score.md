@@ -67,7 +67,7 @@ Judicial recovery (bankruptcy protection), fraud or restatement, relevant litiga
 | Market cap, ranking, FDV, supply, volume, all-time high, development and categories of crypto assets | CoinGecko (public API, ~10 requests/min), issuer `coingecko:<id>` in `fundamental` |
 | Network TVL, stablecoins (backing, peg), market cap and daily prices in dollars | DefiLlama (public API) |
 | Dividends (DY, Bazin) | The asset's calendar (Yahoo, Fundamentus) checked against B3 (API of listed companies and funds, `research_dividend`); with a material divergence, or without a calendar, B3 (official) |
-| Cross-check | Fundamentus (local cache; never a primary source); dividends with B3, no effect on confidence |
+| Cross-check | Fundamentus (local cache; never a primary source), compared in its own convention (EBIT margin, net margin, EV/EBITDA, P/B and earnings yield are redone from Treasury's data with Fundamentus's formulas, [indicators.md](indicators.md)); dividends with B3, no effect on confidence |
 
 ## Fixed income
 

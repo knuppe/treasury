@@ -18,6 +18,8 @@ import type { MethodExplain } from '@/api/generated/MethodExplain';
 import type { MethodRun } from '@/api/generated/MethodRun';
 import type { ScreenMethod } from '@/api/generated/ScreenMethod';
 import type { AssetTag } from '@/api/generated/AssetTag';
+import type { B3RefreshArgs } from '@/api/generated/B3RefreshArgs';
+import type { B3RefreshReport } from '@/api/generated/B3RefreshReport';
 import type { MarketMapPoint } from '@/api/generated/MarketMapPoint';
 import type { MarketOverview } from '@/api/generated/MarketOverview';
 import type { DocumentsStatus } from '@/api/generated/DocumentsStatus';
@@ -81,6 +83,20 @@ export function useResearchSettings() {
 
 export function useIndicators(subject: SubjectArgs | null) {
   return useQuery(read<IndicatorsView>('indicators', subject ?? {}, hasSubject(subject)));
+}
+
+/**
+ * Proventos e capital oficiais da B3 de um papel que ainda não tem (a coleta rolante cobre o
+ * universo em uma semana): consulta uma vez e, se trouxe algo, recalcula os indicadores.
+ */
+export function useB3Refresh() {
+  const client = useQueryClient();
+  return useMutation<B3RefreshReport, ApiError, B3RefreshArgs>({
+    mutationFn: (args) => call<B3RefreshReport>('research.b3_refresh', args),
+    onSuccess: (r) => {
+      if (r.rows > 0) void invalidateResearch(client, ['score']);
+    },
+  });
 }
 
 export function useFairPrice(args: FairPriceArgs | null) {

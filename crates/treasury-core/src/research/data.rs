@@ -346,7 +346,12 @@ pub fn load(
         ticker.as_deref(),
         asset.as_ref().map(|a| a.id.as_str()),
     )?;
+    let share_events = match ticker.as_deref().filter(|_| br) {
+        Some(t) => share_events_of(conn, t)?,
+        None => vec![],
+    };
     Ok(Data {
+        share_events,
         subject,
         facts,
         price,
@@ -357,6 +362,25 @@ pub fn load(
         liquidity,
         today,
     })
+}
+
+/// Eventos em ações oficiais da B3 do papel: (data-com, ações novas por ação antiga).
+fn share_events_of(conn: &Connection, ticker: &str) -> Result<Vec<(NaiveDate, Decimal)>> {
+    let mut stmt = conn.prepare_cached(
+        "SELECT ex_date, kind, factor FROM research_stock_event WHERE ticker = ?1 AND source = ?2 ORDER BY ex_date",
+    )?;
+    let rows: Vec<(String, String, String)> = stmt
+        .query_map(params![ticker, super::b3_listados::SOURCE], |r| {
+            Ok((r.get(0)?, r.get(1)?, r.get(2)?))
+        })?
+        .collect::<rusqlite::Result<_>>()?;
+    Ok(rows
+        .into_iter()
+        .filter_map(|(d, kind, f)| {
+            let m = super::b3_listados::multiplier(&kind, f.parse().ok()?)?;
+            Some((parse_date(&d).ok()?, m))
+        })
+        .collect())
 }
 
 /// Último fechamento conhecido de um ativo cadastrado num dia (para gráficos normalizados).

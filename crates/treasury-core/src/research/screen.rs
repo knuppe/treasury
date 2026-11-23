@@ -131,9 +131,16 @@ pub fn compute_universe(
             continue;
         };
         let v = indicators::compute(&d, bazin);
+        // Proventos estimados pelo fluxo de caixa (sem dado oficial da B3) ficam fora dos
+        // rankings e do screener: erram muito (docs/indicators.md, E9).
+        let estimated_dividends = !d.subject.is_fii()
+            && v.indicators
+                .iter()
+                .any(|i| i.key == "dy" && i.estimated && i.value.is_some());
         let metrics: BTreeMap<String, f64> = v
             .indicators
             .iter()
+            .filter(|i| !(estimated_dividends && indicators::uses_dividends(&i.key)))
             .filter_map(|i| i.value.map(|x| (i.key.clone(), x)))
             .collect();
         out.push(UniverseRow {
@@ -161,7 +168,88 @@ pub fn recompute_universe(
 ) -> Result<usize> {
     let rows = compute_universe(tx, today, bazin)?;
     store_universe(tx, &rows, today)?;
+    report_implausible(tx, &rows)?;
     Ok(rows.len())
+}
+
+/// Faixas largas de plausibilidade (docs/indicators.md, "Input validation", E11): valor fora
+/// delas não é bloqueado (pode ser verdade), mas entra num aviso só, na tela Desenvolvedor,
+/// para alguém conferir o dado de entrada.
+pub const PLAUSIBLE: &[(&str, f64, f64)] = &[
+    ("gross_margin", -1.0, 1.0),
+    ("ebit_margin", -5.0, 1.0),
+    ("roic", -2.0, 2.0),
+    ("pvp", 0.02, 100.0),
+    ("current_ratio", 0.0, 50.0),
+    ("dy", 0.0, 0.5),
+    ("ev_ebitda", 0.0, 200.0),
+];
+
+/// Papéis com algum indicador fora da faixa plausível ("TICKER: chave = valor").
+pub fn implausible(rows: &[UniverseRow]) -> Vec<String> {
+    let mut out = vec![];
+    for r in rows {
+        for (key, lo, hi) in PLAUSIBLE {
+            if let Some(v) = r.metrics.get(*key)
+                && (*v < *lo || *v > *hi)
+            {
+                out.push(format!("{}: {key} = {v:.4}", r.ticker));
+            }
+        }
+    }
+    out
+}
+
+const PLAUSIBILITY_CLIENT: &str = "análise de ativos";
+
+fn report_implausible(conn: &Connection, rows: &[UniverseRow]) -> Result<()> {
+    use crate::devfeedback::{DevFeedbackArea, DevFeedbackInput, DevFeedbackKind};
+    let list = implausible(rows);
+    let titles: Vec<String> = crate::i18n::AVAILABLE
+        .iter()
+        .map(|l| crate::i18n::tr(*l, "nucleo-pesquisa-feedback-faixa-titulo", None))
+        .collect();
+    if list.is_empty() {
+        for t in &titles {
+            crate::devfeedback::resolve_auto(
+                conn,
+                t,
+                PLAUSIBILITY_CLIENT,
+                &crate::i18n::t("nucleo-pesquisa-feedback-faixa-resolvido"),
+            )?;
+        }
+        return Ok(());
+    }
+    let open: bool = titles.iter().any(|t| {
+        conn.query_row(
+            "SELECT 1 FROM dev_feedback WHERE title = ?1 AND status IN ('aberto', 'em_andamento')",
+            [t],
+            |_| Ok(()),
+        )
+        .is_ok()
+    });
+    if open {
+        return Ok(());
+    }
+    let shown: Vec<String> = list.iter().take(40).cloned().collect();
+    crate::devfeedback::add_distinct(
+        conn,
+        &DevFeedbackInput {
+            title: crate::i18n::t("nucleo-pesquisa-feedback-faixa-titulo"),
+            body: crate::i18n::t_args(
+                "nucleo-pesquisa-feedback-faixa-corpo",
+                &crate::i18n::args(&[
+                    ("n", (list.len() as i64).into()),
+                    ("lista", shown.join("\n").into()),
+                ]),
+            ),
+            area: DevFeedbackArea::Dados,
+            kind: DevFeedbackKind::Dados,
+            ..Default::default()
+        },
+        PLAUSIBILITY_CLIENT,
+    )?;
+    Ok(())
 }
 
 fn store_universe(conn: &Connection, rows: &[UniverseRow], today: NaiveDate) -> Result<()> {

@@ -4,11 +4,11 @@
  * FII, bancos). Cada indicador mostra fórmula, período e fonte ao passar o mouse ou ao
  * expandir; indisponíveis mostram o motivo.
  */
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import type { Indicator } from '@/api/generated/Indicator';
 import type { SubjectArgs } from '@/api/generated/SubjectArgs';
-import { useIndicators } from '@/api/hooks/research';
+import { useB3Refresh, useIndicators } from '@/api/hooks/research';
 import { InstrumentCard, KeyValue, Tooltip } from '@/design/components';
 import { cx } from '@/design/cx';
 import { t } from '@/i18n';
@@ -19,7 +19,24 @@ import { SubjectError } from './common';
 import { formatIndicatorValue } from './format';
 import { GROUP_LABEL, PANEL_GROUPS } from './labels';
 
+/** Situação da conferência dos dados de entrada, por extenso. */
+function checkLabel(c: Indicator['check']): string | null {
+  switch (c) {
+    case 'verified':
+      return t('pesquisa-conferencia-conferido');
+    case 'corrected':
+      return t('pesquisa-conferencia-corrigido');
+    case 'warning':
+      return t('pesquisa-conferencia-aviso');
+    case 'blocked':
+      return t('pesquisa-conferencia-bloqueado');
+    default:
+      return null;
+  }
+}
+
 function IndicatorDetail({ ind }: { ind: Indicator }) {
+  const check = checkLabel(ind.check);
   return (
     <KeyValue
       layout="stacked"
@@ -32,6 +49,14 @@ function IndicatorDetail({ ind }: { ind: Indicator }) {
               { label: t('pesquisa-fonte'), value: ind.source ?? '—' },
             ]),
         ...(ind.estimated ? [{ label: t('pesquisa-status'), value: t('pesquisa-estimado') }] : []),
+        ...(check
+          ? [
+              {
+                label: t('pesquisa-conferencia'),
+                value: ind.check_notes.length ? `${check}: ${ind.check_notes.join(' · ')}` : check,
+              },
+            ]
+          : []),
       ]}
     />
   );
@@ -78,6 +103,23 @@ export function IndicatorRow({ ind }: { ind: Indicator }) {
         >
           {ind.estimated && !missing ? '≈ ' : ''}
           {value}
+          {ind.check === 'corrected' || ind.check === 'warning' ? (
+            <span
+              className={cx(
+                'ml-1 text-[11px]',
+                ind.check === 'warning' ? 'text-warning' : 'text-accent',
+              )}
+              role="img"
+              aria-label={t(
+                ind.check === 'warning'
+                  ? 'pesquisa-conferencia-marca-aviso'
+                  : 'pesquisa-conferencia-marca-corrigido',
+                { indicador: ind.label },
+              )}
+            >
+              {ind.check === 'warning' ? '!' : '*'}
+            </span>
+          ) : null}
         </span>
       </div>
       {missing && ind.unavailable_reason ? (
@@ -96,6 +138,18 @@ export function IndicatorRow({ ind }: { ind: Indicator }) {
 
 export function IndicatorsPanel({ subject }: { subject: SubjectArgs }) {
   const q = useIndicators(subject);
+  // Ação sem proventos oficiais da B3 (dividend yield estimado): consulta a B3 uma vez.
+  const refresh = useB3Refresh();
+  const asked = useRef<string | null>(null);
+  const ticker = q.data?.subject.ticker ?? null;
+  const estimated =
+    q.data?.subject.class === 'stock_br' &&
+    q.data.indicators.some((i) => i.key === 'dy' && i.estimated && i.value != null);
+  useEffect(() => {
+    if (!estimated || !ticker || asked.current === ticker) return;
+    asked.current = ticker;
+    refresh.mutate({ ticker });
+  }, [estimated, ticker, refresh]);
   if (q.isPending) return <LoadingBlock label={t('pesquisa-calculando-indicadores')} />;
   if (q.isError) return <SubjectError error={q.error} onRetry={() => void q.refetch()} />;
   const v = q.data;

@@ -209,6 +209,7 @@ nucleo-score-recon-nota-divergente = Dividendos de { $ticker } comprobados con l
 nucleo-score-recon-nota-igual = Dividendos de { $ticker } comprobados con la B3 (oficial) en 24 meses: { $iguais } iguales al calendario ({ $agenda }).
 nucleo-score-fonte-brapi = brapi.dev, leído el { $data }
 nucleo-score-fonte-fundamentus = Fundamentus ({ $indicador }), leído el { $data }
+nucleo-score-conferencia-mesma-regra = { $metrica } (rehecha con la fórmula de Fundamentus)
 nucleo-score-secundaria-concordam = dos fuentes secundarias coinciden (promedio)
 nucleo-score-secundaria-divergem = las fuentes secundarias difieren ({ $fonte1 }: { $valor1 }; { $fonte2 }: { $valor2 }); vale la primera
 nucleo-score-secundaria-uma = una fuente secundaria

@@ -208,6 +208,7 @@ nucleo-score-recon-nota-divergente = { $ticker } dividends checked against B3 (o
 nucleo-score-recon-nota-igual = { $ticker } dividends checked against B3 (official) over 24 months: { $iguais } equal to the calendar ({ $agenda }).
 nucleo-score-fonte-brapi = brapi.dev, read on { $data }
 nucleo-score-fonte-fundamentus = Fundamentus ({ $indicador }), read on { $data }
+nucleo-score-conferencia-mesma-regra = { $metrica } (redone with Fundamentus's formula)
 nucleo-score-secundaria-concordam = two secondary sources agree (average)
 nucleo-score-secundaria-divergem = secondary sources differ ({ $fonte1 }: { $valor1 }; { $fonte2 }: { $valor2 }); the first one is used
 nucleo-score-secundaria-uma = one secondary source

@@ -193,6 +193,9 @@ fn opt(s: String) -> Option<String> {
 // ---------------------------------------------------------------------------
 // DFP e ITR
 
+/// Trecho do aviso de lucro dos controladores não informado (a coleta junta todos num só).
+pub const INCOME_FIX_WARNING: &str = ": lucro dos controladores não informado no consolidado";
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum FilingKind {
     Dfp,
@@ -627,11 +630,9 @@ fn dre_items(l: &Lines, layout: Layout, out: &mut Vec<(&'static str, Decimal)>) 
     {
         out.push((items::EBIT, v));
     }
-    if let Some((code, total)) = net_income_line(l) {
-        let ctrl = children(l, code)
-            .find(|(_, d, _)| d.contains("controladora"))
-            .map(|(_, _, v)| v);
-        out.push((items::NET_INCOME, ctrl.unwrap_or(total)));
+    // O lucro dos controladores sai de `controllers_income`, que também olha a individual.
+    if let Some(p) = net_income_parts(l) {
+        out.push((items::NET_INCOME_TOTAL, p.total));
     }
     // Tributos: achados pela descrição (3.07/3.08 nas companhias, 3.05/3.06 em alguns bancos).
     if let Some((_, v)) = level2(l, "3", "resultado antes dos tributos") {
@@ -658,6 +659,11 @@ fn dre_items(l: &Lines, layout: Layout, out: &mut Vec<(&'static str, Decimal)>) 
             .collect();
         if !sga.is_empty() {
             out.push((items::SGA, sga.into_iter().sum()));
+        }
+        if let Some((_, _, v)) =
+            children(l, &code).find(|(_, d, _)| d.contains("equivalencia patrimonial"))
+        {
+            out.push((items::EQUITY_INCOME, v));
         }
     }
     if let Some((code, _)) = level2(l, "3", "resultado financeiro") {
@@ -688,6 +694,99 @@ fn net_income_line(l: &Lines) -> Option<(&String, Decimal)> {
                 && !d.contains("continuad")
         })
         .map(|(c, (_, v))| (c, *v))
+}
+
+/// Lucro do período em partes: total (com não controladores), linha dos controladores
+/// (`None` quando a DRE não abre o lucro) e linha dos não controladores.
+#[derive(Debug, Clone, Copy, PartialEq)]
+struct NetIncomeParts {
+    total: Decimal,
+    controllers: Option<Decimal>,
+    minority: Decimal,
+}
+
+fn net_income_parts(l: &Lines) -> Option<NetIncomeParts> {
+    let (code, total) = net_income_line(l)?;
+    let mut controllers = None;
+    let mut minority = Decimal::ZERO;
+    for (_, d, v) in children(l, code) {
+        if d.contains("controladora") {
+            controllers = Some(v);
+        } else if d.contains("nao controladores") {
+            minority += v;
+        }
+    }
+    Some(NetIncomeParts {
+        total,
+        controllers,
+        minority,
+    })
+}
+
+/// De onde saiu o lucro dos controladores quando a linha própria não serviu.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum IncomeFix {
+    /// Linha dos controladores zerada: o lucro da demonstração individual.
+    Individual,
+    /// Linha zerada e sem individual: total menos não controladores.
+    TotalLessMinority,
+}
+
+/// Lucro dos controladores do período (docs/indicators.md, "Input validation", E2).
+///
+/// - A linha "atribuído a sócios da empresa controladora" quando preenchida.
+/// - Muitas companhias deixam essa linha zerada e preenchem só o total: zerada com lucro no
+///   total (fora a parte dos não controladores), vale o lucro da demonstração individual do
+///   mesmo período (pela equivalência patrimonial, é o lucro dos controladores); sem
+///   individual, total menos não controladores.
+/// - Sem a linha (DRE que não abre o lucro): o total.
+/// - Bancos: a individual, no padrão contábil do Banco Central (decisão de 23/11/2026); o
+///   consolidado em IFRS fica em `net_income_consolidated`.
+///
+/// Individual toda zerada conta como ausente.
+fn controllers_income(
+    p: &NetIncomeParts,
+    individual: Option<Decimal>,
+    bank: bool,
+) -> (Decimal, Option<IncomeFix>) {
+    let ind = individual.filter(|v| !v.is_zero());
+    if bank && let Some(i) = ind {
+        return (i, None);
+    }
+    match p.controllers {
+        None => (p.total, None),
+        Some(c) if !c.is_zero() => (c, None),
+        Some(c) => {
+            let rest = p.total - p.minority;
+            if rest.abs() <= Decimal::ONE {
+                (c, None)
+            } else if let Some(i) = ind {
+                (i, Some(IncomeFix::Individual))
+            } else {
+                (rest, Some(IncomeFix::TotalLessMinority))
+            }
+        }
+    }
+}
+
+/// Patrimônio líquido total (com não controladores) e a parte dos não controladores.
+fn equity_parts(l: &Lines) -> Option<(Decimal, Decimal, bool)> {
+    let (code, total) = level2(l, "2", "patrimonio liquido").or_else(|| {
+        l.iter()
+            .rfind(|(c, (d, _))| c.starts_with("2.") && depth(c) == 1 && d.contains("patrimonio"))
+            .map(|(c, (_, v))| (c, *v))
+    })?;
+    let minority = children(l, code).find(|(_, d, _)| d.contains("nao controladores"));
+    Some((
+        total,
+        minority.map(|(_, _, v)| v).unwrap_or_default(),
+        minority.is_some(),
+    ))
+}
+
+/// Demonstração individual com conteúdo (a de alguns bancos vem toda zerada).
+fn has_content(l: &Lines) -> bool {
+    l.values().any(|(_, v)| !v.is_zero())
 }
 
 /// Lucro básico por ação ON (R$/ação), para conferir a escala da composição do capital.
@@ -798,16 +897,12 @@ fn bpp_items(l: &Lines, layout: Layout, out: &mut Vec<(&'static str, Decimal)>) 
             .rfind(|(c, (d, _))| c.starts_with("2.") && depth(c) == 1 && d.contains("patrimonio"))
             .map(|(c, (_, v))| (c, *v))
     });
-    if let Some((code, total)) = equity {
-        let minority = children(l, code)
-            .find(|(_, d, _)| d.contains("nao controladores"))
-            .map(|(_, _, v)| v)
-            .unwrap_or_default();
+    if let (Some((code, total)), Some((_, minority, has_minority))) = (equity, equity_parts(l)) {
         out.push((items::EQUITY, total - minority));
         if let Some(t) = val_if(l, "2", &[]) {
             out.push((items::TOTAL_LIABILITIES, t - total));
         }
-        if children(l, code).any(|(_, d, _)| d.contains("nao controladores")) {
+        if has_minority {
             out.push((items::MINORITY, minority));
         }
         // Lucros retidos no Altman BR = reservas de lucro + lucros/prejuízos acumulados, como
@@ -1003,6 +1098,14 @@ fn build_filing(
     };
     let mut flows: BTreeMap<(Ordem, NaiveDate, NaiveDate), FlowGroup> = BTreeMap::new();
     let mut main_eps: Option<(Ordem, Decimal)> = None;
+    // Demonstração individual do mesmo período: lucro e patrimônio dos controladores quando o
+    // consolidado não informa, conferência, e o padrão do Banco Central nos bancos.
+    let individual = |stmt: Stmt| -> Option<&HashMap<GroupKey, Lines>> {
+        consolidated.then(|| acc.data.get(&(stmt, false))).flatten()
+    };
+    let dre_ind = individual(Stmt::Dre);
+    let bank = lay == Layout::Bank;
+    let mut fixed: Vec<IncomeFix> = vec![];
     for stmt in [Stmt::Dre, Stmt::DfcMi, Stmt::Dva] {
         let groups = match stmt {
             Stmt::DfcMi => pick(Stmt::DfcMi).or_else(|| pick(Stmt::DfcMd)),
@@ -1017,6 +1120,43 @@ fn build_filing(
             match stmt {
                 Stmt::Dre => {
                     dre_items(l, lay, &mut e.1);
+                    let ind = dre_ind
+                        .and_then(|g| g.get(&k))
+                        .filter(|li| has_content(li))
+                        .and_then(net_income_line)
+                        .map(|(_, v)| v);
+                    if let Some(p) = net_income_parts(l) {
+                        let (ni, fix) = controllers_income(&p, ind, bank);
+                        e.1.push((items::NET_INCOME, ni));
+                        if consolidated && let Some(c) = p.controllers {
+                            e.1.push((items::NET_INCOME_CONSOLIDATED, c));
+                        }
+                        if k.0 == Ordem::Ultimo
+                            && let Some(f) = fix
+                        {
+                            fixed.push(f);
+                        }
+                    }
+                    if let Some(i) = ind {
+                        e.1.push((items::NET_INCOME_INDIVIDUAL, i));
+                    }
+                    // Comparativo do documento: guardado à parte para achar reapresentações
+                    // (o original, do documento anterior, continua valendo nos 12 meses).
+                    if k.0 == Ordem::Penultimo {
+                        let restated: Vec<(&'static str, Decimal)> =
+                            e.1.iter()
+                                .filter_map(|(item, v)| {
+                                    let r = match *item {
+                                        items::REVENUE => items::REVENUE_RESTATED,
+                                        items::EBIT => items::EBIT_RESTATED,
+                                        items::NET_INCOME => items::NET_INCOME_RESTATED,
+                                        _ => return None,
+                                    };
+                                    Some((r, *v))
+                                })
+                                .collect();
+                        e.1.extend(restated);
+                    }
                     if k.0 == Ordem::Ultimo
                         && let Some(eps) = eps_on(l)
                     {
@@ -1052,9 +1192,38 @@ fn build_filing(
             bpa_items(l, instants.entry((*o, *end)).or_default());
         }
     }
+    let bpp_ind = individual(Stmt::Bpp);
     if let Some(g) = pick(Stmt::Bpp) {
-        for ((o, _, end), l) in g {
-            bpp_items(l, lay, instants.entry((*o, *end)).or_default());
+        for (key, l) in g {
+            let (o, _, end) = key;
+            let v = instants.entry((*o, *end)).or_default();
+            bpp_items(l, lay, v);
+            if !consolidated {
+                continue;
+            }
+            let ind = bpp_ind
+                .and_then(|gi| gi.get(key))
+                .filter(|li| has_content(li))
+                .and_then(equity_parts)
+                .map(|(t, m, _)| t - m);
+            let cons = v
+                .iter()
+                .find(|(item, _)| *item == items::EQUITY)
+                .map(|(_, x)| *x);
+            if let Some(c) = cons {
+                v.push((items::EQUITY_CONSOLIDATED, c));
+            }
+            if let Some(i) = ind {
+                v.push((items::EQUITY_INDIVIDUAL, i));
+                // Bancos: o patrimônio no padrão do Banco Central (individual).
+                if bank {
+                    for (item, x) in v.iter_mut() {
+                        if *item == items::EQUITY {
+                            *x = i;
+                        }
+                    }
+                }
+            }
         }
     }
     for ((o, end), vals) in instants {
@@ -1063,23 +1232,40 @@ fn build_filing(
         }
     }
 
+    if let Some(f) = fixed.first() {
+        warnings.push(format!(
+            "{}{INCOME_FIX_WARNING}{}",
+            acc.name,
+            match f {
+                IncomeFix::Individual => " (usado o da demonstração individual)",
+                IncomeFix::TotalLessMinority => " (usado o total menos não controladores)",
+            }
+        ));
+    }
+
     // Composição do capital (ações em circulação = total − tesouraria).
     if let Some(s) = acc.shares {
         let mut on = s.on - s.t_on;
         let mut pn = s.pn - s.t_pn;
         let mut total = s.total - s.t_total;
+        let mut gross = s.total;
+        let mut treasury = s.t_total;
         if total > Decimal::ZERO {
             // Algumas companhias informam a quantidade em milhares, sem coluna de escala:
             // confere com lucro ÷ lucro por ação do mesmo documento.
+            // Lucro e lucro por ação de mesmo sinal (prejuízo também serve).
             if let (Some(ni), Some((_, eps))) = (main_income, main_eps)
-                && eps > Decimal::ZERO
-                && ni > Decimal::ZERO
+                && !eps.is_zero()
+                && !ni.is_zero()
+                && (eps > Decimal::ZERO) == (ni > Decimal::ZERO)
             {
                 let ratio = ni / eps / total;
                 if ratio > Decimal::from(300) && ratio < Decimal::from(3000) {
                     on *= Decimal::from(1000);
                     pn *= Decimal::from(1000);
                     total *= Decimal::from(1000);
+                    gross *= Decimal::from(1000);
+                    treasury *= Decimal::from(1000);
                     warnings.push(format!(
                         "{}: quantidade de ações informada em milhares (corrigida pelo lucro por ação)",
                         acc.name
@@ -1108,6 +1294,22 @@ fn build_filing(
                 None,
                 reference,
                 pn,
+                Ordem::Ultimo,
+            ));
+            facts.push(fact(
+                items::SHARES_TOTAL,
+                PeriodType::Instant,
+                None,
+                reference,
+                gross,
+                Ordem::Ultimo,
+            ));
+            facts.push(fact(
+                items::SHARES_TREASURY,
+                PeriodType::Instant,
+                None,
+                reference,
+                treasury,
                 Ordem::Ultimo,
             ));
             for f in facts.iter_mut().filter(|f| f.item.starts_with("shares")) {
@@ -1142,6 +1344,30 @@ pub struct Fca {
     pub securities: Vec<Security>,
     /// Auditores do último documento de cada companhia.
     pub auditors: Vec<AuditorRecord>,
+    /// Companhias com ações em bolsa no FCA sem código de negociação válido (ex.: "4030",
+    /// "000000") ou só com a unit: o cadastro é completado pela B3 (`b3_listados`).
+    pub incomplete: Vec<Incomplete>,
+}
+
+/// Companhia com o cadastro de papéis incompleto no FCA.
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct Incomplete {
+    /// CNPJ só com dígitos.
+    pub issuer_id: String,
+    /// Composição da unit declarada no FCA (para a unit achada na B3).
+    pub unit_composition: Option<String>,
+}
+
+/// Espécie pelo final do código de negociação (padrão da B3): 3 = ON; 4 a 8 = PN (PNA, PNB…);
+/// 11 = unit. `None` para outros finais (o FCA decide).
+pub fn share_kind_of_ticker(t: &str) -> Option<&'static str> {
+    let digits: String = t.chars().skip(4).collect();
+    match digits.as_str() {
+        "3" => Some("ON"),
+        "4" | "5" | "6" | "7" | "8" => Some("PN"),
+        "11" => Some("UNIT"),
+        _ => None,
+    }
 }
 
 /// Auditor independente de uma companhia (FCA `auditor`).
@@ -1217,6 +1443,10 @@ pub fn parse_fca(bytes: &[u8]) -> Res<Fca> {
         })?;
     }
     let mut secs: HashMap<String, (DocKey, Vec<Security>)> = HashMap::new();
+    // Por companhia (último documento): declarou ações em bolsa sem código válido; tem
+    // ações ordinárias ou preferenciais com código.
+    let mut declared: HashMap<String, (DocKey, bool, bool)> = HashMap::new();
+    let mut unit_comp: HashMap<String, String> = HashMap::new();
     if let Some(name) = zip.find(|n| n.contains("valor_mobiliario")) {
         zip.each_row(&name, |h, r| {
             let cnpj = cnpj_digits(&field(r, h.idx(&["CNPJ_Companhia"])));
@@ -1244,20 +1474,45 @@ pub fn parse_fca(bytes: &[u8]) -> Res<Fca> {
             } else {
                 return Ok(());
             };
-            if !norm(&field(r, h.idx(&["Mercado"]))).contains("bolsa") {
+            // Mercado em branco com código válido também é bolsa (ex.: Multilaser).
+            let market = norm(&field(r, h.idx(&["Mercado"])));
+            if !market.contains("bolsa") && !market.is_empty() {
                 return Ok(());
             }
             let active = field(r, h.idx(&["Data_Fim_Negociacao"])).is_empty();
-            for t in field(r, h.idx(&["Codigo_Negociacao"]))
+            let codes: Vec<String> = field(r, h.idx(&["Codigo_Negociacao"]))
                 .split(|c: char| c == ',' || c == '/' || c == ';' || c.is_whitespace())
                 .map(|t| t.trim().to_uppercase())
                 .filter(|t| is_b3_ticker(t))
+                .collect();
+            if market.is_empty() && codes.is_empty() {
+                return Ok(());
+            }
+            let d = declared
+                .entry(cnpj.clone())
+                .or_insert((e.0.clone(), false, false));
+            if d.0 < e.0 {
+                *d = (e.0.clone(), false, false);
+            }
+            if codes.is_empty() && active {
+                d.1 = true;
+            }
+            if share_kind == "UNIT"
+                && let Some(c) = opt(field(r, h.idx(&["Composicao_BDR_Unit"])))
             {
+                unit_comp.insert(cnpj.clone(), c);
+            }
+            if share_kind != "UNIT" && !codes.is_empty() {
+                d.2 = true;
+            }
+            for t in codes {
+                // A espécie sai do código (a Magazine Luiza declara MGLU3 como preferencial).
+                let kind = share_kind_of_ticker(&t).unwrap_or(share_kind);
                 e.1.push(Security {
                     ticker: t,
                     issuer_id: cnpj.clone(),
                     class: "stock_br".into(),
-                    share_kind: Some(share_kind.into()),
+                    share_kind: Some(kind.into()),
                     unit_composition: opt(field(r, h.idx(&["Composicao_BDR_Unit"]))),
                     isin: None,
                     listing_segment: opt(field(r, h.idx(&["Segmento"]))),
@@ -1311,10 +1566,25 @@ pub fn parse_fca(bytes: &[u8]) -> Res<Fca> {
             Ok(())
         })?;
     }
+    let mut incomplete: Vec<Incomplete> = declared
+        .into_iter()
+        .filter(|(c, (_, bad, with_shares))| {
+            let has_unit = secs
+                .get(c)
+                .is_some_and(|(_, v)| v.iter().any(|s| s.share_kind.as_deref() == Some("UNIT")));
+            *bad || (has_unit && !*with_shares)
+        })
+        .map(|(c, _)| Incomplete {
+            unit_composition: unit_comp.get(&c).cloned(),
+            issuer_id: c,
+        })
+        .collect();
+    incomplete.sort_by(|a, b| a.issuer_id.cmp(&b.issuer_id));
     let mut out = Fca {
         issuers: issuers.into_values().map(|(_, i)| i).collect(),
         securities: secs.into_values().flat_map(|(_, v)| v).collect(),
         auditors: auditors.into_values().flat_map(|(_, v)| v).collect(),
+        incomplete,
     };
     out.issuers.sort_by(|a, b| a.id.cmp(&b.id));
     out.securities.sort_by(|a, b| a.ticker.cmp(&b.ticker));
@@ -3305,7 +3575,12 @@ mod tests {
         ]);
         let mut out = vec![];
         dre_items(&bb, Layout::Bank, &mut out);
-        assert_eq!(out, vec![(items::NET_INCOME, Decimal::from(13))]);
+        assert_eq!(out, vec![(items::NET_INCOME_TOTAL, Decimal::from(16))]);
+        let parts = net_income_parts(&bb).unwrap();
+        assert_eq!(
+            controllers_income(&parts, None, true),
+            (Decimal::from(13), None)
+        );
         // Itaú: profit in 3.09.
         let itau = lines(&[
             ("3.07", "Resultado Líquido das Operações Continuadas", 45),
@@ -3317,7 +3592,101 @@ mod tests {
         let ind = lines(&[("3.11", "Lucro/Prejuízo do Período", 7)]);
         let mut out = vec![];
         dre_items(&ind, Layout::Industrial, &mut out);
-        assert_eq!(out, vec![(items::NET_INCOME, Decimal::from(7))]);
+        assert_eq!(out, vec![(items::NET_INCOME_TOTAL, Decimal::from(7))]);
+        assert_eq!(
+            controllers_income(&net_income_parts(&ind).unwrap(), None, false),
+            (Decimal::from(7), None)
+        );
+    }
+
+    #[test]
+    fn controllers_income_when_the_line_comes_zeroed() {
+        let parts = |total: i64, ctrl: Option<i64>, minority: i64| NetIncomeParts {
+            total: Decimal::from(total),
+            controllers: ctrl.map(Decimal::from),
+            minority: Decimal::from(minority),
+        };
+        let d = Decimal::from;
+        // Filled line: it wins (Eneva-like: it disagrees a bit with the individual).
+        assert_eq!(
+            controllers_income(&parts(1246, Some(864), 370), Some(d(877)), false),
+            (d(864), None)
+        );
+        // Zeroed with profit in the total (Taesa, Klabin): the individual statement.
+        assert_eq!(
+            controllers_income(&parts(1281, Some(0), 0), Some(d(1281)), false),
+            (d(1281), Some(IncomeFix::Individual))
+        );
+        // Zeroed and no individual: total minus non-controlling interests (Hapvida 9M25).
+        assert_eq!(
+            controllers_income(&parts(-58, Some(0), -1), None, false),
+            (d(-57), Some(IncomeFix::TotalLessMinority))
+        );
+        // Zeroed individual counts as missing.
+        assert_eq!(
+            controllers_income(&parts(100, Some(0), 10), Some(d(0)), false),
+            (d(90), Some(IncomeFix::TotalLessMinority))
+        );
+        // Genuinely zero: the whole profit belongs to non-controlling interests.
+        assert_eq!(
+            controllers_income(&parts(10, Some(0), 10), None, false),
+            (d(0), None)
+        );
+        // Banks: the individual (Central Bank standard), not a correction.
+        assert_eq!(
+            controllers_income(&parts(8134, Some(5776), 2357), Some(d(7425)), true),
+            (d(7425), None)
+        );
+        // Banks without an individual: the consolidated controllers' line.
+        assert_eq!(
+            controllers_income(&parts(8134, Some(5776), 2357), None, true),
+            (d(5776), None)
+        );
+    }
+
+    #[test]
+    fn fca_registry_is_checked_against_the_ticker() {
+        let vm = "CNPJ_Companhia;Data_Referencia;Versao;ID_Documento;Nome_Empresarial;Valor_Mobiliario;Sigla_Classe_Acao_Preferencial;Classe_Acao_Preferencial;Codigo_Negociacao;Composicao_BDR_Unit;Mercado;Sigla_Entidade_Administradora;Entidade_Administradora;Data_Inicio_Negociacao;Data_Fim_Negociacao;Segmento;Data_Inicio_Listagem;Data_Fim_Listagem\n\
+             47.960.950/0001-21;2026-01-01;1;1;MAGAZINE LUIZA S.A.;Ações Preferenciais;;;MGLU3;;Bolsa;B3;B3;2011-05-02;;Novo Mercado;2011-05-02;\n\
+             59.717.553/0001-02;2026-01-01;3;2;GRUPO MULTILASER S.A.;Ações Ordinárias;;;MLAS3;;;;;2021-07-23;;Novo Mercado;2021-07-23;\n\
+             33.042.730/0001-04;2026-01-01;2;3;CIA SIDERURGICA NACIONAL;Ações Ordinárias;;;4030;;Bolsa;B3;B3;1973-07-09;;Básico;1973-07-09;\n\
+             89.637.490/0001-45;2026-01-01;2;4;KLABIN S.A.;Units;;;KLBN11;1 KLBN3 + 4 KLBN4;Bolsa;B3;B3;2014-01-07;;Nível 2;2013-11-28;\n";
+        let zip = fixtures::zip_latin1(&[("fca_cia_aberta_valor_mobiliario_2026.csv", vm.into())]);
+        let f = parse_fca(&zip).unwrap();
+        let kind = |t: &str| {
+            f.securities
+                .iter()
+                .find(|s| s.ticker == t)
+                .and_then(|s| s.share_kind.clone())
+        };
+        // The class comes from the ticker (MGLU3 is common, whatever the FCA says).
+        assert_eq!(kind("MGLU3").as_deref(), Some("ON"));
+        // Blank market with a valid ticker is the exchange.
+        assert_eq!(kind("MLAS3").as_deref(), Some("ON"));
+        // CSN (invalid code) and Klabin (only the unit) go to the B3 registry.
+        assert_eq!(
+            f.incomplete,
+            vec![
+                Incomplete {
+                    issuer_id: "33042730000104".into(),
+                    unit_composition: None,
+                },
+                Incomplete {
+                    issuer_id: "89637490000145".into(),
+                    unit_composition: Some("1 KLBN3 + 4 KLBN4".into()),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn share_kind_comes_from_the_ticker() {
+        assert_eq!(share_kind_of_ticker("MGLU3"), Some("ON"));
+        assert_eq!(share_kind_of_ticker("PETR4"), Some("PN"));
+        assert_eq!(share_kind_of_ticker("USIM5"), Some("PN"));
+        assert_eq!(share_kind_of_ticker("UNIP6"), Some("PN"));
+        assert_eq!(share_kind_of_ticker("KLBN11"), Some("UNIT"));
+        assert_eq!(share_kind_of_ticker("XPTO12"), None);
     }
 
     #[test]

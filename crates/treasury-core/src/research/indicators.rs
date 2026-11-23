@@ -4,8 +4,12 @@
 //! estar indisponível.
 //!
 //! Convenções:
-//! - Fluxos (lucro, receita, EBIT…) são dos últimos 12 meses (LTM); saldos são do último
-//!   balanço. Lucro e patrimônio são os atribuídos aos controladores.
+//! - Fluxos (lucro, receita, EBIT…) são dos últimos 12 meses (LTM); saldos são todos do
+//!   mesmo balanço, o último (uma conta que falta nele fica indisponível, não vem de um
+//!   balanço antigo). Lucro e patrimônio são os atribuídos aos controladores; margem líquida
+//!   e ROA usam o lucro consolidado total, como a receita e o ativo.
+//! - Cada indicador sai com a conferência dos dados de entrada ([`InputCheck`]): conferido,
+//!   corrigido por outra fonte oficial, com aviso, ou bloqueado (sem valor, com o motivo).
 //! - Valor de mercado soma cada classe de ação pela cotação da própria classe quando há
 //!   cotação de todas; senão usa o total de ações × cotação do papel consultado.
 //! - Units: indicadores por ação são multiplicados pelas ações da unit.
@@ -364,6 +368,54 @@ pub static CATALOG: &[IndicatorDef] = &[
     ),
     // Indicadores dos métodos do explorador (docs/design/market-explorer.md, 4.3).
     def!(
+        "p_ebit",
+        G::Valuation,
+        U::Multiple,
+        Some(false),
+        true,
+        Scope::Stock
+    ),
+    def!(
+        "p_working_capital",
+        G::Valuation,
+        U::Multiple,
+        Some(false),
+        true,
+        Scope::Stock
+    ),
+    def!(
+        "p_ncav",
+        G::Valuation,
+        U::Multiple,
+        Some(false),
+        true,
+        Scope::Stock
+    ),
+    def!(
+        "ebit_assets",
+        G::Profitability,
+        U::Percent,
+        Some(true),
+        false,
+        Scope::Stock
+    ),
+    def!(
+        "asset_turnover",
+        G::Profitability,
+        U::Multiple,
+        Some(true),
+        false,
+        Scope::Stock
+    ),
+    def!(
+        "gross_debt_equity",
+        G::Debt,
+        U::Multiple,
+        Some(false),
+        false,
+        Scope::Stock
+    ),
+    def!(
         "earnings_yield",
         G::Valuation,
         U::Percent,
@@ -510,6 +562,80 @@ pub fn catalog() -> Vec<IndicatorInfo> {
         .collect()
 }
 
+/// Conferência dos dados de entrada de um indicador (docs/indicators.md, "Input validation").
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+#[ts(export)]
+pub enum InputCheck {
+    /// Sem valor (dado ausente ou não se aplica): nada a conferir.
+    Unchecked,
+    /// Os dados de entrada passaram nas conferências.
+    Verified,
+    /// Um dado de entrada falhou e foi trocado por outra fonte oficial (ver as notas).
+    Corrected,
+    /// Valor calculado, com uma inconsistência sem explicação nos dados (ver as notas).
+    Warning,
+    /// Dado de entrada inválido, sem fonte que o corrija: o indicador fica sem valor.
+    Blocked,
+}
+
+impl InputCheck {
+    fn rank(self) -> u8 {
+        match self {
+            InputCheck::Unchecked | InputCheck::Verified => 0,
+            InputCheck::Corrected => 1,
+            InputCheck::Warning => 2,
+            InputCheck::Blocked => 3,
+        }
+    }
+}
+
+/// Dados de entrada conferidos separadamente.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+enum Input {
+    /// Lucro dos controladores (12 meses).
+    Income,
+    /// Patrimônio dos controladores.
+    Equity,
+    /// Quantidade de ações.
+    Shares,
+    /// Demonstrações em geral (idade do balanço, reapresentações).
+    Statements,
+    /// Proventos.
+    Dividends,
+}
+
+/// De quais dados de entrada cada indicador depende.
+fn inputs_of(key: &str) -> &'static [Input] {
+    use Input::*;
+    match key {
+        "market_cap" => &[Shares],
+        "ev" | "psr" | "p_ativo" | "ev_ebitda" | "ev_ebit" | "earnings_yield" | "fcf_yield"
+        | "p_ebit" | "p_working_capital" | "p_ncav" => &[Shares, Statements],
+        "pl" | "lpa" | "peg" => &[Income, Shares, Statements],
+        "pvp" | "vpa" => &[Equity, Shares, Statements],
+        "graham" | "graham_upside" => &[Income, Equity, Shares, Statements],
+        "roe" => &[Income, Equity, Statements],
+        "payout" => &[Income, Statements],
+        "net_debt_equity" | "gross_debt_equity" | "roic" => &[Equity, Statements],
+        "roa" | "gross_margin" | "ebitda_margin" | "ebit_margin" | "net_margin"
+        | "net_debt_ebitda" | "current_ratio" | "magic_roc" | "ebit_assets" | "asset_turnover"
+        | "revenue_cagr_5y" | "earnings_cagr_5y" | "loss_years_10y" | "eps_growth_10y" => {
+            &[Statements]
+        }
+        "dy" | "bazin" | "bazin_upside" | "dividend_years" | "dividend_cagr_5y" => &[Dividends],
+        _ => &[],
+    }
+}
+
+/// O indicador depende dos proventos (fica fora dos rankings quando eles são estimados).
+pub fn uses_dividends(key: &str) -> bool {
+    inputs_of(key).contains(&Input::Dividends)
+}
+
+/// Estado de um dado de entrada e as notas da conferência.
+type InputState = (InputCheck, Vec<String>);
+
 /// Um indicador calculado (ou indisponível, com o motivo).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[ts(export)]
@@ -532,6 +658,10 @@ pub struct Indicator {
     /// Estimado (ex.: rendimento de FII calculado a partir do informe mensal).
     pub estimated: bool,
     pub unavailable_reason: Option<String>,
+    /// Conferência dos dados de entrada.
+    pub check: InputCheck,
+    /// O que a conferência achou: correções, avisos ou o motivo do bloqueio.
+    pub check_notes: Vec<String>,
 }
 
 /// Ativo analisado.
@@ -589,6 +719,9 @@ pub struct Data {
     /// De onde vieram os proventos (`dividend_event` do Yahoo, lançamentos…).
     pub dividends_source: Option<String>,
     pub liquidity: Option<(Decimal, String)>,
+    /// Eventos em ações do papel (data-com, ações novas por ação antiga), para conferir a
+    /// quantidade de ações do balanço com a da B3.
+    pub share_events: Vec<(NaiveDate, Decimal)>,
     pub today: NaiveDate,
 }
 
@@ -696,18 +829,99 @@ fn ltm_period(f: &Fact) -> String {
     ltm_until(f.end)
 }
 
-/// Valores-base do emissor: fluxos LTM e saldos mais recentes.
+/// Valores-base do emissor: fluxos LTM e saldos do último balanço.
 struct Base<'a> {
     d: &'a Data,
     ltm: HashMap<String, Fact>,
     reference: Option<NaiveDate>,
+    /// Data do último balanço: todos os saldos vêm dele.
+    balance: Option<NaiveDate>,
     layout: Layout,
+    /// Holding (resultado vindo da equivalência patrimonial) ou seguradora com DRE de
+    /// indústria: os indicadores de EBIT, valor da firma e margens não se aplicam.
+    holding: bool,
     per_unit: Option<Decimal>,
     /// Cotação por ação (cotação da unit ÷ ações por unit).
     price_share: Option<Decimal>,
-    /// Fator da quantidade de ações (1; 1.000 quando o documento informou em milhares).
+    /// Fator da quantidade de ações (1; 1.000 quando o documento informou em milhares;
+    /// total ÷ circulação quando a companhia informou o total já sem a tesouraria).
     shares_factor: Decimal,
     shares_note: Option<String>,
+    /// Conferência dos dados de entrada.
+    checks: HashMap<Input, InputState>,
+    /// Notas de método (bancos pelo padrão do Banco Central).
+    method_notes: Vec<String>,
+}
+
+/// Fatos de fluxo de um item por período (sem os 12 meses calculados).
+fn period_facts<'f>(facts: &'f [Fact], item: &'f str) -> impl Iterator<Item = &'f Fact> + 'f {
+    facts
+        .iter()
+        .filter(move |f| f.item == item && f.period_type != PeriodType::Ltm)
+}
+
+/// Diferença relativa até `tol` (fração).
+fn near_rel(a: Decimal, b: Decimal, tol: Decimal) -> bool {
+    let base = a.abs().max(b.abs());
+    base.is_zero() || (a - b).abs() / base <= tol
+}
+
+/// Fração com uma casa, no formato do idioma ("1,4%").
+fn pct(x: Decimal) -> String {
+    let v = (x * Decimal::from(100)).round_dp(1);
+    crate::ai::alerts::decimal(crate::i18n::current(), &v.normalize().to_string()) + "%"
+}
+
+/// Dinheiro em milhões ("R$ 1.234 mi" no formato do idioma).
+fn millions(v: Decimal) -> String {
+    let m = (v / Decimal::from(1_000_000)).round_dp(0);
+    t_args(
+        "nucleo-pesquisa-ind-milhoes",
+        &args(&[(
+            "valor",
+            crate::ai::alerts::decimal(crate::i18n::current(), &m.normalize().to_string()).into(),
+        )]),
+    )
+}
+
+/// Quantidade de ações em milhões, com uma casa.
+fn shares_millions(v: Decimal) -> String {
+    let m = (v / Decimal::from(1_000_000)).round_dp(1);
+    crate::ai::alerts::decimal(crate::i18n::current(), &m.normalize().to_string())
+}
+
+/// Tolerâncias da conferência (docs/indicators.md, "Input validation").
+mod tol {
+    use rust_decimal::Decimal;
+    /// Quantidade de ações da CVM e da B3 "iguais": até 0,5%.
+    pub fn shares() -> Decimal {
+        Decimal::new(5, 3)
+    }
+    /// Acima disto, a diferença de ações sem evento que explique bloqueia (10%).
+    pub fn shares_block() -> Decimal {
+        Decimal::new(10, 2)
+    }
+    /// Lucro ou patrimônio do consolidado x individual: aviso acima de 1%.
+    pub fn warn() -> Decimal {
+        Decimal::new(1, 2)
+    }
+    /// … e bloqueio acima de 20% (e de R$ 1 milhão).
+    pub fn block() -> Decimal {
+        Decimal::new(20, 2)
+    }
+    pub fn block_abs() -> Decimal {
+        Decimal::from(1_000_000)
+    }
+    /// Reapresentação relevante: acima de 0,5%.
+    pub fn restated() -> Decimal {
+        Decimal::new(5, 3)
+    }
+    /// Balanço com mais de 200 dias fica marcado como antigo (o mesmo corte do score).
+    pub const STALE_DAYS: i64 = 200;
+    /// Peso da equivalência patrimonial no EBIT acima do qual a companhia é uma holding.
+    pub fn holding() -> Decimal {
+        Decimal::new(5, 1)
+    }
 }
 
 /// Quantidade de ações na mesma escala de uma referência (documentos que informam em
@@ -747,6 +961,11 @@ impl<'a> Base<'a> {
             stored
         };
         let reference = ltm_facts.iter().map(|f| f.end).max();
+        // Último balanço: a data mais recente do ativo total e do patrimônio.
+        let balance = [items::TOTAL_ASSETS, items::EQUITY]
+            .iter()
+            .filter_map(|i| periods::instant_at(&d.facts, i, d.today).map(|f| f.end))
+            .max();
         let per_unit = d.per_unit;
         let price_share = match (&d.price, per_unit) {
             (Some((p, _)), Some(u)) if !u.is_zero() => Some(*p / u),
@@ -758,7 +977,16 @@ impl<'a> Base<'a> {
         let mut shares_note = None;
         let raw = periods::instant_at(&d.facts, items::SHARES, d.today);
         let eq = periods::instant_at(&d.facts, items::EQUITY, d.today);
-        if let (Some(s), Some(e), Some(ps)) = (raw, eq, price_share)
+        let shares_b3 = periods::instant_at(&d.facts, items::SHARES_B3, d.today);
+        let mut shares_state: InputState = (InputCheck::Verified, vec![]);
+        if let (Some(s), Some(b3)) = (raw, shares_b3)
+            && !d.subject.is_fii()
+            && s.value > Decimal::ZERO
+        {
+            let (f, st) = reconcile_shares(d, s, b3);
+            shares_factor = f;
+            shares_state = st;
+        } else if let (Some(s), Some(e), Some(ps)) = (raw, eq, price_share)
             && e.value > Decimal::ZERO
             && s.value > Decimal::ZERO
             && !d.subject.is_fii()
@@ -771,6 +999,7 @@ impl<'a> Base<'a> {
                 shares_factor = Decimal::ONE / k;
             }
             if shares_factor != Decimal::ONE {
+                shares_state.0 = InputCheck::Corrected;
                 shares_note = Some(t_args(
                     "nucleo-pesquisa-ind-nota-escala-acoes",
                     &args(&[
@@ -790,15 +1019,257 @@ impl<'a> Base<'a> {
                 ));
             }
         }
-        Self {
+        if let Some(n) = &shares_note {
+            shares_state.1.push(n.clone());
+        }
+        let mut b = Self {
             d,
             ltm: ltm_facts.into_iter().map(|f| (f.item.clone(), f)).collect(),
             reference,
+            balance,
             layout: d.subject.layout.unwrap_or(Layout::Industrial),
+            holding: false,
             per_unit,
             price_share,
             shares_factor,
             shares_note,
+            checks: HashMap::new(),
+            method_notes: vec![],
+        };
+        b.holding = b.is_holding();
+        b.checks.insert(Input::Shares, shares_state);
+        let income = b.check_income();
+        b.checks.insert(Input::Income, income);
+        let equity = b.check_equity();
+        b.checks.insert(Input::Equity, equity);
+        let statements = b.check_statements();
+        b.checks.insert(Input::Statements, statements);
+        let dividends = b.check_dividends();
+        b.checks.insert(Input::Dividends, dividends);
+        b.bank_notes();
+        b
+    }
+
+    /// LTM de um item, quando há.
+    fn ltm_value(&self, item: &str) -> Option<Decimal> {
+        self.ltm.get(item).map(|f| f.value)
+    }
+
+    /// Saldo de um item no último balanço.
+    fn at_balance(&self, item: &str) -> Option<Decimal> {
+        self.inst(item).map(|f| f.value)
+    }
+
+    /// Holding: equivalência patrimonial acima de metade do EBIT; ou seguradora (pelo setor
+    /// do FCA) com DRE de indústria.
+    fn is_holding(&self) -> bool {
+        if self.layout != Layout::Industrial || self.d.subject.is_fii() {
+            return false;
+        }
+        let insurer = self
+            .d
+            .subject
+            .sector
+            .as_deref()
+            .is_some_and(|s| super::norm(s).contains("seguradora"));
+        if insurer {
+            return true;
+        }
+        match (
+            self.ltm_value(items::EQUITY_INCOME),
+            self.ltm_value(items::EBIT),
+        ) {
+            (Some(eqi), Some(ebit)) if ebit > Decimal::ZERO && eqi > Decimal::ZERO => {
+                eqi / ebit > tol::holding()
+            }
+            _ => false,
+        }
+    }
+
+    /// E2: lucro dos controladores conferido com o consolidado informado e com a individual.
+    fn check_income(&self) -> InputState {
+        let mut st: InputState = (InputCheck::Verified, vec![]);
+        if self.layout == Layout::Bank || self.d.subject.is_fii() {
+            return st;
+        }
+        let Some(ni) = self.ltm_value(items::NET_INCOME) else {
+            return st;
+        };
+        let ind = self.ltm_value(items::NET_INCOME_INDIVIDUAL);
+        if let Some(c) = self.ltm_value(items::NET_INCOME_CONSOLIDATED)
+            && !near_rel(ni, c, Decimal::new(1, 6))
+            && (ni - c).abs() > Decimal::from(1000)
+        {
+            // Em que períodos a linha veio zerada, e o que entrou no lugar.
+            let same = |a: &Fact, b: &Fact| {
+                a.period_type == b.period_type && a.end == b.end && a.start == b.start
+            };
+            let facts = &self.d.facts;
+            let from_ind = period_facts(facts, items::NET_INCOME).any(|n| {
+                period_facts(facts, items::NET_INCOME_CONSOLIDATED)
+                    .any(|c| same(n, c) && c.value != n.value)
+                    && period_facts(facts, items::NET_INCOME_INDIVIDUAL)
+                        .any(|i| same(n, i) && i.value == n.value)
+            });
+            st.0 = InputCheck::Corrected;
+            st.1.push(t_args(
+                if from_ind {
+                    "nucleo-pesquisa-ind-check-lucro-individual"
+                } else {
+                    "nucleo-pesquisa-ind-check-lucro-total"
+                },
+                &args(&[
+                    ("informado", millions(c).into()),
+                    ("usado", millions(ni).into()),
+                ]),
+            ));
+            return st;
+        }
+        if let Some(i) = ind {
+            let base = ni.abs().max(i.abs());
+            if base.is_zero() {
+                return st;
+            }
+            let diff = (ni - i).abs() / base;
+            let a = [
+                ("consolidado", millions(ni).into()),
+                ("individual", millions(i).into()),
+                ("diferenca", pct(diff).into()),
+            ];
+            if diff > tol::block() && (ni - i).abs() > tol::block_abs() {
+                st.0 = InputCheck::Blocked;
+                st.1.push(t_args("nucleo-pesquisa-ind-check-lucro-diverge", &args(&a)));
+            } else if diff > tol::warn() {
+                st.0 = InputCheck::Warning;
+                st.1.push(t_args("nucleo-pesquisa-ind-check-lucro-difere", &args(&a)));
+            }
+        }
+        st
+    }
+
+    /// E3: patrimônio dos controladores conferido com o da individual.
+    fn check_equity(&self) -> InputState {
+        let mut st: InputState = (InputCheck::Verified, vec![]);
+        if self.layout == Layout::Bank || self.d.subject.is_fii() {
+            return st;
+        }
+        let (Some(e), Some(i)) = (
+            self.at_balance(items::EQUITY),
+            self.at_balance(items::EQUITY_INDIVIDUAL),
+        ) else {
+            return st;
+        };
+        let base = e.abs().max(i.abs());
+        if base.is_zero() {
+            return st;
+        }
+        let diff = (e - i).abs() / base;
+        let a = [
+            ("consolidado", millions(e).into()),
+            ("individual", millions(i).into()),
+            ("diferenca", pct(diff).into()),
+        ];
+        if diff > tol::block() && (e - i).abs() > tol::block_abs() {
+            st.0 = InputCheck::Blocked;
+            st.1.push(t_args(
+                "nucleo-pesquisa-ind-check-patrimonio-diverge",
+                &args(&a),
+            ));
+        } else if diff > tol::warn() {
+            st.0 = InputCheck::Warning;
+            st.1.push(t_args(
+                "nucleo-pesquisa-ind-check-patrimonio-difere",
+                &args(&a),
+            ));
+        }
+        st
+    }
+
+    /// E6 e E7: idade do balanço e reapresentações nos 12 meses.
+    fn check_statements(&self) -> InputState {
+        let mut st: InputState = (InputCheck::Verified, vec![]);
+        if self.d.subject.is_fii() {
+            return st;
+        }
+        if let Some(b) = self.balance
+            && (self.d.today - b).num_days() > tol::STALE_DAYS
+        {
+            st.0 = InputCheck::Warning;
+            st.1.push(t_args(
+                "nucleo-pesquisa-ind-check-balanco-antigo",
+                &args(&[("data", br(b).into())]),
+            ));
+        }
+        // Reapresentação do acumulado do ano anterior que entra nos 12 meses.
+        if let Some(r) = self.reference {
+            let prev = crate::time::add_months(r, -12);
+            for (item, restated) in [
+                (items::REVENUE, items::REVENUE_RESTATED),
+                (items::EBIT, items::EBIT_RESTATED),
+                (items::NET_INCOME, items::NET_INCOME_RESTATED),
+            ] {
+                let pick = |it: &str| {
+                    self.d.facts.iter().find(|f| {
+                        f.item == it
+                            && f.period_type == PeriodType::Ytd
+                            && periods::near(f.end, prev)
+                    })
+                };
+                // Comparativo zerado é campo em branco, não reapresentação.
+                if let (Some(o), Some(x)) = (pick(item), pick(restated))
+                    && o.priority > x.priority
+                    && !x.value.is_zero()
+                    && !near_rel(o.value, x.value, tol::restated())
+                {
+                    let base = o.value.abs().max(x.value.abs());
+                    if st.0.rank() < InputCheck::Warning.rank() {
+                        st.0 = InputCheck::Warning;
+                    }
+                    st.1.push(t_args(
+                        "nucleo-pesquisa-ind-check-reapresentado",
+                        &args(&[
+                            ("item", items::label(item).into()),
+                            ("periodo", br(o.end).into()),
+                            ("diferenca", pct((x.value - o.value).abs() / base).into()),
+                        ]),
+                    ));
+                }
+            }
+        }
+        st
+    }
+
+    /// E9: proventos oficiais (B3, agenda conferida) ou estimativa pelo fluxo de caixa.
+    fn check_dividends(&self) -> InputState {
+        let d = self.d;
+        if d.subject.is_fii() || !d.dividends.is_empty() || d.dividends_source.is_some() {
+            return (InputCheck::Verified, vec![]);
+        }
+        (
+            InputCheck::Warning,
+            vec![t("nucleo-pesquisa-ind-check-proventos-estimados")],
+        )
+    }
+
+    /// Bancos: lucro e patrimônio pelo padrão do Banco Central, e o consolidado em IFRS.
+    fn bank_notes(&mut self) {
+        if self.layout != Layout::Bank {
+            return;
+        }
+        let ni = self.ltm_value(items::NET_INCOME);
+        let ifrs = self.ltm_value(items::NET_INCOME_CONSOLIDATED);
+        let eq = self.at_balance(items::EQUITY);
+        let eq_ifrs = self.at_balance(items::EQUITY_CONSOLIDATED);
+        let differs = matches!((ni, ifrs), (Some(a), Some(b)) if a != b)
+            || matches!((eq, eq_ifrs), (Some(a), Some(b)) if a != b);
+        if differs && let (Some(i), Some(e)) = (ifrs, eq_ifrs) {
+            self.method_notes.push(t_args(
+                "nucleo-pesquisa-ind-nota-banco-padrao-bc",
+                &args(&[
+                    ("lucro", millions(i).into()),
+                    ("patrimonio", millions(e).into()),
+                ]),
+            ));
         }
     }
 
@@ -818,8 +1289,19 @@ impl<'a> Base<'a> {
         self.ltm.get(item)
     }
 
+    /// Saldo de um item no último balanço (`None` quando o item não está nele). A quantidade
+    /// de ações da B3 tem a data da consulta e é lida à parte.
     fn inst(&self, item: &str) -> Option<&'a Fact> {
-        periods::instant_at(&self.d.facts, item, self.d.today)
+        let f = periods::instant_at(&self.d.facts, item, self.d.today)?;
+        // A quantidade de ações muda pouco: sem a composição do capital no último documento,
+        // vale a do anterior.
+        if item.starts_with("shares") {
+            return Some(f);
+        }
+        match self.balance {
+            Some(b) if !periods::near(f.end, b) => None,
+            _ => Some(f),
+        }
     }
 
     fn month(&self, item: &str) -> Option<&'a Fact> {
@@ -900,6 +1382,94 @@ impl<'a> Base<'a> {
     }
 }
 
+/// E4: quantidade de ações do balanço conferida com o total do capital social na B3 (que
+/// inclui as ações em tesouraria). Devolve o fator para as ações em circulação da CVM e o
+/// estado da conferência.
+fn reconcile_shares(d: &Data, outstanding: &Fact, b3: &Fact) -> (Decimal, InputState) {
+    let same = |item: &str| {
+        periods::instant_at(&d.facts, item, d.today)
+            .filter(|f| f.end == outstanding.end)
+            .map(|f| f.value)
+    };
+    let total = same(items::SHARES_TOTAL).unwrap_or(outstanding.value);
+    let treasury = same(items::SHARES_TREASURY).unwrap_or_default();
+    let b = b3.value;
+    let mut notes = vec![];
+    let mut state = InputCheck::Verified;
+    // Escala: a CVM não tem coluna de escala para a quantidade de ações.
+    let k = Decimal::from(1000);
+    let r = b / total;
+    let scale = if r > Decimal::from(300) && r < Decimal::from(3000) {
+        k
+    } else if r < Decimal::ONE / Decimal::from(300) && r > Decimal::ONE / Decimal::from(3000) {
+        Decimal::ONE / k
+    } else {
+        Decimal::ONE
+    };
+    if scale != Decimal::ONE {
+        state = InputCheck::Corrected;
+        notes.push(t_args(
+            "nucleo-pesquisa-ind-check-acoes-escala",
+            &args(&[
+                ("documento", outstanding.document.clone().into()),
+                ("b3", shares_millions(b).into()),
+            ]),
+        ));
+    }
+    let total_s = total * scale;
+    let treasury_s = treasury * scale;
+    let b3_args = |extra: Vec<(&'static str, fluent_bundle::FluentValue<'static>)>| {
+        let mut a = vec![
+            ("b3", shares_millions(b).into()),
+            ("cvm", shares_millions(total_s).into()),
+            ("data", br(b3.end).into()),
+        ];
+        a.extend(extra);
+        a
+    };
+    if near_rel(b, total_s, tol::shares()) {
+        return (scale, (state, notes));
+    }
+    if treasury_s > Decimal::ZERO
+        && near_rel(b, total_s + treasury_s, tol::shares())
+        && total > treasury
+    {
+        // O total da CVM já veio sem a tesouraria: as ações em circulação são esse total.
+        notes.push(t_args(
+            "nucleo-pesquisa-ind-check-acoes-total-liquido",
+            &args(&b3_args(vec![(
+                "tesouraria",
+                shares_millions(treasury_s).into(),
+            )])),
+        ));
+        return (
+            scale * total / (total - treasury),
+            (InputCheck::Corrected, notes),
+        );
+    }
+    let m = d
+        .share_events
+        .iter()
+        .filter(|(date, _)| *date > outstanding.end && *date <= b3.end)
+        .fold(Decimal::ONE, |acc, (_, x)| acc * *x);
+    if m != Decimal::ONE && near_rel(b, total_s * m, tol::shares()) {
+        notes.push(t_args(
+            "nucleo-pesquisa-ind-check-acoes-evento",
+            &args(&b3_args(vec![("fator", dstr(m.round_dp(6)).into())])),
+        ));
+        return (scale * m, (InputCheck::Corrected, notes));
+    }
+    let diff = (b - total_s).abs() / total_s.abs().max(b.abs());
+    let a = b3_args(vec![("diferenca", pct(diff).into())]);
+    if diff > tol::shares_block() {
+        notes.push(t_args("nucleo-pesquisa-ind-check-acoes-diverge", &args(&a)));
+        (scale, (InputCheck::Blocked, notes))
+    } else {
+        notes.push(t_args("nucleo-pesquisa-ind-check-acoes-difere", &args(&a)));
+        (scale, (InputCheck::Warning, notes))
+    }
+}
+
 fn ratio(a: Decimal, b: Decimal) -> Option<f64> {
     (!b.is_zero()).then(|| to_f64(a / b))
 }
@@ -907,6 +1477,7 @@ fn ratio(a: Decimal, b: Decimal) -> Option<f64> {
 struct Out<'a> {
     list: Vec<Indicator>,
     currency: &'a str,
+    checks: &'a HashMap<Input, InputState>,
 }
 
 impl Out<'_> {
@@ -926,6 +1497,8 @@ impl Out<'_> {
             source: None,
             estimated: false,
             unavailable_reason: None,
+            check: InputCheck::Unchecked,
+            check_notes: vec![],
         };
         match r {
             Ok(c) => {
@@ -944,7 +1517,47 @@ impl Out<'_> {
             }
             Err(e) => ind.unavailable_reason = Some(e),
         }
+        self.apply_checks(&mut ind);
         self.list.push(ind);
+    }
+
+    /// Estado da conferência pelo pior dado de entrada do indicador; bloqueado fica sem valor.
+    fn apply_checks(&self, ind: &mut Indicator) {
+        if ind.value.is_none() {
+            return;
+        }
+        let mut worst = InputCheck::Verified;
+        let mut notes: Vec<String> = vec![];
+        let mut blocked: Vec<String> = vec![];
+        for i in inputs_of(&ind.key) {
+            let Some((st, n)) = self.checks.get(i) else {
+                continue;
+            };
+            if st.rank() > worst.rank() {
+                worst = *st;
+            }
+            if *st == InputCheck::Verified {
+                continue;
+            }
+            for x in n {
+                if !notes.contains(x) {
+                    notes.push(x.clone());
+                }
+                if *st == InputCheck::Blocked && !blocked.contains(x) {
+                    blocked.push(x.clone());
+                }
+            }
+        }
+        if worst == InputCheck::Blocked {
+            ind.value = None;
+            ind.exact = None;
+            ind.unavailable_reason = Some(t_args(
+                "nucleo-pesquisa-ind-bloqueado",
+                &args(&[("motivo", blocked.join(" · ").into())]),
+            ));
+        }
+        ind.check = worst;
+        ind.check_notes = notes;
     }
 }
 
@@ -972,6 +1585,10 @@ fn join(parts: &[Option<String>]) -> Option<String> {
 
 fn financial_na() -> String {
     t("nucleo-pesquisa-ind-nao-se-aplica-financeiras")
+}
+
+fn holding_na() -> String {
+    t("nucleo-pesquisa-ind-nao-se-aplica-holdings")
 }
 
 /// Alíquota nominal de IR sobre o lucro (Brasil: IRPJ 25% + CSLL 9%; EUA: 21% federal).
@@ -1394,6 +2011,7 @@ pub fn compute(d: &Data, bazin: BazinParams) -> IndicatorsView {
     let mut out = Out {
         list: vec![],
         currency: cur,
+        checks: &b.checks,
     };
     let mut notes = vec![];
     let fii = d.subject.is_fii();
@@ -1514,6 +2132,10 @@ pub fn compute(d: &Data, bazin: BazinParams) -> IndicatorsView {
     if financial {
         notes.push(t("nucleo-pesquisa-ind-nota-financeira"));
     }
+    if b.holding {
+        notes.push(t("nucleo-pesquisa-ind-nota-holding"));
+    }
+    notes.extend(b.method_notes.iter().cloned());
     if b.per_unit.is_some_and(|u| u > Decimal::ONE) {
         notes.push(t_args(
             "nucleo-pesquisa-ind-nota-unit",
@@ -1590,6 +2212,26 @@ fn compute_stock(
     let fin = |r: Result<Calc, String>| {
         if financial { Err(financial_na()) } else { r }
     };
+    // Operacionais: também não se aplicam a holdings e seguradoras com DRE de indústria.
+    let holding = b.holding;
+    let op = |r: Result<Calc, String>| {
+        if financial {
+            Err(financial_na())
+        } else if holding {
+            Err(holding_na())
+        } else {
+            r
+        }
+    };
+    // Lucro consolidado total (com não controladores), para margem líquida e ROA: a receita e o
+    // ativo também são de 100% do consolidado.
+    let ni_total = b
+        .flow(items::NET_INCOME_TOTAL)
+        .cloned()
+        .ok_or_else(|| t("nucleo-pesquisa-ind-sem-lucro-12m"))
+        .or_else(|_| ni.clone());
+    let minority = b.inst(items::MINORITY).map(|f| f.value).unwrap_or_default();
+    let total_liab = b.inst(items::TOTAL_LIABILITIES).cloned();
 
     let ebitda = || -> Result<(Decimal, String, NaiveDate), String> {
         let e = ebit.clone()?;
@@ -1605,7 +2247,8 @@ fn compute_stock(
         let c = cash.as_ref().map(|c| c.value).unwrap_or_default();
         Ok((dv.value - c, dv.document))
     };
-    let ev = || -> Result<Decimal, String> { Ok(mc_r()? + net_debt()?.0) };
+    // Valor da firma com a participação dos não controladores: o EBITDA é do consolidado.
+    let ev = || -> Result<Decimal, String> { Ok(mc_r()? + net_debt()?.0 + minority) };
     let flow_calc = |v: Option<f64>, f: &Fact, extra: &[Option<String>]| Calc {
         value: v,
         period: Some(ltm_period(f)),
@@ -1623,7 +2266,7 @@ fn compute_stock(
 
     out.push(
         "ev",
-        fin((|| {
+        op((|| {
             let v = ev()?;
             Ok(Calc {
                 value: Some(to_f64(v)),
@@ -1663,7 +2306,7 @@ fn compute_stock(
     );
     out.push(
         "ev_ebitda",
-        fin((|| {
+        op((|| {
             let (e, doc, end) = ebitda()?;
             if e <= Decimal::ZERO {
                 return Err(t("nucleo-pesquisa-ind-ebitda-negativo"));
@@ -1679,7 +2322,7 @@ fn compute_stock(
     );
     out.push(
         "ev_ebit",
-        fin((|| {
+        op((|| {
             let e = ebit.clone()?;
             if e.value <= Decimal::ZERO {
                 return Err(t("nucleo-pesquisa-ind-ebit-negativo"));
@@ -1693,7 +2336,7 @@ fn compute_stock(
     );
     out.push(
         "psr",
-        fin((|| {
+        op((|| {
             let r = rev.clone()?;
             if r.value <= Decimal::ZERO {
                 return Err(t("nucleo-pesquisa-ind-receita-zero"));
@@ -1776,19 +2419,26 @@ fn compute_stock(
         };
     for (key, r) in [
         ("roe", ret("roe", ni.clone(), eq.clone(), true)),
-        ("roa", ret("roa", ni.clone(), assets.clone(), true)),
+        ("roa", ret("roa", ni_total.clone(), assets.clone(), true)),
     ] {
         out.push(key, r.map(|x| x.1));
     }
     out.push(
         "roic",
-        fin((|| {
+        op((|| {
             let e = ebit.clone()?;
             let q = eq.clone()?;
             let (nd, _) = net_debt()?;
-            let capital = q.value + nd;
+            // Capital de todos os financiadores do EBIT consolidado, com os não controladores.
+            let capital = q.value + minority + nd;
             if capital <= Decimal::ZERO {
                 return Err(t("nucleo-pesquisa-ind-capital-negativo"));
+            }
+            // Caixa líquido muito grande deixa o capital minúsculo e o ROIC sem sentido.
+            if let Ok(a) = &assets
+                && capital < a.value / Decimal::from(10)
+            {
+                return Err(t("nucleo-pesquisa-ind-capital-pequeno"));
             }
             let t = tax_rate(&d.subject.currency);
             let mut c = flow_calc(
@@ -1804,7 +2454,7 @@ fn compute_stock(
         })()),
     );
     let margin = |num: Result<Fact, String>| {
-        fin((|| {
+        op((|| {
             let n = num?;
             let r = rev.clone()?;
             if r.value <= Decimal::ZERO {
@@ -1820,7 +2470,7 @@ fn compute_stock(
     out.push("gross_margin", margin(gross.clone()));
     out.push(
         "ebitda_margin",
-        fin((|| {
+        op((|| {
             let (e, doc, end) = ebitda()?;
             let r = rev.clone()?;
             Ok(Calc {
@@ -1833,7 +2483,7 @@ fn compute_stock(
         })()),
     );
     out.push("ebit_margin", margin(ebit.clone()));
-    out.push("net_margin", margin(ni.clone()));
+    out.push("net_margin", margin(ni_total.clone()));
     out.push(
         "net_debt_equity",
         fin((|| {
@@ -1847,7 +2497,7 @@ fn compute_stock(
     );
     out.push(
         "net_debt_ebitda",
-        fin((|| {
+        op((|| {
             let (nd, doc) = net_debt()?;
             let (e, edoc, end) = ebitda()?;
             if e <= Decimal::ZERO {
@@ -1960,7 +2610,7 @@ fn compute_stock(
     // o crescimento do lucro em 10 anos (Graham defensivo).
     out.push(
         "earnings_yield",
-        fin((|| {
+        op((|| {
             let e = ebit.clone()?;
             let v = ev()?;
             Ok(flow_calc(ratio(e.value, v), &e, std::slice::from_ref(psrc)))
@@ -1968,7 +2618,7 @@ fn compute_stock(
     );
     out.push(
         "magic_roc",
-        fin((|| {
+        op((|| {
             let e = ebit.clone()?;
             let a = ca.clone()?;
             let l = cl.clone()?;
@@ -1986,7 +2636,7 @@ fn compute_stock(
     );
     out.push(
         "fcf_yield",
-        fin((|| {
+        op((|| {
             let cfo = need(b.flow(items::CFO), "nucleo-pesquisa-ind-sem-fco-12m")?;
             let capex = b.flow(items::CAPEX).map(|f| f.value).unwrap_or_default();
             let m = mc_r()?;
@@ -2043,6 +2693,96 @@ fn compute_stock(
                 ..Default::default()
             })
         })(),
+    );
+    // Indicadores do Fundamentus que faltavam (docs/indicators.md).
+    out.push(
+        "p_ebit",
+        op((|| {
+            let e = ebit.clone()?;
+            if e.value <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-ebit-negativo"));
+            }
+            Ok(flow_calc(
+                ratio(mc_r()?, e.value),
+                &e,
+                std::slice::from_ref(psrc),
+            ))
+        })()),
+    );
+    out.push(
+        "p_working_capital",
+        op((|| {
+            let a = ca.clone()?;
+            let l = cl.clone()?;
+            let wc = a.value - l.value;
+            if wc <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-capital-giro-negativo"));
+            }
+            Ok(inst_calc(
+                ratio(mc_r()?, wc),
+                &a,
+                std::slice::from_ref(psrc),
+            ))
+        })()),
+    );
+    out.push(
+        "p_ncav",
+        op((|| {
+            let a = ca.clone()?;
+            let l = total_liab
+                .clone()
+                .ok_or_else(|| t("nucleo-pesquisa-ind-sem-passivo-total"))?;
+            let ncav = a.value - l.value;
+            if ncav <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-ativo-circulante-liquido-negativo"));
+            }
+            Ok(inst_calc(
+                ratio(mc_r()?, ncav),
+                &a,
+                std::slice::from_ref(psrc),
+            ))
+        })()),
+    );
+    out.push(
+        "ebit_assets",
+        op((|| {
+            let e = ebit.clone()?;
+            let a = assets.clone()?;
+            if a.value <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-denominador-negativo"));
+            }
+            Ok(flow_calc(
+                ratio(e.value, a.value),
+                &e,
+                &[Some(a.document.clone())],
+            ))
+        })()),
+    );
+    out.push(
+        "asset_turnover",
+        op((|| {
+            let r = rev.clone()?;
+            let a = assets.clone()?;
+            if a.value <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-denominador-negativo"));
+            }
+            Ok(flow_calc(
+                ratio(r.value, a.value),
+                &r,
+                &[Some(a.document.clone())],
+            ))
+        })()),
+    );
+    out.push(
+        "gross_debt_equity",
+        fin((|| {
+            let dv = debt.clone()?;
+            let e = eq.clone()?;
+            if e.value <= Decimal::ZERO {
+                return Err(t("nucleo-pesquisa-ind-patrimonio-negativo"));
+            }
+            Ok(inst_calc(ratio(dv.value, e.value), &e, &[]))
+        })()),
     );
     push_dividend_history(b, out);
     match per_share(b) {
@@ -2264,3 +3004,6 @@ pub fn value_of(list: &[Indicator], key: &str) -> Option<f64> {
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod real_tests;

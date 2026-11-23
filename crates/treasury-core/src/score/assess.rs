@@ -455,7 +455,8 @@ pub(crate) fn assess_equity(
         peers
     };
     let filled = equity::fill_from_secondary(m, conn, ticker.as_deref(), &mut metrics, false)?;
-    let recon = equity::reconcile(m, conn, ticker.as_deref(), &metrics, false)?;
+    let conv = equity::fundamentus_convention(d, value_of(&view, "market_cap").map(|x| x.0));
+    let recon = equity::reconcile(m, conn, ticker.as_deref(), &metrics, false, &conv)?;
     let mut extra = vec![];
     if !filled.is_empty() {
         extra.push((

@@ -128,6 +128,7 @@ fn exemplo() -> Data {
             ev("2026-08-20", dec!(0.42)),
         ],
         dividends_source: Some("agenda de proventos (yahoo)".into()),
+        share_events: vec![],
         liquidity: Some((
             dec!(2_500_000),
             "média de 21 pregão(ões), B3 COTAHIST".into(),
@@ -499,6 +500,7 @@ fn fii_indicators() {
         siblings: vec![],
         dividends: vec![],
         dividends_source: None,
+        share_events: vec![],
         liquidity: None,
         today: d("2026-10-14"),
     };
@@ -589,6 +591,7 @@ fn fii_dy_sources_and_vacancy() {
         siblings: vec![],
         dividends: vec![],
         dividends_source: None,
+        share_events: vec![],
         liquidity: None,
         today: d("2026-10-14"),
     };
@@ -662,4 +665,250 @@ fn shares_reported_in_thousands_are_corrected_by_price() {
     // Right scale: nothing changes.
     let v = compute(&exemplo(), BazinParams::default());
     assert!(v.notes.iter().all(|n| !n.contains("milhares")));
+}
+
+/// Exemplo with the quote of 2026-10-13 and only the common class (no class sum), so market
+/// cap = shares × price.
+fn exemplo_single_class() -> Data {
+    let mut data = exemplo();
+    data.siblings.clear();
+    // Balance sheet less than 200 days old (no staleness warning in the checks).
+    data.today = d("2026-03-01");
+    data
+}
+
+#[test]
+fn b3_share_count_confirms_or_corrects_the_balance_sheet() {
+    // CVM: 102,000 total with 2,000 in treasury → 100,000 outstanding.
+    let base = |b3: Decimal, total: Decimal, treasury: Decimal| {
+        let mut d = exemplo_single_class();
+        d.facts.push(inst(items::SHARES_TOTAL, "2025-12-31", total));
+        d.facts
+            .push(inst(items::SHARES_TREASURY, "2025-12-31", treasury));
+        d.facts.push(inst(items::SHARES_B3, "2026-02-20", b3));
+        d
+    };
+    // B3 agrees with the total (with treasury): verified, outstanding stays.
+    let v = compute(
+        &base(dec!(102_000), dec!(102_000), dec!(2_000)),
+        BazinParams::default(),
+    );
+    approx(&v, "market_cap", 100_000.0 * 12.0);
+    assert_eq!(ind(&v, "market_cap").check, InputCheck::Verified);
+    // Vale-like: the CVM "total" was already net of treasury (B3 = total + treasury).
+    let mut d = base(dec!(104_000), dec!(102_000), dec!(2_000));
+    if let Some(f) = d.facts.iter_mut().find(|f| f.item == items::SHARES) {
+        f.value = dec!(100_000); // what the reader stores: total − treasury
+    }
+    let v = compute(&d, BazinParams::default());
+    approx(&v, "market_cap", 102_000.0 * 12.0);
+    assert_eq!(ind(&v, "market_cap").check, InputCheck::Corrected);
+    // Shares in thousands at the CVM: the B3 count gives the scale.
+    let mut d = base(dec!(102_000_000), dec!(102_000), dec!(2_000));
+    d.facts
+        .retain(|f| f.item != items::SHARES_ON && f.item != items::SHARES_PN);
+    let v = compute(&d, BazinParams::default());
+    approx(&v, "market_cap", 100_000_000.0 * 12.0);
+    assert_eq!(ind(&v, "market_cap").check, InputCheck::Corrected);
+    // A 2-for-1 split after the balance sheet explains the B3 count.
+    let mut d = base(dec!(204_000), dec!(102_000), dec!(2_000));
+    d.share_events = vec![(d_("2026-02-02"), dec!(2))];
+    let v = compute(&d, BazinParams::default());
+    approx(&v, "market_cap", 200_000.0 * 12.0);
+    assert_eq!(ind(&v, "market_cap").check, InputCheck::Corrected);
+    // Unexplained 5%: value kept, with a warning; above 10%: blocked.
+    let v = compute(
+        &base(dec!(107_100), dec!(102_000), dec!(2_000)),
+        BazinParams::default(),
+    );
+    approx(&v, "market_cap", 100_000.0 * 12.0);
+    assert_eq!(ind(&v, "market_cap").check, InputCheck::Warning);
+    let v = compute(
+        &base(dec!(130_000), dec!(102_000), dec!(2_000)),
+        BazinParams::default(),
+    );
+    let mc = ind(&v, "market_cap");
+    assert_eq!(mc.check, InputCheck::Blocked);
+    assert!(mc.value.is_none());
+    assert!(mc.unavailable_reason.as_deref().unwrap().contains("B3"));
+    assert!(ind(&v, "pl").value.is_none());
+    // ROE does not depend on the share count.
+    assert!(ind(&v, "roe").value.is_some());
+}
+
+fn d_(s: &str) -> NaiveDate {
+    d(s)
+}
+
+#[test]
+fn balances_come_from_the_latest_balance_sheet_only() {
+    let mut data = exemplo();
+    // Non-controlling interests reported only in an old balance sheet: not used.
+    data.facts
+        .push(inst(items::MINORITY, "2020-12-31", dec!(999_999)));
+    let v = compute(&data, BazinParams::default());
+    approx(&v, "ev", 1_080_000.0 + 200_000.0);
+    // In the latest balance sheet: EV and ROIC include them.
+    data.facts
+        .push(inst(items::MINORITY, "2025-12-31", dec!(100_000)));
+    let v = compute(&data, BazinParams::default());
+    approx(&v, "ev", 1_080_000.0 + 200_000.0 + 100_000.0);
+    approx(
+        &v,
+        "roic",
+        200_000.0 * 0.66 / (800_000.0 + 100_000.0 + 200_000.0),
+    );
+}
+
+#[test]
+fn net_margin_and_roa_use_the_consolidated_total() {
+    let mut data = exemplo();
+    data.facts
+        .push(annual(items::NET_INCOME_TOTAL, 2025, dec!(150_000)));
+    let v = compute(&data, BazinParams::default());
+    approx(&v, "net_margin", 0.15);
+    approx(&v, "roa", 150_000.0 / 2_000_000.0);
+    // P/L and ROE stay with the controllers' income.
+    approx(&v, "roe", 120_000.0 / 800_000.0);
+}
+
+#[test]
+fn roic_is_unavailable_when_net_cash_shrinks_the_capital() {
+    let mut data = exemplo();
+    data.facts.retain(|f| f.item != items::CASH);
+    // Cash of 1,150,000: capital = 800,000 + 400,000 − 1,150,000 = 50,000 < 10% of assets.
+    data.facts
+        .push(inst(items::CASH, "2025-12-31", dec!(1_150_000)));
+    let v = compute(&data, BazinParams::default());
+    assert!(ind(&v, "roic").value.is_none());
+    assert!(
+        ind(&v, "roic")
+            .unavailable_reason
+            .as_deref()
+            .unwrap()
+            .contains("10%")
+    );
+}
+
+#[test]
+fn holding_companies_skip_operating_indicators() {
+    let mut data = exemplo();
+    // Equity method above half of EBIT (Itaúsa-like).
+    data.facts
+        .push(annual(items::EQUITY_INCOME, 2025, dec!(150_000)));
+    let v = compute(&data, BazinParams::default());
+    for key in [
+        "ev_ebitda",
+        "ebit_margin",
+        "roic",
+        "p_ebit",
+        "asset_turnover",
+    ] {
+        assert!(ind(&v, key).value.is_none(), "{key}");
+    }
+    assert!(ind(&v, "pl").value.is_some());
+    assert!(ind(&v, "net_debt_equity").value.is_some());
+    assert!(v.notes.iter().any(|n| n.contains("equivalência")));
+    // Insurer by the registry sector, with an industrial-format DRE.
+    let mut data = exemplo();
+    data.subject.sector = Some("Seguradoras e Corretoras".into());
+    let v = compute(&data, BazinParams::default());
+    assert!(ind(&v, "ev").value.is_none());
+}
+
+#[test]
+fn income_checks_against_the_individual_statements() {
+    // Consolidated controllers' line zeroed and replaced by the individual: corrected.
+    let mut data = exemplo_single_class();
+    data.facts
+        .push(annual(items::NET_INCOME_CONSOLIDATED, 2025, dec!(0)));
+    data.facts
+        .push(annual(items::NET_INCOME_INDIVIDUAL, 2025, dec!(120_000)));
+    let v = compute(&data, BazinParams::default());
+    let pl = ind(&v, "pl");
+    assert_eq!(pl.check, InputCheck::Corrected);
+    assert!(pl.check_notes[0].contains("individual"));
+    // Disagreeing by 5%: warning; by more than 20% (and R$ 1 million): blocked.
+    let mut data = exemplo_single_class();
+    data.facts
+        .push(annual(items::NET_INCOME_INDIVIDUAL, 2025, dec!(126_000)));
+    let v = compute(&data, BazinParams::default());
+    assert_eq!(ind(&v, "pl").check, InputCheck::Warning);
+    let mut data = exemplo();
+    for f in data
+        .facts
+        .iter_mut()
+        .filter(|f| f.item == items::NET_INCOME)
+    {
+        f.value *= dec!(100);
+    }
+    data.facts
+        .push(annual(items::NET_INCOME_INDIVIDUAL, 2025, dec!(-5_000_000)));
+    let v = compute(&data, BazinParams::default());
+    assert_eq!(ind(&v, "pl").check, InputCheck::Blocked);
+    assert!(ind(&v, "pl").value.is_none());
+    assert!(ind(&v, "roe").value.is_none());
+    // Revenue-only indicators are unaffected.
+    assert!(ind(&v, "psr").value.is_some());
+}
+
+#[test]
+fn restatements_are_flagged_but_blank_comparatives_are_not() {
+    let ytd = |item: &str, end: &str, v: Decimal, pri: i64| Fact {
+        priority: pri,
+        ..fact(item, PeriodType::Ytd, Some("2025-01-01"), end, v)
+    };
+    let mut data = exemplo_single_class();
+    data.facts
+        .push(ytd(items::NET_INCOME, "2026-06-30", dec!(70_000), 2));
+    data.facts
+        .push(ytd(items::NET_INCOME, "2025-06-30", dec!(50_000), 2));
+    data.facts
+        .push(ytd(items::REVENUE, "2026-06-30", dec!(600_000), 2));
+    data.facts
+        .push(ytd(items::REVENUE, "2025-06-30", dec!(500_000), 2));
+    data.facts
+        .push(ytd(items::REVENUE_RESTATED, "2025-06-30", dec!(450_000), 1));
+    for f in data
+        .facts
+        .iter_mut()
+        .filter(|f| f.end == d("2026-06-30") && f.period_type == PeriodType::Ytd)
+    {
+        f.start = Some(d("2026-01-01"));
+    }
+    data.facts
+        .push(inst(items::TOTAL_ASSETS, "2026-06-30", dec!(2_000_000)));
+    let v = compute(&data, BazinParams::default());
+    let psr = ind(&v, "psr");
+    assert_eq!(psr.check, InputCheck::Warning, "{:?}", psr.check_notes);
+    assert!(psr.check_notes.iter().any(|n| n.contains("reapresentou")));
+    // A zero comparative is a blank field.
+    for f in data
+        .facts
+        .iter_mut()
+        .filter(|f| f.item == items::REVENUE_RESTATED)
+    {
+        f.value = Decimal::ZERO;
+    }
+    let v = compute(&data, BazinParams::default());
+    assert!(
+        !ind(&v, "psr")
+            .check_notes
+            .iter()
+            .any(|n| n.contains("reapresentou"))
+    );
+}
+
+#[test]
+fn estimated_dividends_stay_out_of_rankings() {
+    assert!(uses_dividends("dy"));
+    assert!(uses_dividends("bazin_upside"));
+    assert!(!uses_dividends("pl"));
+    let mut data = exemplo();
+    data.dividends.clear();
+    data.dividends_source = None;
+    let v = compute(&data, BazinParams::default());
+    let dy = ind(&v, "dy");
+    assert!(dy.estimated);
+    assert_eq!(dy.check, InputCheck::Warning);
 }

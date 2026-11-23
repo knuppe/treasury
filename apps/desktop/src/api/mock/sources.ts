@@ -342,6 +342,7 @@ registerMockHandlers({
       invalid('a fonte Fundamentus está desligada em Ajustes › Fontes de dados');
     return { assets: 1, events_added: 2, errors: [] };
   },
+  'research.b3_refresh': () => ({ fetched: false, rows: 0 }),
   'research.fundamentus': (args): FundamentusSnapshot => {
     ready();
     const ticker = str(args, 'ticker').trim().toUpperCase().replace(/\.SA$/, '');

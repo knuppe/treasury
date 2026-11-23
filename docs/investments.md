@@ -48,7 +48,7 @@ content, not a tool).
 
 Each indicator shows the formula, the period (last 12 months or last fiscal year) and the source, like the rest of the app.
 
-How the core calculates (`crates/treasury-core/src/research`): profit and equity are those of the controlling shareholders; flows are for the last 12 months (DFP + ITR: previous year + year to date − year to date of the previous year); consolidated when the company publishes it, otherwise standalone. Bank indicators (Basel, Tier 1 capital, leverage, delinquency) come from the Central Bank's IF.data (`research/ifdata.rs`), and FII vacancy from the CVM monthly report.
+How the core calculates (`crates/treasury-core/src/research`; formulas, input validation and the universe audit in [indicators.md](indicators.md)): profit and equity are those of the controlling shareholders (net margin and ROA use the consolidated total); flows are for the last 12 months (DFP + ITR: previous year + year to date − year to date of the previous year); consolidated when the company publishes it, otherwise standalone. Bank indicators (Basel, Tier 1 capital, leverage, delinquency) come from the Central Bank's IF.data (`research/ifdata.rs`), and FII vacancy from the CVM monthly report.
 
 ## World exchanges
 

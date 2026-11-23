@@ -237,7 +237,8 @@ impl ToolInput for RunScreenInput {
 pub struct RankAssetsInput {
     /// Indicator: `pl`, `pvp`, `ev_ebitda`, `ev_ebit`, `psr`, `p_ativo`, `dy`, `payout`,
     /// `roe`, `roic`, `roa`, `gross_margin`, `ebitda_margin`, `ebit_margin`, `net_margin`,
-    /// `net_debt_equity`, `net_debt_ebitda`, `current_ratio`, `revenue_cagr_5y`,
+    /// `net_debt_equity`, `gross_debt_equity`, `net_debt_ebitda`, `current_ratio`, `p_ebit`,
+    /// `p_working_capital`, `p_ncav`, `ebit_assets`, `asset_turnover`, `revenue_cagr_5y`,
     /// `earnings_cagr_5y`, `loss_years_10y`, `lpa`, `vpa`, `market_cap`, `ev`, `liquidity`,
     /// `price`, `graham`, `graham_upside`, `bazin`, `bazin_upside`, `nav_per_share`,
     /// `holders`, `last_dividend`, the method indicators `earnings_yield`, `magic_roc`,

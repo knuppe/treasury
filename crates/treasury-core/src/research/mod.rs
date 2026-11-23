@@ -226,12 +226,34 @@ impl Security {
             return Some(Decimal::ONE);
         }
         let comp = self.unit_composition.as_deref()?;
-        let total: u32 = comp
-            .split(|c: char| !c.is_ascii_digit())
-            .filter_map(|n| n.parse::<u32>().ok())
-            .sum();
+        let total = unit_count(comp);
         (total > 0).then(|| Decimal::from(total))
     }
+}
+
+/// Ações numa composição de unit: soma os números que são quantidade ("1 ON / 2 PN",
+/// "1 ON e 2PNs", "1 KLBN3 + 4 KLBN4" = 5). Número colado depois de uma letra é parte de um
+/// código de negociação (o 3 de KLBN3) e não conta.
+pub fn unit_count(comp: &str) -> u32 {
+    let chars: Vec<char> = comp.chars().collect();
+    let mut total = 0u32;
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i].is_ascii_digit() {
+            let start = i;
+            while i < chars.len() && chars[i].is_ascii_digit() {
+                i += 1;
+            }
+            let glued = start > 0 && chars[start - 1].is_alphabetic();
+            if !glued {
+                let n: String = chars[start..i].iter().collect();
+                total += n.parse::<u32>().unwrap_or(0);
+            }
+        } else {
+            i += 1;
+        }
+    }
+    total
 }
 
 /// Chaves dos itens gravados em `fundamental`.
@@ -299,6 +321,33 @@ pub mod items {
     /// Participação dos não controladores no patrimônio líquido.
     pub const MINORITY: &str = "minority";
 
+    // Conferência dos dados de entrada (docs/indicators.md, "Input validation").
+    /// Lucro consolidado do período, com a parte dos não controladores (margem líquida e ROA).
+    pub const NET_INCOME_TOTAL: &str = "net_income_total";
+    /// Lucro dos controladores no consolidado, como a companhia informou (pode vir zerado).
+    pub const NET_INCOME_CONSOLIDATED: &str = "net_income_consolidated";
+    /// Lucro da demonstração individual (pela equivalência, o lucro dos controladores).
+    pub const NET_INCOME_INDIVIDUAL: &str = "net_income_individual";
+    /// Resultado de equivalência patrimonial (filha de 3.04). Industrial.
+    pub const EQUITY_INCOME: &str = "equity_income";
+    /// Patrimônio dos controladores no consolidado (total menos não controladores).
+    pub const EQUITY_CONSOLIDATED: &str = "equity_consolidated";
+    /// Patrimônio da demonstração individual.
+    pub const EQUITY_INDIVIDUAL: &str = "equity_individual";
+    /// Ações do capital integralizado (com as em tesouraria), da composição do capital.
+    pub const SHARES_TOTAL: &str = "shares_total";
+    /// Ações em tesouraria, da composição do capital.
+    pub const SHARES_TREASURY: &str = "shares_treasury";
+    /// Total de ações do capital social na B3 (API de empresas listadas), com a data da
+    /// consulta.
+    pub const SHARES_B3: &str = "shares_b3";
+    pub const SHARES_B3_ON: &str = "shares_b3_on";
+    pub const SHARES_B3_PN: &str = "shares_b3_pn";
+    /// Comparativo reapresentado no documento seguinte (o original fica no item sem sufixo).
+    pub const REVENUE_RESTATED: &str = "revenue_restated";
+    pub const EBIT_RESTATED: &str = "ebit_restated";
+    pub const NET_INCOME_RESTATED: &str = "net_income_restated";
+
     // FIIs (informe mensal).
     pub const NAV: &str = "nav";
     pub const NAV_PER_SHARE: &str = "nav_per_share";
@@ -357,6 +406,10 @@ pub mod items {
         INCOME_TAX,
         BUYBACKS,
         SHARE_ISSUANCE,
+        NET_INCOME_TOTAL,
+        NET_INCOME_CONSOLIDATED,
+        NET_INCOME_INDIVIDUAL,
+        EQUITY_INCOME,
     ];
 
     /// Nome do item no idioma da instalação (`nucleo-pesquisa-item-<item>`; desconhecido:
@@ -424,4 +477,19 @@ pub(crate) fn to_f64(d: Decimal) -> f64 {
 
 pub(crate) fn dstr(d: Decimal) -> String {
     d.normalize().to_string()
+}
+
+#[cfg(test)]
+mod unit_tests {
+    use super::unit_count;
+
+    #[test]
+    fn unit_count_ignores_ticker_digits() {
+        assert_eq!(unit_count("1 ON / 2 PN"), 3);
+        assert_eq!(unit_count("1 ON e 2PNs"), 3);
+        assert_eq!(unit_count("1 KLBN3 + 4 KLBN4"), 5);
+        assert_eq!(unit_count("2 ações preferenciais e 1 ação ordinária"), 3);
+        assert_eq!(unit_count("1 ON E 2 PNA"), 3);
+        assert_eq!(unit_count(""), 0);
+    }
 }

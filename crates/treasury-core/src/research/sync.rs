@@ -168,7 +168,10 @@ pub struct Plan {
 /// 4: dívida das americanas também por notas de longo prazo e conversíveis (SEC).
 /// 5: FII trimestral sem a receita por imóvel (inadimplência pela área, sem maior imóvel zero).
 /// 6: FII trimestral, maior imóvel pela área.
-pub const PARSER_VERSION: u32 = 6;
+/// 7: conferência dos dados de entrada (lucro dos controladores zerado, individual, patrimônio
+///    consolidado e individual, ações com tesouraria, reapresentações, equivalência
+///    patrimonial; códigos e classes do FCA).
+pub const PARSER_VERSION: u32 = 7;
 const PARSER_VERSION_SETTING: &str = "research.parser_version";
 /// Fontes lidas de novo em cada versão do parser (só as das versões depois da gravada).
 const REPARSE_BY_VERSION: &[(u32, &[SyncSource])] = &[
@@ -185,6 +188,7 @@ const REPARSE_BY_VERSION: &[(u32, &[SyncSource])] = &[
     (4, &[SyncSource::Sec]),
     (5, &[SyncSource::FiiQuarterly]),
     (6, &[SyncSource::FiiQuarterly]),
+    (7, &[SyncSource::Fca, SyncSource::Dfp, SyncSource::Itr]),
 ];
 
 /// Fontes a reler de uma versão gravada até a atual.
@@ -461,6 +465,8 @@ fn apply_fca(conn: &Connection, f: cvm::Fca, now: &str) -> Result<u64> {
         }
         store::upsert_issuer(conn, &i, now)?;
     }
+    // Cadastros incompletos (sem código válido, ou só a unit): a B3 completa depois.
+    crate::settings::set(conn, super::b3_listados::INCOMPLETE_SETTING, &f.incomplete)?;
     let known: HashSet<String> = f.issuers.iter().map(|i| i.id.clone()).collect();
     let mut n = f.issuers.len() as u64;
     n += store::replace_auditors(conn, &f.auditors, now)? as u64;
@@ -503,6 +509,18 @@ fn apply_filings(conn: &Connection, st: cvm::Statements, now: &str) -> Result<u6
         n += store::upsert_facts(conn, &f.cnpj, &f.facts, now)? as u64;
     }
     Ok(n)
+}
+
+/// Reativa os papéis que o FCA marcou como fora de negociação e que tiveram pregão nos
+/// últimos 30 dias (COTAHIST). Devolve quantos.
+pub fn reactivate_traded(conn: &Connection, today: NaiveDate) -> Result<usize> {
+    let since = fmt_date(today - chrono::Duration::days(30));
+    Ok(conn.execute(
+        "UPDATE research_security SET active = 1
+          WHERE active = 0 AND class = 'stock_br'
+            AND ticker IN (SELECT DISTINCT ticker FROM research_quote WHERE date >= ?1)",
+        [since],
+    )?)
 }
 
 /// Recalcula o LTM de todos os emissores com demonstrações e poda acumulados antigos do
@@ -755,6 +773,66 @@ pub fn run_with(
             )?;
         }
     }
+    // Cotações antes dos balanços: a reativação abaixo usa os pregões recentes.
+    if on(SyncSource::B3) {
+        for d in &plan.quote_dates {
+            r.step(
+                Req {
+                    source: SyncSource::B3,
+                    label: format!("B3 COTAHIST {d}"),
+                    url: &b3::daily_url(*d),
+                    ua: "",
+                    remember: false,
+                },
+                b3::parse_zip,
+                apply_quotes,
+            )?;
+        }
+        for (y, mo) in &plan.quote_months {
+            let st = r.step(
+                Req {
+                    source: SyncSource::B3,
+                    label: format!("B3 COTAHIST {mo:02}/{y}"),
+                    url: &b3::monthly_url(*y, *mo),
+                    ua: "",
+                    remember: true,
+                },
+                b3::parse_zip,
+                apply_quotes,
+            )?;
+            if matches!(st, SyncStatus::Updated | SyncStatus::Unchanged) {
+                r.with(|c| {
+                    let mut done: Vec<String> =
+                        crate::settings::get(c, QUOTE_MONTHS_SETTING)?.unwrap_or_default();
+                    done.push(format!("{y:04}-{mo:02}"));
+                    done.sort();
+                    done.dedup();
+                    // Só os meses ainda dentro da janela.
+                    let floor = add_months(today, -14);
+                    done.retain(|m| {
+                        m.as_str() >= format!("{:04}-{:02}", floor.year(), floor.month()).as_str()
+                    });
+                    crate::settings::set(c, QUOTE_MONTHS_SETTING, &done)
+                })?;
+            }
+        }
+        r.with(|c| {
+            let last: Option<String> = c
+                .query_row("SELECT max(date) FROM research_quote", [], |row| row.get(0))
+                .optional()?
+                .flatten();
+            if let Some(l) = last {
+                let cut = parse_date(&l)? - chrono::Duration::days(QUOTE_HISTORY_DAYS);
+                c.execute(
+                    "DELETE FROM research_quote WHERE date < ?1",
+                    [fmt_date(cut)],
+                )?;
+            }
+            Ok(())
+        })?;
+    } // Papel com pregão nos últimos 30 dias nunca fica inativo: o FCA às vezes traz uma data de
+    // fim de negociação errada (C&A, Raízen), e sem isso a companhia ficava sem balanços.
+    r.with(|c| reactivate_traded(c, today).map(|_| ()))?;
     // Emissores dos ativos cadastrados (o mapa ticker → CNPJ vem do FCA, logo acima) e
     // companhias com ações negociadas.
     let registered = r.with(|c| super::data::registered_issuers(c))?;
@@ -886,63 +964,6 @@ pub fn run_with(
                 apply_ipe,
             )?;
         }
-    }
-    if on(SyncSource::B3) {
-        for d in &plan.quote_dates {
-            r.step(
-                Req {
-                    source: SyncSource::B3,
-                    label: format!("B3 COTAHIST {d}"),
-                    url: &b3::daily_url(*d),
-                    ua: "",
-                    remember: false,
-                },
-                b3::parse_zip,
-                apply_quotes,
-            )?;
-        }
-        for (y, mo) in &plan.quote_months {
-            let st = r.step(
-                Req {
-                    source: SyncSource::B3,
-                    label: format!("B3 COTAHIST {mo:02}/{y}"),
-                    url: &b3::monthly_url(*y, *mo),
-                    ua: "",
-                    remember: true,
-                },
-                b3::parse_zip,
-                apply_quotes,
-            )?;
-            if matches!(st, SyncStatus::Updated | SyncStatus::Unchanged) {
-                r.with(|c| {
-                    let mut done: Vec<String> =
-                        crate::settings::get(c, QUOTE_MONTHS_SETTING)?.unwrap_or_default();
-                    done.push(format!("{y:04}-{mo:02}"));
-                    done.sort();
-                    done.dedup();
-                    // Só os meses ainda dentro da janela.
-                    let floor = add_months(today, -14);
-                    done.retain(|m| {
-                        m.as_str() >= format!("{:04}-{:02}", floor.year(), floor.month()).as_str()
-                    });
-                    crate::settings::set(c, QUOTE_MONTHS_SETTING, &done)
-                })?;
-            }
-        }
-        r.with(|c| {
-            let last: Option<String> = c
-                .query_row("SELECT max(date) FROM research_quote", [], |row| row.get(0))
-                .optional()?
-                .flatten();
-            if let Some(l) = last {
-                let cut = parse_date(&l)? - chrono::Duration::days(QUOTE_HISTORY_DAYS);
-                c.execute(
-                    "DELETE FROM research_quote WHERE date < ?1",
-                    [fmt_date(cut)],
-                )?;
-            }
-            Ok(())
-        })?;
     }
     if on(SyncSource::Brapi) {
         let (token, due) = r.with(|c| {
@@ -1213,6 +1234,33 @@ pub fn run_with(
         let shown: Vec<String> = names.iter().take(5).cloned().collect();
         other.push(crate::i18n::t_args(
             "nucleo-pesquisa-aviso-acoes-em-milhares",
+            &crate::i18n::args(&[
+                ("n", (names.len() as i64).into()),
+                (
+                    "companhias",
+                    format!(
+                        "{}{}",
+                        shown.join(", "),
+                        if names.len() > 5 { ", …" } else { "" }
+                    )
+                    .into(),
+                ),
+            ]),
+        ));
+    }
+    let fixed = cvm::INCOME_FIX_WARNING;
+    let (income, mut other): (Vec<String>, Vec<String>) =
+        other.into_iter().partition(|w| w.contains(fixed));
+    if !income.is_empty() {
+        let mut names: Vec<String> = income
+            .iter()
+            .filter_map(|w| w.split(fixed).next().map(str::to_string))
+            .collect();
+        names.sort();
+        names.dedup();
+        let shown: Vec<String> = names.iter().take(5).cloned().collect();
+        other.push(crate::i18n::t_args(
+            "nucleo-pesquisa-aviso-lucro-controladores",
             &crate::i18n::args(&[
                 ("n", (names.len() as i64).into()),
                 (

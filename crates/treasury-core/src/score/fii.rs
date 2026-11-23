@@ -545,7 +545,14 @@ pub fn assess(
     let filled =
         equity::fill_from_secondary(m, conn, d.subject.ticker.as_deref(), &mut o.metrics, true)?;
     let flags = flags(m, &o.metrics);
-    let recon = equity::reconcile(m, conn, d.subject.ticker.as_deref(), &o.metrics, true)?;
+    let recon = equity::reconcile(
+        m,
+        conn,
+        d.subject.ticker.as_deref(),
+        &o.metrics,
+        true,
+        &Default::default(),
+    )?;
     let mut extra = vec![];
     if !filled.is_empty() {
         extra.push((

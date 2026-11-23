@@ -806,6 +806,15 @@ pub(super) fn handle_unlocked(
             },
         )
         .and_then(to_value),
+        // Proventos e capital oficiais da B3 de um papel ainda sem eles (rede fora da trava).
+        ("research", "b3_refresh") => crate::research::b3_listados::refresh_company(
+            api,
+            &match parse_ref_args(args) {
+                Ok(a) => a,
+                Err(e) => return Some(Err(e)),
+            },
+        )
+        .and_then(to_value),
         // Dados dos ativos: consulta às fontes públicas da rede (B3, GLEIF, BrasilAPI) fora
         // da trava; grava só leituras, nunca o ativo.
         ("assets", "enrich_lookup") => crate::assets::lookup::run(

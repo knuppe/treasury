@@ -697,14 +697,79 @@ fn fmt(x: f64) -> String {
     crate::ai::alerts::decimal(crate::i18n::current(), &format!("{x:.4}"))
 }
 
+/// Os nossos valores refeitos na convenção do Fundamentus, a partir dos nossos dados oficiais
+/// (docs/indicators.md, "Why the numbers differ from other sites"): EBIT como lucro bruto −
+/// vendas − gerais e administrativas, margem líquida com o lucro consolidado total e valor de
+/// mercado pelo total de ações do capital (com a tesouraria). Assim a conferência compara dado
+/// com dado: diferença que sobra é dado errado de um dos lados, não fórmula.
+pub fn fundamentus_convention(
+    d: &crate::research::indicators::Data,
+    market_cap: Option<f64>,
+) -> BTreeMap<String, f64> {
+    use crate::research::{items, periods, to_f64};
+    let mut out = BTreeMap::new();
+    let ltm = periods::compute_ltm(&d.facts);
+    let flow = |item: &str| {
+        d.facts
+            .iter()
+            .find(|f| f.item == item && f.period_type == crate::research::PeriodType::Ltm)
+            .or_else(|| ltm.iter().find(|f| f.item == item))
+            .map(|f| to_f64(f.value))
+    };
+    let inst =
+        |item: &str| periods::instant_at(&d.facts, item, d.today).map(|f| (f.end, to_f64(f.value)));
+    let (Some(rev), Some(gp)) = (flow(items::REVENUE), flow(items::GROSS_PROFIT)) else {
+        return out;
+    };
+    if rev <= 0.0 {
+        return out;
+    }
+    let ebit = gp - flow(items::SGA).unwrap_or(0.0);
+    out.insert("ebit_margin".into(), ebit / rev);
+    if let Some(n) = flow(items::NET_INCOME_TOTAL) {
+        out.insert("net_margin".into(), n / rev);
+    }
+    // Valor de mercado pelo total de ações (com tesouraria): o do Fundamentus.
+    let outstanding = inst(items::SHARES).map(|x| x.1);
+    let total = inst(items::SHARES_B3)
+        .or_else(|| inst(items::SHARES_TOTAL))
+        .map(|x| x.1);
+    let mc = match (market_cap, outstanding, total) {
+        (Some(mc), Some(o), Some(t)) if o > 0.0 && t > 0.0 && (t / o - 1.0).abs() < 0.2 => {
+            Some(mc * t / o)
+        }
+        (Some(mc), _, _) => Some(mc),
+        _ => None,
+    };
+    if let Some(mc) = mc {
+        if let (Some(debt), Some(da)) = (inst(items::GROSS_DEBT), flow(items::DA)) {
+            let cash = inst(items::CASH).map(|x| x.1).unwrap_or(0.0);
+            let ebitda = ebit + da;
+            if ebitda > 0.0 {
+                out.insert("ev_ebitda".into(), (mc + debt.1 - cash) / ebitda);
+            }
+        }
+        if let Some(e) = inst(items::EQUITY).map(|x| x.1).filter(|e| *e > 0.0) {
+            out.insert("pb".into(), mc / e);
+        }
+        if let Some(n) = flow(items::NET_INCOME).filter(|_| mc > 0.0) {
+            out.insert("earnings_to_price".into(), n / mc);
+        }
+    }
+    out
+}
+
 /// Conferência com as fontes secundárias (brapi.dev e Fundamentus; só os retratos guardados):
-/// diferenças acima da tolerância viram itens da conferência.
+/// diferenças acima da tolerância viram itens da conferência. Com o Fundamentus, as métricas
+/// de `conv` (a nossa conta na convenção dele, [`fundamentus_convention`]) entram no lugar das
+/// nossas.
 pub fn reconcile(
     m: &Methodology,
     conn: &Connection,
     ticker: Option<&str>,
     ms: &Metrics,
     fii: bool,
+    conv: &BTreeMap<String, f64>,
 ) -> Result<Vec<ReconItem>> {
     let Some(t) = ticker else { return Ok(vec![]) };
     let mut out = vec![];
@@ -718,16 +783,26 @@ pub fn reconcile(
         {
             continue;
         }
-        let Some(ours) = mv.value else { continue };
+        let Some(mine) = mv.value else { continue };
         for (source, theirs) in vals {
             if theirs == 0.0 {
                 continue;
             }
+            // A fonte é o nome do site em qualquer idioma ("Fundamentus (P/L), lido em …").
+            let same_rule = source.starts_with("Fundamentus") && conv.contains_key(&key);
+            let ours = if same_rule { conv[&key] } else { mine };
             let diff = (ours - theirs).abs() / theirs.abs();
             if diff > m.reconciliation.tolerance {
                 out.push(ReconItem {
                     metric: key.clone(),
-                    label: m.metric_label(&key),
+                    label: if same_rule {
+                        crate::i18n::t_args(
+                            "nucleo-score-conferencia-mesma-regra",
+                            &crate::i18n::args(&[("metrica", m.metric_label(&key).into())]),
+                        )
+                    } else {
+                        m.metric_label(&key)
+                    },
                     ours,
                     theirs,
                     diff,
