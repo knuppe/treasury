@@ -1,0 +1,17 @@
+#!/bin/sh
+# Security audit before every push (docs/development.md, "Before a push"): the same checks as
+# the CI `audit` job, so a new advisory is caught on this machine instead of after the push.
+set -e
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+export PATH="$HOME/.cargo/bin:$PATH"
+if ! command -v cargo-deny >/dev/null 2>&1; then
+  echo "pre-push: cargo-deny is not installed (cargo install cargo-deny --locked)." >&2
+  exit 1
+fi
+echo "pre-push: cargo deny check advisories bans sources licenses" >&2
+cargo deny --log-level error check advisories bans sources licenses
+echo "pre-push: dependency approval list" >&2
+python3 -I scripts/deps-check.py
+echo "pre-push: npm audit (production dependencies)" >&2
+(cd apps/desktop && npm audit --omit=dev --audit-level=moderate)

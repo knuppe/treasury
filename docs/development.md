@@ -239,6 +239,15 @@ It now returns an invalid-argument error and the interface shows it.
 
 Pull requests from outside follow [CONTRIBUTING.md](../CONTRIBUTING.md): each commit carries the DCO `Signed-off-by` line (`git commit -s`), without a CLA, and the contribution is distributed under the AGPL-3.0-only.
 
+## Before a push
+
+Every push runs the security audit first, the same as the CI `audit` job: `cargo deny check
+advisories bans sources licenses`, the dependency approval list (`scripts/deps-check.py`) and
+`npm audit` of the production dependencies. The versioned hook is `.githooks/pre-push`; a local
+`.git/hooks/pre-push` calls it (the hooks folder of each clone is local). A new advisory then
+stops the push here instead of failing the CI after it. It needs `cargo-deny`
+(`cargo install cargo-deny --locked`).
+
 ## Release notes
 
 The notes of each GitHub release are in English and follow one layout:
