@@ -1108,9 +1108,10 @@ fn check_alerts(api: &Api) -> Result<RoutineOutcome> {
     }
     // Vencimentos nos próximos 5 dias.
     let upcoming = sys(api, "reports.upcoming", json!({"days": 5}))?;
+    let silent = api.with_session(|s, _| crate::notify::quiet::list(s.db.conn()))?;
     for u in upcoming.as_array().into_iter().flatten() {
         let amount = u["amount"].as_i64().unwrap_or(0);
-        if amount >= 0 {
+        if amount >= 0 || crate::notify::quiet::is_quiet(&silent, u["recurrence_id"].as_str()) {
             continue;
         }
         let date = u["date"].as_str().unwrap_or("");
@@ -1119,7 +1120,7 @@ fn check_alerts(api: &Api) -> Result<RoutineOutcome> {
             .unwrap_or(0);
         let when = Msg::new("alertas-quando-data")
             .arg("dias", days)
-            .arg("data", date);
+            .arg("data", Arg::day_month(date));
         let ccy = u["currency"].as_str().unwrap_or(&cur);
         let is_card = u["kind"] == "card_due";
         let ref_id = u["ref_id"].as_str().unwrap_or("").to_string();

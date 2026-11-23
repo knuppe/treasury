@@ -113,6 +113,10 @@ pub struct AttentionItem {
     pub count: i64,
     /// Dia a que o item se refere (vencimento, criação do alerta).
     pub date: Option<String>,
+    /// Recorrência do previsto que vence (para oferecer "não avisar mais desta").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub recurrence_id: Option<Id>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]
@@ -301,9 +305,12 @@ fn due_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>> 
     let ahead = crate::notify::prefs(conn)?.bills_days.max(1);
     let from = today - Duration::days(OVERDUE_DAYS);
     let items = crate::reports::upcoming(conn, from, OVERDUE_DAYS as u32 + ahead)?;
+    let silent = crate::notify::quiet::list(conn)?;
     Ok(items
         .into_iter()
         .filter(|u| u.amount < 0)
+        // Recorrência marcada "sem aviso" (diarista, mesada): nem a vencer, nem vencida.
+        .filter(|u| !crate::notify::quiet::is_quiet(&silent, u.recurrence_id.as_deref()))
         .filter_map(|u: UpcomingItem| {
             let date = parse_date(&u.date).ok()?;
             let days = (date - today).num_days();
@@ -334,6 +341,7 @@ fn due_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>> 
             .arg("conta", u.account_name.clone())
             .arg("data", Arg::day_month(&u.date));
             Some(AttentionItem {
+                recurrence_id: u.recurrence_id.clone(),
                 id: format!("due:{}:{}", u.ref_id, u.date),
                 source: AttentionSource::Due,
                 kind: if days < 0 { "overdue" } else { "due_soon" }.into(),
@@ -379,6 +387,7 @@ fn data_items(
     if !stale.is_empty() {
         let (title, body) = crate::notify::stale_accounts_text(stale);
         out.push(AttentionItem {
+            recurrence_id: None,
             id: "data:stale_accounts".into(),
             source: AttentionSource::Data,
             kind: "stale_accounts".into(),
@@ -412,6 +421,7 @@ fn data_items(
             "; ",
         );
         out.push(AttentionItem {
+            recurrence_id: None,
             id: OUTDATED_TABLES_ID.into(),
             source: AttentionSource::Data,
             kind: "outdated_tables".into(),
@@ -436,6 +446,7 @@ fn data_items(
         .count() as i64;
     if waiting > 0 {
         out.push(AttentionItem {
+            recurrence_id: None,
             id: "data:inbox".into(),
             source: AttentionSource::Data,
             kind: "inbox".into(),
@@ -483,6 +494,7 @@ fn todo_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>>
         .filter_map(|s: Suggestion| {
             let kind = todo_kind(s.kind)?;
             Some(AttentionItem {
+                recurrence_id: None,
                 id: format!("todo:{kind}"),
                 source: AttentionSource::Todo,
                 kind: kind.into(),
@@ -510,6 +522,7 @@ fn todo_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>>
             .map(|r| r.key.to_uppercase())
             .collect();
         out.push(AttentionItem {
+            recurrence_id: None,
             id: "todo:learned_rules".into(),
             source: AttentionSource::Todo,
             kind: "learned_rules".into(),
@@ -535,6 +548,7 @@ fn todo_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>>
     let open = crate::food::market_without_items(conn, first, today)?;
     if open.len() >= 2 {
         out.push(AttentionItem {
+            recurrence_id: None,
             id: format!("todo:purchase_items:{}", &fmt_date(today)[..7]),
             source: AttentionSource::Todo,
             kind: "purchase_items".into(),
@@ -570,6 +584,7 @@ fn alert_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionItem>
         .filter(|a: &Alert| !LIVE_ALERT_KINDS.contains(&a.kind.as_str()))
         .filter(|a| a.updated_at.get(..10).is_some_and(|d| d >= since.as_str()))
         .map(|a| AttentionItem {
+            recurrence_id: None,
             id: format!("alert:{}", a.id),
             source: AttentionSource::Alert,
             kind: a.kind,
@@ -600,6 +615,7 @@ fn insight_items(conn: &Connection, today: NaiveDate) -> Result<Vec<AttentionIte
             i.tone == InsightTone::Warning && i.kind != InsightKind::PersonalInflation
         })
         .map(|i| AttentionItem {
+            recurrence_id: None,
             id: format!("insight:{}", i.id),
             source: AttentionSource::Insight,
             kind: serde_json::to_value(i.kind)

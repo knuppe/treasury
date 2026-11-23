@@ -18,4 +18,9 @@ next_dates: Array<string>,
 /**
  * Valor mensal equivalente (para "quanto está comprometido por mês").
  */
-monthly_equivalent: number, };
+monthly_equivalent: number, 
+/**
+ * Avisa o vencimento (lembretes e "Para resolver"). Desligado para despesas que a família
+ * paga sem precisar de lembrete, como diarista (`notify::quiet`).
+ */
+remind: boolean, };

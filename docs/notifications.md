@@ -25,6 +25,26 @@ The **reminders** are deterministic and do not use an AI engine. They run at mos
 
 The asset health score (`asset_score`) and the agent routines (`budget_pace`, `monthly_close`, `rebalance`) create their own alerts.
 
+## Recurring expenses without a reminder
+
+Some recurring expenses need no reminder: the family pays them without thinking (a cleaner every
+week, a child's allowance). Each recurrence can have its due date reminder turned off:
+
+- with the bell in Transactions › Recurrences (the row then says "no reminder"), or
+- with "Stop reminding this one" on the due date item in To solve or in Agent › Alerts.
+
+Turning it off resolves the open due date alerts of that recurrence. From then on, its expected
+transactions are left out of the reminders, of the alerts routine and of To solve (also when
+overdue). They stay in the balance forecast, the budget, "how much can I spend today" and the
+upcoming list of the Dashboard. The list of quiet recurrences is the `notify.quiet_recurrences`
+setting, inside the vault (`notify::quiet`); the command is `notify.set_recurrence_reminder`,
+interface only.
+
+A due date alert also closes by itself once it no longer makes sense: its date has passed, the
+expected transaction was recorded or deleted, or the card statement was paid
+(`notify::quiet::close_stale_due`, on every reminder run). An unpaid overdue item stays in To
+solve, computed on the spot.
+
 ## Episodes: negative balance and watchlist price
 
 These two conditions last for days. To avoid generating an alert per day, each account (or asset) has **one alert per episode**. The episode data lives in `data.episode`: open or not, since when, and the worst value.

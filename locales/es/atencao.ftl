@@ -167,3 +167,8 @@ fechamento-passo-feito = Hecho
 fechamento-passo-pendente = Pendiente
 atencao-compras-titulo = { $n } compras de supermercado de este mes sin artículos
 atencao-compras-corpo = Detalle los artículos que quiera seguir (carne, café, leche): el precio de cada producto y la inflación de su cesta salen de ahí. No hace falta el ticket entero.
+
+atencao-nao-avisar = No avisar más de esta
+atencao-nao-avisar-dica = Para gastos que pagan sin necesitar recordatorio, como la limpieza del hogar. Sigue en la previsión y en el presupuesto; el aviso vuelve con la campana en Movimientos › Recurrencias.
+atencao-nao-avisar-feito = Listo: esta recurrencia ya no avisa el vencimiento.
+atencao-nao-avisar-erro = No se pudo desactivar el aviso

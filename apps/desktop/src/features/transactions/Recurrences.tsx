@@ -4,6 +4,7 @@ import type { Freq } from '@/api/generated/Freq';
 import type { Recurrence } from '@/api/generated/Recurrence';
 import type { RuleSpec } from '@/api/generated/RuleSpec';
 import { useAccounts } from '@/api/hooks/accounts';
+import { useSetRecurrenceReminder } from '@/api/hooks/attention';
 import { useMembers } from '@/api/hooks/household';
 import {
   useCreateRecurrence,
@@ -407,6 +408,7 @@ export function RecurrencesPanel({ onNew }: { onNew: () => void }) {
   const { data: accounts = [] } = useAccounts(true);
   const update = useUpdateRecurrence();
   const remove = useDeleteRecurrence();
+  const reminder = useSetRecurrenceReminder();
   const [editing, setEditing] = useState<Recurrence | null>(null);
   const [deleting, setDeleting] = useState<Recurrence | null>(null);
   const [keepPlanned, setKeepPlanned] = useState(false);
@@ -429,6 +431,11 @@ export function RecurrencesPanel({ onNew }: { onNew: () => void }) {
         <span className={r.active ? undefined : 'text-dim line-through'}>
           {r.description}
           <span className="ml-2 text-[11.5px] text-dim">{TXN_KIND[r.kind]}</span>
+          {r.remind ? null : (
+            <span className="label-caps ml-2 text-[10.5px] text-dim">
+              {t('lancamentos-recorrencia-sem-aviso')}
+            </span>
+          )}
         </span>
       ),
     },
@@ -472,7 +479,7 @@ export function RecurrencesPanel({ onNew }: { onNew: () => void }) {
     {
       key: 'actions',
       header: <span className="sr-only">{t('lancamentos-acoes')}</span>,
-      width: '170px',
+      width: '200px',
       align: 'right',
       cell: (r) => (
         <span className="inline-flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
@@ -502,6 +509,38 @@ export function RecurrencesPanel({ onNew }: { onNew: () => void }) {
           >
             {r.active ? t('lancamentos-pausar') : t('lancamentos-retomar')}
           </Button>
+          {/* Aviso de vencimento: desligado para o que a família paga sem lembrete (diarista). */}
+          <IconButton
+            size="sm"
+            pressed={r.remind}
+            label={
+              r.remind
+                ? t('lancamentos-recorrencia-avisa', { nome: r.description })
+                : t('lancamentos-recorrencia-nao-avisa', { nome: r.description })
+            }
+            icon={<Icon name="bell" size={13} />}
+            className={r.remind ? undefined : 'opacity-50'}
+            onClick={() =>
+              reminder.mutate(
+                { recurrence_id: r.id, remind: !r.remind },
+                {
+                  onSuccess: () =>
+                    toast({
+                      tone: 'success',
+                      title: r.remind
+                        ? t('lancamentos-recorrencia-aviso-desligado', { nome: r.description })
+                        : t('lancamentos-recorrencia-aviso-ligado', { nome: r.description }),
+                    }),
+                  onError: (e) =>
+                    toast({
+                      tone: 'error',
+                      title: t('lancamentos-erro-alterar'),
+                      description: errorText(e),
+                    }),
+                },
+              )
+            }
+          />
           <IconButton
             size="sm"
             label={t('lancamentos-editar-item', { nome: r.description })}

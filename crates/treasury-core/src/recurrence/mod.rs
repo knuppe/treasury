@@ -88,6 +88,9 @@ pub struct Recurrence {
     /// Valor mensal equivalente (para "quanto está comprometido por mês").
     #[ts(type = "number")]
     pub monthly_equivalent: i64,
+    /// Avisa o vencimento (lembretes e "Para resolver"). Desligado para despesas que a família
+    /// paga sem precisar de lembrete, como diarista (`notify::quiet`).
+    pub remind: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -328,6 +331,7 @@ fn to_view(r: RecRow, today: NaiveDate) -> Result<Recurrence> {
         end_date: r.end_date,
         active: r.active,
         next_dates,
+        remind: true,
     })
 }
 
@@ -344,11 +348,20 @@ pub fn list(
     let rows = stmt
         .query_map(params![args.account_id, args.active], row_to_rec)?
         .collect::<rusqlite::Result<Vec<_>>>()?;
-    rows.into_iter().map(|r| to_view(r, today)).collect()
+    let quiet = crate::notify::quiet::list(conn)?;
+    rows.into_iter()
+        .map(|r| {
+            let mut v = to_view(r, today)?;
+            v.remind = !quiet.contains(&v.id);
+            Ok(v)
+        })
+        .collect()
 }
 
 pub fn get(conn: &Connection, id: &str, today: NaiveDate) -> Result<Recurrence> {
-    to_view(load(conn, id)?, today)
+    let mut v = to_view(load(conn, id)?, today)?;
+    v.remind = !crate::notify::quiet::list(conn)?.contains(&v.id);
+    Ok(v)
 }
 
 pub fn preview(args: &PreviewArgs) -> Result<RecurrencePreview> {

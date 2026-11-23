@@ -175,6 +175,10 @@ pub struct UpcomingItem {
     pub account_name: String,
     /// Lançamento previsto ou fatura.
     pub ref_id: Id,
+    /// Recorrência que gerou o previsto (para quem pediu para não ser avisado dela).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub recurrence_id: Option<Id>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -1587,7 +1591,8 @@ pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<Upc
     let mut out = vec![];
     {
         let mut stmt = conn.prepare_cached(
-            "SELECT t.id, t.date, t.description, t.amount, t.currency, t.account_id, a.name, c.name
+            "SELECT t.id, t.date, t.description, t.amount, t.currency, t.account_id, a.name, c.name,
+                    t.recurrence_id
              FROM txn t JOIN account a ON a.id = t.account_id
              LEFT JOIN category c ON c.id = t.category_id
              WHERE t.status = 'planned' AND t.date BETWEEN ?1 AND ?2 AND t.statement_id IS NULL
@@ -1612,6 +1617,7 @@ pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<Upc
                 currency: r.get(4)?,
                 account_id: r.get(5)?,
                 account_name: r.get(6)?,
+                recurrence_id: r.get(8)?,
             });
         }
     }
@@ -1652,6 +1658,7 @@ pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<Upc
                 date: r.get(4)?,
                 kind: UpcomingKind::CardDue,
                 amount: -remaining,
+                recurrence_id: None,
             });
         }
     }

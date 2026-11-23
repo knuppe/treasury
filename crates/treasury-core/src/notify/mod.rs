@@ -24,6 +24,7 @@
 //! hora de mostrar ou de notificar; a deduplicação e os episódios não dependem do texto.
 
 pub mod api;
+pub mod quiet;
 #[cfg(test)]
 mod tests;
 
@@ -424,10 +425,14 @@ fn when(today: NaiveDate, date: &str) -> Msg {
 
 /// Contas e faturas a pagar (mesma chave das rotinas do agente: nunca duas vezes).
 fn bills(conn: &Connection, today: NaiveDate, p: &NotifyPrefs) -> Result<Vec<Owned>> {
+    // "Vence em 5 dias" de uma semana atrás, previsto já pago: saem antes dos novos.
+    quiet::close_stale_due(conn, today)?;
     let items = crate::reports::upcoming(conn, today, p.bills_days)?;
+    let silent = quiet::list(conn)?;
     Ok(items
         .into_iter()
         .filter(|u| u.amount < 0)
+        .filter(|u| !quiet::is_quiet(&silent, u.recurrence_id.as_deref()))
         .map(|u| {
             let card = u.kind == crate::reports::UpcomingKind::CardDue;
             let days = parse_date(&u.date)

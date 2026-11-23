@@ -167,3 +167,8 @@ fechamento-passo-feito = Done
 fechamento-passo-pendente = Pending
 atencao-compras-titulo = { $n } grocery purchases this month without items
 atencao-compras-corpo = Add the items you want to follow (meat, coffee, milk): each product's price and your own basket inflation come from them. It does not have to be the whole receipt.
+
+atencao-nao-avisar = Stop reminding this one
+atencao-nao-avisar-dica = For expenses you pay without needing a reminder, such as a cleaner. It stays in the forecast and the budget; turn the reminder back on with the bell in Transactions › Recurrences.
+atencao-nao-avisar-feito = Done: this recurring item no longer reminds its due date.
+atencao-nao-avisar-erro = Could not turn off the reminder

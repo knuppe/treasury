@@ -31,6 +31,7 @@ import { ErrorBlock, LoadingBlock, errorMessage } from '@/features/portfolio/com
 import { t } from '@/i18n';
 import { formatDateTime } from '@/lib/format';
 import { txnLink } from '@/lib/txnLink';
+import { QuietRecurrenceButton } from '@/features/attention/QuietRecurrenceButton';
 
 import { ALERT_STATUS_LABEL, SEVERITY_LABEL, labels } from './format';
 import { Pill } from './ui';
@@ -189,6 +190,11 @@ function AlertRow({ alert }: { alert: Alert }) {
             <Icon name="arrowRight" size={12} />
             {OPEN_LABEL[alert.target.screen]}
           </Link>
+        ) : null}
+        {alert.kind === 'due_soon' &&
+        alert.status !== 'resolved' &&
+        typeof alert.data?.recurrence_id === 'string' ? (
+          <QuietRecurrenceButton recurrenceId={alert.data.recurrence_id} />
         ) : null}
         {alert.status === 'new' ? (
           <Button size="sm" variant="ghost" onClick={() => act('seen')}>

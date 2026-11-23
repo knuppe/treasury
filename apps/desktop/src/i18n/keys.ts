@@ -2403,6 +2403,10 @@ export interface Messages {
   'atencao-gravidade-critical': never;
   'atencao-gravidade-info': never;
   'atencao-gravidade-warning': never;
+  'atencao-nao-avisar': never;
+  'atencao-nao-avisar-dica': never;
+  'atencao-nao-avisar-erro': never;
+  'atencao-nao-avisar-feito': never;
   'atencao-origem': never;
   'atencao-regras-corpo': { nomes: string | number };
   'atencao-regras-titulo': { n: string | number };
@@ -10235,12 +10239,17 @@ export interface Messages {
   'lancamentos-recorrencia-apagada': never;
   'lancamentos-recorrencia-atualizada': never;
   'lancamentos-recorrencia-atualizada-descricao': never;
+  'lancamentos-recorrencia-avisa': { nome: string | number };
+  'lancamentos-recorrencia-aviso-desligado': { nome: string | number };
+  'lancamentos-recorrencia-aviso-ligado': { nome: string | number };
   'lancamentos-recorrencia-criada': never;
   'lancamentos-recorrencia-criada-descricao': never;
   'lancamentos-recorrencia-dica': never;
   'lancamentos-recorrencia-exemplo': never;
+  'lancamentos-recorrencia-nao-avisa': { nome: string | number };
   'lancamentos-recorrencia-pausada': never;
   'lancamentos-recorrencia-retomada': never;
+  'lancamentos-recorrencia-sem-aviso': never;
   'lancamentos-recorrencias-vazio-descricao': never;
   'lancamentos-recorrencias-vazio-kicker': never;
   'lancamentos-recorrencias-vazio-titulo': never;
@@ -21154,6 +21163,10 @@ export const KEYS: readonly MessageKey[] = [
   'atencao-gravidade-critical',
   'atencao-gravidade-info',
   'atencao-gravidade-warning',
+  'atencao-nao-avisar',
+  'atencao-nao-avisar-dica',
+  'atencao-nao-avisar-erro',
+  'atencao-nao-avisar-feito',
   'atencao-origem',
   'atencao-regras-corpo',
   'atencao-regras-titulo',
@@ -28631,12 +28644,17 @@ export const KEYS: readonly MessageKey[] = [
   'lancamentos-recorrencia-apagada',
   'lancamentos-recorrencia-atualizada',
   'lancamentos-recorrencia-atualizada-descricao',
+  'lancamentos-recorrencia-avisa',
+  'lancamentos-recorrencia-aviso-desligado',
+  'lancamentos-recorrencia-aviso-ligado',
   'lancamentos-recorrencia-criada',
   'lancamentos-recorrencia-criada-descricao',
   'lancamentos-recorrencia-dica',
   'lancamentos-recorrencia-exemplo',
+  'lancamentos-recorrencia-nao-avisa',
   'lancamentos-recorrencia-pausada',
   'lancamentos-recorrencia-retomada',
+  'lancamentos-recorrencia-sem-aviso',
   'lancamentos-recorrencias-vazio-descricao',
   'lancamentos-recorrencias-vazio-kicker',
   'lancamentos-recorrencias-vazio-titulo',

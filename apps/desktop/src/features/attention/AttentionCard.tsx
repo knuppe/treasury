@@ -13,6 +13,7 @@ import { useAttention, useDismissAttention } from '@/api/hooks/attention';
 import { Button, Icon, Tooltip } from '@/design/components';
 import { cx } from '@/design/cx';
 import { alertHref } from '@/features/agent/AlertsPanel';
+import { QuietRecurrenceButton } from '@/features/attention/QuietRecurrenceButton';
 import { t } from '@/i18n';
 
 const DOT: Record<AttentionItem['severity'], string> = {
@@ -84,6 +85,7 @@ function Item({ i }: { i: AttentionItem }) {
               </Button>
             </Tooltip>
           )}
+          {i.recurrence_id ? <QuietRecurrenceButton recurrenceId={i.recurrence_id} /> : null}
         </div>
       </div>
     </li>

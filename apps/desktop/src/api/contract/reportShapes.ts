@@ -551,6 +551,7 @@ export const recurrence: Shape = {
   active: 'boolean',
   next_dates: strings,
   monthly_equivalent: 'number',
+  remind: 'boolean',
 };
 
 export const monthAmounts: Shape = { $array: { month: 'string', amount: 'number' } };

@@ -9,4 +9,8 @@ amount: number, currency: string, account_id: string, account_name: string,
 /**
  * Lançamento previsto ou fatura.
  */
-ref_id: string, };
+ref_id: string, 
+/**
+ * Recorrência que gerou o previsto (para quem pediu para não ser avisado dela).
+ */
+recurrence_id?: string, };

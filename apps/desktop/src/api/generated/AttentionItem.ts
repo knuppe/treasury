@@ -41,4 +41,8 @@ count: number,
 /**
  * Dia a que o item se refere (vencimento, criação do alerta).
  */
-date: string | null, };
+date: string | null, 
+/**
+ * Recorrência do previsto que vence (para oferecer "não avisar mais desta").
+ */
+recurrence_id?: string, };

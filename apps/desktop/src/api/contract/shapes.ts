@@ -401,6 +401,7 @@ export const RecurrenceShape = shape<Recurrence>('Recurrence', {
   active: 'boolean',
   next_dates: ['string'],
   monthly_equivalent: 'number',
+  remind: 'boolean',
 });
 
 export const RecurrencePreviewShape = shape<RecurrencePreview>('RecurrencePreview', {

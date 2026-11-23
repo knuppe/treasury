@@ -52,3 +52,22 @@ export function useSetMonthClose() {
     onSuccess: () => client.invalidateQueries({ queryKey: ATTENTION_KEY }),
   });
 }
+
+/**
+ * Liga ou desliga o aviso de vencimento de uma recorrência (diarista, mesada): os lembretes,
+ * a rotina de alertas e "Para resolver" deixam de avisar; a previsão continua igual.
+ */
+export function useSetRecurrenceReminder() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { recurrence_id: string; remind: boolean }) =>
+      call<{ resolved: number }>('notify.set_recurrence_reminder', args),
+    onSuccess: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: ATTENTION_KEY }),
+        client.invalidateQueries({ queryKey: ['ai', 'alerts'] }),
+        client.invalidateQueries({ queryKey: ['ai', 'alerts_count'] }),
+        client.invalidateQueries({ queryKey: ['recurrences'] }),
+      ]),
+  });
+}

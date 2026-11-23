@@ -542,6 +542,7 @@ describe('comparison, holders, recurrences, cards and net worth', () => {
       active: true,
       next_dates: ['2026-10-17', '2026-11-17', '2026-12-17'],
       monthly_equivalent: -5590,
+      remind: true,
       ...over,
     });
     const list = [

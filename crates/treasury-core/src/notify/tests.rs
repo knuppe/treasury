@@ -517,3 +517,93 @@ fn alert_carries_its_target_and_kind_label() {
     );
     set_current(Locale::PtBr);
 }
+
+#[test]
+fn quiet_recurrence_stops_due_reminders_and_closes_the_open_ones() {
+    // A cleaner paid every week: the family does not want a reminder for it, but the forecast
+    // still counts it.
+    let today = parse_date("2026-11-22").unwrap();
+    let mut t = new_db();
+    let rec = write(&mut t.db, |tx| {
+        let checking = fixture::account(tx, "Conta", "checking", "BRL", 500_000, "2026-01-01");
+        let input: crate::recurrence::RecurrenceInput = serde_json::from_value(json!({
+            "description": "Diarista", "account_id": checking, "amount": -17_000,
+            "kind": "expense", "spec": {"freq": "WEEKLY"}, "start_date": "2026-11-24",
+        }))
+        .unwrap();
+        crate::recurrence::create(tx, &input, today)
+    });
+    let conn = t.db.conn();
+    run(conn, today).unwrap();
+    let open = |conn: &Connection| -> Vec<Alert> {
+        alerts::list(conn, &Default::default())
+            .unwrap()
+            .into_iter()
+            .filter(|a| a.kind == "due_soon" && a.status != alerts::AlertStatus::Resolved)
+            .collect()
+    };
+    assert_eq!(open(conn).len(), 1, "the reminder exists before");
+    let up = crate::reports::upcoming(conn, today, 7).unwrap();
+    assert_eq!(up[0].recurrence_id.as_deref(), Some(rec.as_str()));
+
+    // Turning the reminder off closes the open alert and no new one appears.
+    assert_eq!(quiet::set(conn, &rec, false).unwrap(), 1);
+    assert!(open(conn).is_empty());
+    run(conn, today).unwrap();
+    assert!(open(conn).is_empty());
+    let attention = crate::attention::list(conn, today).unwrap();
+    assert!(
+        attention
+            .items
+            .iter()
+            .all(|i| i.source != crate::attention::AttentionSource::Due),
+        "{:?}",
+        attention.items
+    );
+    let view = crate::recurrence::get(conn, &rec, today).unwrap();
+    assert!(!view.remind);
+    // The forecast still has it.
+    assert!(!crate::reports::upcoming(conn, today, 7).unwrap().is_empty());
+
+    // Back on: the reminder returns with the next occurrence (the one already closed stays closed).
+    quiet::set(conn, &rec, true).unwrap();
+    assert!(crate::recurrence::get(conn, &rec, today).unwrap().remind);
+    run(conn, parse_date("2026-11-29").unwrap()).unwrap();
+    assert_eq!(open(conn).len(), 1);
+    assert!(quiet::set(conn, "nope", false).is_err());
+}
+
+#[test]
+fn due_alert_closes_once_its_date_passes() {
+    let today = parse_date("2026-11-15").unwrap();
+    let mut t = new_db();
+    write(&mut t.db, |tx| {
+        let checking = fixture::account(tx, "Conta", "checking", "BRL", 500_000, "2026-01-01");
+        let mut p = fixture::new_txn(
+            tx,
+            &checking,
+            "2026-11-17",
+            -17_000,
+            TxnKind::Expense,
+            None,
+            None,
+        );
+        p.status = TxnStatus::Planned;
+        p.description = "Diarista".into();
+        crate::transactions::insert(tx, &p)?;
+        Ok(())
+    });
+    let conn = t.db.conn();
+    run(conn, today).unwrap();
+    let still_open = |conn: &Connection| {
+        alerts::list(conn, &Default::default())
+            .unwrap()
+            .into_iter()
+            .filter(|a| a.kind == "due_soon" && a.status != alerts::AlertStatus::Resolved)
+            .count()
+    };
+    assert_eq!(still_open(conn), 1);
+    // A week later "due in 5 days" no longer makes sense.
+    run(conn, parse_date("2026-11-23").unwrap()).unwrap();
+    assert_eq!(still_open(conn), 0);
+}

@@ -3,7 +3,7 @@ import type { Recurrence } from '@/api/generated/Recurrence';
 import type { RuleSpec } from '@/api/generated/RuleSpec';
 import type { TxnKind } from '@/api/generated/TxnKind';
 
-import { registerMockHandlers } from '../mockRegistry';
+import { onMockReset, registerMockHandlers } from '../mockRegistry';
 import { guarded } from './ledger/boot';
 import { addDays, brDate, nowUtc, parseYmd, today } from './ledger/dates';
 import {
@@ -65,6 +65,7 @@ function toView(r: RecurrenceRow, T = today()): Recurrence {
     active: r.active,
     next_dates: r.active ? nextN(spec, r.start_date, r.end_date, T, 3) : [],
     monthly_equivalent: monthlyEquivalent(spec, r.amount),
+    remind: !quietRecurrences.has(r.id),
   };
 }
 
@@ -253,8 +254,19 @@ function update(args: Record<string, unknown>): void {
   if (next.active) materializeOne(next, T, HORIZON);
 }
 
+/** Recorrências sem aviso de vencimento (como `notify::quiet` no núcleo). */
+export const quietRecurrences = new Set<string>();
+onMockReset(() => quietRecurrences.clear());
+
 registerMockHandlers(
   guarded({
+    'notify.set_recurrence_reminder': (args) => {
+      const id = str(args, 'recurrence_id');
+      load(id);
+      if (args.remind === false) quietRecurrences.add(id);
+      else quietRecurrences.delete(id);
+      return { recurrence_id: id, remind: args.remind !== false, resolved: 0 };
+    },
     'recurrences.list': (args) =>
       rows('recurrence')
         .filter(

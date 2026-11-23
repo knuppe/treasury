@@ -229,6 +229,7 @@ function recurrences(): Recurrence[] {
       active: true,
       next_dates: next,
       monthly_equivalent: r.months ? Math.round((amount * r.months.length) / 12) : amount,
+      remind: true,
     };
   });
 }
