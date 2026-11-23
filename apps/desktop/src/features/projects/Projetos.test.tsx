@@ -108,7 +108,7 @@ describe('Projects with the mock', () => {
     expect(imp).toMatchObject({ amount: 330_000, entered_amount: 300_000, linked_count: 2 });
     const detail = await screen.findByRole('region', { name: 'Bem Onix LTZ 2022' });
     const works = within(detail).getByRole('grid', { name: 'Benfeitorias de Onix LTZ 2022' });
-    expect(await within(works).findByRole('link', { name: '2 lançamento(s)' })).toBeTruthy();
+    expect(await within(works).findByRole('link', { name: '2 lançamentos' })).toBeTruthy();
   });
 
   it('puts the checked transactions in a new project via the batch bar', async () => {

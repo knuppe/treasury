@@ -7,7 +7,14 @@ import { divergingOption, slopeOption, type ComparisonInput } from './comparison
 import { childShades, compositionOption, TREEMAP_FULL_LABEL, toEchartsTree } from './composition';
 import { groupedBarsOption } from './groupedBarsOption';
 import { categoricalPalette, sequentialRamp } from './palette';
-import { nodeValues, sankeyHeight, sankeyOption, type SankeyInput } from './sankey';
+import {
+  LABEL_COLUMN_MAX,
+  LABEL_COLUMN_MIN,
+  nodeValues,
+  sankeyHeight,
+  sankeyOption,
+  type SankeyInput,
+} from './sankey';
 import { stackedAreaOption } from './stackedAreaOption';
 import { stackedBarsOption, topSegments } from './stackedBarsOption';
 import type { ChartTheme } from './theme';
@@ -139,6 +146,39 @@ describe('Sankey', () => {
       data: { source: 'hub', target: 'expense:mor', value: 700 },
     });
     expect(edge).toContain('Variação');
+  });
+
+  it('reserves room for the longest last-column label and never cuts the percentage', () => {
+    const long: SankeyInput = {
+      ...input,
+      nodes: [
+        ...input.nodes,
+        { id: 'sub:diarista', name: 'Diarista e serviços domésticos', color: '#3987e5', depth: 3 },
+        {
+          id: 'sub:x',
+          name: 'Uma subcategoria com um nome comprido demais para caber',
+          color: '#3987e5',
+          depth: 3,
+        },
+      ],
+      links: [
+        ...input.links,
+        { source: 'expense:mor', target: 'sub:diarista', value: 42 },
+        { source: 'expense:mor', target: 'sub:x', value: 10 },
+      ],
+    };
+    const s = series(sankeyOption(theme(), long));
+    const fmt = (s.label as { formatter: (p: { name: string }) => string }).formatter;
+    // The column grew past the old fixed 168 px, up to the ceiling.
+    expect(s.right).toBeGreaterThan(168);
+    expect(s.right).toBeLessThanOrEqual(LABEL_COLUMN_MAX);
+    // The usual name fits whole, with its share.
+    expect(fmt({ name: 'sub:diarista' })).toBe('Diarista e serviços domésticos  {v|4,2%}');
+    // The one that cannot fit is shortened with an ellipsis, and keeps its share.
+    const cut = fmt({ name: 'sub:x' });
+    expect(cut).toMatch(/^Uma subcategoria.*… {2}\{v\|1,0%\}$/);
+    // Short names keep the minimum column.
+    expect(series(sankeyOption(theme(), input)).right).toBe(LABEL_COLUMN_MIN);
   });
 
   it('grows the height with the fullest column', () => {

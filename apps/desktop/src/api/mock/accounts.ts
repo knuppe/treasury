@@ -258,13 +258,22 @@ function deleteAccount(id: string): void {
   const a = account(id);
   const txns = rows('txn').filter((t) => t.account_id === id).length;
   if (txns > 0)
-    conflict(`a conta ${a.name} tem ${txns} lançamento(s); apague-os antes ou arquive a conta`);
+    conflict(
+      txns === 1
+        ? `a conta ${a.name} tem 1 lançamento; apague-o antes ou arquive a conta`
+        : `a conta ${a.name} tem ${txns} lançamentos; apague-os antes ou arquive a conta`,
+    );
   const recs = rows('recurrence').filter(
     (r) => r.account_id === id || r.to_account_id === id,
   ).length;
   if (recs > 0) conflict(`a conta ${a.name} é usada por ${recs} recorrência(s); apague-as antes`);
   const plans = rows('installment_plan').filter((p) => p.account_id === id).length;
-  if (plans > 0) conflict(`a conta ${a.name} tem ${plans} parcelamento(s); apague-os antes`);
+  if (plans > 0)
+    conflict(
+      plans === 1
+        ? `a conta ${a.name} tem 1 parcelamento; apague-o antes`
+        : `a conta ${a.name} tem ${plans} parcelamentos; apague-os antes`,
+    );
   for (const c of rows('credit_card')) {
     if (c.payment_account_id === id)
       patch('credit_card', c.id, { payment_account_id: null, updated_at: nowUtc() });

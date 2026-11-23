@@ -66,7 +66,11 @@ email-cadastre-senha = Registe a palavra-passe de aplicação (Editar).
 email-backup-restaurado = Cópia de segurança restaurada: teste a ligação antes de voltar a verificar.
 email-buscar-agora = Verificar agora
 email-conexao-ok = Ligação a funcionar
-email-n-arquivos-pasta = { $n } ficheiro(s) na pasta.
+email-n-arquivos-pasta =
+    { $n ->
+        [one] { $n } ficheiro na pasta.
+       *[other] { $n } ficheiros na pasta.
+    }
 email-teste-le = Lê { $pastas }; para eliminar, { $como }.
 email-apagar-conta = Eliminar a conta?
 email-apagar-conta-descricao = A fila e a auditoria desta conta saem do Treasury. Nada é eliminado no fornecedor nem na pasta, e o que já foi importado continua.

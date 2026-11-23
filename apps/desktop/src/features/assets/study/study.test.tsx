@@ -54,7 +54,7 @@ describe('AI Study', () => {
     expect(pre.textContent).not.toContain('my_position');
     await user.click(screen.getByRole('button', { name: 'Gerar estudo' }));
     const history = await screen.findByRole('list', { name: 'Estudos anteriores' });
-    expect(await within(history).findByText(/1 número\(s\) não conferido\(s\)/)).toBeTruthy();
+    expect(await within(history).findByText(/1 números? não conferidos?/)).toBeTruthy();
     // The new study opens by itself, without having to look in the history.
     const study = await screen.findByRole('article', { name: 'Estudo aberto' });
     expect(

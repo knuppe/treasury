@@ -35,7 +35,11 @@ describe('categorization rules', () => {
     await user.keyboard('{Enter}');
     await user.click(within(dialog).getByRole('button', { name: 'Testar' }));
     expect(
-      await within(dialog).findByText(`${before.total} lançamento(s) casam com esta regra`),
+      await within(dialog).findByText(
+        before.total <= 1
+          ? `${before.total} lançamento casa com esta regra`
+          : `${before.total} lançamentos casam com esta regra`,
+      ),
     ).toBeTruthy();
     await user.click(within(dialog).getByRole('button', { name: 'Criar regra' }));
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Nova regra' })).toBeNull());

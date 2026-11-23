@@ -98,7 +98,7 @@ export function CategoryPicker({
       anchor={anchor}
       label={
         compact ? (
-          <span className={cx('min-w-0 truncate', !current && 'text-dim italic')}>{text}</span>
+          <CompactPath text={text} dim={!current} />
         ) : (
           <>
             <span className={cx('min-w-0 flex-1 truncate text-left', !current && 'text-dim')}>
@@ -175,5 +175,29 @@ export function CategoryPicker({
         </ul>
       </div>
     </Popover>
+  );
+}
+
+/**
+ * Caminho da categoria numa célula estreita: quando falta espaço, a categoria-mãe encolhe com
+ * reticências e a subcategoria, que é a parte que informa, fica inteira ("Alim… › Restaurantes").
+ * O caminho inteiro vai no `title`.
+ */
+function CompactPath({ text, dim }: { text: string; dim: boolean }) {
+  const cut = text.lastIndexOf(' › ');
+  if (dim || cut < 0) {
+    return (
+      <span className={cx('min-w-0 truncate', dim && 'text-dim italic')} title={text}>
+        {text}
+      </span>
+    );
+  }
+  return (
+    <span className="flex min-w-0 items-baseline" title={text}>
+      {/* A mãe encolhe primeiro (fator alto); a filha só quando a mãe chegou a 2 letras. */}
+      <span className="min-w-[2ch] shrink-[999] truncate">{text.slice(0, cut)}</span>
+      <span className="shrink-0 whitespace-pre">{' › '}</span>
+      <span className="min-w-0 shrink truncate">{text.slice(cut + 3)}</span>
+    </span>
   );
 }

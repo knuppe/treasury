@@ -207,7 +207,14 @@ function dailyAllowance(): DailyAllowance {
   const perDay = Math.max(Math.trunc(availableStart / daysLeft), 0);
   const perDayFromTomorrow = daysLeft > 1 ? Math.max(Math.trunc(available / (daysLeft - 1)), 0) : 0;
   const dailyIncome = Math.trunc(income / Math.max(daysLeft + d - 1, 1));
-  const status = available <= 0 ? 'over' : perDay * 10 < dailyIncome * 3 ? 'tight' : 'ok';
+  const status =
+    income <= 0
+      ? 'no_income'
+      : available <= 0
+        ? 'over'
+        : perDay * 10 < dailyIncome * 3
+          ? 'tight'
+          : 'ok';
   return {
     month,
     days_left: daysLeft,
@@ -222,7 +229,10 @@ function dailyAllowance(): DailyAllowance {
     per_day_from_tomorrow: perDayFromTomorrow,
     currency: baseCurrency(),
     status,
-    explanation: `Receitas do mês ${brl(income)} − gastos até ontem ${brl(spentBefore)} − contas que ainda vencem ${brl(fixed)} − falta guardar ${brl(savings)} = ${brl(availableStart)} para ${daysLeft} dia(s): ${brl(perDay)} por dia.`,
+    explanation:
+      income <= 0
+        ? 'Ainda não há receita recebida nem prevista neste mês. Sem ela não dá para calcular quanto sobra por dia.'
+        : `Receitas do mês ${brl(income)} − gastos até ontem ${brl(spentBefore)} − contas que ainda vencem ${brl(fixed)} − falta guardar ${brl(savings)} = ${brl(availableStart)} para ${daysLeft} ${daysLeft === 1 ? 'dia' : 'dias'}: ${brl(perDay)} por dia.`,
   };
 }
 

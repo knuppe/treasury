@@ -30,7 +30,12 @@ test('account, transaction, balance and undo on the real core', async ({ page })
   // Wait for the Transactions screen itself: the account detail also has a "Descrição" column and
   // a "Novo lançamento" button, and a dialog opened there closes when the navigation commits.
   await expect(page.getByRole('heading', { level: 1, name: /Lançamentos/ })).toBeVisible();
-  await expect(page.getByRole('columnheader', { name: 'Descrição' })).toBeVisible();
+  // With no transaction yet, the screen invites to start instead of showing an empty table.
+  await expect(
+    page
+      .getByRole('columnheader', { name: 'Descrição' })
+      .or(page.getByText('Comece pelo extrato do banco')),
+  ).toBeVisible();
   // The screen finishes loading (on the Vite dev server, the first visit may reload the
   // page and close a dialog opened too early).
   await page.waitForLoadState('networkidle');

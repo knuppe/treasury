@@ -55,10 +55,12 @@ export function InstrumentCard({
       )}
       {...rest}
     >
-      <header className="flex h-[var(--card-head)] shrink-0 items-center gap-3 border-b border-line/80 px-4">
+      {/* O título quebra em até duas linhas em vez de virar "Retorno anual (XIR…" num card
+          estreito; com uma linha, a altura é a mesma de sempre. */}
+      <header className="flex min-h-[var(--card-head)] shrink-0 items-center gap-3 border-b border-line/80 px-4 py-1">
         <WindowDots />
         {index ? <span className="num text-[11px] font-medium text-accent">{index}</span> : null}
-        <Heading id={titleId} className="label-caps min-w-0 truncate text-fg">
+        <Heading id={titleId} className="label-caps line-clamp-2 min-w-0 break-words text-fg">
           {title}
         </Heading>
         <AutoHelp label={title} className="-ml-1.5" />

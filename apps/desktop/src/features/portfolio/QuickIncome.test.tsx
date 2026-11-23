@@ -87,12 +87,10 @@ describe('income in a grid', () => {
     expect(await within(dialog).findByText(/confere:/)).toBeTruthy();
     expect(within(dialog).getByText('Dividendos')).toBeTruthy();
     expect(within(dialog).getByText('XXXX9 não está cadastrado na carteira')).toBeTruthy();
-    await waitFor(() =>
-      expect(within(dialog).getByText(/1 pronta\(s\) · 1 com problema/)).toBeTruthy(),
-    );
+    await waitFor(() => expect(within(dialog).getByText(/1 pronta · 1 com problema/)).toBeTruthy());
 
     await user.click(within(dialog).getByRole('button', { name: 'Registrar 1 provento' }));
-    expect(await screen.findByText('1 provento(s) registrado(s)')).toBeTruthy();
+    expect(await screen.findByText('1 provento registrado')).toBeTruthy();
     const income = (await mockCall('portfolio.list_income', {})) as IncomeEvent[];
     const rec = income.find((i) => i.ticker === 'PETR4' && i.pay_date === petr.pay_date)!;
     expect(rec.kind).toBe('dividend');
@@ -131,7 +129,13 @@ describe('income in a grid', () => {
         name: `Confirmar ${pending.length - 1} provento${pending.length - 1 > 1 ? 's' : ''}`,
       }),
     );
-    expect(await screen.findByText(`${pending.length - 1} provento(s) registrado(s)`)).toBeTruthy();
+    expect(
+      await screen.findByText(
+        pending.length - 1 <= 1
+          ? `${pending.length - 1} provento registrado`
+          : `${pending.length - 1} proventos registrados`,
+      ),
+    ).toBeTruthy();
     const income = (await mockCall('portfolio.list_income', {})) as IncomeEvent[];
     const rec = income.find((i) => i.asset_id === first!.asset.id && i.ex_date === first!.ex_date)!;
     expect(rec.net).toBe(1234);

@@ -30,6 +30,7 @@ import { errorText } from '@/features/transactions/ui/errors';
 import { TXN_KIND } from '@/features/transactions/ui/labels';
 import { t } from '@/i18n';
 
+import { plainSummary } from './plainSummary';
 import { conditionsSummary, RuleDialog } from './RuleDialog';
 
 /** Simula e aplica as regras ativas aos lançamentos existentes, com desfazer. */
@@ -217,8 +218,13 @@ export function RulesPanel({
       sortValue: (r) => r.name,
       cell: (r) => (
         <div className="flex min-w-0 flex-col py-1">
-          <span className={r.active ? 'truncate' : 'truncate text-dim line-through'}>{r.name}</span>
-          <span className="truncate text-[11.5px] text-dim">{conditionsSummary(r)}</span>
+          <span className={r.active ? 'break-words' : 'break-words text-dim line-through'}>
+            {r.name}
+          </span>
+          {/* Em palavras, com quebra de linha; a condição exata fica no title. */}
+          <span className="break-words text-[11.5px] text-dim" title={conditionsSummary(r)}>
+            {plainSummary(r)}
+          </span>
         </div>
       ),
     },

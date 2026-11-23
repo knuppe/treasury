@@ -23,6 +23,15 @@ test('creates the vault on the real core, locks and unlocks', async ({ page }) =
   await expect(page.getByRole('link', { name: /Lançamentos/ }).first()).toBeVisible();
   await expect(page.getByText('MOCK')).toHaveCount(0);
 
+  // Empty vault: Transactions invites to start (the default "This month" period is not a filter
+  // the person chose, so the screen must not say "no transactions with these filters").
+  await page
+    .getByRole('link', { name: /Lançamentos/ })
+    .first()
+    .click();
+  await expect(page.getByText('Comece pelo extrato do banco')).toBeVisible();
+  await expect(page.getByText('Nenhum lançamento com estes filtros.')).toHaveCount(0);
+
   await page.getByRole('button', { name: 'Bloquear cofre' }).first().click();
   await expect(page.getByRole('button', { name: 'Desbloquear' })).toBeVisible();
 

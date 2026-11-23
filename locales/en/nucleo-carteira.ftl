@@ -238,7 +238,11 @@ nucleo-carteira-extrato-herdada = Inherited position (ticker change or merger)
 nucleo-carteira-extrato-entrada-sem-custo = Zero-cost entry (split or stock bonus recorded as a buy)
 nucleo-carteira-extrato-compra = Buy
 nucleo-carteira-extrato-venda = Sell
-nucleo-carteira-extrato-come-cotas = Come-cotas: { $cotas } share(s) redeemed for IR
+nucleo-carteira-extrato-come-cotas =
+    { $cotas ->
+        [one] Come-cotas: { $cotas } share redeemed for IR
+       *[other] Come-cotas: { $cotas } shares redeemed for IR
+    }
 # Where the statement line came from.
 nucleo-carteira-extrato-origem-nota = note { $numero }
 nucleo-carteira-extrato-origem-agente = agent

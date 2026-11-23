@@ -1918,7 +1918,7 @@ fn tool_texts_follow_the_installation_locale() {
     );
     assert_eq!(
         spec("get_iptu").summarize(&json!([{}, {}])),
-        format!("2 carnê(s) de IPTU. {centavos}")
+        format!("2 carnês de IPTU. {centavos}")
     );
     assert_eq!(
         spec("preview_receipt").summarize(&receipt),

@@ -58,6 +58,13 @@ regras-apagada = Rule deleted
 
 regras-condicao = { $campo } { $op } { $valor }
 regras-condicao-entre = { $campo } { $op } { $valor } and { $valor2 }
+regras-condicao-termos = { $campo } contains { $termos }{ $mais ->
+        [0] {""}
+       *[other] {" "}and { $mais } more
+    }
+regras-condicao-padrao = { $campo } follows a pattern (see it when editing)
+regras-condicao-saida = is money going out
+regras-condicao-entrada = is money coming in
 regras-conta-escolhida = chosen account
 regras-e = and
 regras-ou = or

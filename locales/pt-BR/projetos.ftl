@@ -105,7 +105,11 @@ projetos-entradas-dica =
        *[other] { $itens } itens
     }
 projetos-destaques = Destaques
-projetos-alimenta = Alimenta { $n } benfeitoria(s) de { $bem }: o custo do bem segue as despesas do projeto (as receitas não abatem).
+projetos-alimenta =
+    { $n ->
+        [one] Alimenta { $n } benfeitoria de { $bem }: o custo do bem segue as despesas do projeto (as receitas não abatem).
+       *[other] Alimenta { $n } benfeitorias de { $bem }: o custo do bem segue as despesas do projeto (as receitas não abatem).
+    }
 projetos-um-bem = um bem
 projetos-por-categoria = Por categoria
 projetos-despesas-categoria = Despesas de { $nome } por categoria
@@ -166,7 +170,11 @@ projetos-fim = Fim
 
 projetos-lanc-no-projeto = Lançamentos no projeto
 projetos-lanc-fora = Lançamentos fora do projeto
-projetos-n-lancamentos = { $n } lançamento(s).
+projetos-n-lancamentos =
+    { $n ->
+        [one] { $n } lançamento.
+       *[other] { $n } lançamentos.
+    }
 projetos-titulo-lancamentos =
     { $n ->
         [1] Projeto do lançamento
@@ -177,9 +185,17 @@ projetos-nome-novo = Nome do novo projeto
 projetos-nome-novo-exemplo = Reforma da cozinha
 projetos-add-titulo = Lançamentos para { $nome }
 projetos-add-descricao = Marque as despesas (compras, PIX, faturas) e as receitas do projeto. Lançamentos de outro projeto mudam para este.
-projetos-add-marcados = { $n } marcado(s) · { $valor }
+projetos-add-marcados =
+    { $n ->
+        [one] { $n } marcado · { $valor }
+       *[other] { $n } marcados · { $valor }
+    }
 projetos-add-toast = Lançamentos em { $nome }
-projetos-add-toast-descricao = { $n } lançamento(s) no projeto.
+projetos-add-toast-descricao =
+    { $n ->
+        [one] { $n } lançamento no projeto.
+       *[other] { $n } lançamentos no projeto.
+    }
 projetos-buscar = Buscar
 projetos-buscar-exemplo = Descrição, favorecido ou observação
 projetos-de = De

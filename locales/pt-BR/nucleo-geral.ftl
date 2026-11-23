@@ -13,7 +13,11 @@ nucleo-geral-erro-principal-arquivado = o membro principal não pode ser arquiva
 nucleo-geral-instituicao = instituição { $id }
 nucleo-geral-erro-codigo-instituicao = código da instituição inválido: { $codigo }
 nucleo-geral-erro-site = endereço do site inválido: { $site }
-nucleo-geral-erro-instituicao-em-uso = a instituição { $instituicao } é usada por { $n } conta(s); troque a instituição dessas contas antes de apagar
+nucleo-geral-erro-instituicao-em-uso =
+    { $n ->
+        [one] a instituição { $instituicao } é usada por { $n } conta; troque a instituição dessa conta antes de apagar
+       *[other] a instituição { $instituicao } é usada por { $n } contas; troque a instituição dessas contas antes de apagar
+    }
 nucleo-geral-erro-bancos-incompleta = lista de bancos incompleta; mantida a anterior
 nucleo-geral-erro-bancos = lista de bancos do Banco Central: { $erro }
 nucleo-geral-motivo-familia = Dados da família alterados
@@ -43,7 +47,11 @@ nucleo-geral-erro-pin-desligado = o PIN não está ligado neste computador
 nucleo-geral-erro-pin-ilegivel-keychain = item do PIN ilegível no Keychain
 nucleo-geral-erro-pin-ilegivel = item do PIN ilegível
 nucleo-geral-erro-pin-bloqueado = PIN errado { $tentativas } vezes: o PIN foi desligado. Entre com a senha mestra.
-nucleo-geral-erro-pin-incorreto = PIN incorreto. Restam { $restam } tentativa(s) antes de exigir a senha mestra.
+nucleo-geral-erro-pin-incorreto =
+    { $restam ->
+        [one] PIN incorreto. Resta { $restam } tentativa antes de exigir a senha mestra.
+       *[other] PIN incorreto. Restam { $restam } tentativas antes de exigir a senha mestra.
+    }
 nucleo-geral-erro-divisao = divisão inválida
 nucleo-geral-erro-parte-invalida = parte de recuperação inválida
 nucleo-geral-erro-duas-partes = informe pelo menos duas partes
@@ -216,7 +224,11 @@ nucleo-geral-expurgo-mercado-consequencia = Cotações intradiárias antigas e o
 nucleo-geral-expurgo-analise = Dados da análise de ativos
 nucleo-geral-expurgo-analise-consequencia = Fundamentos, cotações do universo, documentos e indicadores dos bancos baixados da CVM, B3, SEC e Banco Central; a próxima coleta baixa tudo de novo (cerca de 230 MB pela rede).
 nucleo-geral-erro-expurgo-backup = o backup antes do expurgo não passou na verificação ({ $erro }); nada foi apagado
-nucleo-geral-referencias-quebradas = { $n } referência(s) quebrada(s) entre tabelas
+nucleo-geral-referencias-quebradas =
+    { $n ->
+        [one] { $n } referência quebrada entre tabelas
+       *[other] { $n } referências quebradas entre tabelas
+    }
 nucleo-geral-tabela = tabela { $tabela }
 nucleo-geral-ordem-chave-primaria = chave primária
 nucleo-geral-mostrando-linhas = mostrando as { $limite } primeiras de { $total } linhas

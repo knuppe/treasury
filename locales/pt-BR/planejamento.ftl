@@ -10,6 +10,7 @@ planejamento-data = Data
 planejamento-nome = Nome
 planejamento-valor = Valor
 planejamento-por-mes = Por mês
+planejamento-assinaturas-por-mes-valor = { $valor } por mês
 planejamento-mais-50-anos = mais de 50 anos
 planejamento-tirar = Tirar { $nome }
 
@@ -17,6 +18,7 @@ planejamento-tirar = Tirar { $nome }
 
 planejamento-hoje-titulo = Quanto posso gastar hoje
 planejamento-hoje-estourado = Neste mês o que entrou já está todo comprometido. Segure os gastos que puder esperar até o próximo salário.
+planejamento-hoje-sem-renda = Anote a renda do mês (o salário, por exemplo) e o app calcula quanto dá para gastar por dia sem apertar as contas.
 planejamento-hoje-usado = O valor de hoje já foi usado. Amanhã ele volta, recalculado com o que sobrar.
 planejamento-hoje-apertado = Está apertado: vale priorizar só o essencial até o fim do mês.
 planejamento-hoje-ok = Dentro desse valor, o mês fecha sem comprometer as contas e as metas.
@@ -103,7 +105,11 @@ planejamento-quitacao-juros-ano = Juros ao ano
 planejamento-quitacao-minimo-mes = Mínimo por mês
 planejamento-quitacao-tirar-esta = Tirar esta dívida
 planejamento-quitacao-grafico = Saldo devedor somado, mês a mês
-planejamento-quitacao-fonte = Fonte: { $n } dívida(s); parcelas mínimas + { $extra } de extra por mês
+planejamento-quitacao-fonte =
+    { $n ->
+        [one] Fonte: { $n } dívida; parcelas mínimas + { $extra } de extra por mês
+       *[other] Fonte: { $n } dívidas; parcelas mínimas + { $extra } de extra por mês
+    }
 planejamento-quitacao-grafico-aria = Saldo devedor por estratégia
 planejamento-quitacao-dividas = Dívidas na simulação
 planejamento-quitacao-divida = Dívida
@@ -230,7 +236,11 @@ planejamento-cenarios-patrimonio-cenario = Patrimônio (cenário)
 planejamento-cenarios-liquido-cenario = Contas e investimentos (cenário)
 planejamento-cenarios-base = Base
 planejamento-cenarios-cenario = Cenário
-planejamento-cenarios-patrimonio-em = Patrimônio em { $anos } ano(s)
+planejamento-cenarios-patrimonio-em =
+    { $anos ->
+        [one] Patrimônio em { $anos } ano
+       *[other] Patrimônio em { $anos } anos
+    }
 planejamento-cenarios-base-valor = base { $valor } · { $diferenca }
 planejamento-cenarios-liquido = Contas e investimentos
 planejamento-cenarios-acabam = acabam em { $mes } · { $diferenca }

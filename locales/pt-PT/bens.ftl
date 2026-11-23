@@ -32,7 +32,11 @@ bens-registrar-avaliacao = Registar avaliação
 bens-financiamentos-vazio = Nenhum contrato ligado. Ligue o financiamento registado em 07 · Dívidas para ver o património do bem e o LTV.
 bens-benfeitorias-vazio = Nenhuma obra registada.
 bens-sem-lancamentos-estimado = sem movimentos: vale o estimado
-bens-n-lancamentos = { $n } movimento(s)
+bens-n-lancamentos =
+    { $n ->
+        [one] { $n } movimento
+       *[other] { $n } movimentos
+    }
 bens-benfeitoria-excluida = Benfeitoria eliminada
 bens-excluir-avaliacao-de = Eliminar avaliação de { $data }
 bens-avaliacao-excluida = Avaliação eliminada

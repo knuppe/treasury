@@ -77,10 +77,18 @@ dados-col-confianca = Confiança
 dados-escolha = escolha uma
 dados-vazio = vazio
 dados-nada = Nenhum campo para completar: os dados dos ativos batem com as fontes do cofre.
-dados-aplicar-marcados = Gravar marcados ({ $n } campo(s))
+dados-aplicar-marcados =
+    { $n ->
+        [one] Gravar marcados ({ $n } campo)
+       *[other] Gravar marcados ({ $n } campos)
+    }
 dados-marcar-altos = Marcar os de confiança alta
 dados-desmarcar = Desmarcar todos
-dados-aplicado = { $n } campo(s) gravado(s)
+dados-aplicado =
+    { $n ->
+        [one] { $n } campo gravado
+       *[other] { $n } campos gravados
+    }
 dados-aplicado-desfazer = Dá para desfazer pelo histórico de alterações.
 dados-nao-aplicou = Não foi possível gravar
 dados-rodape = Dados de fontes externas e de IA podem estar errados ou desatualizados. Confira a fonte de cada campo antes de aprovar.
@@ -115,20 +123,40 @@ dados-fonte-brasilapi = Receita Federal · BrasilAPI
 dados-consultar = Consultar fontes
 dados-consultar-dica = Pergunta à B3 (setor em três níveis, atividade, site), ao GLEIF (LEI) e à Receita pela BrasilAPI (razão social e situação). Só vão o código CVM e o CNPJ; uma fonte consultada há menos de 30 dias não é consultada de novo.
 dados-consultar-todos = Consultar fontes de todos
-dados-consultado = { $n } leitura(s) nova(s) das fontes
+dados-consultado =
+    { $n ->
+        [one] { $n } leitura nova das fontes
+       *[other] { $n } leituras novas das fontes
+    }
 dados-consultado-nada = Nenhuma leitura nova: as fontes foram consultadas há pouco, estão desligadas ou não têm este ativo.
 dados-consultados-todos = { $ativos } ativo(s) conferido(s), { $n } leitura(s) nova(s)
-dados-consultados-erros = { $n } ativo(s) com erro em alguma fonte; tente de novo mais tarde.
+dados-consultados-erros =
+    { $n ->
+        [one] { $n } ativo com erro em alguma fonte; tente de novo mais tarde.
+       *[other] { $n } ativos com erro em alguma fonte; tente de novo mais tarde.
+    }
 dados-nao-consultou = Não foi possível consultar as fontes
 
 ## Atalhos (alerta, aviso, ⌘K)
 
 dados-cmd-completar = Completar dados dos ativos
 dados-cmd-sin = setor,segmento,isin,cnpj,dados,cadastro,completar,enriquecer
-dados-aviso = { $n } dado(s) dos seus ativos podem ser completados pelas fontes oficiais ({ $sem_setor } ativo(s) sem setor).
+dados-aviso =
+    { $n ->
+        [one] { $n } dado dos seus ativos pode ser completado pelas fontes oficiais
+       *[other] { $n } dados dos seus ativos podem ser completados pelas fontes oficiais
+    }{ $sem_setor ->
+        [0] .
+        [one] {" "}({ $sem_setor } ativo sem setor).
+       *[other] {" "}({ $sem_setor } ativos sem setor).
+    }
 dados-aviso-ver = Ver dados
 dados-aviso-fechar = Fechar o aviso dos dados dos ativos
-dados-chip-ativo = { $n } dado(s) para completar
+dados-chip-ativo =
+    { $n ->
+        [one] { $n } dado para completar
+       *[other] { $n } dados para completar
+    }
 dados-campo-pension_type = Tipo do plano
 dados-valor-pension_type-efpc = Fundo de pensão (EFPC)
 dados-valor-pension_type-pgbl = PGBL

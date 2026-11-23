@@ -441,7 +441,11 @@ ativos-prev-custodia-conta = { $n ->
        *[other] Las cuotas de este plan están en las cuentas { $contas }.
     }
 ativos-prev-custodia-sem-conta = Este plan aún no tiene cuenta de cuotas. Importar el historial de pagos crea una junto con los aportes.
-ativos-prev-aportes-pendentes = { $n } aporte(s), { $valor } en total, esperan la cuota de la CVM desde { $data }: se vuelven cuotas solos cuando la recogida de cotizaciones traiga el historial del fondo.
+ativos-prev-aportes-pendentes =
+    { $n ->
+        [one] { $n } aporte, { $valor } en total, espera la cuota de la CVM desde { $data }: se vuelve cuotas solo cuando la recogida de cotizaciones traiga el historial del fondo.
+       *[other] { $n } aportes, { $valor } en total, esperan la cuota de la CVM desde { $data }: se vuelven cuotas solos cuando la recogida de cotizaciones traiga el historial del fondo.
+    }
 ativos-prev-plano = Plan
 ativos-prev-aportes-titulo = Aportes y tramo de impuesto
 ativos-prev-aportes-tabela = Aportes de la previsión
@@ -562,7 +566,11 @@ ativo-conversas-texto = Las conversaciones con el agente iniciadas en esta pági
 ativo-ver-estudos = Ver estudios
 ativo-conversas-vazio = Todavía no hay conversaciones sobre este activo
 ativo-conversas-vazio-texto = Usa "Preguntar al agente" para conversar sobre { $ativo }; la conversación queda guardada aquí.
-ativo-conversa-detalhe = { $quando } · { $n } mensaje(s)
+ativo-conversa-detalhe =
+    { $n ->
+        [one] { $quando } · { $n } mensaje
+       *[other] { $quando } · { $n } mensajes
+    }
 ativo-abrir-conversa = Abrir
 
 # Visão geral e notícias do ativo (docs/asset-overview.md).

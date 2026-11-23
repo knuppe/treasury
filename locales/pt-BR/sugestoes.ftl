@@ -7,7 +7,7 @@ sugestoes-nomes-mais = { $nomes } e mais { $n }
 ## Primeiro cadastro
 
 sugestoes-cadastro-titulo = Cadastrar as contas da família
-sugestoes-cadastro-detalhe = Diga onde vocês têm conta (bancos, cartões, corretoras) e o agente propõe o cadastro e o melhor jeito de importar cada uma.
+sugestoes-cadastro-detalhe = Comece pela conta que você mais usa (banco, cartão ou corretora). Se tiver um assistente de IA configurado, ele pode propor o cadastro das outras e dizer como trazer o extrato de cada uma.
 sugestoes-cadastro-pedido = Quero cadastrar onde a família tem dinheiro. Pergunte onde temos contas (bancos, cartões de crédito, corretoras, contas no exterior) e, para cada uma: proponha o cadastro (create_account com institution_name; cartões com fechamento e vencimento), diga o melhor caminho para trazer os dados (OFX ou CSV do banco, fatura em PDF, relatório da Área do Investidor B3, notas de corretagem em PDF) e onde baixar cada arquivo. Não invente saldos: pergunte.
 sugestoes-cadastro-pedido-exterior = Quero cadastrar onde a família tem dinheiro. Pergunte onde temos contas (bancos, cartões de crédito, corretoras, contas de aposentadoria, contas em outro país) e, para cada uma: proponha o cadastro (create_account com institution_name; cartões com fechamento e vencimento), diga o melhor caminho para trazer os dados (OFX, QFX ou CSV do banco, o extrato da corretora) e onde baixar cada arquivo. Não invente saldos: pergunte.
 
@@ -33,7 +33,11 @@ sugestoes-sem-extrato-pedido = As contas { $contas } estão sem lançamentos há
 
 sugestoes-fatura-titulo = Fatura do { $cartao } vence em { $data }
 sugestoes-fatura-detalhe = { $valor } a pagar.
-sugestoes-fatura-detalhe-mais = { $valor } a pagar (+{ $n } fatura(s)).
+sugestoes-fatura-detalhe-mais =
+    { $n ->
+        [one] { $valor } a pagar (+{ $n } fatura).
+       *[other] { $valor } a pagar (+{ $n } faturas).
+    }
 sugestoes-fatura-pedido = A fatura do cartão { $cartao } vence em { $data }. Confira o total com list_card_statements, diga de qual conta sai o pagamento e se o saldo dela cobre.
 
 ## Orçamento estourado

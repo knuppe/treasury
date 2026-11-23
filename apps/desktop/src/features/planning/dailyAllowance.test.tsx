@@ -57,6 +57,25 @@ describe('Quanto posso gastar hoje', () => {
     expect(within(card).getByText(/Dividido por 11 dias, a partir de amanhã/)).toBeTruthy();
   });
 
+  it('no income in the month: invites to record it instead of a red zero', () => {
+    data = {
+      ...base,
+      income: 0,
+      spent: 0,
+      spent_today: 0,
+      available: 0,
+      per_day: 0,
+      per_day_from_tomorrow: 0,
+      status: 'no_income',
+    };
+    render(<DailyAllowanceCard />);
+    const card = screen.getByRole('region', { name: 'Quanto posso gastar hoje' });
+    expect(within(card).getByText(/Anote a renda do mês/)).toBeTruthy();
+    expect(within(card).queryByText('R$ 0,00')).toBeNull();
+    expect(within(card).queryByText(/todo comprometido/)).toBeNull();
+    expect(within(card).queryByRole('button', { name: 'Como calculei' })).toBeNull();
+  });
+
   it("with money left today, the highlight is still today's", () => {
     data = { ...base, spent_today: 5_000, today_left: 13_633, per_day_from_tomorrow: 19_871 };
     render(<DailyAllowanceCard />);

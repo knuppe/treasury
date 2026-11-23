@@ -209,7 +209,11 @@ bens-benfeitorias-de = Benfeitorias de { $nome }
 bens-benfeitorias-vazio = Nenhuma obra registrada.
 bens-fora-custo = fora do custo
 bens-sem-lancamentos-estimado = sem lançamentos: vale o estimado
-bens-n-lancamentos = { $n } lançamento(s)
+bens-n-lancamentos =
+    { $n ->
+        [one] { $n } lançamento
+       *[other] { $n } lançamentos
+    }
 bens-benfeitoria-excluida = Benfeitoria excluída
 bens-avaliacoes-de = Avaliações de { $nome }
 bens-avaliacoes-vazio = Nenhuma avaliação: o valor é estimado automaticamente a partir do custo.

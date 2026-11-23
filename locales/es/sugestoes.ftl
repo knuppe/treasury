@@ -8,7 +8,7 @@ sugestoes-nomes-mais = { $nomes } y { $n } más
 ## Primer registro
 
 sugestoes-cadastro-titulo = Registrar las cuentas de la familia
-sugestoes-cadastro-detalhe = Dile al agente dónde tienen cuentas (bancos, tarjetas, corredoras) y propone el registro y la mejor forma de importar cada una.
+sugestoes-cadastro-detalhe = Empieza por la cuenta que más usas (banco, tarjeta o corredora). Si tienes un asistente de IA configurado, puede proponer el registro de las demás y explicar cómo traer el extracto de cada una.
 sugestoes-cadastro-pedido = Quiero registrar dónde tiene dinero la familia. Pregunta dónde tenemos cuentas (bancos, tarjetas de crédito, corredoras, cuentas en el exterior) y, para cada una: propone el registro (create_account con institution_name; tarjetas con cierre y vencimiento), dime la mejor forma de traer los datos (OFX o CSV del banco, resumen de tarjeta en PDF, informe del Área del Inversionista de B3, notas de corretaje en PDF) y dónde descargar cada archivo. No inventes saldos: pregunta.
 sugestoes-cadastro-pedido-exterior = Quiero registrar dónde tiene dinero la familia. Pregunta dónde tenemos cuentas (bancos, tarjetas de crédito, corredoras, planes de pensiones, cuentas en otro país) y, para cada una: propone el registro (create_account con institution_name; tarjetas con cierre y vencimiento), dime la mejor forma de traer los datos (OFX, QFX, CSV o Norma 43 del banco, el extracto de la corredora) y dónde descargar cada archivo. No inventes saldos: pregunta.
 
@@ -34,7 +34,11 @@ sugestoes-sem-extrato-pedido = Las cuentas { $contas } no tienen movimientos hac
 
 sugestoes-fatura-titulo = El resumen de { $cartao } vence el { $data }
 sugestoes-fatura-detalhe = { $valor } por pagar.
-sugestoes-fatura-detalhe-mais = { $valor } por pagar (+{ $n } resumen(es)).
+sugestoes-fatura-detalhe-mais =
+    { $n ->
+        [one] { $valor } por pagar (+{ $n } resumen).
+       *[other] { $valor } por pagar (+{ $n } resumenes).
+    }
 sugestoes-fatura-pedido = El resumen de la tarjeta { $cartao } vence el { $data }. Revisa el total con list_card_statements, dime de qué cuenta sale el pago y si su saldo alcanza.
 
 ## Presupuesto excedido

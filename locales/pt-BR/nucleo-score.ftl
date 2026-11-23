@@ -335,7 +335,11 @@ nucleo-score-rf-titular-desconhecido = titular não informado
 nucleo-score-rf-fgc-sem-titulares = contas sem titulares cadastrados contam como um único CPF (exposição da família inteira)
 nucleo-score-rf-fgc-por-titular = exposição por titular das contas (conta conjunta dividida entre os titulares)
 nucleo-score-rf-sem-posicao = sem posição: dentro do limite
-nucleo-score-rf-nota-fgc = { $titulos } título(s) garantido(s) da família nesta instituição; maior exposição por CPF { $exposicao }; titulares: { $titulares }; { $atribuicao }
+nucleo-score-rf-nota-fgc =
+    { $titulos ->
+        [one] { $titulos } título garantido da família nesta instituição; maior exposição por CPF { $exposicao }; titulares: { $titulares }; { $atribuicao }
+       *[other] { $titulos } títulos garantidos da família nesta instituição; maior exposição por CPF { $exposicao }; titulares: { $titulares }; { $atribuicao }
+    }
 nucleo-score-rf-fonte-fgc = posições da carteira e regra do FGC
 nucleo-score-rf-fonte-regra-poupanca = regra da poupança
 nucleo-score-rf-nota-liquidez-diaria = liquidez diária

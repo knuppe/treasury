@@ -10,7 +10,7 @@ perfil-refazer = Refazer o questionário
 perfil-boas-vindas = Boas-vindas ao Treasury
 perfil-boas-vindas-texto = Em 2 minutos o app se ajusta a você: o que aparece na tela, como as coisas são explicadas e por onde começar.
 perfil-personalizar = Quero personalizar o app para mim
-perfil-personalizar-dica = 7 perguntas rápidas, de múltipla escolha.
+perfil-personalizar-dica = 8 perguntas rápidas, de múltipla escolha.
 perfil-completo = Já sei o que quero: usar a interface completa
 perfil-completo-dica = Modo avançado, com todas as telas à vista. Sem perguntas.
 perfil-demo-convite = Só quer conhecer o app? { $botao } com dados de exemplo, separado deste.
@@ -47,7 +47,11 @@ perfil-reserva-criar-frase = { $link } para acompanhar o quanto já guardou.
 perfil-onde-foi = Para onde foi o dinheiro
 perfil-onde-item = { $valor } ({ $pct }% do que saiu)
 perfil-onde-vazio = Nenhum gasto anotado neste mês ainda.
-perfil-sem-categoria = { $n } lançamento(s) sem categoria.
+perfil-sem-categoria =
+    { $n ->
+        [one] { $n } lançamento sem categoria.
+       *[other] { $n } lançamentos sem categoria.
+    }
 perfil-escolher-categoria = Escolher a categoria
 perfil-seu-mes = Seu mês de { $mes }
 perfil-anotar-gasto = Anotar um gasto
@@ -66,8 +70,16 @@ perfil-membro-saiu = Saiu
 perfil-membro-sobrou = Sobrou
 perfil-membro-patrimonio = Patrimônio { $valor }
 perfil-membro-guardou = guardou { $pct } do que entrou em 12 meses
-perfil-membro-contas = { $n } conta(s)
-perfil-membro-dividas = { $n } dívida(s)
+perfil-membro-contas =
+    { $n ->
+        [one] { $n } conta
+       *[other] { $n } contas
+    }
+perfil-membro-dividas =
+    { $n ->
+        [one] { $n } dívida
+       *[other] { $n } dívidas
+    }
 perfil-ver-como = Ver como { $nome }
 perfil-fazer-questionario = Fazer o questionário
 perfil-membros-familia = Da família (sem membro, como contas conjuntas): entrou { $entrou }, saiu { $saiu }.

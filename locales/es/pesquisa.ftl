@@ -388,7 +388,11 @@ pesquisa-dados-n-atualizados = { $n ->
    *[other] { $n } actualizados
 }
 pesquisa-dados-n-ok = { $n } ok
-pesquisa-dados-n-pulados = { $n } omitido(s), sin problema
+pesquisa-dados-n-pulados =
+    { $n ->
+        [one] { $n } omitido, sin problema
+       *[other] { $n } omitidos, sin problema
+    }
 pesquisa-dados-total = Total
 pesquisa-dados-aviso = Aviso de la recolección
 pesquisa-dados-concluida = Recolección del análisis terminada

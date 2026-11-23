@@ -18,6 +18,7 @@ nucleo-planejamento-gastar-hoje =
        *[other] { $dias } días
     }: { $por_dia } por día.
 nucleo-planejamento-gastar-amanha = Hoy ya se gastaron { $hoje }; a partir de mañana, { $amanha } por día.
+nucleo-planejamento-gastar-sem-renda = Todavía no hay ingresos recibidos ni previstos este mes. Sin ellos no se puede calcular cuánto queda por día.
 
 ## Escenarios "y si" (`scenarios`)
 
@@ -239,12 +240,20 @@ nucleo-planejamento-previdencia-pagamentos-ilegivel-data = Captura { $print }: e
 nucleo-planejamento-previdencia-pagamentos-cortada-alto = Captura { $print }: la primera línea está cortada (solo { $lido }). Envía la captura de arriba con la línea entera, o indica el pago.
 nucleo-planejamento-previdencia-pagamentos-cortada-fim = Captura { $print }: la última línea está cortada (solo { $lido }). Envía la captura de abajo con la línea entera, o indica el pago.
 nucleo-planejamento-previdencia-pagamentos-mes-faltando = Ningún pago en { $lido }, en medio de una serie mensual. Revisa si hubo aporte ese mes (puede faltar una captura).
-nucleo-planejamento-previdencia-aviso-aportes-sem-cota = { $n } aporte(s) aún sin cuota de la CVM cuentan en el saldo por el importe aportado, sin rendimiento, hasta que la recogida traiga la cuota del día
+nucleo-planejamento-previdencia-aviso-aportes-sem-cota =
+    { $n ->
+        [one] { $n } aporte aún sin cuota de la CVM cuenta en el saldo por el importe aportado, sin rendimiento, hasta que la recogida traiga la cuota del día
+       *[other] { $n } aportes aún sin cuota de la CVM cuentan en el saldo por el importe aportado, sin rendimiento, hasta que la recogida traiga la cuota del día
+    }
 nucleo-planejamento-previdencia-pagamentos-vao = Capturas { $print }: el día { $lido } quedó con menos aportes que los otros días de la serie; un pago puede haber quedado entre las dos capturas. Envía una captura que muestre ese tramo, o indica el pago.
 nucleo-planejamento-previdencia-pagamentos-conta-nova = Cuotas · { $plano }
 nucleo-planejamento-previdencia-pagamentos-conta-nota = Cuenta de las cuotas del plan { $plano }, creada al importar el historial de pagos (sin movimiento de caja).
 nucleo-planejamento-previdencia-motivo-pagamentos-n = { $plano }: { $com } aporte(s) con cuota, { $sem } a la espera de la cuota de la CVM y { $pendencias } pendiente(s) para revisar
-nucleo-planejamento-previdencia-motivo-cotas-completadas = Cuotas de la CVM completadas en { $n } aporte(s) de previsión
+nucleo-planejamento-previdencia-motivo-cotas-completadas =
+    { $n ->
+        [one] Cuotas de la CVM completadas en { $n } aporte de previsión
+       *[other] Cuotas de la CVM completadas en { $n } aportes de previsión
+    }
 nucleo-previdencia-saldo-so-previdencia = el saldo informado es solo para planes de previsión
 nucleo-previdencia-saldo-positivo = el saldo debe ser mayor que cero
 nucleo-previdencia-saldo-sem-cotas = el plan no tiene cuotas el { $data }: registre los aportes antes de informar el saldo

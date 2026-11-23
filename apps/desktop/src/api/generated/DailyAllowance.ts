@@ -47,6 +47,8 @@ today_left: number,
  */
 per_day_from_tomorrow: number, currency: string, 
 /**
- * `ok`, `tight` (menos de 30% do que entra por dia) ou `over` (já passou).
+ * `ok`, `tight` (menos de 30% do que entra por dia), `over` (já passou) ou `no_income`
+ * (nenhuma receita recebida nem prevista no mês: sem ela não há o que dividir, e a falta
+ * de dado não vira "mês estourado").
  */
 status: string, explanation: string, };

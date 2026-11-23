@@ -48,7 +48,7 @@ describe('Asset data with sources', () => {
 
     const save = within(panel).getByRole('button', { name: /^Gravar marcados/ });
     await user.click(save);
-    expect(await screen.findByText(/campo\(s\) gravado\(s\)/)).toBeTruthy();
+    expect(await screen.findByText(/campos? gravados?/)).toBeTruthy();
     const petr = (await mockCall('assets.field_sources', { asset_id: 'ast-petr4' })) as {
       fields: { status: { field: string; current: string | null; origin: string | null } }[];
     };
@@ -69,7 +69,7 @@ describe('Asset data with sources', () => {
     );
     expect(within(panel).getAllByText('já preenchido').length).toBeGreaterThan(0);
     await user.click(within(panel).getByRole('button', { name: 'Completar dados' }));
-    expect(await screen.findByText(/campo\(s\) gravado\(s\)/)).toBeTruthy();
+    expect(await screen.findByText(/campos? gravados?/)).toBeTruthy();
     expect(
       (await within(panel).findAllByText(/CVM · FCA · 14\/10\/2026 · 90/)).length,
     ).toBeGreaterThan(0);
@@ -89,7 +89,7 @@ describe('Asset data with sources', () => {
       { timeout: 15_000 },
     );
     await user.click(within(panel).getByRole('button', { name: 'Consultar fontes' }));
-    expect(await screen.findByText(/leitura\(s\) nova\(s\) das fontes/)).toBeTruthy();
+    expect(await screen.findByText(/leituras? novas? das fontes/)).toBeTruthy();
     expect(await within(panel).findByText(/5493000J801JZRCMFE49/)).toBeTruthy();
     const r = (await mockCall('assets.data_gaps', { asset_ids: ['ast-petr4'] })) as {
       assets: { fields: { field: string; candidate: { source: string } | null }[] }[];
@@ -111,7 +111,7 @@ describe('Asset data with sources', () => {
     const user = userEvent.setup();
     renderApp('unlocked', {}, '#/carteira');
     const note = await screen.findByText(
-      /dado\(s\) dos seus ativos podem ser completados/,
+      /dados dos seus ativos podem ser completados pelas fontes oficiais\.$/,
       undefined,
       {
         timeout: 15_000,
@@ -127,7 +127,7 @@ describe('Asset data with sources', () => {
     renderApp('unlocked', {}, '#/ativos?ativo=ast-petr4');
     const chip = await screen.findByRole(
       'button',
-      { name: /dado\(s\) para completar/ },
+      { name: /dados? para completar/ },
       { timeout: 15_000 },
     );
     await user.click(chip);

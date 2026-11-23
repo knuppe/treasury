@@ -212,7 +212,7 @@ describe('07 · Dívidas with the mock', () => {
     const found = within(prev).getByRole('list', { name: 'Amortizações achadas' });
     expect(within(found).getByText(/20\.000,00/)).toBeTruthy();
     await user.click(within(dialog).getByRole('button', { name: /Importar 3 parcela/ }));
-    expect(await screen.findByText('3 parcela(s) do extrato registradas')).toBeTruthy();
+    expect(await screen.findByText('3 parcelas do extrato registradas')).toBeTruthy();
     const v = (await mockCall('debt.get', { id: l.id })) as LoanView;
     expect(v.statement_until).toBe(3);
     expect(v.remaining_count).toBe(60);

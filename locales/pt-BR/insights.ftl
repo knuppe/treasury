@@ -45,8 +45,16 @@ insights-fgts-corpo = { $n ->
 }
 insights-fgts-acao = Confira o holerite e fale com o RH da empresa; se não resolver, a Caixa e o Ministério do Trabalho recebem a denúncia.
 insights-previdencia-titulo = { $plano }: aportes para conferir
-insights-previdencia-pendencias = { $n } pendência(s) no histórico de pagamentos importado:
-insights-previdencia-sem-cota = { $aportes } aporte(s) esperam a cota da CVM desde { $desde } e entram no saldo pelo valor aportado.
+insights-previdencia-pendencias =
+    { $n ->
+        [one] { $n } pendência no histórico de pagamentos importado:
+       *[other] { $n } pendências no histórico de pagamentos importado:
+    }
+insights-previdencia-sem-cota =
+    { $aportes ->
+        [one] { $aportes } aporte espera a cota da CVM desde { $desde } e entram no saldo pelo valor aportado.
+       *[other] { $aportes } aportes esperam a cota da CVM desde { $desde } e entram no saldo pelo valor aportado.
+    }
 insights-previdencia-acao = Abra o plano em Ativos, confira as pendências e mande ao agente o pagamento que faltou (ou o print que mostra esse trecho).
 
 ## Gasto fora do normal

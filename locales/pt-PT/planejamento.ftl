@@ -8,6 +8,7 @@ planejamento-tirar = Remover { $nome }
 ## Quanto posso gastar hoje
 
 planejamento-hoje-estourado = Neste mês, o que entrou já está todo comprometido. Adie os gastos que puderem esperar até ao próximo salário.
+planejamento-hoje-sem-renda = Registe o rendimento do mês (o salário, por exemplo) e a app calcula quanto pode gastar por dia sem apertar as contas.
 planejamento-hoje-usado = O valor de hoje já foi usado. Amanhã volta, recalculado com o que sobrar.
 planejamento-hoje-apertado = Está apertado: convém dar prioridade só ao essencial até ao fim do mês.
 planejamento-hoje-esconder = Ocultar o cálculo
@@ -31,7 +32,11 @@ planejamento-quitacao-intro = Quanto sobra por mês para pagar além das presta�
 planejamento-quitacao-fora-app = Dívida fora da aplicação
 planejamento-quitacao-exemplo = Descoberto autorizado
 planejamento-quitacao-tirar-esta = Remover esta dívida
-planejamento-quitacao-fonte = Fonte: { $n } dívida(s); prestações mínimas + { $extra } de extra por mês
+planejamento-quitacao-fonte =
+    { $n ->
+        [one] Fonte: { $n } dívida; prestações mínimas + { $extra } de extra por mês
+       *[other] Fonte: { $n } dívidas; prestações mínimas + { $extra } de extra por mês
+    }
 planejamento-quitacao-juros-aa = Juros/ano
 planejamento-quitacao-ordem = Ordem de liquidação
 planejamento-quitacao-ordem-de = Ordem de liquidação: { $estrategia }
@@ -81,7 +86,11 @@ planejamento-cenarios-renda-pausa-dica = 0% = sem rendimento; 50% = tempo parcia
 planejamento-cenarios-negativo-dica = Negativo para saída (ex.: -5000,00).
 planejamento-cenarios-patrimonio-base = Património (base)
 planejamento-cenarios-patrimonio-cenario = Património (cenário)
-planejamento-cenarios-patrimonio-em = Património em { $anos } ano(s)
+planejamento-cenarios-patrimonio-em =
+    { $anos ->
+        [one] Património em { $anos } ano
+       *[other] Património em { $anos } anos
+    }
 planejamento-cenarios-aposentadoria = Reforma
 # O trecho entre ** sai mais pequeno, a cinzento.
 planejamento-cenarios-chance = { $pct }% **de probabilidade**

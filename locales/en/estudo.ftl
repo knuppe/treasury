@@ -47,7 +47,11 @@ estudo-confianca-alta = high
 estudo-confianca-media = medium
 estudo-confianca-baixa = low
 estudo-confianca-sem = not stated
-estudo-nao-conferidos = { $n } number(s) not checked
+estudo-nao-conferidos =
+    { $n ->
+        [one] { $n } number not checked
+       *[other] { $n } numbers not checked
+    }
 estudo-resumo = Summary
 estudo-negocio = What it does
 estudo-fortes = Strengths

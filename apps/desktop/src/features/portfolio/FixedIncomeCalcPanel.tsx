@@ -276,11 +276,15 @@ function resultColumns(): TechColumn<ResultRow>[] {
       key: 'calendar_days',
       header: t('carteira-rf-col-prazo'),
       numeric: true,
+      // A data final já está na coluna da oferta ("até …"); o prazo em dias fica no seletor.
+      defaultHidden: true,
       sortValue: (r) => r.calendar_days,
       cell: (r) => t('carteira-rf-dias', { n: r.calendar_days }),
     },
     money('gross', t('carteira-rf-col-bruto')),
-    money('iof', t('carteira-rf-col-iof')),
+    // IOF e custódia começam escondidos (seletor de colunas): já estão descontados no líquido,
+    // e com eles a tabela passava da largura da janela.
+    { ...money('iof', t('carteira-rf-col-iof')), defaultHidden: true },
     {
       key: 'ir',
       header: t('carteira-rf-col-ir'),
@@ -298,7 +302,7 @@ function resultColumns(): TechColumn<ResultRow>[] {
           </span>
         ),
     },
-    money('custody', t('carteira-rf-col-custodia')),
+    { ...money('custody', t('carteira-rf-col-custodia')), defaultHidden: true },
     money('net', t('carteira-rf-col-liquido'), true),
     {
       key: 'net_annual',
@@ -317,7 +321,7 @@ function resultColumns(): TechColumn<ResultRow>[] {
     {
       key: 'equivalence',
       header: t('carteira-rf-col-equivalencia'),
-      width: '190px',
+      width: '170px',
       sortValue: (r) =>
         (r.ir_exempt ? r.taxable_equivalent_pct_cdi : r.exempt_equivalent_pct_cdi) ?? null,
       cell: (r) => <span className="text-[12px] whitespace-normal">{equivalenceText(r)}</span>,
@@ -332,7 +336,7 @@ function resultColumns(): TechColumn<ResultRow>[] {
     {
       key: 'notes',
       header: t('carteira-rf-col-avisos'),
-      width: '220px',
+      width: '190px',
       sortable: false,
       cell: (r) => (
         <span className="text-[11.5px] whitespace-normal text-dim">{r.notes.join(' ')}</span>
@@ -481,7 +485,7 @@ function CompareSection() {
             <TechTable
               label={t('carteira-rf-tabela')}
               prefsId="carteira-rf-ofertas"
-              minWidth="1250px"
+              minWidth="1000px"
               rows={rows}
               columns={columns}
               getRowId={(r) => r.id}

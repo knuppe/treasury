@@ -137,7 +137,11 @@ agente-esforco-sem-controle = { $motor } não tem controlo de esforço com este 
 
 ## Anexos
 
-agente-anexos-a-mais = { $n } ficheiro(s) a mais
+agente-anexos-a-mais =
+    { $n ->
+        [one] { $n } ficheiro a mais
+       *[other] { $n } ficheiros a mais
+    }
 agente-anexo-grande = ficheiro demasiado grande (máx. 20 MB)
 agente-anexar-dica = Anexar imagens, PDFs, folhas de cálculo ou textos. Também pode arrastar ficheiros para aqui ou colar com ⌘V / Ctrl+V.
 agente-anexar-arquivos = Anexar ficheiros
@@ -181,7 +185,11 @@ agente-memoria-rodape = Aplica-se a todos os motores. O agente só grava notas n
 
 ## Procedimentos aprendidos
 
-agente-proc-ocultados = { $n } trecho(s) sensível(is) ocultado(s) (palavras-passe, números de conta ou documentos).
+agente-proc-ocultados =
+    { $n ->
+        [one] { $n } trecho sensível ocultado (palavras-passe, números de conta ou documentos).
+       *[other] { $n } trechos sensíveis ocultados (palavras-passe, números de conta ou documentos).
+    }
 agente-proc-dialogo-texto = Notas que o agente consulta antes de voltar a procurar. Não escreva palavras-passe, códigos nem números de conta ou de documento.
 agente-site-dica = Só o domínio, ex.: www.banco.pt
 agente-passos-dica = Menus, filtros, botão de exportar e o que o ficheiro traz.
@@ -259,7 +267,11 @@ agente-limitar-outro-mais = Limitar outro fornecedor…
 ## Utilização e custo
 
 agente-uso-titulo = Utilização e custo
-agente-sem-preco = { "*" } { $n } chamada(s) sem preço registado para o modelo: custo fora do total. Registe o preço na tabela abaixo.
+agente-sem-preco =
+    { $n ->
+        [one] { "*" } { $n } chamada sem preço registado para o modelo: custo fora do total. Registe o preço na tabela abaixo.
+       *[other] { "*" } { $n } chamadas sem preço registado para o modelo: custo fora do total. Registe o preço na tabela abaixo.
+    }
 agente-custo-fonte = Fonte: chamadas registadas × tabela de preços (as CLIs e os modelos locais custam zero na aplicação)
 agente-uso-por-provider = Uso por fornecedor
 

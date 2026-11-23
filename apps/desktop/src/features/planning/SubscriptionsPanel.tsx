@@ -100,6 +100,11 @@ function subscriptionColumns(): TechColumn<Subscription>[] {
           <span className="truncate text-[11.5px] text-dim">
             {s.account_name}
             {s.category ? ` · ${s.category}` : ''}
+            {` · ${
+              s.kind === 'fixed_bill'
+                ? t('planejamento-assinaturas-conta-fixa')
+                : t('planejamento-assinaturas-tipo-assinatura')
+            }`}
           </span>
         </span>
       ),
@@ -117,9 +122,18 @@ function subscriptionColumns(): TechColumn<Subscription>[] {
       key: 'amount',
       header: t('planejamento-valor'),
       numeric: true,
+      // Ordena pelo custo por mês (anual e mensal na mesma régua).
+      sortValue: (s) => s.monthly_cost,
       cell: (s) => (
         <span className="flex flex-col items-end">
           <Money cents={s.amount} currency={s.currency} />
+          {s.cadence !== 'monthly' ? (
+            <span className="text-[11px] text-dim">
+              {tRich('planejamento-assinaturas-por-mes-valor', {
+                valor: <Money cents={s.monthly_cost} currency={s.currency} />,
+              })}
+            </span>
+          ) : null}
           {s.change_pct != null ? (
             <span
               className={cx(
@@ -134,29 +148,10 @@ function subscriptionColumns(): TechColumn<Subscription>[] {
       ),
     },
     {
-      key: 'monthly_cost',
-      header: t('planejamento-por-mes'),
-      numeric: true,
-      cell: (s) => <Money cents={s.monthly_cost} currency={s.currency} />,
-    },
-    {
       key: 'next_expected',
       header: t('planejamento-assinaturas-proxima'),
       width: '100px',
       cell: (s) => formatDate(s.next_expected),
-    },
-    {
-      key: 'kind',
-      header: t('planejamento-assinaturas-tipo'),
-      width: '110px',
-      cell: (s) => (
-        <span className="text-[12px] text-dim">
-          {s.kind === 'fixed_bill'
-            ? t('planejamento-assinaturas-conta-fixa')
-            : t('planejamento-assinaturas-tipo-assinatura')}
-        </span>
-      ),
-      sortValue: (s) => s.kind,
     },
     {
       key: 'status',

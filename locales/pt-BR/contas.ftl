@@ -124,7 +124,11 @@ contas-secoes-de = Seções de { $nome }
 
 ## Conciliação com o extrato
 
-contas-n-conciliados = { $n } lançamento(s) conciliado(s)
+contas-n-conciliados =
+    { $n ->
+        [one] { $n } lançamento conciliado
+       *[other] { $n } lançamentos conciliados
+    }
 contas-ate-data = até { $data }
 contas-conciliar-explicacao = Pegue o saldo do extrato do banco numa data e compare com o calculado (saldo inicial + lançamentos efetivados até a data). Se bater, os lançamentos até ali viram { $conciliados } e ficam protegidos contra mudança acidental de valor ou data.
 contas-conciliados-destaque = conciliados
@@ -133,7 +137,11 @@ contas-saldo-extrato = Saldo no extrato ({ $moeda })
 contas-comparar = Comparar
 contas-extrato-banco = Extrato do banco
 contas-diferenca = Diferença
-contas-n-marcados-conciliados = ✓ { $n } lançamento(s) marcados como conciliados.
+contas-n-marcados-conciliados =
+    { $n ->
+        [one] ✓ { $n } lançamento marcado como conciliado.
+       *[other] ✓ { $n } lançamentos marcados como conciliados.
+    }
 contas-conciliacao-desfeita = Conciliação desfeita
 contas-confere = Confere ✓
 contas-marcar-conciliado = Marcar como conciliado até { $data }
@@ -326,7 +334,11 @@ contas-cotas-saldos = Saldos das cotas capital
 contas-cotas-aportes-identificados = Aportes identificados
 contas-cotas-aportes-identificados-n = Aportes identificados ({ $n })
 contas-cotas-ja-fora = Os aportes já estavam fora das despesas
-contas-cotas-n-tirados = { $n } aporte(s) tirados das despesas
+contas-cotas-n-tirados =
+    { $n ->
+        [one] { $n } aporte tirado das despesas
+       *[other] { $n } aportes tirados das despesas
+    }
 contas-cotas-tirar = Tirar os aportes das despesas
 contas-cotas-como-identificar = Como identificar os aportes
 contas-cotas-texto-extrato = Texto no extrato
@@ -384,7 +396,11 @@ contas-falta = falta
 contas-apagar-parcelamento = Apagar parcelamento
 contas-apagar-parcelamento-descricao = Todas as parcelas (passadas e futuras) saem do cartão. Dá para desfazer pelo histórico.
 contas-apagar-parcelas = Apagar parcelas
-contas-n-parcelas-apagadas = { $n } parcela(s) apagada(s)
+contas-n-parcelas-apagadas =
+    { $n ->
+        [one] { $n } parcela apagada
+       *[other] { $n } parcelas apagadas
+    }
 
 ## Lista e página da conta
 

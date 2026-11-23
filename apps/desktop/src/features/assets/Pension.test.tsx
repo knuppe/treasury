@@ -189,7 +189,7 @@ describe('VGBL pension', () => {
     expect(within(grid).getByText('Extra do empregador')).toBeTruthy();
     expect(within(grid).getByText('Só informativo')).toBeTruthy();
     expect(within(dialog).getByText('PLANOPREV-Arrojado')).toBeTruthy();
-    await user.click(within(dialog).getByRole('button', { name: 'Importar 2 linha(s)' }));
+    await user.click(within(dialog).getByRole('button', { name: 'Importar 2 linhas' }));
     expect(await screen.findByText('Extrato importado')).toBeTruthy();
     const v = (await mockCall('pension.get', { asset_id: id })) as PensionView;
     expect(v.plan?.admin_fee_pct).toBe('0.25');

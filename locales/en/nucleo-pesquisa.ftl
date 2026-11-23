@@ -136,8 +136,16 @@ nucleo-pesquisa-ind-fonte-dividendos-dfc = dividends and JCP paid (cash flow sta
 nucleo-pesquisa-ind-fonte-dividendos-sec = dividends declared per share (SEC)
 nucleo-pesquisa-ind-fonte-dividendos-dfc-acoes = dividends and JCP paid per share in the fiscal year (cash flow ÷ shares)
 nucleo-pesquisa-ind-fonte-dfp-lucro = DFP (net income attributable to controlling shareholders)
-nucleo-pesquisa-ind-media-anos = average of { $anos } year(s) with data ({ $pedidos } requested)
-nucleo-pesquisa-ind-media-anos-agenda = the dividend calendar starts in { $ano }: average of { $anos } year(s) with data ({ $pedidos } requested)
+nucleo-pesquisa-ind-media-anos =
+    { $anos ->
+        [one] average of { $anos } year with data ({ $pedidos } requested)
+       *[other] average of { $anos } years with data ({ $pedidos } requested)
+    }
+nucleo-pesquisa-ind-media-anos-agenda =
+    { $anos ->
+        [one] the dividend calendar starts in { $ano }: average of { $anos } year with data ({ $pedidos } requested)
+       *[other] the dividend calendar starts in { $ano }: average of { $anos } years with data ({ $pedidos } requested)
+    }
 nucleo-pesquisa-ind-premissa-lpa = EPS (12 months)
 nucleo-pesquisa-ind-premissa-vpa = BVPS
 nucleo-pesquisa-ind-premissa-acoes = Shares outstanding
@@ -332,10 +340,18 @@ nucleo-pesquisa-erro-b3-historico = B3 dividend history in an unexpected format:
 nucleo-pesquisa-erro-b3-vazia = B3 responded with no content
 nucleo-pesquisa-erro-304 = 304 response without a conditional request
 nucleo-pesquisa-erro-b3-api = B3 API failure
-nucleo-pesquisa-b3-log-proventos = { $n } dividend(s)
+nucleo-pesquisa-b3-log-proventos =
+    { $n ->
+        [one] { $n } dividend
+       *[other] { $n } dividends
+    }
 nucleo-pesquisa-b3-log-proventos-eventos = { $proventos } dividend(s), { $eventos } stock event(s)
 nucleo-pesquisa-b3-passo-historico = B3 dividend history { $codigo }
-nucleo-pesquisa-b3-passo-resumo = B3 listed companies and funds · dividends and events ({ $feitos } of { $total } issuers and funds, { $pedidos } request(s))
+nucleo-pesquisa-b3-passo-resumo =
+    { $pedidos ->
+        [one] B3 listed companies and funds · dividends and events ({ $feitos } of { $total } issuers and funds, { $pedidos } request)
+       *[other] B3 listed companies and funds · dividends and events ({ $feitos } of { $total } issuers and funds, { $pedidos } requests)
+    }
 nucleo-pesquisa-b3-parou = B3 didn't respond { $vezes } times in a row; the rest is left for the next collection
 nucleo-pesquisa-b3-nada-a-atualizar = nothing to update: all checked recently
 nucleo-pesquisa-erro-brapi-invalida = invalid response from brapi: { $erro }
@@ -346,8 +362,16 @@ nucleo-pesquisa-erro-brapi-sem-resultados = brapi: response without results
 nucleo-pesquisa-erro-zip = invalid zip file: { $erro }
 nucleo-pesquisa-erro-coluna-ausente = column { $coluna } missing
 nucleo-pesquisa-erro-ipe-sem-csv = IPE CSV not found in the zip
-nucleo-pesquisa-liquidez-cotahist = average of { $n } session(s), B3 COTAHIST
-nucleo-pesquisa-liquidez-cotacoes = average of { $n } session(s) (price × volume, { $fonte })
+nucleo-pesquisa-liquidez-cotahist =
+    { $n ->
+        [one] average of { $n } session, B3 COTAHIST
+       *[other] average of { $n } sessions, B3 COTAHIST
+    }
+nucleo-pesquisa-liquidez-cotacoes =
+    { $n ->
+        [one] average of { $n } session (price × volume, { $fonte })
+       *[other] average of { $n } sessions (price × volume, { $fonte })
+    }
 nucleo-pesquisa-erro-asset-ou-ticker = enter asset_id or ticker
 nucleo-pesquisa-erro-fora-do-universo = { $ticker } in the downloaded universe (run the asset analysis collection)
 
@@ -392,9 +416,17 @@ nucleo-pesquisa-ifdata-sem-valores = the Central Bank IF.data had no values for 
 ## Network
 
 nucleo-pesquisa-erro-post = POST not supported
-nucleo-pesquisa-erro-servidor-recusou = the server refused access (HTTP { $status }) after { $tentativas } attempt(s); try again later
+nucleo-pesquisa-erro-servidor-recusou =
+    { $tentativas ->
+        [one] the server refused access (HTTP { $status }) after { $tentativas } attempt; try again later
+       *[other] the server refused access (HTTP { $status }) after { $tentativas } attempts; try again later
+    }
 nucleo-pesquisa-erro-token-recusado = access refused (HTTP { $status }): check the token
-nucleo-pesquisa-erro-http-tentativas = HTTP { $status } after { $tentativas } attempt(s)
+nucleo-pesquisa-erro-http-tentativas =
+    { $tentativas ->
+        [one] HTTP { $status } after { $tentativas } attempt
+       *[other] HTTP { $status } after { $tentativas } attempts
+    }
 
 ## Documents for the last 12 months
 

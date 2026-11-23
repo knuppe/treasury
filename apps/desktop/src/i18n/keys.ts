@@ -15522,6 +15522,7 @@ export interface Messages {
     por_dia: string | number;
     receitas: string | number;
   };
+  'nucleo-planejamento-gastar-sem-renda': never;
   'nucleo-planejamento-mercado-aviso-falha': { erro: string | number };
   'nucleo-planejamento-mercado-aviso-fonte-desligada': never;
   'nucleo-planejamento-mercado-aviso-sem-taxas': never;
@@ -17645,6 +17646,7 @@ export interface Messages {
   'planejamento-assinaturas-nao-veio': never;
   'planejamento-assinaturas-nova': never;
   'planejamento-assinaturas-por-ano': never;
+  'planejamento-assinaturas-por-mes-valor': { valor: string | number };
   'planejamento-assinaturas-proxima': never;
   'planejamento-assinaturas-recorrencia-criada': never;
   'planejamento-assinaturas-recorrencia-criada-descricao': { nome: string | number };
@@ -17786,6 +17788,7 @@ export interface Messages {
     valor: string | number;
   };
   'planejamento-hoje-receitas': never;
+  'planejamento-hoje-sem-renda': never;
   'planejamento-hoje-sobra': never;
   'planejamento-hoje-sobra-amanha': never;
   'planejamento-hoje-titulo': never;
@@ -18083,11 +18086,19 @@ export interface Messages {
   'regras-col-regra': never;
   'regras-combinar': never;
   'regras-condicao': { campo: string | number; op: string | number; valor: string | number };
+  'regras-condicao-entrada': never;
   'regras-condicao-entre': {
     campo: string | number;
     op: string | number;
     valor: string | number;
     valor2: string | number;
+  };
+  'regras-condicao-padrao': { campo: string | number };
+  'regras-condicao-saida': never;
+  'regras-condicao-termos': {
+    campo: string | number;
+    mais: string | number;
+    termos: string | number;
   };
   'regras-condicoes-nota': never;
   'regras-conta-condicao': { n: string | number };
@@ -33100,6 +33111,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-planejamento-fatura',
   'nucleo-planejamento-gastar-amanha',
   'nucleo-planejamento-gastar-hoje',
+  'nucleo-planejamento-gastar-sem-renda',
   'nucleo-planejamento-mercado-aviso-falha',
   'nucleo-planejamento-mercado-aviso-fonte-desligada',
   'nucleo-planejamento-mercado-aviso-sem-taxas',
@@ -34886,6 +34898,7 @@ export const KEYS: readonly MessageKey[] = [
   'planejamento-assinaturas-nao-veio',
   'planejamento-assinaturas-nova',
   'planejamento-assinaturas-por-ano',
+  'planejamento-assinaturas-por-mes-valor',
   'planejamento-assinaturas-proxima',
   'planejamento-assinaturas-recorrencia-criada',
   'planejamento-assinaturas-recorrencia-criada-descricao',
@@ -34997,6 +35010,7 @@ export const KEYS: readonly MessageKey[] = [
   'planejamento-hoje-ok',
   'planejamento-hoje-por-dia',
   'planejamento-hoje-receitas',
+  'planejamento-hoje-sem-renda',
   'planejamento-hoje-sobra',
   'planejamento-hoje-sobra-amanha',
   'planejamento-hoje-titulo',
@@ -35277,7 +35291,11 @@ export const KEYS: readonly MessageKey[] = [
   'regras-col-regra',
   'regras-combinar',
   'regras-condicao',
+  'regras-condicao-entrada',
   'regras-condicao-entre',
+  'regras-condicao-padrao',
+  'regras-condicao-saida',
+  'regras-condicao-termos',
   'regras-condicoes-nota',
   'regras-conta-condicao',
   'regras-conta-escolhida',

@@ -31,11 +31,23 @@ nucleo-orcamento-erro-item-valor = o valor do item tem de ser maior que zero (re
 nucleo-orcamento-motivo-projeto-criado = Projeto criado: { $nome }
 nucleo-orcamento-motivo-projeto-alterado = Projeto alterado: { $nome }
 nucleo-orcamento-motivo-projeto-removido = Projeto removido: { $nome }
-nucleo-orcamento-motivo-lancamentos-no-projeto = { $n } lançamento(s) no projeto { $nome }
-nucleo-orcamento-motivo-lancamentos-tirados = { $n } lançamento(s) tirados do projeto
+nucleo-orcamento-motivo-lancamentos-no-projeto =
+    { $n ->
+        [one] { $n } lançamento no projeto { $nome }
+       *[other] { $n } lançamentos no projeto { $nome }
+    }
+nucleo-orcamento-motivo-lancamentos-tirados =
+    { $n ->
+        [one] { $n } lançamento tirado do projeto
+       *[other] { $n } lançamentos tirados do projeto
+    }
 nucleo-orcamento-motivo-item-adicionado = Item no projeto { $nome }: { $item }
 nucleo-orcamento-motivo-item-alterado = Item de projeto alterado: { $item }
-nucleo-orcamento-motivo-entradas-tiradas = { $n } entrada(s) tiradas do projeto
+nucleo-orcamento-motivo-entradas-tiradas =
+    { $n ->
+        [one] { $n } entrada tirada do projeto
+       *[other] { $n } entradas tiradas do projeto
+    }
 
 ## Metas (`goals`)
 

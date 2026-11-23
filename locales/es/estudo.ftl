@@ -47,7 +47,11 @@ estudo-confianca-alta = alta
 estudo-confianca-media = media
 estudo-confianca-baixa = baja
 estudo-confianca-sem = no informada
-estudo-nao-conferidos = { $n } número(s) sin verificar
+estudo-nao-conferidos =
+    { $n ->
+        [one] { $n } número sin verificar
+       *[other] { $n } números sin verificar
+    }
 estudo-resumo = Resumen
 estudo-negocio = Qué hace
 estudo-fortes = Puntos fuertes

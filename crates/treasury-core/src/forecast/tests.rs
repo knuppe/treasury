@@ -113,6 +113,28 @@ fn balance_forecast_from_recurrences_cards_and_loans() {
 }
 
 #[test]
+fn daily_allowance_without_income_is_no_data_not_over() {
+    // An empty vault (or a month whose salary has not arrived nor is expected): the lack of
+    // income must not read as "everything is committed".
+    let today = d("2026-10-15");
+    let mut t = new_db();
+    write(&mut t.db, |tx| {
+        let checking = fixture::account(tx, "Conta", "checking", "BRL", 0, "2026-01-01");
+        expense(tx, &checking, "2026-10-14", -10_000, None, None, "mercado");
+        Ok(())
+    });
+    let a = daily_allowance(t.db.conn(), today).unwrap();
+    assert_eq!(a.status, "no_income");
+    assert_eq!(a.income, 0);
+    assert!(!a.explanation.contains('='), "{}", a.explanation);
+    let empty = new_db();
+    assert_eq!(
+        daily_allowance(empty.db.conn(), today).unwrap().status,
+        "no_income"
+    );
+}
+
+#[test]
 fn daily_allowance_divides_what_is_left_by_the_days_left() {
     let today = d("2026-10-15");
     let mut t = new_db();
@@ -172,7 +194,7 @@ fn daily_allowance_divides_what_is_left_by_the_days_left() {
     assert_eq!(a.today_left, 320_000 / 17 - 5_000);
     assert_eq!(a.per_day_from_tomorrow, 315_000 / 16);
     assert_eq!(a.status, "ok");
-    assert!(a.explanation.contains("17 dia(s)"));
+    assert!(a.explanation.contains("17 dias"));
     assert!(
         a.explanation.contains("gastos até ontem R$ 1.000,00"),
         "{}",

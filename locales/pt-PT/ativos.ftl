@@ -91,7 +91,11 @@ ativo-conversas-texto = As conversas com o agente começadas nesta página ficam
 ativo-ver-estudos = Ver estudos
 ativo-conversas-vazio = Ainda não há conversas sobre este ativo
 ativo-conversas-vazio-texto = Use "Perguntar ao agente" para conversar sobre { $ativo }; a conversa fica guardada aqui.
-ativo-conversa-detalhe = { $quando } · { $n } mensagem(ns)
+ativo-conversa-detalhe =
+    { $n ->
+        [one] { $quando } · { $n } mensagem
+       *[other] { $quando } · { $n } mensagens
+    }
 ativo-abrir-conversa = Abrir
 
 # Visão geral e notícias do ativo (docs/asset-overview.md).

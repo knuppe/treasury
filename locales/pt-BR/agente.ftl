@@ -660,7 +660,11 @@ agente-esforco-valor = Esforço: { $nivel }
 ## Anexos
 
 agente-anexo-colado = colado.png
-agente-anexos-a-mais = { $n } arquivo(s) a mais
+agente-anexos-a-mais =
+    { $n ->
+        [one] { $n } arquivo a mais
+       *[other] { $n } arquivos a mais
+    }
 agente-anexos-maximo = no máximo { $max } anexos por mensagem
 agente-anexo-grande = arquivo grande demais (máx. 20 MB)
 agente-anexo-paginas = { $n } pág.
@@ -797,7 +801,11 @@ agente-memoria-vazia = A memória está vazia.
 
 agente-proc-atualizado = Procedimento atualizado
 agente-proc-gravado = Procedimento gravado
-agente-proc-ocultados = { $n } trecho(s) sensível(is) ocultado(s) (senhas, números de conta ou documentos).
+agente-proc-ocultados =
+    { $n ->
+        [one] { $n } trecho sensível ocultado (senhas, números de conta ou documentos).
+       *[other] { $n } trechos sensíveis ocultados (senhas, números de conta ou documentos).
+    }
 agente-proc-editar = Editar procedimento
 agente-proc-novo = Novo procedimento
 agente-proc-dialogo-texto = Notas que o agente consulta antes de procurar de novo. Não escreva senhas, códigos nem números de conta ou documento.
@@ -1000,7 +1008,11 @@ agente-moeda = Moeda
 agente-fonte-uso = ai_usage · tabela de preços
 agente-custo-estimado = Custo estimado
 agente-tokens = Tokens
-agente-sem-preco = { "*" } { $n } chamada(s) sem preço cadastrado para o modelo: custo fora do total. Cadastre o preço na tabela abaixo.
+agente-sem-preco =
+    { $n ->
+        [one] { "*" } { $n } chamada sem preço cadastrado para o modelo: custo fora do total. Cadastre o preço na tabela abaixo.
+       *[other] { "*" } { $n } chamadas sem preço cadastrado para o modelo: custo fora do total. Cadastre o preço na tabela abaixo.
+    }
 agente-custo-mes = Custo estimado por mês
 agente-custo-fonte = Fonte: chamadas registradas × tabela de preços (CLIs e modelos locais custam zero no app)
 agente-custo-ia-mes = Custo estimado de IA por mês

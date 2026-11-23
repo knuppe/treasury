@@ -44,7 +44,11 @@ fgts-gravar = { $n ->
     [one] Guardar 1 movimiento
    *[other] Guardar { $n } movimientos
 }
-fgts-importado = { $n } movimiento(s) guardado(s), { $existentes } ya existían.
+fgts-importado =
+    { $n ->
+        [one] { $n } movimiento guardado, { $existentes } ya existían.
+       *[other] { $n } movimientos guardados, { $existentes } ya existían.
+    }
 fgts-motivo-rescisao = Despido
 fgts-motivo-aposentadoria = Jubilación
 fgts-motivo-moradia = Vivienda (préstamo)

@@ -363,6 +363,9 @@ export function TradesTable({ assetId, compact = false }: { assetId?: string; co
               key: 'fx',
               header: t('carteira-col-cambio'),
               numeric: true,
+              // Câmbio e número da nota começam escondidos (seletor de colunas): poucas
+              // operações têm, e com eles a tabela passava da largura da janela.
+              defaultHidden: true,
               cell: (tr: Trade) =>
                 tr.fx_rate ? formatDecimal(tr.fx_rate, { minDecimals: 4 }) : '—',
             },
@@ -374,6 +377,7 @@ export function TradesTable({ assetId, compact = false }: { assetId?: string; co
             {
               key: 'note',
               header: t('carteira-col-nota'),
+              defaultHidden: true,
               cell: (tr: Trade) => tr.note_number ?? '—',
             },
           ]),

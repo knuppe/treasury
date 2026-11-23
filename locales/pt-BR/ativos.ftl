@@ -363,7 +363,11 @@ ativos-come-cotas-auto = Automático
 ativos-come-cotas-longo = Longo prazo (15%)
 ativos-come-cotas-curto = Curto prazo (20%)
 ativos-come-cotas-isento = Sem come-cotas
-ativos-come-cotas-descontos = { $n } desconto(s), IR total { $total }
+ativos-come-cotas-descontos =
+    { $n ->
+        [one] { $n } desconto, IR total { $total }
+       *[other] { $n } descontos, IR total { $total }
+    }
 ativos-extrato-montando = Montando o extrato
 ativos-extrato-confira = Confira os desdobramentos
 ativos-extrato-aviso = { $n ->
@@ -428,7 +432,11 @@ ativos-prev-custodia-conta = { $n ->
        *[other] As cotas deste plano ficam nas contas { $contas }.
     }
 ativos-prev-custodia-sem-conta = Este plano ainda não tem conta das cotas. A importação do histórico de pagamentos cria uma junto com os aportes.
-ativos-prev-aportes-pendentes = { $n } aporte(s), { $valor } no total, esperam a cota da CVM desde { $data }: viram cotas sozinhos quando a coleta de cotações trouxer o histórico do fundo.
+ativos-prev-aportes-pendentes =
+    { $n ->
+        [one] { $n } aporte, { $valor } no total, espera a cota da CVM desde { $data }: vira cotas sozinho quando a coleta de cotações trouxer o histórico do fundo.
+       *[other] { $n } aportes, { $valor } no total, esperam a cota da CVM desde { $data }: viram cotas sozinhos quando a coleta de cotações trouxer o histórico do fundo.
+    }
 ativos-prev-plano = Plano
 ativos-prev-aportes-titulo = Aportes e faixa de IR
 ativos-prev-aportes-tabela = Aportes da previdência
@@ -486,7 +494,11 @@ ativos-prev-importado-resumo = { $contribuicoes } contribuição(ões){ $seguros
     [0] {""}
    *[other] ; { $puladas } já estavam no app
 }.
-ativos-prev-importar-linhas = Importar { $n } linha(s)
+ativos-prev-importar-linhas =
+    { $n ->
+        [one] Importar { $n } linha
+       *[other] Importar { $n } linhas
+    }
 ativos-prev-nada-novo = Nada novo para importar
 
 ## Proventos a confirmar
@@ -539,7 +551,11 @@ ativo-conversas-texto = As conversas com o agente começadas nesta página ficam
 ativo-ver-estudos = Ver estudos
 ativo-conversas-vazio = Nenhuma conversa sobre este ativo ainda
 ativo-conversas-vazio-texto = Use "Perguntar ao agente" para conversar sobre { $ativo }; a conversa fica guardada aqui.
-ativo-conversa-detalhe = { $quando } · { $n } mensagem(ns)
+ativo-conversa-detalhe =
+    { $n ->
+        [one] { $quando } · { $n } mensagem
+       *[other] { $quando } · { $n } mensagens
+    }
 ativo-abrir-conversa = Abrir
 
 # Visão geral e notícias do ativo (docs/asset-overview.md).

@@ -118,9 +118,7 @@ describe('03 · Accounts', () => {
     const confirm = await screen.findByRole('dialog', { name: /Apagar Carteira/ });
     await user.click(within(confirm).getByRole('button', { name: 'Apagar conta' }));
     expect(
-      await within(confirm).findByText(
-        /tem \d+ lançamento\(s\); apague-os antes ou arquive a conta/,
-      ),
+      await within(confirm).findByText(/tem \d+ lançamentos?; apague-os? antes ou arquive a conta/),
     ).toBeTruthy();
   });
 

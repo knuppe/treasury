@@ -3,7 +3,11 @@
 
 ## Aplicar regras
 
-regras-n-alterados = { $n } lançamento(s) alterado(s) pelas regras
+regras-n-alterados =
+    { $n ->
+        [one] { $n } lançamento alterado pelas regras
+       *[other] { $n } lançamentos alterados pelas regras
+    }
 regras-aplicar = Aplicar regras
 regras-aplicar-descricao = Primeiro veja o que mudaria; nada é gravado até você confirmar. Tudo fica num só item do histórico.
 regras-aplicacao-desfeita = Aplicação desfeita
@@ -54,6 +58,13 @@ regras-apagada = Regra apagada
 
 regras-condicao = { $campo } { $op } { $valor }
 regras-condicao-entre = { $campo } { $op } { $valor } e { $valor2 }
+regras-condicao-termos = { $campo } contém { $termos }{ $mais ->
+        [0] {""}
+       *[other] {" "}e mais { $mais }
+    }
+regras-condicao-padrao = { $campo } segue um padrão (veja na edição)
+regras-condicao-saida = é uma saída
+regras-condicao-entrada = é uma entrada
 regras-conta-escolhida = conta escolhida
 regras-e = e
 regras-ou = ou
@@ -95,7 +106,11 @@ regras-mudar-tipo = Mudar o tipo para
 regras-tags = Tags
 regras-resultado-teste = Resultado do teste
 regras-teste-nenhum = Nenhum lançamento existente casa com esta regra
-regras-teste-n = { $n } lançamento(s) casam com esta regra
+regras-teste-n =
+    { $n ->
+        [one] { $n } lançamento casa com esta regra
+       *[other] { $n } lançamentos casam com esta regra
+    }
 regras-teste-50 = 50 ou mais lançamento(s) casam com esta regra
 regras-sem-categoria = sem categoria
 

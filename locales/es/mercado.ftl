@@ -157,7 +157,11 @@ mercado-metodo-voltar = Todos los métodos
 mercado-metodo-lista = Quién cumple { $metodo }
 mercado-metodo-resultado = { $passam } de { $avaliados } valores evaluados cumplen todos los criterios hoy.
 mercado-metodo-ninguem = Ningún valor cumple todos los criterios hoy.
-mercado-metodo-cumprem = { $n } valor(es) cumplen los criterios hoy
+mercado-metodo-cumprem =
+    { $n ->
+        [one] { $n } valor cumple los criterios hoy
+       *[other] { $n } valores cumplen los criterios hoy
+    }
 mercado-metodo-contando = Contando…
 mercado-metodo-ver-lista = Ver la receta y la lista
 mercado-metodo-fonte-versao = { $fonte } · v{ $versao }

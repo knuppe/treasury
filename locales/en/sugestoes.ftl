@@ -8,7 +8,7 @@ sugestoes-nomes-mais = { $nomes } and { $n } more
 ## First setup
 
 sugestoes-cadastro-titulo = Add the family's accounts
-sugestoes-cadastro-detalhe = Tell the agent where you have accounts (banks, cards, brokers) and it proposes adding them and the best way to import each one.
+sugestoes-cadastro-detalhe = Start with the account you use most (bank, card or brokerage). If you have an AI assistant set up, it can propose the others and explain how to bring in each statement.
 sugestoes-cadastro-pedido = I want to record where the family keeps its money. Ask where we have accounts (banks, credit cards, brokers, accounts abroad) and, for each one: propose adding it (create_account with institution_name; cards with closing and due dates), tell me the best way to bring in the data (OFX or CSV from the bank, PDF card bill, B3 Investor Area report, PDF brokerage notes) and where to download each file. Don't make up balances: ask.
 sugestoes-cadastro-pedido-exterior = I want to record where the family keeps its money. Ask where we have accounts (banks, credit cards, brokers, retirement accounts, accounts in another country) and, for each one: propose adding it (create_account with institution_name; cards with closing and due dates), tell me the best way to bring in the data (OFX, QFX or CSV from the bank, the broker statement) and where to download each file. Don't make up balances: ask.
 
@@ -34,7 +34,11 @@ sugestoes-sem-extrato-pedido = The accounts { $contas } have had no transactions
 
 sugestoes-fatura-titulo = { $cartao } bill due on { $data }
 sugestoes-fatura-detalhe = { $valor } to pay.
-sugestoes-fatura-detalhe-mais = { $valor } to pay (+{ $n } bill(s)).
+sugestoes-fatura-detalhe-mais =
+    { $n ->
+        [one] { $valor } to pay (+{ $n } bill).
+       *[other] { $valor } to pay (+{ $n } bills).
+    }
 sugestoes-fatura-pedido = The { $cartao } card bill is due on { $data }. Check the total with list_card_statements, tell me which account the payment comes from and whether its balance covers it.
 
 ## Budget exceeded

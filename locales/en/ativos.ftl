@@ -441,7 +441,11 @@ ativos-prev-custodia-conta = { $n ->
        *[other] This plan's units are in the accounts { $contas }.
     }
 ativos-prev-custodia-sem-conta = This plan has no account for its units yet. Importing the payment history creates one together with the contributions.
-ativos-prev-aportes-pendentes = { $n } contribution(s), { $valor } in total, have been waiting for the CVM unit price since { $data }: they become units on their own when the quote collection fetches the fund's history.
+ativos-prev-aportes-pendentes =
+    { $n ->
+        [one] { $n } contribution, { $valor } in total, has been waiting for the CVM unit price since { $data }: it becomes units on its own when the quote collection fetches the fund's history.
+       *[other] { $n } contributions, { $valor } in total, have been waiting for the CVM unit price since { $data }: they become units on their own when the quote collection fetches the fund's history.
+    }
 ativos-prev-plano = Plan
 ativos-prev-aportes-titulo = Contributions and tax bracket
 ativos-prev-aportes-tabela = Pension contributions
@@ -562,7 +566,11 @@ ativo-conversas-texto = Conversations with the agent started on this page are ke
 ativo-ver-estudos = See studies
 ativo-conversas-vazio = No conversations about this asset yet
 ativo-conversas-vazio-texto = Use "Ask the agent" to talk about { $ativo }; the conversation is kept here.
-ativo-conversa-detalhe = { $quando } · { $n } message(s)
+ativo-conversa-detalhe =
+    { $n ->
+        [one] { $quando } · { $n } message
+       *[other] { $quando } · { $n } messages
+    }
 ativo-abrir-conversa = Open
 
 # Visão geral e notícias do ativo (docs/asset-overview.md).

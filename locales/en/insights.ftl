@@ -45,8 +45,16 @@ insights-fgts-corpo = { $n ->
 }
 insights-fgts-acao = Check the payslip and talk to the company's HR; if that does not solve it, Caixa and the Ministry of Labor take complaints.
 insights-previdencia-titulo = { $plano }: contributions to check
-insights-previdencia-pendencias = { $n } item(s) to check in the imported payment history:
-insights-previdencia-sem-cota = { $aportes } contribution(s) have been waiting for the CVM unit price since { $desde } and count in the balance at the amount paid.
+insights-previdencia-pendencias =
+    { $n ->
+        [one] { $n } item to check in the imported payment history:
+       *[other] { $n } items to check in the imported payment history:
+    }
+insights-previdencia-sem-cota =
+    { $aportes ->
+        [one] { $aportes } contribution has been waiting for the CVM unit price since { $desde } and counts in the balance at the amount paid.
+       *[other] { $aportes } contributions have been waiting for the CVM unit price since { $desde } and count in the balance at the amount paid.
+    }
 insights-previdencia-acao = Open the plan in Assets, check the items and send the agent the missing payment (or the screenshot showing that part).
 
 ## Unusual spending

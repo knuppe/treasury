@@ -29,7 +29,7 @@ describe('06 · Consumption › Fiscal receipts', () => {
     const steps = await screen.findByRole('list', { name: 'Etapas da leitura' });
     expect(within(steps).getByText('Consultar a nota na SEFAZ')).toBeTruthy();
     const result = await screen.findByRole('region', { name: 'Resultado da leitura' });
-    expect(within(result).getByText(/4 item\(ns\) de SUPERMERCADO EXEMPLO LTDA/)).toBeTruthy();
+    expect(within(result).getByText(/4 (?:itens|item) de SUPERMERCADO EXEMPLO LTDA/)).toBeTruthy();
     await user.click(within(result).getByRole('button', { name: 'Revisar e gravar' }));
     const dialog = await screen.findByRole('dialog', { name: /Cupom de SUPERMERCADO EXEMPLO/ });
     // What the document says is locked; each item's category is chosen.

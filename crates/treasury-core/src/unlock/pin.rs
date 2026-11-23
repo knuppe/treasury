@@ -197,7 +197,7 @@ mod tests {
             let e = unlock(&p, "999999").unwrap_err();
             assert!(
                 e.to_string()
-                    .contains(&format!("Restam {}", MAX_FAILURES - i)),
+                    .contains(&format!(" {} tentativa", MAX_FAILURES - i)),
                 "{e}"
             );
         }

@@ -118,7 +118,11 @@ nucleo-pesquisa-ind-periodo-vp-informe = VP do informe de { $mes }
 nucleo-pesquisa-ind-periodo-data-com = data-com { $data }
 nucleo-pesquisa-ind-periodo-divida-ebitda = dívida em { $divida }; EBITDA de 12 meses até { $ebitda }
 nucleo-pesquisa-ind-periodo-exercicios = exercícios { $de } a { $ate }
-nucleo-pesquisa-ind-periodo-n-exercicios = { $n } exercício(s): { $de } a { $ate }
+nucleo-pesquisa-ind-periodo-n-exercicios =
+    { $n ->
+        [one] { $n } exercício: { $de } a { $ate }
+       *[other] { $n } exercícios: { $de } a { $ate }
+    }
 nucleo-pesquisa-ind-cotas-x-cotacao = { $cotas } cotas × cotação
 nucleo-pesquisa-ind-acoes-x-cotacao = { $acoes } ações × cotação por ação do papel consultado
 nucleo-pesquisa-ind-on-pn-x-cotacao = ações ON × cotação ON + ações PN × cotação PN
@@ -135,8 +139,16 @@ nucleo-pesquisa-ind-fonte-dividendos-dfc = dividendos e JCP pagos (DFC) · { $do
 nucleo-pesquisa-ind-fonte-dividendos-sec = dividendos declarados por ação (SEC)
 nucleo-pesquisa-ind-fonte-dividendos-dfc-acoes = dividendos e JCP pagos por ação no exercício (DFC ÷ ações)
 nucleo-pesquisa-ind-fonte-dfp-lucro = DFP (lucro líquido dos controladores)
-nucleo-pesquisa-ind-media-anos = média de { $anos } ano(s) com dados (pedidos { $pedidos })
-nucleo-pesquisa-ind-media-anos-agenda = a agenda de proventos começa em { $ano }: média de { $anos } ano(s) com dados (pedidos { $pedidos })
+nucleo-pesquisa-ind-media-anos =
+    { $anos ->
+        [one] média de { $anos } ano com dados (pedidos { $pedidos })
+       *[other] média de { $anos } anos com dados (pedidos { $pedidos })
+    }
+nucleo-pesquisa-ind-media-anos-agenda =
+    { $anos ->
+        [one] a agenda de proventos começa em { $ano }: média de { $anos } ano com dados (pedidos { $pedidos })
+       *[other] a agenda de proventos começa em { $ano }: média de { $anos } anos com dados (pedidos { $pedidos })
+    }
 nucleo-pesquisa-ind-premissa-lpa = LPA (12 meses)
 nucleo-pesquisa-ind-premissa-vpa = VPA
 nucleo-pesquisa-ind-premissa-acoes = Ações em circulação
@@ -331,10 +343,18 @@ nucleo-pesquisa-erro-b3-historico = histórico de proventos da B3 em formato ine
 nucleo-pesquisa-erro-b3-vazia = a B3 respondeu sem conteúdo
 nucleo-pesquisa-erro-304 = resposta 304 sem pedido condicional
 nucleo-pesquisa-erro-b3-api = falha na API da B3
-nucleo-pesquisa-b3-log-proventos = { $n } provento(s)
+nucleo-pesquisa-b3-log-proventos =
+    { $n ->
+        [one] { $n } provento
+       *[other] { $n } proventos
+    }
 nucleo-pesquisa-b3-log-proventos-eventos = { $proventos } provento(s), { $eventos } evento(s) em ações
 nucleo-pesquisa-b3-passo-historico = B3 histórico de proventos { $codigo }
-nucleo-pesquisa-b3-passo-resumo = B3 empresas e fundos listados · proventos e eventos ({ $feitos } de { $total } emissores e fundos, { $pedidos } pedido(s))
+nucleo-pesquisa-b3-passo-resumo =
+    { $pedidos ->
+        [one] B3 empresas e fundos listados · proventos e eventos ({ $feitos } de { $total } emissores e fundos, { $pedidos } pedido)
+       *[other] B3 empresas e fundos listados · proventos e eventos ({ $feitos } de { $total } emissores e fundos, { $pedidos } pedidos)
+    }
 nucleo-pesquisa-b3-parou = a B3 não respondeu { $vezes } vezes seguidas; o resto fica para a próxima coleta
 nucleo-pesquisa-b3-nada-a-atualizar = nada a atualizar: todos consultados há pouco
 nucleo-pesquisa-erro-brapi-invalida = resposta inválida da brapi: { $erro }
@@ -391,9 +411,17 @@ nucleo-pesquisa-ifdata-sem-valores = o Bacen IF.data não trouxe valores do { $b
 ## Rede
 
 nucleo-pesquisa-erro-post = POST não suportado
-nucleo-pesquisa-erro-servidor-recusou = o servidor recusou o acesso (HTTP { $status }) depois de { $tentativas } tentativa(s); tente mais tarde
+nucleo-pesquisa-erro-servidor-recusou =
+    { $tentativas ->
+        [one] o servidor recusou o acesso (HTTP { $status }) depois de { $tentativas } tentativa; tente mais tarde
+       *[other] o servidor recusou o acesso (HTTP { $status }) depois de { $tentativas } tentativas; tente mais tarde
+    }
 nucleo-pesquisa-erro-token-recusado = acesso recusado (HTTP { $status }): confira o token
-nucleo-pesquisa-erro-http-tentativas = HTTP { $status } depois de { $tentativas } tentativa(s)
+nucleo-pesquisa-erro-http-tentativas =
+    { $tentativas ->
+        [one] HTTP { $status } depois de { $tentativas } tentativa
+       *[other] HTTP { $status } depois de { $tentativas } tentativas
+    }
 
 ## Documentos dos últimos 12 meses
 
@@ -450,8 +478,16 @@ nucleo-pesquisa-passo-sec-cadastro = SEC cadastro { $ticker }
 nucleo-pesquisa-erro-sec-sem-ticker = { $ticker } não está na lista de tickers da SEC
 nucleo-pesquisa-passo-ifdata-sondagem = Banco Central IF.data: sondagem de { $periodo }
 nucleo-pesquisa-passo-parte = parte { $parte }/{ $partes }
-nucleo-pesquisa-aviso-acoes-em-milhares = { $n } companhia(s) informaram a quantidade de ações em milhares em algum documento (corrigida pelo lucro por ação): { $companhias }
-nucleo-pesquisa-aviso-lucro-controladores = { $n } companhia(s) deixaram zerado o lucro dos controladores no consolidado em algum documento (corrigido pela demonstração individual): { $companhias }
+nucleo-pesquisa-aviso-acoes-em-milhares =
+    { $n ->
+        [one] { $n } companhia informou a quantidade de ações em milhares em algum documento (corrigida pelo lucro por ação): { $companhias }
+       *[other] { $n } companhias informaram a quantidade de ações em milhares em algum documento (corrigida pelo lucro por ação): { $companhias }
+    }
+nucleo-pesquisa-aviso-lucro-controladores =
+    { $n ->
+        [one] { $n } companhia deixou zerado o lucro dos controladores no consolidado em algum documento (corrigido pela demonstração individual): { $companhias }
+       *[other] { $n } companhias deixaram zerado o lucro dos controladores no consolidado em algum documento (corrigido pela demonstração individual): { $companhias }
+    }
 nucleo-pesquisa-feedback-faixa-titulo = Indicadores fora da faixa plausível no universo
 nucleo-pesquisa-feedback-faixa-corpo = { $n } valor(es) de indicador fora das faixas largas de plausibilidade (docs/indicators.md, E11). Não foram bloqueados, porque podem ser verdade; vale conferir o dado de entrada de cada um:
     { $lista }

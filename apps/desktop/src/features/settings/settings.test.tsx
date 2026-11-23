@@ -179,7 +179,7 @@ describe('Settings', () => {
     const list = screen.getByRole('list', { name: 'Categorias sugeridas' });
     expect(within(list).getByText('Filhos › Fraldas e higiene')).toBeTruthy();
     await user.click(screen.getByRole('button', { name: 'Adicionar sugeridas' }));
-    expect(await screen.findByText(/categoria\(s\) adicionada\(s\)/)).toBeTruthy();
+    expect(await screen.findByText(/categorias? adicionadas?/)).toBeTruthy();
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: 'Adicionar sugeridas' })).toBeNull(),
     );
@@ -202,8 +202,8 @@ describe('Settings', () => {
         name: 'Venda de bens › Imóveis (receita)',
       }).checked,
     ).toBe(false);
-    await user.click(screen.getByRole('button', { name: /^Adicionar \d+ selecionada\(s\)$/ }));
-    expect(await screen.findByText(/categoria\(s\) adicionada\(s\)/)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: /^Adicionar \d+ selecionadas?$/ }));
+    expect(await screen.findByText(/categorias? adicionadas?/)).toBeTruthy();
     // Only what was left unchecked remains.
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'Adicionar sugeridas' })).toBeTruthy(),

@@ -58,9 +58,17 @@ lancamentos-transferencia-desligada-descricao = As duas pernas ficaram soltas: l
 lancamentos-erro-desligar = Não foi possível desligar
 lancamentos-erro-sugerir-regra = Não foi possível sugerir uma regra
 lancamentos-status-rotulo = Status: { $status }
-lancamentos-n-alterados = { $n } lançamento(s) alterado(s).
+lancamentos-n-alterados =
+    { $n ->
+        [one] { $n } lançamento alterado.
+       *[other] { $n } lançamentos alterados.
+    }
 lancamentos-erro-status = Não foi possível mudar o status
-lancamentos-n-marcados-toast = { $n } lançamento(s) marcados
+lancamentos-n-marcados-toast =
+    { $n ->
+        [one] { $n } lançamento marcado
+       *[other] { $n } lançamentos marcados
+    }
 lancamentos-mesma-descricao-toast = Mesma descrição (“{ $descricao }”), em todo o período. Categorize ou mude em lote na barra acima.
 lancamentos-mesma-descricao-lista = Mesma descrição ({ $descricoes }), em todo o período.
 lancamentos-erro-marcar = Não foi possível marcar
@@ -133,7 +141,11 @@ lancamentos-parc = parc. { $numero }
 lancamentos-vinculado = Vinculado: { $operacao }
 lancamentos-recorrencia-dica = Gerado por uma recorrência
 lancamentos-recorrente = Recorrente
-lancamentos-n-anexos = { $n } anexo(s)
+lancamentos-n-anexos =
+    { $n ->
+        [one] { $n } anexo
+       *[other] { $n } anexos
+    }
 lancamentos-acoes-marcados = Ações de { $n } lançamentos marcados
 lancamentos-vazio-filtro = Nenhum lançamento com estes filtros.
 lancamentos-acoes-de = Ações de { $descricao }
@@ -389,7 +401,11 @@ lancamentos-recorrencias-vazio-descricao = Recorrências geram lançamentos prev
 lancamentos-apagar-recorrencia = Apagar recorrência
 lancamentos-apagar-recorrencia-descricao = “{ $descricao }” deixa de gerar lançamentos. Os já efetivados ficam, sem vínculo. Dá para desfazer pelo histórico.
 lancamentos-recorrencia-apagada = Recorrência apagada
-lancamentos-previstos-removidos = { $n } previsto(s) removido(s).
+lancamentos-previstos-removidos =
+    { $n ->
+        [one] { $n } previsto removido.
+       *[other] { $n } previstos removidos.
+    }
 lancamentos-manter-previstos = Manter os lançamentos previstos já gerados
 
 ## Ligar a outra conta (transferência ou pagamento de fatura)

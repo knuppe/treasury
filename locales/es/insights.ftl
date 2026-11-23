@@ -46,8 +46,16 @@ insights-fgts-corpo = { $n ->
 }
 insights-fgts-acao = Revisa la nómina y habla con RR. HH. de la empresa; si no se resuelve, la Caixa y el Ministerio de Trabajo reciben la denuncia.
 insights-previdencia-titulo = { $plano }: aportes para revisar
-insights-previdencia-pendencias = { $n } pendiente(s) en el historial de pagos importado:
-insights-previdencia-sem-cota = { $aportes } aporte(s) esperan la cuota de la CVM desde { $desde } y cuentan en el saldo por el importe aportado.
+insights-previdencia-pendencias =
+    { $n ->
+        [one] { $n } pendiente en el historial de pagos importado:
+       *[other] { $n } pendientes en el historial de pagos importado:
+    }
+insights-previdencia-sem-cota =
+    { $aportes ->
+        [one] { $aportes } aporte espera la cuota de la CVM desde { $desde } y cuenta en el saldo por el importe aportado.
+       *[other] { $aportes } aportes esperan la cuota de la CVM desde { $desde } y cuentan en el saldo por el importe aportado.
+    }
 insights-previdencia-acao = Abre el plan en Activos, revisa los pendientes y envía al agente el pago que faltó (o la captura que muestra ese tramo).
 
 ## Gasto fuera de lo normal

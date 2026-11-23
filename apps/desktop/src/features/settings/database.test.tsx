@@ -19,11 +19,11 @@ describe('Ajustes · Banco de dados', () => {
     const purge = screen.getByRole('region', { name: /Expurgo de dados antigos/ });
     const row = within(purge).getByText('Auditoria do agente e do MCP').closest('li')!;
     await user.click(within(row as HTMLElement).getByRole('button', { name: 'Ver prévia' }));
-    expect(await within(row as HTMLElement).findByText(/registro\(s\), cerca de/)).toBeTruthy();
+    expect(await within(row as HTMLElement).findByText(/registros?, cerca de/)).toBeTruthy();
     await user.click(within(row as HTMLElement).getByRole('button', { name: 'Apagar' }));
     const dialog = await screen.findByRole('dialog', { name: /Apagar: Auditoria/ });
     await user.click(within(dialog).getByRole('button', { name: 'Fazer backup e apagar' }));
-    expect(await screen.findByText(/registro\(s\) apagado\(s\)/)).toBeTruthy();
+    expect(await screen.findByText(/registros? apagados?/)).toBeTruthy();
     await waitFor(() => expect(screen.queryByRole('dialog', { name: /Apagar:/ })).toBeNull());
   });
 

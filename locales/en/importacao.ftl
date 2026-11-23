@@ -126,8 +126,16 @@ importacao-csv-sem-conta = The CSV doesn't say which account it's from: check th
 importacao-pdf-conta-cartao = The PDF card bill goes into the card's account.
 importacao-pdf-conta-extrato = The PDF statement goes into the bank's checking account.
 importacao-pdf-extrato-titulo = Account statement in PDF
-importacao-pdf-extrato-lidos = { $n } transaction(s) read ({ $leiaute }).
-importacao-pdf-extrato-lidos-ocr = { $n } transaction(s) read on this computer by OCR ({ $leiaute }), without AI. Check the amounts in the preview.
+importacao-pdf-extrato-lidos =
+    { $n ->
+        [one] { $n } transaction read ({ $leiaute }).
+       *[other] { $n } transactions read ({ $leiaute }).
+    }
+importacao-pdf-extrato-lidos-ocr =
+    { $n ->
+        [one] { $n } transaction read on this computer by OCR ({ $leiaute }), without AI. Check the amounts in the preview.
+       *[other] { $n } transactions read on this computer by OCR ({ $leiaute }), without AI. Check the amounts in the preview.
+    }
 importacao-pdf-extrato-nao-cartao = The chosen account is a card: choose this statement's checking account.
 importacao-ref-gravada = Branch and account saved
 importacao-ref-gravada-descricao = The next OFX files from this bank go straight to { $conta }.
@@ -339,7 +347,11 @@ documento-ver-texto = View as text
 documento-ver-texto-nome = View { $nome } as text
 documento-texto-titulo = { $nome } as text
 documento-texto-lendo = Reading the document…
-documento-texto-resumo = This is how AI assistants read this document: { $paginas } page(s), { $total } characters.
+documento-texto-resumo =
+    { $paginas ->
+        [one] This is how AI assistants read this document: { $paginas } page, { $total } characters.
+       *[other] This is how AI assistants read this document: { $paginas } pages, { $total } characters.
+    }
 documento-texto-ocr = The PDF is only an image: the text came from the computer's OCR and may have errors.
 documento-texto-paginas-corridas = Pages as plain text (the check did not match): { $paginas }.
 documento-texto-conteudo = Document content

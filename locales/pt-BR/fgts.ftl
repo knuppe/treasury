@@ -44,7 +44,11 @@ fgts-gravar = { $n ->
     [one] Gravar 1 lançamento
    *[other] Gravar { $n } lançamentos
 }
-fgts-importado = { $n } lançamento(s) gravado(s), { $existentes } já existiam.
+fgts-importado =
+    { $n ->
+        [one] { $n } lançamento gravado, { $existentes } já existiam.
+       *[other] { $n } lançamentos gravados, { $existentes } já existiam.
+    }
 fgts-motivo-rescisao = Rescisão
 fgts-motivo-aposentadoria = Aposentadoria
 fgts-motivo-moradia = Moradia (financiamento)

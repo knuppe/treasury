@@ -17,6 +17,7 @@ nucleo-planejamento-gastar-hoje =
        *[other] { $dias } days
     }: { $por_dia } a day.
 nucleo-planejamento-gastar-amanha = Today's spending so far is { $hoje }; from tomorrow on, { $amanha } a day.
+nucleo-planejamento-gastar-sem-renda = No income received or expected this month yet. Without it, there is nothing to divide by the days left.
 
 ## "What if" scenarios (`scenarios`)
 
@@ -238,7 +239,11 @@ nucleo-planejamento-previdencia-pagamentos-ilegivel-data = Screenshot { $print }
 nucleo-planejamento-previdencia-pagamentos-cortada-alto = Screenshot { $print }: the first line is cut (only { $lido }). Send the screenshot above with the whole line, or enter the payment.
 nucleo-planejamento-previdencia-pagamentos-cortada-fim = Screenshot { $print }: the last line is cut (only { $lido }). Send the screenshot below with the whole line, or enter the payment.
 nucleo-planejamento-previdencia-pagamentos-mes-faltando = No payment in { $lido }, in the middle of a monthly series. Check whether there was a contribution that month (a screenshot may be missing).
-nucleo-planejamento-previdencia-aviso-aportes-sem-cota = { $n } contribution(s) still without a CVM unit price count in the balance at the amount paid, with no return, until the quote collection brings the price of the day
+nucleo-planejamento-previdencia-aviso-aportes-sem-cota =
+    { $n ->
+        [one] { $n } contribution still without a CVM unit price counts in the balance at the amount paid, with no return, until the quote collection brings the price of the day
+       *[other] { $n } contributions still without a CVM unit price count in the balance at the amount paid, with no return, until the quote collection brings the price of the day
+    }
 nucleo-planejamento-previdencia-pagamentos-vao = Screenshots { $print }: the day { $lido } has fewer contributions than the other days of the series; a payment may have been left between the two screenshots. Send a screenshot showing that part, or enter the payment.
 nucleo-planejamento-previdencia-pagamentos-conta-nova = Units · { $plano }
 nucleo-planejamento-previdencia-pagamentos-conta-nota = Account holding the units of the plan { $plano }, created when the payment history was imported (no cash movement).

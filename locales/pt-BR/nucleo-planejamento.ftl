@@ -9,13 +9,22 @@ nucleo-planejamento-conta-ou-arquivada = conta (ou arquivada)
 nucleo-planejamento-fatura = Fatura { $cartao }
 nucleo-planejamento-parcela = Parcela { $contrato }
 nucleo-planejamento-sazonal = { $descricao } (estimativa pelo valor de { $ano })
-nucleo-planejamento-gastar-hoje = Receitas do mês { $receitas } − gastos até ontem { $gastos } − contas que ainda vencem { $contas } − falta guardar { $guardar } = { $disponivel } para { $dias } dia(s): { $por_dia } por dia.
+nucleo-planejamento-gastar-hoje =
+    Receitas do mês { $receitas } − gastos até ontem { $gastos } − contas que ainda vencem { $contas } − falta guardar { $guardar } = { $disponivel } para { $dias ->
+        [one] { $dias } dia
+       *[other] { $dias } dias
+    }: { $por_dia } por dia.
 nucleo-planejamento-gastar-amanha = Hoje já foram { $hoje }; a partir de amanhã, { $amanha } por dia.
+nucleo-planejamento-gastar-sem-renda = Ainda não há receita recebida nem prevista neste mês. Sem ela não dá para calcular quanto sobra por dia.
 
 ## Cenários "e se" (`scenarios`)
 
 nucleo-planejamento-cenario-nome = Cenário
-nucleo-planejamento-cenario-explicacao = Em { $anos } ano(s), o patrimônio fica { $cenario } no cenário contra { $base } na base ({ $diferenca } de diferença; { $liquido } em contas e investimentos).
+nucleo-planejamento-cenario-explicacao =
+    { $anos ->
+        [one] Em { $anos } ano, o patrimônio fica { $cenario } no cenário contra { $base } na base ({ $diferenca } de diferença; { $liquido } em contas e investimentos).
+       *[other] Em { $anos } anos, o patrimônio fica { $cenario } no cenário contra { $base } na base ({ $diferenca } de diferença; { $liquido } em contas e investimentos).
+    }
 nucleo-planejamento-cenario-dinheiro-acaba = O dinheiro disponível acaba em { $mes }.
 nucleo-planejamento-cenario-saldo-negativo = Nos próximos 12 meses, o saldo das contas fica negativo em { $data }.
 nucleo-planejamento-cenario-aposentadoria = Aposentadoria: chance de sucesso de { $base } para { $cenario }.
@@ -103,7 +112,11 @@ nucleo-planejamento-divida-erro-primeira-parcela = a primeira parcela não pode 
 nucleo-planejamento-divida-erro-prazo = prazo inválido (a carência deve ser menor que o prazo)
 nucleo-planejamento-divida-erro-quantas-antecipar = informe quantas parcelas antecipar
 nucleo-planejamento-divida-erro-sem-futuras = não há parcelas futuras em aberto para antecipar
-nucleo-planejamento-divida-erro-poucas-futuras = só há { $n } parcela(s) futura(s) em aberto
+nucleo-planejamento-divida-erro-poucas-futuras =
+    { $n ->
+        [one] só há { $n } parcela futura em aberto
+       *[other] só há { $n } parcelas futuras em aberto
+    }
 nucleo-planejamento-divida-erro-parcela-seguros = a parcela precisa ser maior que os seguros e taxas mensais
 nucleo-planejamento-divida-erro-taxa-nao-fecha = com essa parcela e esse prazo a taxa não fecha: confira os valores (a parcela vezes o prazo precisa passar do valor financiado)
 nucleo-planejamento-divida-erro-pagamento-antes = o pagamento é anterior ao primeiro vencimento do contrato
@@ -139,7 +152,11 @@ nucleo-planejamento-divida-motivo-parcela-ligada = Parcela { $numero } de { $con
 nucleo-planejamento-divida-motivo-pagamento-desfeito = Pagamento de parcela desfeito
 # Descrição dos lançamentos criados pela amortização e pela antecipação.
 nucleo-planejamento-divida-lancamento-amortizacao = Amortização extraordinária · { $contrato }
-nucleo-planejamento-divida-lancamento-antecipacao = Antecipação de { $n } parcela(s) · { $contrato }
+nucleo-planejamento-divida-lancamento-antecipacao =
+    { $n ->
+        [one] Antecipação de { $n } parcela · { $contrato }
+       *[other] Antecipação de { $n } parcelas · { $contrato }
+    }
 
 ## Taxas de juros do mercado (Banco Central do Brasil, `debt::market_rates`)
 
@@ -169,7 +186,11 @@ nucleo-planejamento-mercado-erro-sem-taxas = o BCB não devolveu taxas
 
 ## Extrato do contrato colado do banco (`debt::statement`)
 
-nucleo-planejamento-divida-extrato-linhas-nao-entendidas = { $n } linha(s) não entendida(s), por exemplo: "{ $exemplo }"
+nucleo-planejamento-divida-extrato-linhas-nao-entendidas =
+    { $n ->
+        [one] { $n } linha não entendida, por exemplo: "{ $exemplo }"
+       *[other] { $n } linhas não entendidas, por exemplo: "{ $exemplo }"
+    }
 nucleo-planejamento-divida-extrato-erro-vazio = cole o extrato do contrato (ou envie as linhas)
 nucleo-planejamento-divida-extrato-erro-nenhuma-linha = nenhuma linha do extrato foi entendida: cole com o cabeçalho (data, amortização, juros, saldo devedor…)
 nucleo-planejamento-divida-extrato-aviso-juros = os juros do extrato equivalem a { $mensal }% ao mês ({ $nominal }% a.a. nominal, { $efetiva }% a.a. efetiva); o contrato está com { $contrato }% a.a. efetiva. Ajuste a taxa para a projeção bater com o banco
@@ -206,19 +227,31 @@ nucleo-planejamento-previdencia-pagamentos-erro-vazio = Informe ao menos um paga
 nucleo-planejamento-previdencia-pagamentos-erro-valor = O valor de cada pagamento deve ser maior que zero.
 nucleo-planejamento-previdencia-pagamentos-erro-conta = Escolha a conta das cotas do plano.
 nucleo-planejamento-previdencia-pagamentos-sem-cnpj = Sem cota: informe no ativo o CNPJ do fundo do plano (o FIE), para buscar as cotas na CVM.
-nucleo-planejamento-previdencia-pagamentos-sem-cota = { $n } aporte(s) ainda sem cota da CVM, desde { $data }: entram na proposta com a quantidade pendente e viram compra de cotas sozinhos quando a coleta de cotações trouxer o histórico do fundo.
+nucleo-planejamento-previdencia-pagamentos-sem-cota =
+    { $n ->
+        [one] { $n } aporte ainda sem cota da CVM, desde { $data }: entra na proposta com a quantidade pendente e vira compra de cotas sozinho quando a coleta de cotações trouxer o histórico do fundo.
+       *[other] { $n } aportes ainda sem cota da CVM, desde { $data }: entram na proposta com a quantidade pendente e viram compra de cotas sozinhos quando a coleta de cotações trouxer o histórico do fundo.
+    }
 nucleo-planejamento-previdencia-pagamentos-nada = Nada novo para gravar: os pagamentos já foram importados.
 nucleo-planejamento-previdencia-pagamentos-ilegivel-valor = Print { $print }: a linha de { $lido } está com o valor ilegível. Confira no app da seguradora e informe o valor.
 nucleo-planejamento-previdencia-pagamentos-ilegivel-data = Print { $print }: o pagamento de { $lido } está sem data legível. Confira no app da seguradora e informe a data.
 nucleo-planejamento-previdencia-pagamentos-cortada-alto = Print { $print }: a primeira linha está cortada (só { $lido }). Mande o print de cima com a linha inteira, ou informe o pagamento.
 nucleo-planejamento-previdencia-pagamentos-cortada-fim = Print { $print }: a última linha está cortada (só { $lido }). Mande o print de baixo com a linha inteira, ou informe o pagamento.
 nucleo-planejamento-previdencia-pagamentos-mes-faltando = Nenhum pagamento em { $lido }, no meio de uma série mensal. Confira se houve aporte nesse mês (pode faltar um print).
-nucleo-planejamento-previdencia-aviso-aportes-sem-cota = { $n } aporte(s) ainda sem cota da CVM entram no saldo pelo valor aportado, sem rendimento, até a coleta trazer a cota do dia
+nucleo-planejamento-previdencia-aviso-aportes-sem-cota =
+    { $n ->
+        [one] { $n } aporte ainda sem cota da CVM entra no saldo pelo valor aportado, sem rendimento, até a coleta trazer a cota do dia
+       *[other] { $n } aportes ainda sem cota da CVM entram no saldo pelo valor aportado, sem rendimento, até a coleta trazer a cota do dia
+    }
 nucleo-planejamento-previdencia-pagamentos-vao = Prints { $print }: o dia { $lido } ficou com menos aportes que os outros dias da série; um pagamento pode ter ficado entre os dois prints. Mande um print que mostre esse trecho, ou informe o pagamento.
 nucleo-planejamento-previdencia-pagamentos-conta-nova = Cotas · { $plano }
 nucleo-planejamento-previdencia-pagamentos-conta-nota = Conta das cotas do plano { $plano }, criada na importação do histórico de pagamentos (sem movimento no caixa).
 nucleo-planejamento-previdencia-motivo-pagamentos-n = { $plano }: { $com } aporte(s) com cota, { $sem } aguardando a cota da CVM e { $pendencias } pendência(s) para conferir
-nucleo-planejamento-previdencia-motivo-cotas-completadas = Cotas da CVM completadas em { $n } aporte(s) de previdência
+nucleo-planejamento-previdencia-motivo-cotas-completadas =
+    { $n ->
+        [one] Cotas da CVM completadas em { $n } aporte de previdência
+       *[other] Cotas da CVM completadas em { $n } aportes de previdência
+    }
 nucleo-previdencia-saldo-so-previdencia = o saldo informado é só para planos de previdência
 nucleo-previdencia-saldo-positivo = o saldo precisa ser maior que zero
 nucleo-previdencia-saldo-sem-cotas = o plano não tem cotas em { $data }: registre os aportes antes de informar o saldo

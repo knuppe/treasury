@@ -813,10 +813,18 @@ carteira-unidade-anualizada = % p.a. (annualized, 252 business days)
 
 carteira-setor-titulo = By sector
 carteira-setor-sem = No sector
-carteira-setor-ativos = { $n } asset(s)
+carteira-setor-ativos =
+    { $n ->
+        [one] { $n } asset
+       *[other] { $n } assets
+    }
 carteira-setor-vazio = No positions with a market value.
 carteira-setor-rodape = Sector from each asset's record (yours or an approved suggestion from the sources).
-carteira-setor-completar = Fill in the sector of { $n } asset(s) in Asset health
+carteira-setor-completar =
+    { $n ->
+        [one] Fill in the sector of { $n } asset in Asset health
+       *[other] Fill in the sector of { $n } assets in Asset health
+    }
 
 ## Vendas (resultado nominal e real)
 

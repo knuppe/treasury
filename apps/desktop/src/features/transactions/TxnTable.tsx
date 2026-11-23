@@ -380,14 +380,14 @@ export function TxnTable({
         key: 'account',
         sortValue: (row) => row.account_name,
         header: t('lancamentos-campo-conta'),
-        width: '15%',
+        width: '13%',
         cell: (row) => <span className="block truncate text-dim">{row.account_name}</span>,
       },
       {
         key: 'category',
         sortValue: (row) => row.category_path,
         header: t('lancamentos-campo-categoria'),
-        width: '19%',
+        width: '22%',
         cell: (row) => (
           <CategoryCell
             txn={row}

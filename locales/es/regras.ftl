@@ -58,6 +58,13 @@ regras-apagada = Regla eliminada
 
 regras-condicao = { $campo } { $op } { $valor }
 regras-condicao-entre = { $campo } { $op } { $valor } y { $valor2 }
+regras-condicao-termos = { $campo } contiene { $termos }{ $mais ->
+        [0] {""}
+       *[other] {" "}y { $mais } más
+    }
+regras-condicao-padrao = { $campo } sigue un patrón (véalo al editar)
+regras-condicao-saida = es una salida
+regras-condicao-entrada = es una entrada
 regras-conta-escolhida = cuenta elegida
 regras-e = y
 regras-ou = o

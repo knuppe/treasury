@@ -134,6 +134,12 @@ export default function Lancamentos() {
   const tab = TABS.find((x) => x.id === aba)?.id ?? 'lancamentos';
   const [exchangeOpen, setExchangeOpen] = useState(false);
   const query = useTxnQuery(queryFilter(state), tab === 'lancamentos');
+  // Lista vazia: o cofre não tem nenhum lançamento (convite para começar) ou só o período e os
+  // filtros não acham nada? O período padrão ("Este mês") já é um filtro de datas, então a
+  // pergunta vai ao cofre inteiro, só quando a página veio vazia.
+  const pageEmpty = query.data?.total === 0;
+  const anyTxn = useTxnQuery({ limit: 1, offset: 0 }, tab === 'lancamentos' && pageEmpty);
+  const vaultEmpty = pageEmpty && anyTxn.data?.total === 0;
   const page = query.data;
 
   const [selection, setSelection] = useState<Set<string>>(new Set());
@@ -743,7 +749,7 @@ export default function Lancamentos() {
               onRetry={() => void query.refetch()}
               label={t('lancamentos-carregando')}
             >
-              {page && page.total === 0 && !hasActiveFilters(state.filter) ? (
+              {page && page.total === 0 && (vaultEmpty || !hasActiveFilters(state.filter)) ? (
                 <div className="p-4">
                   <EmptyState
                     kicker={t('lancamentos-vazio-kicker')}

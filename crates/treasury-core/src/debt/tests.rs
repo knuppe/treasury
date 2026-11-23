@@ -600,7 +600,7 @@ fn anticipation_discounts_interest_from_last_or_next() {
     let txns = api
         .call("transactions.query", json!({"account_ids": [acc]}))
         .unwrap();
-    assert!(txns.to_string().contains("Antecipação de 2 parcela(s)"));
+    assert!(txns.to_string().contains("Antecipação de 2 parcelas"));
 }
 
 #[test]

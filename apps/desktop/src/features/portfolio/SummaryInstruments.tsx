@@ -60,6 +60,7 @@ export function SummaryInstruments({
       <ResultCard
         index="02"
         title={t('carteira-resultado')}
+        perspective={false}
         deflator={s.deflator}
         nominal={s.total_result}
         real={s.real_result}

@@ -234,7 +234,7 @@ function monthClose(): MonthClose {
       'Trazer os extratos',
       stale.length === 0,
       false,
-      `${stale.length} contas sem extrato recente: ${stale.map((a) => a.name).join(', ')}.`,
+      `${stale.length} ${stale.length === 1 ? 'conta' : 'contas'} sem extrato recente: ${stale.map((a) => a.name).join(', ')}.`,
       '/lancamentos?importar=1',
     ),
     step(

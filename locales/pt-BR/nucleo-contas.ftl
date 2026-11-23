@@ -17,9 +17,21 @@ nucleo-contas-erro-historico-longo = período longo demais para pontos diários 
 nucleo-contas-erro-agencia = agência: use só números e hífen
 nucleo-contas-erro-numero-conta = número da conta: use só números e hífen
 nucleo-contas-erro-cheque-especial-tipo = cheque especial só vale para conta corrente
-nucleo-contas-erro-apagar-lancamentos = a conta { $nome } tem { $n } lançamento(s); apague-os antes ou arquive a conta
-nucleo-contas-erro-apagar-recorrencias = a conta { $nome } é usada por { $n } recorrência(s); apague-as antes
-nucleo-contas-erro-apagar-parcelamentos = a conta { $nome } tem { $n } parcelamento(s); apague-os antes
+nucleo-contas-erro-apagar-lancamentos =
+    { $n ->
+        [one] a conta { $nome } tem { $n } lançamento; apague-o antes ou arquive a conta
+       *[other] a conta { $nome } tem { $n } lançamentos; apague-os antes ou arquive a conta
+    }
+nucleo-contas-erro-apagar-recorrencias =
+    { $n ->
+        [one] a conta { $nome } é usada por { $n } recorrência; apague-a antes
+       *[other] a conta { $nome } é usada por { $n } recorrências; apague-as antes
+    }
+nucleo-contas-erro-apagar-parcelamentos =
+    { $n ->
+        [one] a conta { $nome } tem { $n } parcelamento; apague-o antes
+       *[other] a conta { $nome } tem { $n } parcelamentos; apague-os antes
+    }
 # Por que o OFX não achou a conta sozinho.
 nucleo-contas-ofx-sem-numero = o OFX não traz o número da conta
 nucleo-contas-ofx-sem-cartao = nenhum cartão com esse final; preencha o final do cartão no cadastro
@@ -45,7 +57,11 @@ nucleo-contas-ref-fatura = fatura { $id }
 nucleo-contas-ref-parcelamento = parcelamento { $id }
 nucleo-contas-historico-pagamento-fatura = Pagamento da fatura { $cartao } com vencimento em { $vencimento }
 nucleo-contas-historico-total-informado = Total informado da fatura
-nucleo-contas-historico-movidos-fatura = { $n } lançamento(s) movido(s) de fatura
+nucleo-contas-historico-movidos-fatura =
+    { $n ->
+        [one] { $n } lançamento movido de fatura
+       *[other] { $n } lançamentos movidos de fatura
+    }
 nucleo-contas-historico-compra-parcelada = Compra parcelada em { $n }x: { $descricao }
 nucleo-contas-historico-parcelamento-apagado = Parcelamento apagado: { $descricao }
 # Descrição do pagamento de fatura (fica gravada no lançamento); $mes no formato 10/2026.
@@ -100,11 +116,23 @@ nucleo-contas-sincronia-nota = Saldo no banco em { $data }: { $banco }; o Treasu
 nucleo-contas-sincronia-erro-futuro = a data do saldo não pode estar no futuro
 nucleo-contas-sincronia-erro-motivo = escreva o motivo da diferença
 # Causas prováveis da diferença.
-nucleo-contas-sincronia-dica-mesmo-valor = { $n } lançamento(s) com o valor exato da diferença ({ $valor }): pode ser um lançado a mais (ou de menos) no Treasury.
+nucleo-contas-sincronia-dica-mesmo-valor =
+    { $n ->
+        [one] { $n } lançamento com o valor exato da diferença ({ $valor }): pode ser um lançado a mais (ou de menos) no Treasury.
+       *[other] { $n } lançamentos com o valor exato da diferença ({ $valor }): pode ser um lançado a mais (ou de menos) no Treasury.
+    }
 nucleo-contas-sincronia-dica-previsto = Há previsto com o valor da diferença ainda não efetivado: talvez já tenha acontecido no banco.
 nucleo-contas-sincronia-dica-sinal = Lançamento de { $valor } com o sinal trocado explicaria a diferença.
-nucleo-contas-sincronia-dica-duplicados = { $n } lançamento(s) parecem duplicados (mesma data, valor e descrição).
-nucleo-contas-sincronia-dica-conferir = Nenhuma causa óbvia: confira os { $n } lançamento(s) do período com o extrato (tarifas, juros e estornos costumam faltar).
+nucleo-contas-sincronia-dica-duplicados =
+    { $n ->
+        [one] { $n } lançamento parece duplicado (mesma data, valor e descrição).
+       *[other] { $n } lançamentos parecem duplicados (mesma data, valor e descrição).
+    }
+nucleo-contas-sincronia-dica-conferir =
+    { $n ->
+        [one] Nenhuma causa óbvia: confira o lançamento do período com o extrato (tarifas, juros e estornos costumam faltar).
+       *[other] Nenhuma causa óbvia: confira os { $n } lançamentos do período com o extrato (tarifas, juros e estornos costumam faltar).
+    }
 
 ## Câmbio
 

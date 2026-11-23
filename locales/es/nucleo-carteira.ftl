@@ -131,7 +131,11 @@ nucleo-carteira-lote-posicao-sem-ativo = posición { $n }: activo { $ativo } no 
 nucleo-carteira-lote-posicao-quantidade = posición { $n }: la cantidad debe ser positiva
 nucleo-carteira-lote-posicao-erro = posición { $n }: { $erro }
 nucleo-carteira-lote-posicao-confere = posición { $n } ({ $ativo }): ya coincide
-nucleo-carteira-lote-posicao-maior = posición { $n } ({ $ativo }): ya hay { $registrado } registrado(s), más que { $informado }; registra la venta con `record_trade` (`side: sell`; `cash_movement: false` si el dinero ya entró en la cuenta)
+nucleo-carteira-lote-posicao-maior =
+    { $registrado ->
+        [one] posición { $n } ({ $ativo }): ya hay { $registrado } registrado, más que { $informado }; registra la venta con `record_trade` (`side: sell`; `cash_movement: false` si el dinero ya entró en la cuenta)
+       *[other] posición { $n } ({ $ativo }): ya hay { $registrado } registrados, más que { $informado }; registra la venta con `record_trade` (`side: sell`; `cash_movement: false` si el dinero ya entró en la cuenta)
+    }
 nucleo-carteira-lote-posicao-repetida = posición { $n }: ya registrada
 nucleo-carteira-lote-provento-sem-ativo = dividendo { $n }: activo { $ativo } no registrado (inclúyelo en `assets`)
 nucleo-carteira-lote-provento-repetido = dividendo { $n }: ya registrado
@@ -239,7 +243,11 @@ nucleo-carteira-extrato-herdada = Posición heredada (cambio de ticker o absorci
 nucleo-carteira-extrato-entrada-sem-custo = Entrada sin costo (desdoblamiento o bonificación registrado como compra)
 nucleo-carteira-extrato-compra = Compra
 nucleo-carteira-extrato-venda = Venta
-nucleo-carteira-extrato-come-cotas = Come-cotas: { $cotas } cuota(s) rescatada(s) para el IR
+nucleo-carteira-extrato-come-cotas =
+    { $cotas ->
+        [one] Come-cotas: { $cotas } cuota rescatada para el IR
+       *[other] Come-cotas: { $cotas } cuotas rescatadas para el IR
+    }
 # De dónde vino la línea del extracto.
 nucleo-carteira-extrato-origem-nota = nota { $numero }
 nucleo-carteira-extrato-origem-agente = agente

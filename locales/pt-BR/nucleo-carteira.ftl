@@ -76,7 +76,11 @@ nucleo-carteira-motivo-eventos-removidos = { $n ->
 nucleo-carteira-motivo-provento-registrado = Provento registrado
 nucleo-carteira-erro-sem-proventos = nenhum provento para registrar
 nucleo-carteira-erro-proventos-demais = no máximo 500 proventos por vez
-nucleo-carteira-motivo-proventos-confirmados = { $n } provento(s) confirmados
+nucleo-carteira-motivo-proventos-confirmados =
+    { $n ->
+        [one] { $n } provento confirmado
+       *[other] { $n } proventos confirmados
+    }
 nucleo-carteira-motivo-proventos-removidos = { $n ->
         [1] Provento removido
        *[other] { $n } proventos removidos
@@ -95,10 +99,18 @@ nucleo-carteira-erro-lote-conta = operações, posições e proventos precisam d
 nucleo-carteira-erro-conta-cartao = a conta dos investimentos não pode ser cartão de crédito
 # Motivo do histórico: "Investimentos em lote (2 ativo(s), 5 operação(ões)): extrato da XP".
 nucleo-carteira-motivo-lote = Investimentos em lote ({ $itens }): { $fonte }
-nucleo-carteira-lote-ativos = { $n } ativo(s)
+nucleo-carteira-lote-ativos =
+    { $n ->
+        [one] { $n } ativo
+       *[other] { $n } ativos
+    }
 nucleo-carteira-lote-operacoes = { $n } operação(ões)
 nucleo-carteira-lote-posicoes = { $n } posição(ões)
-nucleo-carteira-lote-proventos = { $n } provento(s)
+nucleo-carteira-lote-proventos =
+    { $n ->
+        [one] { $n } provento
+       *[other] { $n } proventos
+    }
 nucleo-carteira-lote-conta = conta
 # A conta do relatório do lote.
 nucleo-carteira-lote-conta-existente-id = existente { $id }
@@ -113,7 +125,11 @@ nucleo-carteira-lote-posicao-sem-ativo = posição { $n }: ativo { $ativo } não
 nucleo-carteira-lote-posicao-quantidade = posição { $n }: quantidade precisa ser positiva
 nucleo-carteira-lote-posicao-erro = posição { $n }: { $erro }
 nucleo-carteira-lote-posicao-confere = posição { $n } ({ $ativo }): já confere
-nucleo-carteira-lote-posicao-maior = posição { $n } ({ $ativo }): já há { $registrado } registrado(s), mais que { $informado }; registre a venda com `record_trade` (`side: sell`; `cash_movement: false` se o dinheiro já entrou na conta)
+nucleo-carteira-lote-posicao-maior =
+    { $registrado ->
+        [one] posição { $n } ({ $ativo }): já há { $registrado } registrado, mais que { $informado }; registre a venda com `record_trade` (`side: sell`; `cash_movement: false` se o dinheiro já entrou na conta)
+       *[other] posição { $n } ({ $ativo }): já há { $registrado } registrados, mais que { $informado }; registre a venda com `record_trade` (`side: sell`; `cash_movement: false` se o dinheiro já entrou na conta)
+    }
 nucleo-carteira-lote-posicao-repetida = posição { $n }: já registrada
 nucleo-carteira-lote-provento-sem-ativo = provento { $n }: ativo { $ativo } não cadastrado (inclua em `assets`)
 nucleo-carteira-lote-provento-repetido = provento { $n }: já registrado
@@ -148,7 +164,11 @@ nucleo-carteira-rapido-nota-sem-anuncio = nenhum provento anunciado perto de { $
 nucleo-carteira-rapido-nota-ir = IR retido presumido: { $imposto } (bruto { $bruto })
 nucleo-carteira-rapido-nota-futuro = pagamento futuro: fica como anunciado, sem caixa
 # Motivo do histórico: "3 provento(s) registrados: PETR4, VALE3, ITUB4".
-nucleo-carteira-rapido-motivo = { $n } provento(s) registrados: { $lista }
+nucleo-carteira-rapido-motivo =
+    { $n ->
+        [one] { $n } provento registrado: { $lista }
+       *[other] { $n } proventos registrados: { $lista }
+    }
 nucleo-carteira-rapido-e-mais = { $lista } e mais { $n }
 
 ## Proventos anunciados a conferir (`pending`)
@@ -218,7 +238,11 @@ nucleo-carteira-extrato-herdada = Posição herdada (troca de ticker ou incorpor
 nucleo-carteira-extrato-entrada-sem-custo = Entrada sem custo (desdobramento ou bonificação lançado como compra)
 nucleo-carteira-extrato-compra = Compra
 nucleo-carteira-extrato-venda = Venda
-nucleo-carteira-extrato-come-cotas = Come-cotas: { $cotas } cota(s) resgatada(s) para o IR
+nucleo-carteira-extrato-come-cotas =
+    { $cotas ->
+        [one] Come-cotas: { $cotas } cota resgatada para o IR
+       *[other] Come-cotas: { $cotas } cotas resgatadas para o IR
+    }
 # De onde veio a linha do extrato.
 nucleo-carteira-extrato-origem-nota = nota { $numero }
 nucleo-carteira-extrato-origem-agente = agente

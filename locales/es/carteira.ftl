@@ -825,10 +825,18 @@ carteira-unidade-anualizada = % anual (anualizado, 252 días hábiles)
 
 carteira-setor-titulo = Por sector
 carteira-setor-sem = Sin sector
-carteira-setor-ativos = { $n } activo(s)
+carteira-setor-ativos =
+    { $n ->
+        [one] { $n } activo
+       *[other] { $n } activos
+    }
 carteira-setor-vazio = Sin posiciones con valor de mercado.
 carteira-setor-rodape = Sector del registro de cada activo (el tuyo o una sugerencia aprobada de las fuentes).
-carteira-setor-completar = Completar el sector de { $n } activo(s) en Salud de los activos
+carteira-setor-completar =
+    { $n ->
+        [one] Completar el sector de { $n } activo en Salud de los activos
+       *[other] Completar el sector de { $n } activos en Salud de los activos
+    }
 
 ## Vendas (resultado nominal e real)
 
@@ -836,12 +844,20 @@ carteira-aba-vendas = Ventas
 carteira-deflator-igpm-dica = Índice General de Precios del Mercado (FGV, vía BCB/SGS 189)
 carteira-vendas-titulo = Resultado de las ventas
 carteira-vendas-total-vendido = Total vendido
-carteira-vendas-n = { $n } venta(s): { $ganhos } con ganancia, { $perdas } con pérdida
+carteira-vendas-n =
+    { $n ->
+        [one] { $n } venta: { $ganhos } con ganancia, { $perdas } con pérdida
+       *[other] { $n } ventas: { $ganhos } con ganancia, { $perdas } con pérdida
+    }
 carteira-vendas-nominal = Resultado de precio
 carteira-vendas-nominal-dica = Venta menos el costo al precio medio, como en el impuesto
 carteira-vendas-real = Resultado real ({ $indice })
 carteira-vendas-real-dica = { $ganhos } con ganancia real, { $perdas } con pérdida real
-carteira-vendas-faltam = { $n } venta(s) sin { $indice } en el período quedaron fuera
+carteira-vendas-faltam =
+    { $n ->
+        [one] { $n } venta sin { $indice } en el período quedó fuera
+       *[other] { $n } ventas sin { $indice } en el período quedaron fuera
+    }
 carteira-vendas-efeito = Comido por el { $indice }
 carteira-vendas-efeito-dica = Cuánto el costo corregido por el { $indice } supera el costo original
 carteira-vendas-por-mes = Resultado por mes: nominal × real
@@ -1096,7 +1112,11 @@ carteira-vendas-metodo-escolhido = Método elegido en Ajustes › Familia.
 carteira-objetivo-titulo = Por objetivo
 carteira-objetivo-vazio = Ninguna posición vinculada a una meta todavía. Vincula posiciones a una meta para ver la cartera por objetivo.
 carteira-objetivo-ir-metas = Ir a Metas
-carteira-objetivo-alvo = { $n } posición(es) vinculada(s) · { $pct } del objetivo
+carteira-objetivo-alvo =
+    { $n ->
+        [one] { $n } posición vinculada · { $pct } del objetivo
+       *[other] { $n } posiciónes vinculadas · { $pct } del objetivo
+    }
 carteira-objetivo-sem = Sin objetivo
 carteira-objetivo-nota = Por los pesos de las posiciones vinculadas a cada meta (fracciones y fondo común).
 carteira-plano-titulo = Aportes programados
@@ -1117,7 +1137,11 @@ carteira-plano-meta-dica = Para qué meta va el aporte (solo informativo).
 carteira-plano-sem-meta = Ninguna
 carteira-plano-ativo-ligado = Activo (desmarca para pausar)
 carteira-plano-salvo = Aporte programado guardado
-carteira-plano-a-confirmar = { $n } aporte(s) programado(s) por confirmar. Ajusta la cantidad y el precio si hace falta.
+carteira-plano-a-confirmar =
+    { $n ->
+        [one] { $n } aporte programado por confirmar. Ajusta la cantidad y el precio si hace falta.
+       *[other] { $n } aportes programados por confirmar. Ajusta la cantidad y el precio si hace falta.
+    }
 carteira-plano-a-confirmar-lista = Aportes por confirmar
 carteira-plano-preco-de = precio del { $data }
 carteira-plano-sem-preco = sin cotización: indica el precio
@@ -1135,7 +1159,11 @@ carteira-plano-resumo = { $ativo } cada día { $dia } · { $conta }
 carteira-plano-proximo = próximo el { $data }
 carteira-plano-excluir-nome = Eliminar { $nome }
 carteira-plano-excluido = Aporte programado eliminado
-carteira-plano-aviso = { $n } aporte(s) programado(s) esperando tu confirmación.
+carteira-plano-aviso =
+    { $n ->
+        [one] { $n } aporte programado esperando tu confirmación.
+       *[other] { $n } aportes programados esperando tu confirmación.
+    }
 carteira-plano-aviso-ver = Ver aportes
 
 ## Posición reciente (menos de 30 días: solo el retorno del período)

@@ -28,12 +28,20 @@ projetos-salvo = Projeto guardado
 projetos-nome-exemplo = Remodelação da casa de banho, bate-chapa do carro…
 projetos-lanc-no-projeto = Movimentos no projeto
 projetos-lanc-fora = Movimentos fora do projeto
-projetos-n-lancamentos = { $n } movimento(s).
+projetos-n-lancamentos =
+    { $n ->
+        [one] { $n } movimento.
+       *[other] { $n } movimentos.
+    }
 projetos-link-descricao = O gasto do projeto é a soma dos movimentos dele; benfeitorias ligadas ao projeto passam a valer esse gasto.
 projetos-add-titulo = Movimentos para { $nome }
 projetos-add-descricao = Marque as despesas (compras, PIX, faturas) e as receitas do projeto. Movimentos de outro projeto mudam para este.
 projetos-add-toast = Movimentos em { $nome }
-projetos-add-toast-descricao = { $n } movimento(s) no projeto.
+projetos-add-toast-descricao =
+    { $n ->
+        [one] { $n } movimento no projeto.
+       *[other] { $n } movimentos no projeto.
+    }
 projetos-buscar-exemplo = Descrição, beneficiário ou observação
 projetos-encontrados = Movimentos encontrados
 projetos-nenhum-filtro = Nenhum movimento neste filtro.

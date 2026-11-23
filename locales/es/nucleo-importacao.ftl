@@ -59,7 +59,11 @@ nucleo-importacao-aviso-fitid-colisoes = { $n ->
     [one] { $n } movimiento con FITID repetido y contenido distinto recibió un id propio
    *[other] { $n } movimientos con FITID repetido y contenido distinto recibieron un id propio
 }
-nucleo-importacao-aviso-outra-conta = { $n } movimiento(s) del archivo ya están en { $conta } con el mismo identificador del banco: quizás el archivo sea de esa cuenta. No se registrarán aquí.
+nucleo-importacao-aviso-outra-conta =
+    { $n ->
+        [one] { $n } movimiento del archivo ya está en { $conta } con el mismo identificador del banco: quizás el archivo sea de esa cuenta. No se registrarán aquí.
+       *[other] { $n } movimientos del archivo ya están en { $conta } con el mismo identificador del banco: quizás el archivo sea de esa cuenta. No se registrarán aquí.
+    }
 
 ## OFX
 
@@ -125,7 +129,11 @@ nucleo-importacao-dica-imagem = leída en este ordenador (QR y texto): un ticket
 nucleo-importacao-tipo-cupom-pdf = Ticket fiscal en PDF (DANFE NFC-e)
 nucleo-importacao-tipo-cupom-xml = Factura en XML (NF-e/NFC-e)
 nucleo-importacao-dica-cupom = abre la compra con los artículos para revisar y guardar en Consumo
-nucleo-importacao-imagem-cupom = Ticket leído en este ordenador: { $itens } artículo(s)
+nucleo-importacao-imagem-cupom =
+    { $itens ->
+        [one] Ticket leído en este ordenador: { $itens } artículo
+       *[other] Ticket leído en este ordenador: { $itens } artículos
+    }
 nucleo-importacao-imagem-cupom-fechou = el total cuadra; revisa y guarda la compra
 nucleo-importacao-imagem-cupom-revisar = el total no cuadra; revisa los artículos (la IA puede ayudar, si quieres)
 nucleo-importacao-imagem-comprovante = Comprobante de pago o transferencia

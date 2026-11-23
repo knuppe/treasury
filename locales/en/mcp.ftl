@@ -232,7 +232,11 @@ mcp-resumo-n-caixa = { $n ->
         [one] { $n } file in the inbox.
        *[other] { $n } files in the inbox.
     }
-mcp-resumo-documento = Document as Markdown: { $paginas } page(s), { $total } characters in total.
+mcp-resumo-documento =
+    { $paginas ->
+        [one] Document as Markdown: { $paginas } page, { $total } characters in total.
+       *[other] Document as Markdown: { $paginas } pages, { $total } characters in total.
+    }
 mcp-resumo-n-metas = { $n ->
         [one] { $n } goal.
        *[other] { $n } goals.
@@ -526,7 +530,11 @@ mcp-resumo-sincronia-causas = Difference of { $diferenca } on { $data }: { $caus
     } in the period.
 mcp-resumo-transferencias-nenhuma = No pair looks like a transfer between accounts.
 mcp-resumo-copias-nenhuma = No transaction repeated in another account.
-mcp-resumo-copias = { $n } transaction(s) repeated in another account with the same bank identifier.
+mcp-resumo-copias =
+    { $n ->
+        [one] { $n } transaction repeated in another account with the same bank identifier.
+       *[other] { $n } transactions repeated in another account with the same bank identifier.
+    }
 mcp-resumo-transferencias = { $n ->
         [one] { $n } pair looks like a transfer between own accounts.
        *[other] { $n } pairs look like transfers between own accounts.
@@ -703,12 +711,20 @@ mcp-resumo-vendas = { $n ->
        *[other] { $n } sales
     }: nominal result { $resultado }, real { $real }.
 mcp-resumo-documentos-status = Documents: { $motivo } ({ $n } stored).
-mcp-resumo-n-metodos = { $n } method(s) with the recipe.
+mcp-resumo-n-metodos =
+    { $n ->
+        [one] { $n } method with the recipe.
+       *[other] { $n } methods with the recipe.
+    }
 mcp-resumo-metodo = { $metodo }: { $passam } of { $avaliados } securities meet the criteria.
 mcp-resumo-metodo-passa = { $ticker } meets the method's criteria.
 mcp-resumo-metodo-nao-passa = { $ticker } does not meet the method's criteria.
 mcp-resumo-mercado = Universe: { $acoes } stocks and { $fiis } FIIs, { $score } with a score.
-mcp-resumo-n-tags = { $n } characteristic(s) with the rule and today's count.
+mcp-resumo-n-tags =
+    { $n ->
+        [one] { $n } characteristic with the rule and today's count.
+       *[other] { $n } characteristics with the rule and today's count.
+    }
 
 ## Server (local socket and HTTP port)
 

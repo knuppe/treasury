@@ -697,7 +697,11 @@ carteira-grade-digitar = Digitar
 carteira-grade-ticker-linha = Ticker, linha { $n }
 carteira-grade-ativos-linha = Ativos para a linha { $n }
 carteira-grade-em-carteira = em carteira
-carteira-proventos-registrados = { $n } provento(s) registrado(s)
+carteira-proventos-registrados =
+    { $n ->
+        [one] { $n } provento registrado
+       *[other] { $n } proventos registrados
+    }
 carteira-grade-nada-novo = Nada novo para registrar
 carteira-grade-tabela = Proventos a registrar
 carteira-grade-ticker = Ticker
@@ -709,7 +713,11 @@ carteira-grade-data-invalida = Data inválida.
 carteira-grade-complete = Complete data, ticker e valor.
 carteira-grade-remover-linha = Remover linha { $n }
 carteira-grade-ajuda = Valor recebido é o creditado na corretora (líquido). Data em branco repete a de cima; Enter vai para a próxima linha. Pode colar várias linhas de uma planilha.
-carteira-grade-prontas = { $n } pronta(s)
+carteira-grade-prontas =
+    { $n ->
+        [one] { $n } pronta
+       *[other] { $n } prontas
+    }
 carteira-grade-duplicadas = { $n } já registrada(s)
 carteira-grade-problema = { $n } com problema
 carteira-grade-nenhuma-completa = Nenhuma linha completa ainda.
@@ -746,9 +754,17 @@ carteira-pend-sem-data = sem data na fonte: confira
 carteira-pend-detalhe = { $tipo } · { $conta } · data-com { $data }
 carteira-ir-valor = IR { $valor }
 carteira-pend-valor-de = Valor recebido de { $ativo }
-carteira-pend-duvidosos = { $n } provento(s) com fontes divergentes ou de uma fonte só.
+carteira-pend-duvidosos =
+    { $n ->
+        [one] { $n } provento com fontes divergentes ou de uma fonte só.
+       *[other] { $n } proventos com fontes divergentes ou de uma fonte só.
+    }
 carteira-pend-pedir-agente = Pedir ao agente para conferir
-carteira-pend-marcados = { $n } de { $total } marcado(s)
+carteira-pend-marcados =
+    { $total ->
+        [one] { $n } de { $total } marcado
+       *[other] { $n } de { $total } marcados
+    }
 carteira-confirmar-n-proventos =
     { $n ->
         [1] Confirmar { $n } provento
@@ -764,10 +780,18 @@ carteira-unidade-anualizada = % a.a. (anualizado, 252 d.u.)
 
 carteira-setor-titulo = Por setor
 carteira-setor-sem = Sem setor
-carteira-setor-ativos = { $n } ativo(s)
+carteira-setor-ativos =
+    { $n ->
+        [one] { $n } ativo
+       *[other] { $n } ativos
+    }
 carteira-setor-vazio = Sem posições com valor de mercado.
 carteira-setor-rodape = Setor do cadastro de cada ativo (o seu ou uma sugestão aprovada das fontes).
-carteira-setor-completar = Completar o setor de { $n } ativo(s) em Saúde dos ativos
+carteira-setor-completar =
+    { $n ->
+        [one] Completar o setor de { $n } ativo em Saúde dos ativos
+       *[other] Completar o setor de { $n } ativos em Saúde dos ativos
+    }
 
 ## Vendas (resultado nominal e real)
 
@@ -775,12 +799,20 @@ carteira-aba-vendas = Vendas
 carteira-deflator-igpm-dica = Índice Geral de Preços do Mercado (FGV, via BCB/SGS 189)
 carteira-vendas-titulo = Resultado das vendas
 carteira-vendas-total-vendido = Total vendido
-carteira-vendas-n = { $n } venda(s): { $ganhos } com ganho, { $perdas } com perda
+carteira-vendas-n =
+    { $n ->
+        [one] { $n } venda: { $ganhos } com ganho, { $perdas } com perda
+       *[other] { $n } vendas: { $ganhos } com ganho, { $perdas } com perda
+    }
 carteira-vendas-nominal = Resultado de preço
 carteira-vendas-nominal-dica = Venda menos o custo pelo preço médio, como no IR
 carteira-vendas-real = Resultado real ({ $indice })
 carteira-vendas-real-dica = { $ganhos } com ganho real, { $perdas } com perda real
-carteira-vendas-faltam = { $n } venda(s) sem { $indice } no período ficaram de fora
+carteira-vendas-faltam =
+    { $n ->
+        [one] { $n } venda sem { $indice } no período ficou de fora
+       *[other] { $n } vendas sem { $indice } no período ficaram de fora
+    }
 carteira-vendas-efeito = Comido pelo { $indice }
 carteira-vendas-efeito-dica = Quanto o custo corrigido pelo { $indice } supera o custo original
 carteira-vendas-por-mes = Resultado por mês: nominal × real
@@ -1056,7 +1088,11 @@ carteira-plano-meta-dica = Para qual meta o aporte vai (só informativo).
 carteira-plano-sem-meta = Nenhuma
 carteira-plano-ativo-ligado = Ativo (desmarque para pausar)
 carteira-plano-salvo = Aporte programado salvo
-carteira-plano-a-confirmar = { $n } aporte(s) programado(s) para confirmar. Ajuste a quantidade e o preço se precisar.
+carteira-plano-a-confirmar =
+    { $n ->
+        [one] { $n } aporte programado para confirmar. Ajuste a quantidade e o preço se precisar.
+       *[other] { $n } aportes programados para confirmar. Ajuste a quantidade e o preço se precisar.
+    }
 carteira-plano-a-confirmar-lista = Aportes a confirmar
 carteira-plano-preco-de = preço de { $data }
 carteira-plano-sem-preco = sem cotação: informe o preço
@@ -1074,7 +1110,11 @@ carteira-plano-resumo = { $ativo } todo dia { $dia } · { $conta }
 carteira-plano-proximo = próximo em { $data }
 carteira-plano-excluir-nome = Excluir { $nome }
 carteira-plano-excluido = Aporte programado excluído
-carteira-plano-aviso = { $n } aporte(s) programado(s) esperando a sua confirmação.
+carteira-plano-aviso =
+    { $n ->
+        [one] { $n } aporte programado esperando a sua confirmação.
+       *[other] { $n } aportes programados esperando a sua confirmação.
+    }
 carteira-plano-aviso-ver = Ver aportes
 
 ## Posição recente (menos de 30 dias: só o retorno do período)

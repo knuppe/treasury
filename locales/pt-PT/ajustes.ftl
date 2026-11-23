@@ -120,7 +120,11 @@ ajustes-externas-texto = Cada fonte abaixo é consultada pela rede só para obte
 ajustes-externas-buscar = Pesquisar fonte
 ajustes-externas-buscar-placeholder = Pesquisar por nome, dado ou país…
 ajustes-externas-desligada-app = Desligada pela aplicação depois de { $dias } dias seguidos de falha.
-ajustes-externas-falhando = A falhar há { $dias } dia(s); desliga-se sozinha aos 3.
+ajustes-externas-falhando =
+    { $dias ->
+        [one] A falhar há { $dias } dia; desliga-se sozinha aos 3.
+       *[other] A falhar há { $dias } dias; desliga-se sozinha aos 3.
+    }
 
 ## Exportar dados
 
@@ -208,15 +212,27 @@ ajustes-backup-ajustes = Ajustes das cópias de segurança
 
 ## Categorias
 
-ajustes-cat-uso-parcelamentos = { $n } plano(s) de prestações
+ajustes-cat-uso-parcelamentos =
+    { $n ->
+        [one] { $n } plano de prestações
+       *[other] { $n } planos de prestações
+    }
 ajustes-cat-sem-uso = Sem uso: pode ser eliminada sem reatribuir.
 ajustes-cat-juntar-titulo = Juntar { $nome } noutra
 ajustes-cat-apagar-nome = Eliminar { $nome }
 ajustes-cat-apagada = Categoria eliminada
 ajustes-cat-juntar-texto = Tudo o que usa esta categoria (lançamentos, divisões, orçamento, regras, recorrências) passa para a escolhida, incluindo as subcategorias. Pode desfazer no histórico.
 ajustes-cat-apagar-texto = Se estiver em uso, escolha quem recebe os lançamentos. Para apenas a ocultar dos seletores, arquive-a.
-ajustes-cat-sugeridas-despesa = { $n } categoria(s) sugerida(s) do conjunto predefinido (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
-ajustes-cat-sugeridas-receita = { $n } categoria(s) sugerida(s) do conjunto predefinido, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho em plataformas, vendas e biscates, reforma e apoios do Estado…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
+ajustes-cat-sugeridas-despesa =
+    { $n ->
+        [one] { $n } categoria sugerida do conjunto predefinido (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
+       *[other] { $n } categorias sugeridas do conjunto predefinido (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
+    }
+ajustes-cat-sugeridas-receita =
+    { $n ->
+        [one] { $n } categoria sugerida do conjunto predefinido, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho em plataformas, vendas e biscates, reforma e apoios do Estado…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
+       *[other] { $n } categorias sugeridas do conjunto predefinido, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho em plataformas, vendas e biscates, reforma e apoios do Estado…). As que já tem não mudam; em “Ver lista”, escolha quais entram.
+    }
 ajustes-cat-esconder-lista = Ocultar lista
 
 ## Base de dados
@@ -226,11 +242,23 @@ ajustes-banco-estatisticas-dica = ANALYZE: ajuda a base de dados a escolher os �
 ajustes-banco-compactar-dica = VACUUM: devolve ao disco o espaço livre dentro do ficheiro.
 ajustes-banco-previa = Pré-visualizar
 ajustes-banco-nada = Nada para eliminar.
-ajustes-banco-previa-texto = { $n } registo(s), cerca de { $tamanho }. { $consequencia }
+ajustes-banco-previa-texto =
+    { $n ->
+        [one] { $n } registo, cerca de { $tamanho }. { $consequencia }
+       *[other] { $n } registos, cerca de { $tamanho }. { $consequencia }
+    }
 ajustes-banco-apagar-titulo = Eliminar: { $item }
-ajustes-banco-apagar-texto = { $n } registo(s). { $consequencia } Antes, o Treasury faz uma cópia de segurança verificada do cofre.
+ajustes-banco-apagar-texto =
+    { $n ->
+        [one] { $n } registo. { $consequencia } Antes, o Treasury faz uma cópia de segurança verificada do cofre.
+       *[other] { $n } registos. { $consequencia } Antes, o Treasury faz uma cópia de segurança verificada do cofre.
+    }
 ajustes-banco-apagar-confirmar = Fazer cópia de segurança e eliminar
-ajustes-banco-apagados = { $n } registo(s) eliminado(s)
+ajustes-banco-apagados =
+    { $n ->
+        [one] { $n } registo eliminado
+       *[other] { $n } registos eliminados
+    }
 ajustes-banco-apagados-dica = Cópia de segurança feita antes. Ficheiro: { $antes } → { $depois }.
 ajustes-banco-rodar = Executar
 ajustes-banco-maiores-rotulo = Maiores tabelas da base de dados
@@ -318,7 +346,11 @@ ajustes-seg-bloqueio-dica = Depois deste tempo sem uso, o cofre fecha e a chave 
 ajustes-pin-desbloquear-dica = PIN de 6 a 12 dígitos, guardado só no keychain deste computador. Cinco erros desativam o PIN e pedem a palavra-passe mestra.
 ajustes-pin-ligar-dica = Escolha o PIN e confirme a palavra-passe mestra.
 ajustes-partes-texto = Guarde cada parte num local diferente (por exemplo: papel em casa, com o cônjuge, no cofre do banco). Quaisquer duas recuperam o cofre; uma sozinha não revela nada. Não voltarão a ser mostradas.
-ajustes-partes-fido2-removidas = { $n } chave(s) física(s) deixaram de valer: registe-as de novo.
+ajustes-partes-fido2-removidas =
+    { $n ->
+        [one] { $n } chave física deixou de valer: registe-a de novo.
+       *[other] { $n } chaves físicas deixaram de valer: registe-as de novo.
+    }
 ajustes-partes-geradas = Partes geradas em { $data }. Continuam válidas depois de alterar a palavra-passe.
 ajustes-partes-dica = Divide a recuperação em 3 partes: quaisquer duas abrem o cofre se se esquecer da palavra-passe.
 ajustes-partes-trocar-dica = As partes antigas e as chaves físicas registadas deixam de valer.

@@ -560,7 +560,11 @@ lancamentos-resgate = Withdrawal
 lancamentos-sem-categoria-aporte = Investment contribution
 lancamentos-sem-categoria-resgate = Investment withdrawal
 lancamentos-sem-categoria-aporte-ajuda = Contributions and withdrawals do not use a category: the money moves within your net worth and stays out of the cash flow and the budget. The Sankey counts money leaving the bank for the brokerage (contribution) and coming back (withdrawal); purchases and sales inside the brokerage are not counted again.
-lancamentos-n-alterados-n-fora = { $n } changed; { $fora } contribution(s), withdrawal(s), card bill payment(s) or adjustment(s) were left without a category, as they don't use one
+lancamentos-n-alterados-n-fora =
+    { $fora ->
+        [one] { $n } changed; { $fora } contribution, withdrawal, card bill payment or adjustment was left without a category, as they don't use one
+       *[other] { $n } changed; { $fora } contributions, withdrawals, card bill payments or adjustments were left without a category, as they don't use one
+    }
 lancamentos-campo-cartao = Card used
 lancamentos-cartao-dica = The purchase goes to whoever uses this card, unless you choose the member.
 lancamentos-cartao-nao-informado = Not given

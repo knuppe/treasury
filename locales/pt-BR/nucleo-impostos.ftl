@@ -83,7 +83,11 @@ nucleo-impostos-nota-escolha-estado = Escolha o estado: sem ele, o imposto sobre
 nucleo-impostos-nota-escolha-pais = Escolha o país: sem ele, o IVA não é estimado.
 # parte: porcentagem inteira (sem casas decimais).
 nucleo-impostos-nota-cupons = { $parte }% do consumo veio de cupons fiscais lidos: nessas compras vale o imposto da nota (o impresso, ou o estimado item a item pelo percentual do grupo de consumo).
-nucleo-impostos-nota-sem-grupo = { $n } categoria(s) sem grupo de imposto ficaram de fora: escolha o grupo delas.
+nucleo-impostos-nota-sem-grupo =
+    { $n ->
+        [one] { $n } categoria sem grupo de imposto ficou de fora: escolha o grupo dela.
+       *[other] { $n } categorias sem grupo de imposto ficaram de fora: escolha o grupo delas.
+    }
 nucleo-impostos-nota-sem-iptu = Há imóvel cadastrado e nenhum IPTU lançado no ano: o IPTU não entra na estimativa.
 nucleo-impostos-nota-sem-regras = Os dados de { $dados } não têm regras de renda: o imposto sobre o salário não é estimado (lance os informes de rendimentos).
 nucleo-impostos-nota-salario-estimado = Imposto e INSS do salário estimados a partir do líquido recebido, sem descontos como plano de saúde ou pensão: com o informe de rendimentos, a estimativa usa os valores dele.

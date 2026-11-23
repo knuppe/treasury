@@ -130,17 +130,45 @@ cupons-etapa-afip = Leer el comprobante por el QR (Argentina, Portugal, España)
 cupons-etapa-afip-sem-itens = el QR no trae los ítems: agrégalos en la revisión
 cupons-etapa-ocr = Leer los ítems del texto de la foto
 cupons-etapa-ocr-ia = con la IA
-cupons-etapa-ocr-itens = { $n } línea(s) de ítem
+cupons-etapa-ocr-itens =
+    { $n ->
+        [one] { $n } línea de ítem
+       *[other] { $n } líneas de ítem
+    }
 cupons-etapa-arquivo = Leer el archivo
 cupons-etapa-texto = Leer el texto de la página
 cupons-etapa-conferir = Revisar ítems y total
-cupons-etapa-conferir-ok = { $n } ítem(s), la suma coincide con el total
-cupons-etapa-conferir-diferenca = { $n } ítem(s), la suma no coincide con el total
+cupons-etapa-conferir-ok =
+    { $n ->
+        [one] { $n } ítem, la suma coincide con el total
+       *[other] { $n } ítems, la suma coincide con el total
+    }
+cupons-etapa-conferir-diferenca =
+    { $n ->
+        [one] { $n } ítem, la suma no coincide con el total
+       *[other] { $n } ítems, la suma no coincide con el total
+    }
 cupons-resultado = Resultado de la lectura
-cupons-resultado-ok = { $n } ítem(s) de { $loja }, total { $valor }. Todo coincide.
-cupons-resultado-diferenca = { $n } ítem(s) de { $loja }, total { $valor }. La suma de los ítems no coincide con el total.
-cupons-resultado-foto-ok = { $n } ítem(s) leídos de la foto, total { $valor }. La suma coincide.
-cupons-resultado-foto-diferenca = { $n } ítem(s) leídos de la foto, total { $valor }. La suma no coincide: revisa los ítems.
+cupons-resultado-ok =
+    { $n ->
+        [one] { $n } ítem de { $loja }, total { $valor }. Todo coincide.
+       *[other] { $n } ítems de { $loja }, total { $valor }. Todo coincide.
+    }
+cupons-resultado-diferenca =
+    { $n ->
+        [one] { $n } ítem de { $loja }, total { $valor }. La suma de los ítems no coincide con el total.
+       *[other] { $n } ítems de { $loja }, total { $valor }. La suma de los ítems no coincide con el total.
+    }
+cupons-resultado-foto-ok =
+    { $n ->
+        [one] { $n } ítem leído de la foto, total { $valor }. La suma coincide.
+       *[other] { $n } ítems leídos de la foto, total { $valor }. La suma coincide.
+    }
+cupons-resultado-foto-diferenca =
+    { $n ->
+        [one] { $n } ítem leído de la foto, total { $valor }. La suma no coincide: revisa los ítems.
+       *[other] { $n } ítems leídos de la foto, total { $valor }. La suma no coincide: revisa los ítems.
+    }
 cupons-resultado-afip = { $pais ->
     [PT] Factura de Portugal
     [ES] Factura de España

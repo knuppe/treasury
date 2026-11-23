@@ -876,7 +876,8 @@ function suggestions(a: Args): Suggestion[] {
         kind: 'onboarding',
         severity: 'info',
         title: 'Cadastrar as contas da família',
-        detail: 'Diga onde vocês têm conta e o agente propõe o cadastro.',
+        detail:
+          'Comece pela conta que você mais usa (banco, cartão ou corretora). Se tiver um assistente de IA configurado, ele pode propor o cadastro das outras e dizer como trazer o extrato de cada uma.',
         prompt: ONBOARDING_PROMPT_MOCK,
         route: '/contas',
         screens: ['painel', 'contas', 'lancamentos', 'carteira'],

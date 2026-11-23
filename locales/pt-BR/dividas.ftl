@@ -189,7 +189,11 @@ dividas-atrasadas-texto =
        *[other] Vencidas e sem pagamento registrado. Se já pagou, concilie com os lançamentos da conta de débito ou marque como paga na tabela.
     }
 dividas-marcadas-titulo = Parcelas marcadas como pagas
-dividas-marcadas-descricao = { $n } parcela(s) vencida(s), no vencimento e pelo valor do cronograma.
+dividas-marcadas-descricao =
+    { $n ->
+        [one] { $n } parcela vencida, no vencimento e pelo valor do cronograma.
+       *[other] { $n } parcelas vencidas, no vencimento e pelo valor do cronograma.
+    }
 dividas-marcar-vencidas = Marcar as { $n } vencidas como pagas
 dividas-de-financiados = de { $valor } financiados
 dividas-parcelas-pagas-de = { $pagas } de { $total } parcelas pagas
@@ -292,7 +296,11 @@ dividas-antecipar-valor-cronograma = Valor no cronograma
 dividas-antecipar-a-pagar = A pagar agora
 dividas-antecipar-ficam = Ficam em aberto
 dividas-antecipadas = Parcelas antecipadas
-dividas-antecipadas-descricao = { $n } parcela(s) por { $valor }
+dividas-antecipadas-descricao =
+    { $n ->
+        [one] { $n } parcela por { $valor }
+       *[other] { $n } parcelas por { $valor }
+    }
 dividas-antecipar-registrar = Registrar antecipação
 dividas-antecipar-com-conta = A saída é lançada na conta de débito do contrato.
 dividas-antecipar-sem-conta = Sem conta de débito: só as parcelas ficam pagas.
@@ -404,13 +412,25 @@ dividas-em-aberto-de-novo = Parcela { $n } em aberto de novo
 
 ## Extrato do contrato
 
-dividas-extrato-importadas = { $n } parcela(s) do extrato registradas
-dividas-extrato-projecao = Projeção a partir do saldo de { $data }, com { $n } parcela(s) restantes.
+dividas-extrato-importadas =
+    { $n ->
+        [one] { $n } parcela do extrato registrado
+       *[other] { $n } parcelas do extrato registradas
+    }
+dividas-extrato-projecao =
+    { $n ->
+        [one] Projeção a partir do saldo de { $data }, com { $n } parcela restante.
+       *[other] Projeção a partir do saldo de { $data }, com { $n } parcelas restantes.
+    }
 dividas-extrato-titulo = Importar extrato do contrato
 dividas-extrato-descricao = Cole o histórico do banco (da planilha ou do internet banking), com o cabeçalho. As parcelas ficam com os valores do banco, as amortizações extraordinárias são achadas pelo saldo e o cronograma futuro parte do último saldo. Também dá para mandar a imagem ou o PDF para o agente.
 dividas-extrato-conferir = Conferir
 dividas-extrato-importar = Importar
-dividas-extrato-importar-n = Importar { $n } parcela(s)
+dividas-extrato-importar-n =
+    { $n ->
+        [one] Importar { $n } parcela
+       *[other] Importar { $n } parcelas
+    }
 dividas-extrato-colado = Extrato colado
 dividas-extrato-colado-dica = Colunas: data, prestação, amortização, juros, seguros, taxas, saldo devedor, correção monetária e valor pago (os nomes do cabeçalho bastam; a ordem da planilha da Caixa também é reconhecida).
 dividas-extrato-faltam-dica = Depois da última linha. Vazio: calculado pela última prestação.

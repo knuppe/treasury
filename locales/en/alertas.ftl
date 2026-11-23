@@ -165,7 +165,11 @@ alertas-tipo-subscription-new = New subscription
 
 ## Asset data (enrichment)
 
-alertas-dados-ativos-titulo = { $n } piece(s) of your asset data to fill in
+alertas-dados-ativos-titulo =
+    { $n ->
+        [one] { $n } piece of your asset data to fill in
+       *[other] { $n } pieces of your asset data to fill in
+    }
 alertas-dados-ativos-corpo = The official sources Treasury has already downloaded have suggestions for **{ $campos } field(s)** of { $ativos } asset(s), such as sector, segment, ISIN and CNPJ (e.g. { $exemplos }).
 alertas-dados-ativos-onde = Check each one's source and confidence and save what you want in Portfolio › Asset health › Asset data. Nothing changes until you choose.
 alertas-reduflacao-titulo = { $produto }: smaller pack, higher price

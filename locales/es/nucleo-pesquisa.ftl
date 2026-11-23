@@ -120,7 +120,11 @@ nucleo-pesquisa-ind-periodo-vp-informe = VP del informe de { $mes }
 nucleo-pesquisa-ind-periodo-data-com = fecha de corte { $data }
 nucleo-pesquisa-ind-periodo-divida-ebitda = deuda al { $divida }; EBITDA de 12 meses hasta el { $ebitda }
 nucleo-pesquisa-ind-periodo-exercicios = ejercicios { $de } a { $ate }
-nucleo-pesquisa-ind-periodo-n-exercicios = { $n } ejercicio(s): { $de } a { $ate }
+nucleo-pesquisa-ind-periodo-n-exercicios =
+    { $n ->
+        [one] { $n } ejercicio: { $de } a { $ate }
+       *[other] { $n } ejercicios: { $de } a { $ate }
+    }
 nucleo-pesquisa-ind-cotas-x-cotacao = { $cotas } cuotas × cotización
 nucleo-pesquisa-ind-acoes-x-cotacao = { $acoes } acciones × cotización por acción del título consultado
 nucleo-pesquisa-ind-on-pn-x-cotacao = acciones ON × cotización ON + acciones PN × cotización PN
@@ -137,8 +141,16 @@ nucleo-pesquisa-ind-fonte-dividendos-dfc = dividendos y JCP pagados (flujo de ef
 nucleo-pesquisa-ind-fonte-dividendos-sec = dividendos declarados por acción (SEC)
 nucleo-pesquisa-ind-fonte-dividendos-dfc-acoes = dividendos y JCP pagados por acción en el ejercicio (flujo de efectivo ÷ acciones)
 nucleo-pesquisa-ind-fonte-dfp-lucro = DFP (utilidad neta de los controladores)
-nucleo-pesquisa-ind-media-anos = promedio de { $anos } año(s) con datos ({ $pedidos } pedidos)
-nucleo-pesquisa-ind-media-anos-agenda = el calendario de dividendos empieza en { $ano }: promedio de { $anos } año(s) con datos ({ $pedidos } pedidos)
+nucleo-pesquisa-ind-media-anos =
+    { $anos ->
+        [one] promedio de { $anos } año con datos ({ $pedidos } pedidos)
+       *[other] promedio de { $anos } años con datos ({ $pedidos } pedidos)
+    }
+nucleo-pesquisa-ind-media-anos-agenda =
+    { $anos ->
+        [one] el calendario de dividendos empieza en { $ano }: promedio de { $anos } año con datos ({ $pedidos } pedidos)
+       *[other] el calendario de dividendos empieza en { $ano }: promedio de { $anos } años con datos ({ $pedidos } pedidos)
+    }
 nucleo-pesquisa-ind-premissa-lpa = UPA (12 meses)
 nucleo-pesquisa-ind-premissa-vpa = VLA
 nucleo-pesquisa-ind-premissa-acoes = Acciones en circulación
@@ -333,10 +345,18 @@ nucleo-pesquisa-erro-b3-historico = historial de dividendos de la B3 en un forma
 nucleo-pesquisa-erro-b3-vazia = la B3 respondió sin contenido
 nucleo-pesquisa-erro-304 = respuesta 304 sin solicitud condicional
 nucleo-pesquisa-erro-b3-api = falla en la API de la B3
-nucleo-pesquisa-b3-log-proventos = { $n } dividendo(s)
+nucleo-pesquisa-b3-log-proventos =
+    { $n ->
+        [one] { $n } dividendo
+       *[other] { $n } dividendos
+    }
 nucleo-pesquisa-b3-log-proventos-eventos = { $proventos } dividendo(s), { $eventos } evento(s) en acciones
 nucleo-pesquisa-b3-passo-historico = B3 historial de dividendos { $codigo }
-nucleo-pesquisa-b3-passo-resumo = B3 empresas y fondos listados · dividendos y eventos ({ $feitos } de { $total } emisores y fondos, { $pedidos } solicitud(es))
+nucleo-pesquisa-b3-passo-resumo =
+    { $pedidos ->
+        [one] B3 empresas y fondos listados · dividendos y eventos ({ $feitos } de { $total } emisores y fondos, { $pedidos } solicitud)
+       *[other] B3 empresas y fondos listados · dividendos y eventos ({ $feitos } de { $total } emisores y fondos, { $pedidos } solicitudes)
+    }
 nucleo-pesquisa-b3-parou = la B3 no respondió { $vezes } veces seguidas; el resto queda para la próxima recolección
 nucleo-pesquisa-b3-nada-a-atualizar = nada que actualizar: todos se consultaron hace poco
 nucleo-pesquisa-erro-brapi-invalida = respuesta no válida de brapi: { $erro }
@@ -347,8 +367,16 @@ nucleo-pesquisa-erro-brapi-sem-resultados = brapi: respuesta sin resultados
 nucleo-pesquisa-erro-zip = archivo zip no válido: { $erro }
 nucleo-pesquisa-erro-coluna-ausente = falta la columna { $coluna }
 nucleo-pesquisa-erro-ipe-sem-csv = no se encontró el CSV del IPE en el zip
-nucleo-pesquisa-liquidez-cotahist = promedio de { $n } sesión(es), B3 COTAHIST
-nucleo-pesquisa-liquidez-cotacoes = promedio de { $n } sesión(es) (cotización × volumen, { $fonte })
+nucleo-pesquisa-liquidez-cotahist =
+    { $n ->
+        [one] promedio de { $n } sesión, B3 COTAHIST
+       *[other] promedio de { $n } sesiónes, B3 COTAHIST
+    }
+nucleo-pesquisa-liquidez-cotacoes =
+    { $n ->
+        [one] promedio de { $n } sesión (cotización × volumen, { $fonte })
+       *[other] promedio de { $n } sesiónes (cotización × volumen, { $fonte })
+    }
 nucleo-pesquisa-erro-asset-ou-ticker = indica asset_id o ticker
 nucleo-pesquisa-erro-fora-do-universo = { $ticker } en el universo descargado (haz la recolección del análisis de activos)
 
@@ -393,9 +421,17 @@ nucleo-pesquisa-ifdata-sem-valores = el IF.data del Banco Central no trajo valor
 ## Red
 
 nucleo-pesquisa-erro-post = POST no admitido
-nucleo-pesquisa-erro-servidor-recusou = el servidor rechazó el acceso (HTTP { $status }) después de { $tentativas } intento(s); inténtalo más tarde
+nucleo-pesquisa-erro-servidor-recusou =
+    { $tentativas ->
+        [one] el servidor rechazó el acceso (HTTP { $status }) después de { $tentativas } intento; inténtalo más tarde
+       *[other] el servidor rechazó el acceso (HTTP { $status }) después de { $tentativas } intentos; inténtalo más tarde
+    }
 nucleo-pesquisa-erro-token-recusado = acceso rechazado (HTTP { $status }): revisa el token
-nucleo-pesquisa-erro-http-tentativas = HTTP { $status } después de { $tentativas } intento(s)
+nucleo-pesquisa-erro-http-tentativas =
+    { $tentativas ->
+        [one] HTTP { $status } después de { $tentativas } intento
+       *[other] HTTP { $status } después de { $tentativas } intentos
+    }
 
 ## Documentos de los últimos 12 meses
 
@@ -452,8 +488,16 @@ nucleo-pesquisa-passo-sec-cadastro = SEC registro { $ticker }
 nucleo-pesquisa-erro-sec-sem-ticker = { $ticker } no está en la lista de tickers de la SEC
 nucleo-pesquisa-passo-ifdata-sondagem = Banco Central IF.data: sondeo de { $periodo }
 nucleo-pesquisa-passo-parte = parte { $parte }/{ $partes }
-nucleo-pesquisa-aviso-acoes-em-milhares = { $n } compañía(s) informaron la cantidad de acciones en miles en algún documento (corregida con la utilidad por acción): { $companhias }
-nucleo-pesquisa-aviso-lucro-controladores = { $n } compañía(s) dejaron en cero la utilidad atribuible a los controladores en el consolidado en algún documento (corregida con los estados individuales): { $companhias }
+nucleo-pesquisa-aviso-acoes-em-milhares =
+    { $n ->
+        [one] { $n } compañía informó la cantidad de acciones en miles en algún documento (corregida con la utilidad por acción): { $companhias }
+       *[other] { $n } compañías informaron la cantidad de acciones en miles en algún documento (corregida con la utilidad por acción): { $companhias }
+    }
+nucleo-pesquisa-aviso-lucro-controladores =
+    { $n ->
+        [one] { $n } compañía dejó en cero la utilidad atribuible a los controladores en el consolidado en algún documento (corregida con los estados individuales): { $companhias }
+       *[other] { $n } compañías dejaron en cero la utilidad atribuible a los controladores en el consolidado en algún documento (corregida con los estados individuales): { $companhias }
+    }
 nucleo-pesquisa-feedback-faixa-titulo = Indicadores fuera del rango plausible en el universo
 nucleo-pesquisa-feedback-faixa-corpo = { $n } valor(es) de indicador fuera de los rangos amplios de plausibilidad (docs/indicators.md, E11). No se bloquearon, porque pueden ser ciertos; vale la pena revisar el dato de entrada de cada uno:
     { $lista }

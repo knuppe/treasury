@@ -475,7 +475,11 @@ fn sale_after_ignored_custody_transfer_explains_the_error() {
     let e = sale.error.as_deref().unwrap();
     assert!(e.contains("maior que a posição"), "{e}");
     assert!(e.contains("transferência de custódia"), "{e}");
-    assert!(p.warnings.iter().any(|w| w.contains("venda(s) maiores")));
+    assert!(
+        p.warnings
+            .iter()
+            .any(|w| w.contains("que a posição na data"))
+    );
     assert_eq!(p.counts.errors, 1);
 
     // With both institutions pointing to the same account, the sale goes through.

@@ -68,8 +68,16 @@ importacao-csv-sem-conta = O CSV não diz de que conta é: verifique a conta ant
 importacao-pdf-conta-cartao = O extrato em PDF entra na conta do cartão.
 importacao-pdf-conta-extrato = O extrato em PDF entra na conta à ordem do banco.
 importacao-pdf-extrato-titulo = Extrato de conta em PDF
-importacao-pdf-extrato-lidos = { $n } movimento(s) lidos ({ $leiaute }).
-importacao-pdf-extrato-lidos-ocr = { $n } movimento(s) lidos no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na pré-visualização.
+importacao-pdf-extrato-lidos =
+    { $n ->
+        [one] { $n } movimento lido ({ $leiaute }).
+       *[other] { $n } movimentos lidos ({ $leiaute }).
+    }
+importacao-pdf-extrato-lidos-ocr =
+    { $n ->
+        [one] { $n } movimento lido no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na pré-visualização.
+       *[other] { $n } movimentos lidos no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na pré-visualização.
+    }
 importacao-pdf-extrato-nao-cartao = A conta escolhida é um cartão: escolha a conta à ordem deste extrato.
 importacao-ref-gravada = Balcão e conta gravados
 importacao-ref-gravada-descricao = Os próximos OFX deste banco vão diretamente para { $conta }.
@@ -88,7 +96,11 @@ importacao-ofx-conta-cartao = A conta escolhida é um cartão, mas o ficheiro é
 ## Leitura: extrato de cartão em PDF
 
 importacao-pdf-titulo = Extrato de cartão (PDF)
-importacao-pdf-lidos = { $n } lançamento(s) lidos. Vão para o extrato com o vencimento impresso no PDF, e o total do extrato é verificado na pré-visualização.
+importacao-pdf-lidos =
+    { $n ->
+        [one] { $n } lançamento lido. Vai para o extrato com o vencimento impresso no PDF, e o total do extrato é verificado na pré-visualização.
+       *[other] { $n } lançamentos lidos. Vão para o extrato com o vencimento impresso no PDF, e o total do extrato é verificado na pré-visualização.
+    }
 importacao-pdf-protegido = O PDF parece protegido por palavra-passe (ou não tem texto). Indique a palavra-passe do extrato, em geral os primeiros dígitos do CPF.
 importacao-pdf-senha = Palavra-passe do PDF (se tiver)
 importacao-pdf-senha-dica = Usada só para ler o ficheiro agora; não fica guardada.
@@ -112,7 +124,11 @@ importacao-confere = ✓ bate certo
 ## Resultado
 
 importacao-resultado-parcelas = { $n } prestação(ões) de contrato marcada(s) como paga(s) pela categoria.
-importacao-resultado-transferencias = { $n } transferência(s) entre as suas contas já ligada(s).
+importacao-resultado-transferencias =
+    { $n ->
+        [one] { $n } transferência entre as suas contas já ligada.
+       *[other] { $n } transferências entre as suas contas já ligadas.
+    }
 importacao-resultado-previstos = { $n ->
         [one] { $n } movimento previsto foi efetivado pelo extrato.
        *[other] { $n } movimentos previstos foram efetivados pelo extrato.

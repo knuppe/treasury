@@ -125,8 +125,16 @@ importacao-csv-sem-conta = O CSV não diz de qual conta é: confira a conta ante
 importacao-pdf-conta-cartao = A fatura em PDF entra na conta do cartão.
 importacao-pdf-conta-extrato = O extrato em PDF entra na conta corrente do banco.
 importacao-pdf-extrato-titulo = Extrato de conta em PDF
-importacao-pdf-extrato-lidos = { $n } lançamento(s) lidos ({ $leiaute }).
-importacao-pdf-extrato-lidos-ocr = { $n } lançamento(s) lidos no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na prévia.
+importacao-pdf-extrato-lidos =
+    { $n ->
+        [one] { $n } lançamento lido ({ $leiaute }).
+       *[other] { $n } lançamentos lidos ({ $leiaute }).
+    }
+importacao-pdf-extrato-lidos-ocr =
+    { $n ->
+        [one] { $n } lançamento lido no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na prévia.
+       *[other] { $n } lançamentos lidos no computador pelo OCR ({ $leiaute }), sem IA. Confira os valores na prévia.
+    }
 importacao-pdf-extrato-nao-cartao = A conta escolhida é um cartão: escolha a conta corrente deste extrato.
 importacao-ref-gravada = Agência e conta gravadas
 importacao-ref-gravada-descricao = Os próximos OFX deste banco vão direto para { $conta }.
@@ -153,7 +161,11 @@ importacao-ofx-conta-cartao = A conta escolhida é cartão, mas o arquivo é ext
 ## Leitura: fatura em PDF
 
 importacao-pdf-titulo = Fatura de cartão (PDF)
-importacao-pdf-lidos = { $n } lançamento(s) lidos. Eles vão para a fatura do vencimento impresso no PDF, e o total da fatura é conferido na prévia.
+importacao-pdf-lidos =
+    { $n ->
+        [one] { $n } lançamento lido. Ele vai para a fatura do vencimento impresso no PDF, e o total da fatura é conferido na prévia.
+       *[other] { $n } lançamentos lidos. Eles vão para a fatura do vencimento impresso no PDF, e o total da fatura é conferido na prévia.
+    }
 importacao-pdf-protegido = O PDF parece protegido por senha (ou não traz texto). Informe a senha da fatura, em geral os primeiros dígitos do CPF.
 importacao-pdf-senha = Senha do PDF (se tiver)
 importacao-pdf-senha-dica = Usada só para ler o arquivo agora; não fica guardada.
@@ -224,7 +236,11 @@ importacao-importar-linha = Importar linha { $n }
 importacao-descricao-linha = Descrição da linha { $n }
 importacao-categoria-linha = Categoria da linha { $n }
 importacao-sugestao-regra = sugestão de regra
-importacao-importar-n = Importar { $n } lançamento(s)
+importacao-importar-n =
+    { $n ->
+        [one] Importar { $n } lançamento
+       *[other] Importar { $n } lançamentos
+    }
 
 ## Resultado
 
@@ -240,8 +256,16 @@ importacao-resultado = { $inseridos ->
         [one] { $pulados } linha ficou de fora.
        *[other] { $pulados } linhas ficaram de fora.
     }
-importacao-resultado-parcelas = { $n } parcela(s) de contrato marcada(s) como paga(s) pela categoria.
-importacao-resultado-transferencias = { $n } transferência(s) entre suas contas já ligada(s).
+importacao-resultado-parcelas =
+    { $n ->
+        [one] { $n } parcela de contrato marcada como paga pela categoria.
+       *[other] { $n } parcelas de contrato marcadas como pagas pela categoria.
+    }
+importacao-resultado-transferencias =
+    { $n ->
+        [one] { $n } transferência entre suas contas já ligada.
+       *[other] { $n } transferências entre suas contas já ligadas.
+    }
 importacao-resultado-previstos = { $n ->
         [one] { $n } lançamento previsto foi efetivado pelo extrato.
        *[other] { $n } lançamentos previstos foram efetivados pelo extrato.
@@ -324,7 +348,11 @@ documento-ver-texto = Ver como texto
 documento-ver-texto-nome = Ver { $nome } como texto
 documento-texto-titulo = { $nome } como texto
 documento-texto-lendo = Lendo o documento…
-documento-texto-resumo = É assim que os assistentes de IA leem este documento: { $paginas } página(s), { $total } caracteres.
+documento-texto-resumo =
+    { $paginas ->
+        [one] É assim que os assistentes de IA leem este documento: { $paginas } página, { $total } caracteres.
+       *[other] É assim que os assistentes de IA leem este documento: { $paginas } páginas, { $total } caracteres.
+    }
 documento-texto-ocr = O PDF é só imagem: o texto veio do OCR do computador e pode ter erros.
 documento-texto-paginas-corridas = Páginas como texto corrido (a conferência não bateu): { $paginas }.
 documento-texto-conteudo = Conteúdo do documento

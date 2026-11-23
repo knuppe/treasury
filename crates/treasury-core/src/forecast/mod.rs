@@ -652,7 +652,9 @@ pub struct DailyAllowance {
     #[ts(type = "number")]
     pub per_day_from_tomorrow: i64,
     pub currency: String,
-    /// `ok`, `tight` (menos de 30% do que entra por dia) ou `over` (já passou).
+    /// `ok`, `tight` (menos de 30% do que entra por dia), `over` (já passou) ou `no_income`
+    /// (nenhuma receita recebida nem prevista no mês: sem ela não há o que dividir, e a falta
+    /// de dado não vira "mês estourado").
     pub status: String,
     pub explanation: String,
 }
@@ -722,7 +724,9 @@ pub fn daily_allowance(conn: &Connection, today: NaiveDate) -> Result<DailyAllow
         0
     };
     let daily_income = income / i64::from(days_left.max(1) + today.day() - 1);
-    let status = if available <= 0 {
+    let status = if income <= 0 {
+        "no_income"
+    } else if available <= 0 {
         "over"
     } else if per_day * 10 < daily_income * 3 {
         "tight"
@@ -732,19 +736,23 @@ pub fn daily_allowance(conn: &Connection, today: NaiveDate) -> Result<DailyAllow
     let m = |v: i64| -> fluent_bundle::FluentValue<'static> {
         crate::i18n::money(crate::i18n::current(), v, &base).into()
     };
-    let mut explanation = t_args(
-        "nucleo-planejamento-gastar-hoje",
-        &args(&[
-            ("receitas", m(income)),
-            ("gastos", m(spent_before)),
-            ("contas", m(fixed_remaining)),
-            ("guardar", m(savings_remaining)),
-            ("disponivel", m(available_start)),
-            ("dias", days_left.into()),
-            ("por_dia", m(per_day)),
-        ]),
-    );
-    if spent_today > 0 && days_left > 1 {
+    let mut explanation = if income <= 0 {
+        t("nucleo-planejamento-gastar-sem-renda")
+    } else {
+        t_args(
+            "nucleo-planejamento-gastar-hoje",
+            &args(&[
+                ("receitas", m(income)),
+                ("gastos", m(spent_before)),
+                ("contas", m(fixed_remaining)),
+                ("guardar", m(savings_remaining)),
+                ("disponivel", m(available_start)),
+                ("dias", days_left.into()),
+                ("por_dia", m(per_day)),
+            ]),
+        )
+    };
+    if income > 0 && spent_today > 0 && days_left > 1 {
         explanation.push(' ');
         explanation.push_str(&t_args(
             "nucleo-planejamento-gastar-amanha",

@@ -59,7 +59,11 @@ nucleo-importacao-aviso-fitid-colisoes = { $n ->
     [one] { $n } transaction with a repeated FITID and different content got its own id
    *[other] { $n } transactions with a repeated FITID and different content got their own id
 }
-nucleo-importacao-aviso-outra-conta = { $n } transaction(s) in the file are already in { $conta } with the same bank identifier: the file may belong to that account. They will not be recorded here.
+nucleo-importacao-aviso-outra-conta =
+    { $n ->
+        [one] { $n } transaction in the file is already in { $conta } with the same bank identifier: the file may belong to that account. It will not be recorded here.
+       *[other] { $n } transactions in the file are already in { $conta } with the same bank identifier: the file may belong to that account. They will not be recorded here.
+    }
 
 ## OFX
 
@@ -125,7 +129,11 @@ nucleo-importacao-dica-imagem = read on this computer (QR and text): a receipt o
 nucleo-importacao-tipo-cupom-pdf = Receipt in PDF (NFC-e DANFE)
 nucleo-importacao-tipo-cupom-xml = Invoice in XML (NF-e/NFC-e)
 nucleo-importacao-dica-cupom = opens the purchase with its items to review and save in Consumption
-nucleo-importacao-imagem-cupom = Receipt read on this computer: { $itens } item(s)
+nucleo-importacao-imagem-cupom =
+    { $itens ->
+        [one] Receipt read on this computer: { $itens } item
+       *[other] Receipt read on this computer: { $itens } items
+    }
 nucleo-importacao-imagem-cupom-fechou = the total matches; review and save the purchase
 nucleo-importacao-imagem-cupom-revisar = the total does not match; review the items (AI can help, if you want)
 nucleo-importacao-imagem-comprovante = Payment or transfer receipt

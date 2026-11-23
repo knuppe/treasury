@@ -54,8 +54,16 @@ nucleo-importacao-n43-tarjeta = Cartão
 nucleo-importacao-n43-nomina = Salário (nómina)
 nucleo-importacao-n43-comision = Comissão bancária
 nucleo-importacao-aviso-sinais-invertidos = o arquivo mostra compras como valores positivos; os sinais foram invertidos para que compras fiquem negativas no cartão
-nucleo-importacao-aviso-fitid-colisoes = { $n } lançamento(s) com FITID repetido e conteúdo diferente receberam um id próprio
-nucleo-importacao-aviso-outra-conta = { $n } lançamento(s) do arquivo já estão em { $conta }, com o mesmo identificador do banco: talvez o arquivo seja dessa conta. Eles não serão gravados aqui.
+nucleo-importacao-aviso-fitid-colisoes =
+    { $n ->
+        [one] { $n } lançamento com FITID repetido e conteúdo diferente recebeu um id próprio
+       *[other] { $n } lançamentos com FITID repetido e conteúdo diferente receberam um id próprio
+    }
+nucleo-importacao-aviso-outra-conta =
+    { $n ->
+        [one] { $n } lançamento do arquivo já está em { $conta }, com o mesmo identificador do banco: talvez o arquivo seja dessa conta. Ele não será gravados aqui.
+       *[other] { $n } lançamentos do arquivo já estão em { $conta }, com o mesmo identificador do banco: talvez o arquivo seja dessa conta. Eles não serão gravados aqui.
+    }
 
 ## OFX
 
@@ -99,7 +107,11 @@ nucleo-importacao-pdf-so-cartao = fatura em PDF só entra numa conta de cartão 
 nucleo-importacao-pdf-sem-vencimento = não achei o vencimento no PDF: os lançamentos vão para a fatura pela data da compra
 nucleo-importacao-pdf-total-diferente = o total impresso ({ $impresso }) não bate com as linhas lidas ({ $lido }): confira se faltou alguma linha antes de gravar
 nucleo-importacao-pdf-sem-total = não achei o total da fatura no PDF para conferir
-nucleo-importacao-pdf-pagamentos-fora = { $n } pagamento(s) da fatura anterior ficaram de fora: entram pela conta que pagou
+nucleo-importacao-pdf-pagamentos-fora =
+    { $n ->
+        [one] { $n } pagamento da fatura anterior ficou de fora: entram pela conta que pagou
+       *[other] { $n } pagamentos da fatura anterior ficaram de fora: entram pela conta que pagou
+    }
 
 ## Lançamentos lidos pelo agente
 
@@ -118,7 +130,11 @@ nucleo-importacao-dica-imagem = lida no computador (QR e texto): cupom fiscal ab
 nucleo-importacao-tipo-cupom-pdf = Cupom fiscal em PDF (DANFE NFC-e)
 nucleo-importacao-tipo-cupom-xml = Nota fiscal em XML (NF-e/NFC-e)
 nucleo-importacao-dica-cupom = abre a compra com os itens para revisar e gravar em Consumo
-nucleo-importacao-imagem-cupom = Cupom fiscal lido no computador: { $itens } item(ns)
+nucleo-importacao-imagem-cupom =
+    { $itens ->
+        [one] Cupom fiscal lido no computador: { $itens } item
+       *[other] Cupom fiscal lido no computador: { $itens } itens
+    }
 nucleo-importacao-imagem-cupom-fechou = a conta fechou; revise e grave a compra
 nucleo-importacao-imagem-cupom-revisar = a conta não fechou; revise os itens (a IA pode ajudar, se você quiser)
 nucleo-importacao-imagem-comprovante = Comprovante de pagamento ou transferência
@@ -165,7 +181,11 @@ nucleo-importacao-b3-aviso-sem-relatorio = { $arquivo }: nenhum relatório da B3
 nucleo-importacao-b3-aviso-aba-ignorada = aba "{ $aba }" ignorada: empréstimos, opções e termo não são posição em ativo
 nucleo-importacao-b3-aviso-liquidacoes = sem o relatório de negociação, as compras e vendas vieram das liquidações da movimentação, com a data do negócio estimada (2 dias úteis antes); importe a negociação para datas exatas
 nucleo-importacao-b3-aviso-sem-conta = sem conta escolhida para { $instituicoes }: as linhas dessas instituições não serão gravadas
-nucleo-importacao-b3-aviso-vendas-maiores = { $n } venda(s) maiores que a posição na data: importe também o histórico anterior (ou a posição inicial) dessas contas
+nucleo-importacao-b3-aviso-vendas-maiores =
+    { $n ->
+        [one] { $n } venda maior que a posição na data: importe também o histórico anterior (ou a posição inicial) dessas contas
+       *[other] { $n } vendas maiores que a posição na data: importe também o histórico anterior (ou a posição inicial) dessas contas
+    }
 # Células e linhas que não deu para ler.
 nucleo-importacao-b3-celula-numero = número inválido: { $valor }
 nucleo-importacao-b3-celula-data-no-numero = esperava um número, veio a data { $data }

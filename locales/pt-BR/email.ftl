@@ -89,7 +89,11 @@ email-ignorar-mensagem = Ignorar a mensagem
 ## Peças da mensagem
 
 email-cartao-final = cartão final { $final }
-email-ia-propostas = { $n } proposta(s) na fila de aprovação do agente
+email-ia-propostas =
+    { $n ->
+        [one] { $n } proposta na fila de aprovação do agente
+       *[other] { $n } propostas na fila de aprovação do agente
+    }
 email-conta-lancamento = Conta do lançamento
 email-escolha-conta = Escolha a conta
 email-lancar = Lançar
@@ -112,7 +116,11 @@ email-agente-chegou = Chegou pelo e-mail (de { $remetente }).
 
 email-teste-ate = Modo de teste da exclusão até { $data }: nada é apagado, só registrado.
 email-teste-acabou = O modo de teste acabou. A exclusão só começa depois da sua confirmação; até lá, continua em teste.
-email-teriam-saido = { $n } mensagem(ns) teriam saído (veja na auditoria).
+email-teriam-saido =
+    { $n ->
+        [one] { $n } mensagem teria saído (veja na auditoria).
+       *[other] { $n } mensagens teriam saído (veja na auditoria).
+    }
 email-nada-teria-saido = Nada teria saído até agora.
 email-confirmar-exclusao = Confirmar a exclusão (sem desfazer)
 
@@ -134,7 +142,11 @@ email-backup-restaurado = Backup restaurado: teste a conexão antes de voltar a 
 email-buscar-agora = Buscar agora
 email-testar = Testar
 email-conexao-ok = Conexão funcionando
-email-n-arquivos-pasta = { $n } arquivo(s) na pasta.
+email-n-arquivos-pasta =
+    { $n ->
+        [one] { $n } arquivo na pasta.
+       *[other] { $n } arquivos na pasta.
+    }
 email-teste-le = Lê { $pastas }; para apagar, { $como }.
 email-nenhuma-pasta = nenhuma pasta
 email-apagar-conta = Apagar a conta?

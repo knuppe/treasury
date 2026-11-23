@@ -116,7 +116,11 @@ nucleo-lancamentos-erro-categoria-de-outro-tipo = la categoría { $nome } es de 
    *[despesa] gasto
 }
 nucleo-lancamentos-erro-tipo-sem-divisao = los movimientos de tipo { $tipo } no se pueden dividir
-nucleo-lancamentos-erro-lote-sem-categoria = aporte, pago de tarjeta y ajuste no usan categoría: mueven el patrimonio y quedan fuera del flujo de caja y del presupuesto ({ $n } marcado(s))
+nucleo-lancamentos-erro-lote-sem-categoria =
+    { $n ->
+        [one] aporte, pago de tarjeta y ajuste no usan categoría: mueven el patrimonio y quedan fuera del flujo de caja y del presupuesto ({ $n } marcado)
+       *[other] aporte, pago de tarjeta y ajuste no usan categoría: mueven el patrimonio y quedan fuera del flujo de caja y del presupuesto ({ $n } marcados)
+    }
 nucleo-lancamentos-erro-divisao-partes = una división necesita al menos dos partes
 nucleo-lancamentos-erro-divisao-soma = la suma de las partes ({ $soma }) es distinta del total ({ $total })
 nucleo-lancamentos-erro-divisao-sinal = las partes de la división deben tener el mismo signo que el total y no pueden ser cero

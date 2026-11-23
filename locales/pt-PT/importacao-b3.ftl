@@ -14,14 +14,22 @@ b3-importados-toast = { $n ->
     [one] { $n } movimento importado da B3
    *[other] { $n } movimentos importados da B3
 }
-b3-importar-n = Importar { $n } movimento(s)
+b3-importar-n =
+    { $n ->
+        [one] Importar { $n } movimento
+       *[other] Importar { $n } movimentos
+    }
 b3-relatorios-dica = Negociação, movimentação e posição, em Excel (.xlsx) ou CSV. Envie os do mesmo período juntos: a posição confere o resultado. Os ficheiros ficam só na memória da aplicação até importar.
 b3-lendo = A ler os relatórios…
 b3-contas-texto = Escolha a corretora de cada instituição do ficheiro. A sugestão vem do nome; as linhas de instituições marcadas como “Não importar” ficam de fora.
 b3-incluir-possiveis-dica = Mesma data, ativo e quantidade (ou valor) de um movimento feito à mão.
 b3-lancar-caixa = Registar no saldo da corretora
 b3-lancar-caixa-dica = Desligado (predefinição): a B3 não informa o saldo nem as comissões da corretora; importe o extrato da conta à parte. Ligado: compras, vendas e rendimentos movimentam o saldo.
-b3-ativos-texto = { $n } ativo(s) a registar. A classe vem da folha da posição, do final do código ou do nome; confira os assinalados.
+b3-ativos-texto =
+    { $n ->
+        [one] { $n } ativo a registar. A classe vem da folha da posição, do final do código ou do nome; confira os assinalados.
+       *[other] { $n } ativos a registar. A classe vem da folha da posição, do final do código ou do nome; confira os assinalados.
+    }
 b3-cadastrar = Registar
 b3-ja-cadastrado = Já registado
 b3-usar-cadastrado = Usar ativo já registado

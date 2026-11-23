@@ -268,7 +268,7 @@ function GroupTable({
           // Larguras em %: abaixo disso as colunas se sobrepõem; a tabela rola na horizontal. Cada
           // célula recorta o que passar da largura dela (o texto de baixo quebra antes disso).
           className="[&_table]:table-fixed [&_td]:overflow-hidden"
-          minWidth="1200px"
+          minWidth="1080px"
           label={t('carteira-posicoes-de', { grupo: group.label })}
           prefsId={group.prefsId}
           rows={group.positions}

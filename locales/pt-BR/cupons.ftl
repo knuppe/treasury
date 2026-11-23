@@ -8,8 +8,16 @@
 cupons-cupom-de = Cupom de { $loja }
 cupons-cupom-fiscal = Cupom fiscal
 cupons-sem-data = sem data
-cupons-previa-impresso = { $data } · { $n } item(ns) · imposto impresso na nota
-cupons-previa-estimado = { $data } · { $n } item(ns) · imposto estimado pelo percentual de cada grupo de consumo
+cupons-previa-impresso =
+    { $n ->
+        [one] { $data } · { $n } item · imposto impresso na nota
+       *[other] { $data } · { $n } itens · imposto impresso na nota
+    }
+cupons-previa-estimado =
+    { $n ->
+        [one] { $data } · { $n } item · imposto estimado pelo percentual de cada grupo de consumo
+       *[other] { $data } · { $n } itens · imposto estimado pelo percentual de cada grupo de consumo
+    }
 cupons-itens = Itens do cupom
 cupons-item = Item
 cupons-grupo = Grupo
@@ -54,8 +62,16 @@ cupons-periodo-3m = Últimos 3 meses
 cupons-periodo-ano = Este ano
 cupons-familia-compra = O que a família compra
 cupons-periodo-compras = Período das compras
-cupons-resumo = { $n } cupom(ns), { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago).
-cupons-resumo-impresso = { $n } cupom(ns), { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago; parte dele impresso nas notas).
+cupons-resumo =
+    { $n ->
+        [one] { $n } cupom, { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago).
+       *[other] { $n } cupons, { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago).
+    }
+cupons-resumo-impresso =
+    { $n ->
+        [one] { $n } cupom, { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago; parte dele impresso nas notas).
+       *[other] { $n } cupons, { $gasto } em compras e { $imposto } de imposto ({ $pct } do que foi pago; parte dele impresso nas notas).
+    }
 cupons-compras-grupo = Compras por grupo
 cupons-gasto = Gasto
 cupons-pct-compras = % das compras
@@ -114,17 +130,45 @@ cupons-etapa-afip = Ler a nota pelo QR (Argentina, Portugal, Espanha)
 cupons-etapa-afip-sem-itens = o QR não traz os itens: inclua-os na revisão
 cupons-etapa-ocr = Ler os itens pelo texto da foto
 cupons-etapa-ocr-ia = com a IA
-cupons-etapa-ocr-itens = { $n } linha(s) de item
+cupons-etapa-ocr-itens =
+    { $n ->
+        [one] { $n } linha de item
+       *[other] { $n } linhas de item
+    }
 cupons-etapa-arquivo = Ler o arquivo
 cupons-etapa-texto = Ler o texto da página
 cupons-etapa-conferir = Conferir itens e total
-cupons-etapa-conferir-ok = { $n } item(ns), soma bate com o total
-cupons-etapa-conferir-diferenca = { $n } item(ns), soma diferente do total
+cupons-etapa-conferir-ok =
+    { $n ->
+        [one] { $n } item, soma bate com o total
+       *[other] { $n } itens, soma bate com o total
+    }
+cupons-etapa-conferir-diferenca =
+    { $n ->
+        [one] { $n } item, soma diferente do total
+       *[other] { $n } itens, soma diferente do total
+    }
 cupons-resultado = Resultado da leitura
-cupons-resultado-ok = { $n } item(ns) de { $loja }, total { $valor }. Tudo confere.
-cupons-resultado-diferenca = { $n } item(ns) de { $loja }, total { $valor }. A soma dos itens não bate com o total.
-cupons-resultado-foto-ok = { $n } item(ns) lidos pela foto, total { $valor }. A soma bate.
-cupons-resultado-foto-diferenca = { $n } item(ns) lidos pela foto, total { $valor }. A soma não bate: confira os itens.
+cupons-resultado-ok =
+    { $n ->
+        [one] { $n } item de { $loja }, total { $valor }. Tudo confere.
+       *[other] { $n } itens de { $loja }, total { $valor }. Tudo confere.
+    }
+cupons-resultado-diferenca =
+    { $n ->
+        [one] { $n } item de { $loja }, total { $valor }. A soma dos itens não bate com o total.
+       *[other] { $n } itens de { $loja }, total { $valor }. A soma dos itens não bate com o total.
+    }
+cupons-resultado-foto-ok =
+    { $n ->
+        [one] { $n } item lido pela foto, total { $valor }. A soma bate.
+       *[other] { $n } itens lidos pela foto, total { $valor }. A soma bate.
+    }
+cupons-resultado-foto-diferenca =
+    { $n ->
+        [one] { $n } item lido pela foto, total { $valor }. A soma não bate: confira os itens.
+       *[other] { $n } itens lidos pela foto, total { $valor }. A soma não bate: confira os itens.
+    }
 cupons-resultado-afip = { $pais ->
     [PT] Fatura de Portugal
     [ES] Fatura da Espanha

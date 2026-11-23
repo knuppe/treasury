@@ -154,7 +154,11 @@ ajustes-sync-cotacao = Cotação
 ajustes-sync-resultado = Resultado da atualização
 ajustes-sync-ok = Tudo atualizado ✓
 ajustes-sync-parcial = { $ok } de { $total } séries atualizadas; { $falhas } com problema.
-ajustes-sync-ipca = IPCA estimado em { $n } mês(es) (projeção).
+ajustes-sync-ipca =
+    { $n ->
+        [one] IPCA estimado em { $n } mês (projeção).
+       *[other] IPCA estimado em { $n } meses (projeção).
+    }
 ajustes-sync-novos = { $n } novos
 ajustes-sync-sem-fonte = Sem fonte de cotação ({ $n })
 ajustes-brapi-titulo = brapi.dev (opcional)
@@ -268,7 +272,11 @@ ajustes-externas-nenhuma-busca = Nenhuma fonte encontrada para “{ $busca }”.
 ajustes-externas-nenhuma-pais = Nenhuma fonte encontrada em { $pais }.
 ajustes-externas-nenhuma-busca-pais = Nenhuma fonte encontrada para “{ $busca }” em { $pais }.
 ajustes-externas-desligada-app = Desligada pelo app depois de { $dias } dias seguidos de falha.
-ajustes-externas-falhando = Falhando há { $dias } dia(s); desliga sozinha com 3.
+ajustes-externas-falhando =
+    { $dias ->
+        [one] Falhando há { $dias } dia; desliga sozinha com 3.
+       *[other] Falhando há { $dias } dias; desliga sozinha com 3.
+    }
 ajustes-externas-ultimo-erro = Último erro: { $erro }
 ajustes-externas-ligada = { $fonte } ligada
 ajustes-externas-desligada = { $fonte } desligada
@@ -423,13 +431,41 @@ ajustes-backup-ajustes = Ajustes de backup
 
 ## Categorias
 
-ajustes-cat-uso-lancamentos = { $n } lançamento(s)
-ajustes-cat-uso-divisoes = { $n } parte(s) de divisão
-ajustes-cat-uso-orcamento = { $n } linha(s) de orçamento
-ajustes-cat-uso-regras = { $n } regra(s)
-ajustes-cat-uso-recorrencias = { $n } recorrência(s)
-ajustes-cat-uso-parcelamentos = { $n } parcelamento(s)
-ajustes-cat-uso-subcategorias = { $n } subcategoria(s)
+ajustes-cat-uso-lancamentos =
+    { $n ->
+        [one] { $n } lançamento
+       *[other] { $n } lançamentos
+    }
+ajustes-cat-uso-divisoes =
+    { $n ->
+        [one] { $n } parte de divisão
+       *[other] { $n } partes de divisão
+    }
+ajustes-cat-uso-orcamento =
+    { $n ->
+        [one] { $n } linha de orçamento
+       *[other] { $n } linhas de orçamento
+    }
+ajustes-cat-uso-regras =
+    { $n ->
+        [one] { $n } regra
+       *[other] { $n } regras
+    }
+ajustes-cat-uso-recorrencias =
+    { $n ->
+        [one] { $n } recorrência
+       *[other] { $n } recorrências
+    }
+ajustes-cat-uso-parcelamentos =
+    { $n ->
+        [one] { $n } parcelamento
+       *[other] { $n } parcelamentos
+    }
+ajustes-cat-uso-subcategorias =
+    { $n ->
+        [one] { $n } subcategoria
+       *[other] { $n } subcategorias
+    }
 ajustes-cat-em-uso = Em uso por { $usos }.
 ajustes-cat-sem-uso = Sem uso: pode ser apagada sem reatribuir.
 ajustes-cat-principal = — (categoria principal)
@@ -451,7 +487,11 @@ ajustes-cat-renomeada = Categoria renomeada
 ajustes-cat-movida = Categoria movida
 ajustes-cat-juntadas = Categorias juntadas
 ajustes-cat-apagada = Categoria apagada
-ajustes-cat-reatribuidos = { $n } lançamento(s) reatribuído(s).
+ajustes-cat-reatribuidos =
+    { $n ->
+        [one] { $n } lançamento reatribuído.
+       *[other] { $n } lançamentos reatribuídos.
+    }
 ajustes-cat-juntar-texto = Tudo que usa esta categoria (lançamentos, divisões, orçamento, regras, recorrências) passa para a escolhida, inclusive as subcategorias. Dá para desfazer pelo histórico.
 ajustes-cat-apagar-texto = Se estiver em uso, escolha quem recebe os lançamentos. Para só esconder dos seletores, arquive.
 ajustes-cat-dentro-de = Dentro de
@@ -462,14 +502,30 @@ ajustes-cat-nao-reatribuir = Não reatribuir
 ajustes-cat-recolher = Recolher { $nome }
 ajustes-cat-expandir = Expandir { $nome }
 ajustes-cat-arquivada = arquivada
-ajustes-cat-sugeridas-despesa = { $n } categoria(s) sugerida(s) do conjunto padrão (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
-ajustes-cat-sugeridas-receita = { $n } categoria(s) sugerida(s) do conjunto padrão, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho por aplicativo, vendas e bicos, aposentadoria e auxílios do governo…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
+ajustes-cat-sugeridas-despesa =
+    { $n ->
+        [one] { $n } categoria sugerida do conjunto padrão (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
+       *[other] { $n } categorias sugeridas do conjunto padrão (pagamentos de contas, empréstimos e cartão; escola, saúde, seguros, poupança dos filhos…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
+    }
+ajustes-cat-sugeridas-receita =
+    { $n ->
+        [one] { $n } categoria sugerida do conjunto padrão, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho por aplicativo, vendas e bicos, aposentadoria e auxílios do governo…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
+       *[other] { $n } categorias sugeridas do conjunto padrão, { $receitas } de receita (resgates, venda de bens, dívidas recebidas, trabalho por aplicativo, vendas e bicos, aposentadoria e auxílios do governo…). As que você já tem não mudam; em “Ver lista”, escolha quais entram.
+    }
 ajustes-cat-ver-lista = Ver lista
 ajustes-cat-esconder-lista = Esconder lista
-ajustes-cat-adicionadas = { $n } categoria(s) adicionada(s)
+ajustes-cat-adicionadas =
+    { $n ->
+        [one] { $n } categoria adicionada
+       *[other] { $n } categorias adicionadas
+    }
 ajustes-cat-desfazer-dica = Desfaça em Ajustes › Histórico, se quiser.
 ajustes-cat-adicionar-sugeridas = Adicionar sugeridas
-ajustes-cat-adicionar-selecionadas = Adicionar { $n } selecionada(s)
+ajustes-cat-adicionar-selecionadas =
+    { $n ->
+        [one] Adicionar { $n } selecionada
+       *[other] Adicionar { $n } selecionadas
+    }
 ajustes-cat-sugeridas = Categorias sugeridas
 ajustes-cat-receita-item = { $caminho } (receita)
 ajustes-cat-principais = Principais
@@ -540,17 +596,37 @@ ajustes-banco-idade = Idade mínima: { $item }
 ajustes-banco-mais-de-dias = mais de { $n } dias
 ajustes-banco-previa = Ver prévia
 ajustes-banco-nada = Nada para apagar.
-ajustes-banco-previa-texto = { $n } registro(s), cerca de { $tamanho }. { $consequencia }
+ajustes-banco-previa-texto =
+    { $n ->
+        [one] { $n } registro, cerca de { $tamanho }. { $consequencia }
+       *[other] { $n } registros, cerca de { $tamanho }. { $consequencia }
+    }
 ajustes-banco-apagar-titulo = Apagar: { $item }
-ajustes-banco-apagar-texto = { $n } registro(s). { $consequencia } Antes, o Treasury faz um backup verificado do cofre.
+ajustes-banco-apagar-texto =
+    { $n ->
+        [one] { $n } registro. { $consequencia } Antes, o Treasury faz um backup verificado do cofre.
+       *[other] { $n } registros. { $consequencia } Antes, o Treasury faz um backup verificado do cofre.
+    }
 ajustes-banco-apagar-confirmar = Fazer backup e apagar
-ajustes-banco-apagados = { $n } registro(s) apagado(s)
+ajustes-banco-apagados =
+    { $n ->
+        [one] { $n } registro apagado
+       *[other] { $n } registros apagados
+    }
 ajustes-banco-apagados-dica = Backup feito antes. Arquivo: { $antes } → { $depois }.
 ajustes-banco-espaco-livre = Espaço livre dentro dele
 ajustes-banco-cifra = Cifra
 ajustes-banco-versao-esquema = Versão do esquema
-ajustes-banco-conjuntos = { $n } conjunto(s)
-ajustes-banco-conjuntos-desde = { $n } conjunto(s) desde { $data }
+ajustes-banco-conjuntos =
+    { $n ->
+        [one] { $n } conjunto
+       *[other] { $n } conjuntos
+    }
+ajustes-banco-conjuntos-desde =
+    { $n ->
+        [one] { $n } conjunto desde { $data }
+       *[other] { $n } conjuntos desde { $data }
+    }
 ajustes-banco-ultima-manutencao = Última manutenção
 ajustes-banco-manutencao = Manutenção
 ajustes-banco-rodar = Rodar
@@ -697,7 +773,11 @@ ajustes-notif-antecedencia-dica = De 0 (só no dia) a 15.
 ajustes-notif-dias = dias
 ajustes-notif-teste-falhou = O sistema não mostrou a notificação
 ajustes-notif-testar = Enviar notificação de teste
-ajustes-notif-novos = { $n } lembrete(s) novo(s)
+ajustes-notif-novos =
+    { $n ->
+        [one] { $n } lembrete novo
+       *[other] { $n } lembretes novos
+    }
 ajustes-notif-nenhum = Nenhum lembrete novo
 ajustes-notif-caixa = Os alertas ficam na caixa do Agente.
 ajustes-notif-conferir = Conferir lembretes agora
@@ -825,7 +905,11 @@ ajustes-partes = Partes de recuperação
 ajustes-partes-copiada = Parte copiada
 ajustes-partes-texto = Guarde cada parte num lugar diferente (por exemplo: papel em casa, com o cônjuge, no cofre do banco). Quaisquer duas recuperam o cofre; uma sozinha não revela nada. Elas não serão mostradas de novo.
 ajustes-partes-parte = Parte { $n }
-ajustes-partes-fido2-removidas = { $n } chave(s) física(s) deixaram de valer: cadastre de novo.
+ajustes-partes-fido2-removidas =
+    { $n ->
+        [one] { $n } chave física deixou de valer: cadastre de novo.
+       *[other] { $n } chaves físicas deixaram de valer: cadastre de novo.
+    }
 ajustes-partes-geradas = Partes geradas em { $data }. Continuam valendo depois de trocar a senha.
 ajustes-partes-dica = Divide a recuperação em 3 partes: quaisquer duas abrem o cofre se você esquecer a senha.
 ajustes-partes-novas-copias = Mostrar novas cópias das partes

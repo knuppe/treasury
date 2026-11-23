@@ -52,6 +52,11 @@ export interface ResultCardProps {
   estimated?: boolean;
   /** Linhas do rodapé (não realizado, realizado, proventos), sempre nominais. */
   parts: readonly { label: string; value: ReactNode }[];
+  /**
+   * Seletor do índice no título. Na Carteira ele fica de fora: a barra "Resultado real
+   * descontado por" logo acima já escolhe o índice, e o seletor apertava o título ("Resul…").
+   */
+  perspective?: boolean;
 }
 
 export function ResultCard({
@@ -64,6 +69,7 @@ export function ResultCard({
   cost,
   estimated,
   parts,
+  perspective = true,
 }: ResultCardProps) {
   const label = useDeflatorLabel();
   const isReal = deflator !== 'none';
@@ -83,7 +89,12 @@ export function ResultCard({
       ]
     : parts;
   return (
-    <InstrumentCard index={index} title={title} actions={<ResultPerspective />} footer={footer}>
+    <InstrumentCard
+      index={index}
+      title={title}
+      actions={perspective ? <ResultPerspective /> : undefined}
+      footer={footer}
+    >
       <Measure
         size="md"
         label={

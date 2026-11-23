@@ -78,10 +78,18 @@ dados-col-confianca = Confidence
 dados-escolha = pick one
 dados-vazio = empty
 dados-nada = No fields to fill in: the asset data matches the sources in the vault.
-dados-aplicar-marcados = Save selected ({ $n } field(s))
+dados-aplicar-marcados =
+    { $n ->
+        [one] Save selected ({ $n } field)
+       *[other] Save selected ({ $n } fields)
+    }
 dados-marcar-altos = Select high confidence
 dados-desmarcar = Clear selection
-dados-aplicado = { $n } field(s) saved
+dados-aplicado =
+    { $n ->
+        [one] { $n } field saved
+       *[other] { $n } fields saved
+    }
 dados-aplicado-desfazer = You can undo it from the change history.
 dados-nao-aplicou = Could not save
 dados-rodape = Data from external sources and AI may be wrong or outdated. Check each field's source before approving.
@@ -119,17 +127,33 @@ dados-consultar-todos = Check sources for all
 dados-consultado = { $n } new reading(s) from the sources
 dados-consultado-nada = No new readings: the sources were checked recently, are turned off or don't have this asset.
 dados-consultados-todos = { $ativos } asset(s) checked, { $n } new reading(s)
-dados-consultados-erros = { $n } asset(s) with an error in some source; try again later.
+dados-consultados-erros =
+    { $n ->
+        [one] { $n } asset with an error in some source; try again later.
+       *[other] { $n } assets with an error in some source; try again later.
+    }
 dados-nao-consultou = Could not check the sources
 
 ## Shortcuts (alert, notice, ⌘K)
 
 dados-cmd-completar = Fill in asset data
 dados-cmd-sin = sector,segment,isin,cnpj,data,record,fill,enrich
-dados-aviso = { $n } piece(s) of your asset data can be filled in from official sources ({ $sem_setor } asset(s) without a sector).
+dados-aviso =
+    { $n ->
+        [one] { $n } piece of your asset data can be filled in from official sources
+       *[other] { $n } pieces of your asset data can be filled in from official sources
+    }{ $sem_setor ->
+        [0] .
+        [one] {" "}({ $sem_setor } asset without a sector).
+       *[other] {" "}({ $sem_setor } assets without a sector).
+    }
 dados-aviso-ver = See data
 dados-aviso-fechar = Close the asset data notice
-dados-chip-ativo = { $n } field(s) to fill in
+dados-chip-ativo =
+    { $n ->
+        [one] { $n } field to fill in
+       *[other] { $n } fields to fill in
+    }
 dados-campo-pension_type = Plan type
 dados-valor-pension_type-efpc = Pension fund (EFPC)
 dados-valor-pension_type-pgbl = PGBL

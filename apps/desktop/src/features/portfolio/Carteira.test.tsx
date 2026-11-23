@@ -100,23 +100,25 @@ describe('08 · Portfolio with the mock', () => {
         'Resultado real (IGP-M)',
       ),
     ).toBeTruthy();
-    // The Result card at the top follows the same deflator, in the title selector.
+    // The Result card at the top follows the same deflator.
     expect(
-      within(screen.getByRole('region', { name: 'Resultado' })).getByRole('combobox', {
-        name: 'Perspectiva do resultado',
-      }).textContent,
-    ).toContain('IGP-M');
+      await within(screen.getByRole('region', { name: 'Resultado' })).findByText(
+        'Resultado real (IGP-M)',
+      ),
+    ).toBeTruthy();
   });
 
-  it('the Result card switches perspective in the title: real by IPCA or nominal', async () => {
+  it('the Result card follows the bar above it: real by IPCA or nominal', async () => {
     const user = userEvent.setup();
     openCarteira();
     const card = await screen.findByRole('region', { name: 'Resultado' });
     // Default: real by IPCA, with the nominal and the index effect in the footer.
     expect(await within(card).findByText('Resultado real (IPCA)')).toBeTruthy();
     expect(within(card).getByText('Efeito do IPCA')).toBeTruthy();
-    await user.click(within(card).getByRole('combobox', { name: 'Perspectiva do resultado' }));
-    await user.click(await screen.findByRole('option', { name: 'Nominal' }));
+    // No second selector squeezing the title: the bar "Resultado real descontado por" decides.
+    expect(within(card).queryByRole('combobox', { name: 'Perspectiva do resultado' })).toBeNull();
+    const group = screen.getAllByRole('radiogroup', { name: 'Deflator do resultado real' })[0]!;
+    await user.click(within(group).getByRole('radio', { name: 'Nominal' }));
     expect(await within(card).findByText('Resultado total')).toBeTruthy();
     expect(within(card).queryByText('Efeito do IPCA')).toBeNull();
   });
@@ -581,7 +583,7 @@ describe('08 · Scheduled contributions and portfolio by goal', () => {
     const before = ((await mockCall('portfolio.list_trades', {})) as Trade[]).length;
     const list = await screen.findByRole('list', { name: 'Aportes a confirmar' });
     expect(within(list).getAllByRole('listitem')).toHaveLength(3);
-    expect(screen.getByText(/3 aporte\(s\) programado\(s\) para confirmar/)).toBeTruthy();
+    expect(screen.getByText(/3 aportes programados para confirmar/)).toBeTruthy();
     // Nothing saved before confirming.
     expect(((await mockCall('portfolio.list_trades', {})) as Trade[]).length).toBe(before);
 
@@ -596,7 +598,7 @@ describe('08 · Scheduled contributions and portfolio by goal', () => {
     // Outside the Operations tab, a notice reminds what is left to confirm.
     await user.click(screen.getByRole('tab', { name: /Posições/ }));
     expect(
-      await screen.findByText('1 aporte(s) programado(s) esperando a sua confirmação.'),
+      await screen.findByText('1 aporte programado esperando a sua confirmação.'),
     ).toBeTruthy();
   });
 

@@ -133,13 +133,37 @@ cupons-etapa-ocr-itens = { $n } item line(s)
 cupons-etapa-arquivo = Read the file
 cupons-etapa-texto = Read the page text
 cupons-etapa-conferir = Check items and total
-cupons-etapa-conferir-ok = { $n } item(s), sum matches the total
-cupons-etapa-conferir-diferenca = { $n } item(s), sum differs from the total
+cupons-etapa-conferir-ok =
+    { $n ->
+        [one] { $n } item, sum matches the total
+       *[other] { $n } items, sum matches the total
+    }
+cupons-etapa-conferir-diferenca =
+    { $n ->
+        [one] { $n } item, sum differs from the total
+       *[other] { $n } items, sum differs from the total
+    }
 cupons-resultado = Reading result
-cupons-resultado-ok = { $n } item(s) from { $loja }, total { $valor }. Everything matches.
-cupons-resultado-diferenca = { $n } item(s) from { $loja }, total { $valor }. The items don't add up to the total.
-cupons-resultado-foto-ok = { $n } item(s) read from the photo, total { $valor }. The sum matches.
-cupons-resultado-foto-diferenca = { $n } item(s) read from the photo, total { $valor }. The sum doesn't match: check the items.
+cupons-resultado-ok =
+    { $n ->
+        [one] { $n } item from { $loja }, total { $valor }. Everything matches.
+       *[other] { $n } items from { $loja }, total { $valor }. Everything matches.
+    }
+cupons-resultado-diferenca =
+    { $n ->
+        [one] { $n } item from { $loja }, total { $valor }. The items don't add up to the total.
+       *[other] { $n } items from { $loja }, total { $valor }. The items don't add up to the total.
+    }
+cupons-resultado-foto-ok =
+    { $n ->
+        [one] { $n } item read from the photo, total { $valor }. The sum matches.
+       *[other] { $n } items read from the photo, total { $valor }. The sum matches.
+    }
+cupons-resultado-foto-diferenca =
+    { $n ->
+        [one] { $n } item read from the photo, total { $valor }. The sum doesn't match: check the items.
+       *[other] { $n } items read from the photo, total { $valor }. The sum doesn't match: check the items.
+    }
 cupons-resultado-afip = { $pais ->
     [PT] Portuguese invoice
     [ES] Spanish invoice

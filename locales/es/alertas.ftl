@@ -166,7 +166,11 @@ alertas-tipo-subscription-new = Suscripción nueva
 
 ## Datos de los activos (enriquecimiento)
 
-alertas-dados-ativos-titulo = { $n } dato(s) de tus activos para completar
+alertas-dados-ativos-titulo =
+    { $n ->
+        [one] { $n } dato de tus activos para completar
+       *[other] { $n } datos de tus activos para completar
+    }
 alertas-dados-ativos-corpo = Las fuentes oficiales que Treasury ya descargó tienen sugerencias para **{ $campos } campo(s)** de { $ativos } activo(s), como sector, segmento, ISIN y CNPJ (ej.: { $exemplos }).
 alertas-dados-ativos-onde = Revisa la fuente y la confianza de cada uno y guarda lo que quieras en Cartera › Salud de los activos › Datos de los activos. Nada cambia sin que elijas.
 alertas-reduflacao-titulo = { $produto }: envase más chico, precio más alto

@@ -123,7 +123,11 @@ contas-cotas-saldos = Saldos das quotas de capital
 contas-cotas-aportes-identificados = Reforços identificados
 contas-cotas-aportes-identificados-n = Reforços identificados ({ $n })
 contas-cotas-ja-fora = Os reforços já estavam fora das despesas
-contas-cotas-n-tirados = { $n } reforço(s) retirados das despesas
+contas-cotas-n-tirados =
+    { $n ->
+        [one] { $n } reforço retirado das despesas
+       *[other] { $n } reforços retirados das despesas
+    }
 contas-cotas-tirar = Retirar os reforços das despesas
 contas-cotas-como-identificar = Como identificar os reforços
 contas-cotas-categoria = Categoria dos reforços

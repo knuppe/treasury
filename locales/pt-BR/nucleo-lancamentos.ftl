@@ -57,15 +57,43 @@ nucleo-lancamentos-historico-copias-apagadas = { $n } cópias entre contas apaga
 nucleo-lancamentos-historico-transferencia = Transferência: { $origem } → { $destino }
 nucleo-lancamentos-historico-pagamento-fatura = Pagamento de fatura: { $origem } → { $destino }
 nucleo-lancamentos-historico-aporte = Aporte: { $origem } → { $destino }
-nucleo-lancamentos-historico-categoria-definida = Categoria { $categoria } definida em { $n } lançamento(s)
-nucleo-lancamentos-historico-categoria-removida = Categoria removida de { $n } lançamento(s)
-nucleo-lancamentos-historico-status = Status alterado para { $status } em { $n } lançamento(s)
-nucleo-lancamentos-historico-membro-definido = Membro { $membro } definido em { $n } lançamento(s)
-nucleo-lancamentos-historico-membro-removido = Membro removido de { $n } lançamento(s)
-nucleo-lancamentos-historico-tags = Tags alteradas em { $n } lançamento(s)
+nucleo-lancamentos-historico-categoria-definida =
+    { $n ->
+        [one] Categoria { $categoria } definida em { $n } lançamento
+       *[other] Categoria { $categoria } definida em { $n } lançamentos
+    }
+nucleo-lancamentos-historico-categoria-removida =
+    { $n ->
+        [one] Categoria removida de { $n } lançamento
+       *[other] Categoria removida de { $n } lançamentos
+    }
+nucleo-lancamentos-historico-status =
+    { $n ->
+        [one] Status alterado para { $status } em { $n } lançamento
+       *[other] Status alterado para { $status } em { $n } lançamentos
+    }
+nucleo-lancamentos-historico-membro-definido =
+    { $n ->
+        [one] Membro { $membro } definido em { $n } lançamento
+       *[other] Membro { $membro } definido em { $n } lançamentos
+    }
+nucleo-lancamentos-historico-membro-removido =
+    { $n ->
+        [one] Membro removido de { $n } lançamento
+       *[other] Membro removido de { $n } lançamentos
+    }
+nucleo-lancamentos-historico-tags =
+    { $n ->
+        [one] Tags alteradas em { $n } lançamento
+       *[other] Tags alteradas em { $n } lançamentos
+    }
 nucleo-lancamentos-historico-par-ligado = Lançamentos ligados como transferência entre contas
 nucleo-lancamentos-historico-pares-ligados = { $n } pares ligados como transferências entre contas
-nucleo-lancamentos-historico-vinculados = { $n } lançamento(s) vinculado(s) a { $operacao }
+nucleo-lancamentos-historico-vinculados =
+    { $n ->
+        [one] { $n } lançamento vinculado a { $operacao }
+       *[other] { $n } lançamentos vinculados a { $operacao }
+    }
 nucleo-lancamentos-historico-vinculado = Lançamento vinculado: { $descricao } → { $operacao }
 nucleo-lancamentos-historico-desvinculado = Vínculo desfeito: { $descricao }
 nucleo-lancamentos-historico-transferencia-desligada = Transferência desligada: as duas pernas ficaram soltas
@@ -94,7 +122,11 @@ nucleo-lancamentos-erro-categoria-de-outro-tipo = a categoria { $nome } é de { 
    *[despesa] despesa
 }
 nucleo-lancamentos-erro-tipo-sem-divisao = lançamentos do tipo { $tipo } não podem ser divididos
-nucleo-lancamentos-erro-lote-sem-categoria = aporte, pagamento de fatura e ajuste não usam categoria: são movimentação do patrimônio e ficam fora do fluxo de caixa e do orçamento ({ $n } marcado(s))
+nucleo-lancamentos-erro-lote-sem-categoria =
+    { $n ->
+        [one] aporte, pagamento de fatura e ajuste não usam categoria: são movimentação do patrimônio e ficam fora do fluxo de caixa e do orçamento ({ $n } marcado)
+       *[other] aporte, pagamento de fatura e ajuste não usam categoria: são movimentação do patrimônio e ficam fora do fluxo de caixa e do orçamento ({ $n } marcados)
+    }
 nucleo-lancamentos-erro-divisao-partes = uma divisão precisa de pelo menos duas partes
 nucleo-lancamentos-erro-divisao-soma = a soma das partes ({ $soma }) difere do total ({ $total })
 nucleo-lancamentos-erro-divisao-sinal = as partes da divisão devem ter o mesmo sinal do total e não podem ser zero
@@ -142,7 +174,11 @@ nucleo-lancamentos-erro-pagamento-de-cartao = a fatura deve ser paga a partir de
 nucleo-lancamentos-erro-transferencia-tipo = transferências não podem ser do tipo { $tipo }
 # Por que um par aparece nas transferências sugeridas (juntados com "; ").
 nucleo-lancamentos-motivo-mesmo-valor-mesmo-dia = mesmo valor no mesmo dia
-nucleo-lancamentos-motivo-mesmo-valor-dias = mesmo valor com { $dias } dia(s) de diferença
+nucleo-lancamentos-motivo-mesmo-valor-dias =
+    { $dias ->
+        [one] mesmo valor com { $dias } dia de diferença
+       *[other] mesmo valor com { $dias } dias de diferença
+    }
 nucleo-lancamentos-motivo-texto-transferencia = texto de transferência (PIX, TED…)
 nucleo-lancamentos-motivo-nome-outra-conta = o nome da outra conta aparece na descrição
 nucleo-lancamentos-erro-par-ja-transferencia = um dos lançamentos já faz parte de uma transferência
@@ -356,7 +392,11 @@ nucleo-lancamentos-categoria-erro-juntar-tipos = { $origem } é de { $tipo_orige
    *[despesa] despesa
 }; só é possível juntar categorias do mesmo tipo
 nucleo-lancamentos-categoria-erro-juntar-sub = { $destino } é subcategoria de { $origem }; escolha uma categoria fora dela
-nucleo-lancamentos-categoria-erro-tem-subcategorias = { $nome } tem { $n } subcategoria(s); apague, mova ou junte as subcategorias antes
+nucleo-lancamentos-categoria-erro-tem-subcategorias =
+    { $n ->
+        [one] { $nome } tem { $n } subcategoria; apague, mova ou junte a subcategoria antes
+       *[other] { $nome } tem { $n } subcategorias; apague, mova ou junte as subcategorias antes
+    }
 nucleo-lancamentos-categoria-erro-em-uso = { $nome } está em uso ({ $lancamentos } lançamento(s), { $divisoes } divisão(ões), { $orcamento } linha(s) de orçamento, { $regras } regra(s), { $recorrencias } recorrência(s), { $parcelamentos } parcelamento(s)); escolha uma categoria para receber esse uso
 nucleo-lancamentos-erro-anexo-so-interface = salvar anexo no disco só pela interface do app
 nucleo-lancamentos-erro-copias-so-interface = apagar cópias entre contas só pela interface do app

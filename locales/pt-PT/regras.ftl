@@ -23,5 +23,9 @@ regras-salvar = Guardar regra
 regras-nome-exemplo = Viagens em TVDE
 regras-prioridade-dica = A menor vence.
 regras-teste-nenhum = Nenhum lançamento existente corresponde a esta regra
-regras-teste-n = { $n } lançamento(s) correspondem a esta regra
+regras-teste-n =
+    { $n ->
+        [one] { $n } lançamento corresponde a esta regra
+       *[other] { $n } lançamentos correspondem a esta regra
+    }
 regras-teste-50 = 50 ou mais lançamento(s) correspondem a esta regra

@@ -16,6 +16,7 @@ import { monthBounds } from '@/lib/months';
 
 /** Frase do dia, sem julgamento. */
 export function allowanceSentence(a: DailyAllowance): string {
+  if (a.status === 'no_income') return t('planejamento-hoje-sem-renda');
   if (a.status === 'over') return t('planejamento-hoje-estourado');
   if (a.today_left === 0) return t('planejamento-hoje-usado');
   if (a.status === 'tight') return t('planejamento-hoje-apertado');
@@ -26,6 +27,19 @@ export function DailyAllowanceCard() {
   const { data: a } = useDailyAllowance();
   const [open, setOpen] = useState(false);
   if (!a) return null;
+  // Sem receita no mês não há o que dividir: em vez de um R$ 0,00 vermelho, o convite para
+  // anotar a renda (falta de dado não é mês estourado).
+  if (a.status === 'no_income') {
+    return (
+      <section
+        aria-label={t('planejamento-hoje-titulo')}
+        className="flex flex-col gap-1 rounded-card border border-line bg-surface px-4 py-3.5"
+      >
+        <span className="text-[13px] text-dim">{t('planejamento-hoje-titulo')}</span>
+        <p className="text-[13.5px] text-fg">{t('planejamento-hoje-sem-renda')}</p>
+      </section>
+    );
+  }
   const end = monthBounds(a.month).to;
   const tone =
     a.status === 'over' ? 'text-negative' : a.status === 'tight' ? 'text-warning' : 'text-positive';

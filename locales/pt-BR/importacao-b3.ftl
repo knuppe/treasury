@@ -74,7 +74,11 @@ b3-importar-operacao = Importar operação { $n }
 b3-importar-provento = Importar provento { $n }
 b3-importar-evento = Importar evento { $n }
 b3-gerar-previa = Gerar prévia
-b3-importar-n = Importar { $n } lançamento(s)
+b3-importar-n =
+    { $n ->
+        [one] Importar { $n } lançamento
+       *[other] Importar { $n } lançamentos
+    }
 b3-desfeita = Importação da B3 desfeita
 b3-desfazer = Desfazer importação
 b3-concluir = Concluir
@@ -110,7 +114,11 @@ b3-aba-proventos = Proventos
 b3-aba-eventos = Eventos
 b3-aba-ignoradas = Ignoradas
 b3-aba-posicao = Posição
-b3-ativos-texto = { $n } ativo(s) a cadastrar. A classe vem da aba da posição, do final do código ou do nome; confira os marcados.
+b3-ativos-texto =
+    { $n ->
+        [one] { $n } ativo a cadastrar. A classe vem da aba da posição, do final do código ou do nome; confira os marcados.
+       *[other] { $n } ativos a cadastrar. A classe vem da aba da posição, do final do código ou do nome; confira os marcados.
+    }
 b3-ativos-tabela = Ativos da importação
 b3-ativo = Ativo
 b3-situacao = Situação

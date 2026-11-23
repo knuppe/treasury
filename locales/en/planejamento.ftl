@@ -10,6 +10,7 @@ planejamento-data = Date
 planejamento-nome = Name
 planejamento-valor = Amount
 planejamento-por-mes = Per month
+planejamento-assinaturas-por-mes-valor = { $valor } a month
 planejamento-mais-50-anos = over 50 years
 planejamento-tirar = Remove { $nome }
 
@@ -17,6 +18,7 @@ planejamento-tirar = Remove { $nome }
 
 planejamento-hoje-titulo = How much can I spend today
 planejamento-hoje-estourado = This month, everything that came in is already committed. Hold off on the spending that can wait until the next paycheck.
+planejamento-hoje-sem-renda = Record this month's income (your paycheck, for example) and the app works out how much you can spend each day without squeezing the bills.
 planejamento-hoje-usado = Today's amount has already been used. It comes back tomorrow, recalculated with what is left.
 planejamento-hoje-apertado = Things are tight: it's worth sticking to the essentials until the end of the month.
 planejamento-hoje-ok = Within this amount, the month closes without putting bills and goals at risk.

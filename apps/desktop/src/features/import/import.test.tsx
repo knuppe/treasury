@@ -85,7 +85,7 @@ describe('statement import', () => {
     await user.type(desc, 'Livraria Cultura Viva (livros)');
     await user.tab();
     await user.click(within(table).getByRole('checkbox', { name: 'Importar linha 3' }));
-    await user.click(within(dialog).getByRole('button', { name: 'Importar 2 lançamento(s)' }));
+    await user.click(within(dialog).getByRole('button', { name: 'Importar 2 lançamentos' }));
 
     // Imported: the window closes and the result stays in the notice.
     await waitFor(() =>
@@ -161,9 +161,7 @@ describe('statement import', () => {
     expect(options.some((o) => /Nubank Conta|Conta Corrente|Poupança/.test(o))).toBe(false);
     await user.click(await screen.findByRole('option', { name: /Cartão Nubank/ }));
     await user.click(within(dialog).getByRole('button', { name: 'Gerar prévia' }));
-    await user.click(
-      await within(dialog).findByRole('button', { name: 'Importar 1 lançamento(s)' }),
-    );
+    await user.click(await within(dialog).findByRole('button', { name: 'Importar 1 lançamento' }));
     expect(await screen.findByText(/1 lançamento importado em Cartão Nubank/)).toBeTruthy();
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Importar extrato' })).toBeNull(),
@@ -228,9 +226,7 @@ describe('statement import', () => {
     let dialog = await screen.findByRole('dialog', { name: 'Importar extrato' });
     await user.upload(within(dialog).getByLabelText('Arquivo do banco'), ofx());
     await user.click(await within(dialog).findByRole('button', { name: 'Gerar prévia' }));
-    await user.click(
-      await within(dialog).findByRole('button', { name: 'Importar 3 lançamento(s)' }),
-    );
+    await user.click(await within(dialog).findByRole('button', { name: 'Importar 3 lançamentos' }));
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Importar extrato' })).toBeNull(),
     );
@@ -246,7 +242,7 @@ describe('statement import', () => {
     ).toBeTruthy();
     expect(
       within(dialog)
-        .getByRole('button', { name: 'Importar 0 lançamento(s)' })
+        .getByRole('button', { name: 'Importar 0 lançamento' })
         .hasAttribute('disabled'),
     ).toBe(true);
     expect(todayIso()).toMatch(/^\d{4}-/);

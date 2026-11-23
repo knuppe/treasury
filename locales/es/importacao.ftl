@@ -126,8 +126,16 @@ importacao-csv-sem-conta = El CSV no dice de qué cuenta es: revisa la cuenta an
 importacao-pdf-conta-cartao = El resumen en PDF entra en la cuenta de la tarjeta.
 importacao-pdf-conta-extrato = El extracto en PDF entra en la cuenta corriente del banco.
 importacao-pdf-extrato-titulo = Extracto de cuenta en PDF
-importacao-pdf-extrato-lidos = { $n } movimiento(s) leídos ({ $leiaute }).
-importacao-pdf-extrato-lidos-ocr = { $n } movimiento(s) leídos en la computadora por OCR ({ $leiaute }), sin IA. Revisa los montos en la vista previa.
+importacao-pdf-extrato-lidos =
+    { $n ->
+        [one] { $n } movimiento leído ({ $leiaute }).
+       *[other] { $n } movimientos leídos ({ $leiaute }).
+    }
+importacao-pdf-extrato-lidos-ocr =
+    { $n ->
+        [one] { $n } movimiento leído en la computadora por OCR ({ $leiaute }), sin IA. Revisa los montos en la vista previa.
+       *[other] { $n } movimientos leídos en la computadora por OCR ({ $leiaute }), sin IA. Revisa los montos en la vista previa.
+    }
 importacao-pdf-extrato-nao-cartao = La cuenta elegida es una tarjeta: elige la cuenta corriente de este extracto.
 importacao-ref-gravada = Sucursal y cuenta guardadas
 importacao-ref-gravada-descricao = Los próximos OFX de este banco van directo a { $conta }.
@@ -339,7 +347,11 @@ documento-ver-texto = Ver como texto
 documento-ver-texto-nome = Ver { $nome } como texto
 documento-texto-titulo = { $nome } como texto
 documento-texto-lendo = Leyendo el documento…
-documento-texto-resumo = Así leen este documento los asistentes de IA: { $paginas } página(s), { $total } caracteres.
+documento-texto-resumo =
+    { $paginas ->
+        [one] Así leen este documento los asistentes de IA: { $paginas } página, { $total } caracteres.
+       *[other] Así leen este documento los asistentes de IA: { $paginas } páginas, { $total } caracteres.
+    }
 documento-texto-ocr = El PDF es solo imagen: el texto vino del OCR del ordenador y puede tener errores.
 documento-texto-paginas-corridas = Páginas como texto corrido (la verificación no coincidió): { $paginas }.
 documento-texto-conteudo = Contenido del documento
