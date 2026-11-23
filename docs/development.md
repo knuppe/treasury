@@ -238,3 +238,18 @@ It now returns an invalid-argument error and the interface shows it.
 ```
 
 Pull requests from outside follow [CONTRIBUTING.md](../CONTRIBUTING.md): each commit carries the DCO `Signed-off-by` line (`git commit -s`), without a CLA, and the contribution is distributed under the AGPL-3.0-only.
+
+## Release notes
+
+The notes of each GitHub release are in English and follow one layout:
+
+1. A first paragraph that sums up the release in plain words: what changes for the family and
+   whether the vault needs a migration.
+2. `## Breaking`, only when there is something: what stops working or changes behavior, and
+   what the person has to do.
+3. `## New`: new features.
+4. `## Fixes`: corrections.
+5. The closing lines about installation (notarization, previews, `SHA256SUMS.txt`).
+
+Each item is one or two lines, written for the person who uses the app; internal changes
+(tests, tooling, refactors) stay out unless they matter to someone building from source.
