@@ -10,18 +10,15 @@ feature are at the end of its document; only the larger fronts are here.
   financial health, AI agent and MCP server, multiple vaults, demo vault and four languages
   (pt-BR, English, Spanish and partial pt-PT).
 - **macOS (Apple Silicon)** is the platform used every day.
-- **Linux** (AppImage, `.deb`, `.rpm`) and **Windows** (NSIS installer and `.msi`) build from the
-  same code, through Docker or in CI, but have not yet been tested end to end on a real
-  installation.
-- Signed automatic update is implemented for all packages ([auto-update.md](auto-update.md)), but
-  only starts working once the keys are created (below) and has not yet been tested on Linux and
-  Windows.
+- **Linux** (AppImage, `.deb`, `.rpm`): installation and first launch checked on Ubuntu
+  22.04/24.04, Debian 12/13 and Fedora 42. Automatic update not yet tested.
+- **Windows** (NSIS installer and `.msi`): built by CI, preview; not yet opened on a real
+  installation and without code signing.
+- Public releases since 1.0.0, with signed automatic update for all packages
+  ([auto-update.md](auto-update.md), [trust.md](trust.md)).
 
-## Before the first public release
+## Open items
 
-- Create the update keys (two YubiKeys, a new minisign, a recovery key) and test a real update on
-  macOS, Linux and Windows ([auto-update.md](auto-update.md)). Without them, no release ships and
-  no app accepts an update ([trust.md](trust.md)).
 - Vulnerabilities in dependencies: whatever has a fix is fixed. Two exceptions remain in
   `deny.toml`, each with its reason; remove them when possible:
   - RUSTSEC-2026-0502 (SQLCipher): wait for a `refinery` that accepts `rusqlite` 0.42, to move up
@@ -29,12 +26,8 @@ feature are at the end of its document; only the larger fronts are here.
   - RUSTSEC-2026-0543 (`chrono` unmaintained, no known flaw): `rusqlite`, `rmcp`, `lopdf`,
     `imap` and `schemars` depend on it. Switch to `jiff` or `time` when those dependencies
     switch.
-- Turn on the repository protections on GitHub ([distribution.md](distribution.md)).
-- See CI green in the public repository, on the three systems, and open the Linux and Windows
-  packages on a real machine ([distribution.md](distribution.md)).
-- Fill in what is missing from support and the Terms (donation channels, contact and effective
-  date; [support.md](support.md), [terms.md](terms.md)) and generate the full list of
-  dependency licenses (Rust and npm) along with the package.
+- Test automatic update on Linux and Windows, and open the Windows packages on a real machine
+  ([distribution.md](distribution.md)).
 
 ## Next fronts
 

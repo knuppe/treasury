@@ -66,8 +66,18 @@ Para relatar uma falha, veja o [SECURITY.md](SECURITY.md).
 | Linux (x86_64) | AppImage, `.deb`, `.rpm` | Gerado pelo CI; atualização automática; instalação conferida no Ubuntu 22.04/24.04, Debian 12/13 e Fedora 42 (atualização ainda sem teste) |
 | Windows (x64) | instalador NSIS, `.msi` | Gerado pelo CI; atualização automática; pré-visualização, ainda sem assinatura de código |
 
-O app do macOS ainda não é notarizado: na primeira abertura, libere em Ajustes do Sistema ›
-Privacidade e Segurança. Confira os downloads com o `SHA256SUMS.txt`
+O app do macOS ainda não é notarizado, então o macOS bloqueia a primeira abertura. Uma vez por
+instalação:
+
+1. Abra o `.dmg` e arraste o Treasury para Aplicativos.
+2. Abra o Treasury. O macOS avisa que ele "não pode ser verificado"; clique em **OK** (não em
+   "Mover para o Lixo").
+3. Abra Ajustes do Sistema › Privacidade e Segurança, desça até o aviso sobre o Treasury e clique
+   em **Abrir Mesmo Assim**; confirme com a senha ou o Touch ID.
+4. O Treasury abre. Daí em diante ele abre normalmente, e as atualizações se instalam sozinhas.
+
+No Windows, o SmartScreen mostra "O Windows protegeu o computador": clique em **Mais informações** e
+depois em **Executar assim mesmo**. Confira os downloads com o `SHA256SUMS.txt`
 ([docs/distribution.md](docs/distribution.md)). O AppImage precisa do FUSE (`fuse3`) e das
 bibliotecas EGL/GLES do sistema (`libegl1`, `libgles2`), que a maioria dos desktops já tem.
 

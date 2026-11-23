@@ -33,7 +33,7 @@ por dia    = disponível ÷ dias que faltam (zero quando não sobra)
 hoje       = por dia − o que já foi gasto hoje
 ```
 
-The `status` is `over` when nothing is left, `tight` when the amount per day is below 30% of what comes in per day, and `ok` otherwise. The `explanation` field brings the calculation written out.
+The `status` is `no_income` when no income was received or is expected in the month (the card then asks the person to record the month's income instead of showing a red zero: missing data is not an overspent month), `over` when nothing is left, `tight` when the amount per day is below 30% of what comes in per day, and `ok` otherwise. The `explanation` field brings the calculation written out.
 
 - Interface: a highlight at the top of the **Dashboard** at the Beginner and Intermediate levels (only for the current month and the family view), with "How I calculated it".
 - Command: `forecast.daily_allowance`. MCP tool: `get_daily_allowance`.
