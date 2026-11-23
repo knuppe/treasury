@@ -1,0 +1,156 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "react", "import"],
+  "jsPlugins": [
+    {
+      "name": "i18next",
+      "specifier": "eslint-plugin-i18next"
+    }
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": ["dist", "coverage", "src-tauri", "src/api/generated"],
+  "rules": {
+    "typescript/consistent-type-imports": [
+      "error",
+      {
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrors": "none"
+      }
+    ],
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": {
+          "attributes": false
+        }
+      }
+    ],
+    "typescript/await-thenable": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/restrict-template-expressions": "error",
+    "typescript/unbound-method": "error",
+    "typescript/no-base-to-string": "error",
+    "typescript/no-redundant-type-constituents": "error",
+    "typescript/no-duplicate-type-constituents": "error",
+    "typescript/only-throw-error": "error",
+    "typescript/prefer-promise-reject-errors": "error",
+    "typescript/require-await": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "off",
+    "eqeqeq": ["error", "smart"],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/jsx-key": "off",
+    "react/purity": "off",
+    "react/immutability": "off",
+    "typescript/no-misused-spread": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/i18n/**",
+        "src/app/**",
+        "src/features/agent/**",
+        "src/features/companion/**",
+        "src/charts/**",
+        "src/commands/**",
+        "src/content/**",
+        "src/design/**",
+        "src/vault/**",
+        "src/features/accounts/**",
+        "src/features/cards/**",
+        "src/features/budget/**",
+        "src/features/country/**",
+        "src/features/dashboard/**",
+        "src/features/demo/**",
+        "src/features/fx/**",
+        "src/features/health/**",
+        "src/features/import/**",
+        "src/features/income/**",
+        "src/features/longevity/**",
+        "src/features/mail/**",
+        "src/features/portfolio/*.{ts,tsx}",
+        "src/features/portfolio/charts/**",
+        "src/features/portfolio/components/**",
+        "src/features/planning/**",
+        "src/features/profile/**",
+        "src/features/reports/controls.tsx",
+        "src/features/reports/explain/**",
+        "src/features/rules/**",
+        "src/features/settings/**",
+        "src/features/support/**",
+        "src/features/terms/**",
+        "src/features/transactions/**",
+        "src/screens/Agente.tsx",
+        "src/screens/Ajustes.tsx",
+        "src/screens/Carteira.tsx",
+        "src/screens/Contas.tsx",
+        "src/screens/Familia.tsx",
+        "src/screens/Lancamentos.tsx",
+        "src/screens/Orcamento.tsx",
+        "src/screens/Painel.tsx",
+        "src/screens/NotFound.tsx",
+        "src/charts/InflationChart.tsx",
+        "src/charts/inflationOption.ts",
+        "src/features/assets/**",
+        "src/features/debts/**",
+        "src/features/devfeedback/**",
+        "src/features/goals/**",
+        "src/features/indices/**",
+        "src/features/market/**",
+        "src/features/physical/**",
+        "src/features/portfolio/import/**",
+        "src/features/projects/**",
+        "src/features/receipts/**",
+        "src/features/reports/**",
+        "src/features/research/**",
+        "src/features/score/**",
+        "src/features/tax/**",
+        "src/features/taxburden/**",
+        "src/screens/Ativos.tsx",
+        "src/screens/Desenvolvedor.tsx",
+        "src/screens/Dividas.tsx",
+        "src/screens/Impostos.tsx",
+        "src/screens/Relatorios.tsx",
+        "src/screens/dev/**",
+        "src/features/food/**",
+        "src/lib/**",
+        "src/state/**",
+        "src/screens/Ativo.tsx",
+        "src/screens/Consumo.tsx",
+        "src/screens/Mercado.tsx"
+      ],
+      "rules": {
+        "i18next/no-literal-string": "error"
+      }
+    },
+    {
+      "files": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**"],
+      "rules": {
+        "i18next/no-literal-string": "off",
+        "typescript/unbound-method": "off"
+      }
+    }
+  ]
+}

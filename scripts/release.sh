@@ -141,7 +141,7 @@ fi
 if [ "$checks" = 1 ]; then
   mkdir -p "$LOGS"
   step "Verificações"
-  # Duas filas em paralelo: a interface (prettier, tsc, eslint, vitest) e o Rust (fmt,
+  # Duas filas em paralelo: a interface (prettier, tsc, lint, vitest) e o Rust (fmt,
   # clippy, testes). Os testes `export_bindings` regravam os tipos TS gerados que o tsc lê,
   # por isso ficam de fora da fila do Rust e rodam no fim, sozinhos, com a conferência de
   # que nada mudou. Antes, os testes do Rust esperavam a interface terminar (~1,5 min a mais).
@@ -178,7 +178,7 @@ if [ "$checks" = 1 ]; then
   fi
   awk '/^test result/ { ok += $4; ign += $8 } END { printf "%d testes ok, %d ignorados\n", ok, ign }' "$LOGS/testes.log"
 
-  echo "interface (prettier, tsc, eslint, vitest): aguardando…"
+  echo "interface (prettier, tsc, lint, vitest): aguardando…"
   if ! wait "$web_pid"; then
     tail -40 "$web_log"
     die "verificações da interface (log completo: $web_log)"

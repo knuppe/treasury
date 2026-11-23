@@ -43,6 +43,16 @@ cd apps/desktop && npm test            # interface tests
 cd apps/desktop && npm run lint && npm run typecheck
 ```
 
+**Interface lint and types.** `npm run typecheck` is TypeScript 7 (`tsc -b`). `npm run lint` is
+oxlint with the type-aware rules (`oxlint-tsgolint`, on the same TypeScript 7), configured in
+`apps/desktop/.oxlintrc.json`: floating and misused promises, the `no-unsafe-*` family, type
+imports, `eqeqeq`, the rules of hooks and `exhaustive-deps`, and the "no fixed text in JSX" rule of
+`eslint-plugin-i18next`, loaded as a JS plugin, on the folders already in the language catalogs.
+The React Compiler rules of `eslint-plugin-react-hooks` (state set inside an effect, purity,
+immutability) are not checked, and neither are `jsx-key` (the `withSlots` arrays get their keys
+inside it) and `no-misused-spread` (spreading a string into code points is intended where used).
+`// eslint-disable-next-line <rule>` comments keep working.
+
 **Memory to build.** The core is a single crate, and each build of it needs about 4 GB of
 RAM (measured on macOS, at any level of parallelism). `cargo test` and `cargo clippy
 --all-targets` build the library and its tests at the same time, plus the dependencies in
@@ -88,7 +98,7 @@ scripts/release.sh --dist --dmg       # public installer: full LTO and .dmg
 ```
 
 The script prunes the old cache (`clean-build.py`), runs `cargo fmt --check`, `clippy`, the workspace
-tests and the interface checks (prettier, tsc, eslint and vitest in parallel with
+tests and the interface checks (prettier, tsc, lint and vitest in parallel with
 clippy), bumps the app version, records the new migrations in `migrations.lock`, makes the
 commit `release: X.Y.Z (…)`, builds the `.app` (on Linux, AppImage and .deb) and, with `--install`, closes
 Treasury, sends the old app to the Trash and installs the new one in `/Applications`. It refuses to run

@@ -92,7 +92,7 @@ jobs:
           (cd apps/desktop && npm ci)
           python3 -I scripts/third-party-licenses.py --check
 
-  # Interface: lint. Em paralelo com o job ui-build (o eslint sozinho leva mais de 2 minutos).
+  # Interface: lint (oxlint com as regras que pedem tipos). Em paralelo com o job ui-build.
   ui-lint:
     needs: changes
     if: needs.changes.outputs.ui == 'true'

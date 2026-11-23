@@ -89,7 +89,7 @@ export function Money({
       ) : null}
       {estimated ? (
         <>
-          <span aria-hidden>≈&#8239;</span>
+          <span aria-hidden>{'≈\u202f'}</span>
           <span className="sr-only">{`${t('componentes-aproximadamente')} `}</span>
         </>
       ) : null}

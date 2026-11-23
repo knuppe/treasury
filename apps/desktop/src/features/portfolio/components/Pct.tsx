@@ -34,7 +34,7 @@ export function Pct({
   return (
     <Private className={className}>
       <span className={cx('num whitespace-nowrap', color, estimated && 'italic', className)}>
-        {estimated ? <span aria-hidden>≈&#8239;</span> : null}
+        {estimated ? <span aria-hidden>{'≈\u202f'}</span> : null}
         {formatPercent(value, { signed: signed || tone === 'auto', decimals })}
       </span>
     </Private>

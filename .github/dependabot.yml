@@ -54,6 +54,7 @@ updates:
       # Os tipos do Node seguem a versão usada no CI e no build (Node 22).
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
-      # TypeScript 7 (o compilador novo) fica para uma migração própria.
+      # TypeScript e o lint com tipos (oxlint-tsgolint) andam juntos: a próxima versão maior de
+      # um só entra com a do outro, numa migração própria.
       - dependency-name: typescript
         update-types: ['version-update:semver-major']

@@ -58,7 +58,7 @@ export function PriceWithOrigin({
   return (
     <span className="inline-flex items-center justify-end gap-1">
       <span className={stale ? 'italic' : undefined}>
-        {stale ? <span aria-hidden>≈&#8239;</span> : null}
+        {stale ? <span aria-hidden>{'≈\u202f'}</span> : null}
         {formatUnitPrice(price.close, currency)}
       </span>
       <OriginBadge
