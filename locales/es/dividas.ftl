@@ -212,9 +212,9 @@ dividas-correcao-aniversario = en el aniversario
 dividas-correcao-mes = del mes
 dividas-correcao-piso = piso cero
 dividas-correcao-prorata = 1.er período prorrateado
-dividas-cet-contratado = CET contratado
+dividas-cet-contratado = { $sigla } del contrato
 dividas-custo-realizado = Costo real pagado
-dividas-cet-realizado = CET realizado
+dividas-cet-realizado = { $sigla } de lo ya pagado
 dividas-custo-real-ipca = Costo real (− IPCA)
 dividas-juros-pagos = Intereses pagados
 dividas-seguros-taxas-pagos = Seguros y comisiones pagados
@@ -594,8 +594,8 @@ dividas-form-outros-seguros-dica = Monto fijo, además del MIP y del DFI.
 dividas-form-seguros-dica = Seguro de desgravamen y otros.
 dividas-form-taxa-adm = Comisión de administración por mes
 dividas-form-taxa-adm-dica = Comisión mensual del contrato (en el crédito hipotecario suele ser R$ 25).
-dividas-form-cet = CET contratado (% anual)
-dividas-form-cet-dica = Del contrato o de la propuesta. Opcional.
+dividas-form-cet = { $sigla } del contrato (% anual)
+dividas-form-cet-dica = Del contrato o de la propuesta. Opcional: Treasury también lo calcula con el cronograma y muestra los dos lado a lado.
 dividas-form-conta-dica = Para conciliar las cuotas con los movimientos.
 dividas-form-categoria-dica = Un movimiento en esta categoría (importado o ingresado a mano) marca la cuota más cercana como pagada.
 dividas-form-observacoes = Observaciones
@@ -628,3 +628,57 @@ dividas-extra-fgts-saldo = cuenta FGTS, saldo { $saldo }
 dividas-extra-fgts-descricao = La salida quedó en la cuenta FGTS, como retiro para vivienda.
 dividas-extra-data-passada = Fecha pasada ({ $data }): entra después de la última cuota vencida hasta ese día.
 dividas-extra-registrar = Registrar amortización
+
+dividas-cet-sigla = { $pais ->
+    [BR] CET
+    [PT] TAEG
+    [FR] TAEG
+    [DE] Effektiver Jahreszins
+    [US] APR
+    [GB] APR
+    [CA] APR
+    [AR] CFT
+    [CL] CAE
+   *[otro] TAE
+}
+dividas-cet-formula = Σ FCⱼ ÷ (1 + { $sigla })^((dⱼ − d₀) ÷ 365) − FC₀ = 0
+dividas-cet-calculado = { $sigla } según nuestro cálculo
+dividas-cet-nao-informado = no informado
+dividas-cet-explicacao-titulo = Cómo calculamos el { $sigla }
+dividas-cet-explicacao-intro = Es la tasa que iguala lo que recibiste el día de la firma a todo lo que pagas después, cada monto descontado por los días corridos hasta el pago. Entran intereses, comisiones, impuestos y seguros; los índices variables (TR, IPCA, CDI) quedan fuera.
+dividas-cet-formula-legenda = FC₀ = monto entregado · FCⱼ = cuota j (amortización, intereses, seguros y comisiones) · dⱼ − d₀ = días corridos desde la entrega
+dividas-cet-passo-liberado = 1 · Lo que recibiste
+dividas-cet-passo-pagamentos = 2 · Lo que pagas
+dividas-cet-passo-resultado = 3 · Resultado
+dividas-cet-valor-contrato = Monto del contrato
+dividas-cet-iof = Impuesto en la firma (IOF)
+dividas-cet-tarifas = Comisiones y registro
+dividas-cet-seguro-vista = Seguro de prima única
+dividas-cet-liberado = Monto entregado (FC₀)
+dividas-cet-parcelas = { $n } cuotas, del { $de } al { $ate } ({ $dias } días)
+dividas-cet-amortizacao = Amortización
+dividas-cet-juros = Intereses
+dividas-cet-seguros = Seguros en las cuotas
+dividas-cet-taxas = Comisiones en las cuotas
+dividas-cet-total-pago = Total pagado
+dividas-cet-do-total = { $pct } del total
+dividas-cet-resultado-valor = { $aa } anual · { $am } mensual
+dividas-cet-apr-nominal = APR nominal (Regulation Z)
+dividas-cet-diferenca-titulo = El { $sigla } del contrato es distinto del nuestro
+dividas-cet-diferenca = El contrato informa { $informado } y el cronograma registrado da { $calculado } ({ $diferenca } p.p.).
+dividas-cet-diferenca-custos = Probablemente el banco incluyó impuestos, comisiones o seguro que no están registrados: agrégalos en Editar.
+dividas-cet-diferenca-confira = Revisa en el contrato la tasa, las fechas, los seguros y los costos iniciales.
+dividas-cet-indice-fora = Índice fuera del cálculo: { $indice }. La regla deja fuera los índices variables y solo los informa.
+dividas-cet-sem-custos = No hay costos iniciales registrados. Si hubo impuesto, comisión de apertura, registro o seguro de prima única, agrégalos en Editar para que el { $sigla } quede completo.
+dividas-cet-fonte-br = Regla: Resolución CMN nº 4.881/2020 del Banco Central de Brasil (arts. 3 a 5), con dos decimales.
+dividas-cet-fonte-outros = Mismo cálculo que el CET de Brasil (Res. CMN 4.881/2020) y la TAE de España (Ley 16/2011): tasa anual efectiva, días corridos ÷ 365. Compárala con el número de tu contrato.
+dividas-cet-fonte-eua = En EE. UU. el APR del contrato es nominal (tasa mensual × 12, Regulation Z, Appendix J); la tasa efectiva aparece al lado para comparar con otros países.
+dividas-cet-quedas = { $n ->
+    [one] Una caída del saldo sin pago registrado ({ $valor }, cuota { $parcela }) se contó como pagada.
+   *[other] { $n } caídas del saldo sin pago registrado ({ $valor } en total, la primera en la cuota { $parcela }) se contaron como pagadas.
+} Si fue una amortización, regístrala; si el monto del contrato está mal, corrígelo.
+dividas-form-custos-iniciais = Costos en la firma
+dividas-form-custos-iniciais-dica = Pagados el día de la firma, aunque se hayan sumado al monto financiado. Salen del monto entregado en el cálculo del { $sigla }.
+dividas-form-iof = Impuesto (IOF)
+dividas-form-tarifas-iniciais = Comisiones y registro
+dividas-form-seguro-vista = Seguro de prima única

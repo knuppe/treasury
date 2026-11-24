@@ -60,6 +60,7 @@ import {
   SYSTEM_HINT_POST,
   SYSTEM_LABEL,
 } from './labels';
+import { useCetName } from './cet';
 import { decimalString, decimalText, firstPaymentPreview, rateText } from './transform';
 
 const NONE = '__none__';
@@ -126,6 +127,10 @@ interface LoanForm {
   dfiMode: InsuranceMode;
   dfiAmount: number | null;
   fees: number | null;
+  /** Costs paid at signing (IOF, one-time fees, single-premium insurance). */
+  upfrontIof: number | null;
+  upfrontFees: number | null;
+  upfrontInsurance: number | null;
   cet: string | null;
   debitAccountId: string;
   categoryId: string | null;
@@ -171,6 +176,9 @@ function initial(loan: LoanView | null | undefined): LoanForm {
     dfiMode: loan?.dfi_amount != null ? 'amount' : 'rate',
     dfiAmount: loan?.dfi_amount ?? null,
     fees: loan?.fees_monthly ?? 0,
+    upfrontIof: loan?.upfront.iof || null,
+    upfrontFees: loan?.upfront.fees || null,
+    upfrontInsurance: loan?.upfront.insurance || null,
     cet: loan?.cet_annual ?? null,
     debitAccountId: loan?.debit_account_id ?? NONE,
     categoryId: loan?.category_id ?? null,
@@ -235,6 +243,7 @@ function LoanFormBody({
   const editing = Boolean(loan);
   // Índices, consignado e base de 252 dias são do Brasil.
   const br = useCountryFeatures().br_credit_rates;
+  const sigla = useCetName();
   // Valores do formulário na moeda base da família (como os campos de valor).
   const symbol = currencyPrefix(useBaseCurrency());
   const [f, setF] = useState<LoanForm>(() => initial(loan));
@@ -407,6 +416,9 @@ function LoanFormBody({
           ? { dfi_rate: f.dfiRate }
           : {}),
       ...(f.fees ? { fees_monthly: f.fees } : {}),
+      ...(f.upfrontIof ? { upfront_iof: f.upfrontIof } : {}),
+      ...(f.upfrontFees ? { upfront_fees: f.upfrontFees } : {}),
+      ...(f.upfrontInsurance ? { upfront_insurance: f.upfrontInsurance } : {}),
       ...(f.cet ? { cet_annual: f.cet } : {}),
       ...(opt(f.institutionId) ? { institution_id: opt(f.institutionId) } : {}),
       ...(opt(f.memberId) ? { member_id: opt(f.memberId) } : {}),
@@ -931,7 +943,27 @@ function LoanFormBody({
           >
             <MoneyInput value={f.fees} onValueChange={(v) => set('fees', v)} />
           </Field>
-          <Field label={t('dividas-form-cet')} hint={t('dividas-form-cet-dica')}>
+          <fieldset className="col-span-full flex flex-col gap-2">
+            <legend className="label-caps">{t('dividas-form-custos-iniciais')}</legend>
+            <p className="text-[12px] text-dim">
+              {t('dividas-form-custos-iniciais-dica', { sigla })}
+            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Field label={t('dividas-form-iof')}>
+                <MoneyInput value={f.upfrontIof} onValueChange={(v) => set('upfrontIof', v)} />
+              </Field>
+              <Field label={t('dividas-form-tarifas-iniciais')}>
+                <MoneyInput value={f.upfrontFees} onValueChange={(v) => set('upfrontFees', v)} />
+              </Field>
+              <Field label={t('dividas-form-seguro-vista')}>
+                <MoneyInput
+                  value={f.upfrontInsurance}
+                  onValueChange={(v) => set('upfrontInsurance', v)}
+                />
+              </Field>
+            </div>
+          </fieldset>
+          <Field label={t('dividas-form-cet', { sigla })} hint={t('dividas-form-cet-dica')}>
             <DecimalInput
               value={f.cet}
               onValueChange={(v) => set('cet', v)}

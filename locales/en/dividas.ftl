@@ -212,9 +212,9 @@ dividas-correcao-aniversario = on the anniversary
 dividas-correcao-mes = same month
 dividas-correcao-piso = zero floor
 dividas-correcao-prorata = 1st period pro rata
-dividas-cet-contratado = Contracted CET
+dividas-cet-contratado = { $sigla } on the contract
 dividas-custo-realizado = Actual cost
-dividas-cet-realizado = Actual CET
+dividas-cet-realizado = { $sigla } of what was paid
 dividas-custo-real-ipca = Real cost (− IPCA)
 dividas-juros-pagos = Interest paid
 dividas-seguros-taxas-pagos = Insurance and fees paid
@@ -594,8 +594,8 @@ dividas-form-outros-seguros-dica = Fixed amount, on top of MIP and DFI.
 dividas-form-seguros-dica = Credit life and others.
 dividas-form-taxa-adm = Administration fee per month
 dividas-form-taxa-adm-dica = The loan's monthly fee (for a mortgage, usually R$ 25).
-dividas-form-cet = Contracted CET (% p.a.)
-dividas-form-cet-dica = From the contract or the offer. Optional.
+dividas-form-cet = { $sigla } on the contract (% p.a.)
+dividas-form-cet-dica = From the contract or the offer. Optional: Treasury also computes it from the schedule and shows both side by side.
 dividas-form-conta-dica = To reconcile the installments with transactions.
 dividas-form-categoria-dica = A transaction in this category (imported or typed in) marks the closest installment as paid.
 dividas-form-observacoes = Notes
@@ -628,3 +628,55 @@ dividas-extra-fgts-saldo = FGTS account, balance { $saldo }
 dividas-extra-fgts-descricao = The money left the FGTS account, as a housing withdrawal.
 dividas-extra-data-passada = Past date ({ $data }): it goes in after the last installment due up to then.
 dividas-extra-registrar = Record extra payment
+
+dividas-cet-sigla = { $pais ->
+    [BR] CET
+    [PT] TAEG
+    [FR] TAEG
+    [ES] TAE
+    [DE] Effektiver Jahreszins
+    [AR] CFT
+    [CL] CAE
+   *[other] APR
+}
+dividas-cet-formula = Σ FCⱼ ÷ (1 + { $sigla })^((dⱼ − d₀) ÷ 365) − FC₀ = 0
+dividas-cet-calculado = { $sigla } by our calculation
+dividas-cet-nao-informado = not informed
+dividas-cet-explicacao-titulo = How we calculate the { $sigla }
+dividas-cet-explicacao-intro = It's the rate that makes what reached you on the signing day equal to everything you pay afterward, each amount discounted by the calendar days until it is paid. Interest, fees, taxes and insurance count; floating indexes (TR, IPCA, CDI) stay out.
+dividas-cet-formula-legenda = FC₀ = amount released · FCⱼ = installment j (principal, interest, insurance and fees) · dⱼ − d₀ = calendar days since the release
+dividas-cet-passo-liberado = 1 · What you received
+dividas-cet-passo-pagamentos = 2 · What you pay
+dividas-cet-passo-resultado = 3 · Result
+dividas-cet-valor-contrato = Contract amount
+dividas-cet-iof = Tax at signing (IOF)
+dividas-cet-tarifas = Fees and registration
+dividas-cet-seguro-vista = Single-premium insurance
+dividas-cet-liberado = Amount released (FC₀)
+dividas-cet-parcelas = { $n } installments, from { $de } to { $ate } ({ $dias } days)
+dividas-cet-amortizacao = Principal
+dividas-cet-juros = Interest
+dividas-cet-seguros = Insurance in the installments
+dividas-cet-taxas = Fees in the installments
+dividas-cet-total-pago = Total paid
+dividas-cet-do-total = { $pct } of the total
+dividas-cet-resultado-valor = { $aa } p.a. · { $am } a month
+dividas-cet-apr-nominal = Nominal APR (Regulation Z)
+dividas-cet-diferenca-titulo = The contract's { $sigla } differs from ours
+dividas-cet-diferenca = The contract says { $informado } and the registered schedule gives { $calculado } ({ $diferenca } pp).
+dividas-cet-diferenca-custos = The bank probably included taxes, fees or insurance that are not registered: add them in Edit.
+dividas-cet-diferenca-confira = Check the rate, the dates, the insurance and the upfront costs on the contract.
+dividas-cet-indice-fora = Index left out: { $indice }. The rule leaves floating indexes out and only states them.
+dividas-cet-sem-custos = No upfront costs registered. If there was a tax, a registration fee or single-premium insurance, add it in Edit so the { $sigla } is complete.
+dividas-cet-fonte-br = Rule: Resolução CMN nº 4.881/2020 of Brazil's Central Bank (articles 3 to 5), with two decimal places.
+dividas-cet-fonte-outros = Same calculation as Brazil's CET (Res. CMN 4.881/2020) and Spain's TAE: effective annual rate, calendar days ÷ 365. Compare it with the number on your contract.
+dividas-cet-fonte-eua = In the US the contract's APR is nominal (monthly rate × 12, Regulation Z, Appendix J); the effective rate is shown next to it to compare with other countries.
+dividas-cet-quedas = { $n ->
+    [one] One balance drop with no payment recorded ({ $valor }, installment { $parcela }) was counted as paid.
+   *[other] { $n } balance drops with no payment recorded ({ $valor } in total, the first at installment { $parcela }) were counted as paid.
+} If it was a prepayment, record it; if the contract amount is wrong, fix it.
+dividas-form-custos-iniciais = Costs at signing
+dividas-form-custos-iniciais-dica = Paid on the signing day, even if they were added to the amount financed. They come out of the amount released in the { $sigla }.
+dividas-form-iof = Tax (IOF)
+dividas-form-tarifas-iniciais = Fees and registration
+dividas-form-seguro-vista = Single-premium insurance

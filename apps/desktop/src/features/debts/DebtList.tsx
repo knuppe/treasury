@@ -16,6 +16,7 @@ import { Pct } from '@/features/portfolio/components/Pct';
 import { t } from '@/i18n';
 import { formatDate } from '@/lib/format';
 
+import { headlinePct, useCountryCode } from './cet';
 import { INDEXER_LABEL, isPostIndexer, KIND_LABEL, SYSTEM_LABEL } from './labels';
 import { loanRateLabel, progress, rateText } from './transform';
 
@@ -62,6 +63,8 @@ export function LoanTable({
   onSelect: (id: string) => void;
   rowMenu?: (loan: LoanView) => readonly ContextMenuEntry[];
 }) {
+  const country = useCountryCode();
+  const sigla = t('dividas-cet-sigla', { pais: country });
   return (
     <TechTable<LoanView>
       label={t('dividas-contratos')}
@@ -175,10 +178,23 @@ export function LoanTable({
         },
         {
           key: 'cet',
-          header: 'CET',
+          header: sigla,
           numeric: true,
-          sortValue: (l) => (l.cet_annual ? Number(l.cet_annual) : null),
-          cell: (l) => (l.cet_annual ? rateText(l.cet_annual) : '—'),
+          sortValue: (l) => {
+            const h = headlinePct(l, country).pct;
+            return h ? Number(h) : null;
+          },
+          cell: (l) => {
+            const h = headlinePct(l, country);
+            return h.pct ? (
+              <span title={h.computed ? t('dividas-cet-calculado', { sigla }) : undefined}>
+                {h.computed ? '≈ ' : ''}
+                {rateText(h.pct)}
+              </span>
+            ) : (
+              '—'
+            );
+          },
         },
         {
           key: 'real',

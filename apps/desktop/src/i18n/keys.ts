@@ -7113,8 +7113,51 @@ export interface Messages {
   'dividas-calculando': never;
   'dividas-carregando-contratos': never;
   'dividas-categoria-pagamentos': never;
-  'dividas-cet-contratado': never;
-  'dividas-cet-realizado': never;
+  'dividas-cet-amortizacao': never;
+  'dividas-cet-apr-nominal': never;
+  'dividas-cet-calculado': { sigla: string | number };
+  'dividas-cet-contratado': { sigla: string | number };
+  'dividas-cet-diferenca': {
+    calculado: string | number;
+    diferenca: string | number;
+    informado: string | number;
+  };
+  'dividas-cet-diferenca-confira': never;
+  'dividas-cet-diferenca-custos': never;
+  'dividas-cet-diferenca-titulo': { sigla: string | number };
+  'dividas-cet-do-total': { pct: string | number };
+  'dividas-cet-explicacao-intro': never;
+  'dividas-cet-explicacao-titulo': { sigla: string | number };
+  'dividas-cet-fonte-br': never;
+  'dividas-cet-fonte-eua': never;
+  'dividas-cet-fonte-outros': never;
+  'dividas-cet-formula': { sigla: string | number };
+  'dividas-cet-formula-legenda': never;
+  'dividas-cet-indice-fora': { indice: string | number };
+  'dividas-cet-iof': never;
+  'dividas-cet-juros': never;
+  'dividas-cet-liberado': never;
+  'dividas-cet-nao-informado': never;
+  'dividas-cet-parcelas': {
+    ate: string | number;
+    de: string | number;
+    dias: string | number;
+    n: string | number;
+  };
+  'dividas-cet-passo-liberado': never;
+  'dividas-cet-passo-pagamentos': never;
+  'dividas-cet-passo-resultado': never;
+  'dividas-cet-quedas': { n: string | number; parcela: string | number; valor: string | number };
+  'dividas-cet-realizado': { sigla: string | number };
+  'dividas-cet-resultado-valor': { aa: string | number; am: string | number };
+  'dividas-cet-seguro-vista': never;
+  'dividas-cet-seguros': never;
+  'dividas-cet-sem-custos': { sigla: string | number };
+  'dividas-cet-sigla': { pais: string | number };
+  'dividas-cet-tarifas': never;
+  'dividas-cet-taxas': never;
+  'dividas-cet-total-pago': never;
+  'dividas-cet-valor-contrato': never;
   'dividas-col-custo-real': never;
   'dividas-col-numero': never;
   'dividas-col-progresso': never;
@@ -7249,7 +7292,7 @@ export interface Messages {
   'dividas-form-carencia': never;
   'dividas-form-carencia-dica': never;
   'dividas-form-categoria-dica': never;
-  'dividas-form-cet': never;
+  'dividas-form-cet': { sigla: string | number };
   'dividas-form-cet-dica': never;
   'dividas-form-como-dfi': never;
   'dividas-form-como-mip': never;
@@ -7257,6 +7300,8 @@ export interface Messages {
   'dividas-form-conta-dica': never;
   'dividas-form-correcao-dica': never;
   'dividas-form-correcao-valor': { indice: string | number };
+  'dividas-form-custos-iniciais': never;
+  'dividas-form-custos-iniciais-dica': { sigla: string | number };
   'dividas-form-dados': never;
   'dividas-form-data-contrato': never;
   'dividas-form-data-contrato-dica': never;
@@ -7301,6 +7346,7 @@ export interface Messages {
   'dividas-form-indice-usado': never;
   'dividas-form-informar-taxa': never;
   'dividas-form-instituicao': never;
+  'dividas-form-iof': never;
   'dividas-form-ja-paguei': { n: string | number };
   'dividas-form-ja-paguei-dica': never;
   'dividas-form-juros-dica': never;
@@ -7343,11 +7389,13 @@ export interface Messages {
   'dividas-form-prorata-dica': never;
   'dividas-form-prorata-pos': never;
   'dividas-form-salvar': never;
+  'dividas-form-seguro-vista': never;
   'dividas-form-seguros': never;
   'dividas-form-seguros-dica': never;
   'dividas-form-sistema': never;
   'dividas-form-spread': never;
   'dividas-form-spread-dica': { indice: string | number };
+  'dividas-form-tarifas-iniciais': never;
   'dividas-form-taxa-adm': never;
   'dividas-form-taxa-adm-dica': never;
   'dividas-form-taxa-calculada': never;
@@ -15436,6 +15484,8 @@ export interface Messages {
   'nucleo-planejamento-divida-erro-categoria-despesa': never;
   'nucleo-planejamento-divida-erro-categoria-ligada': { contrato: string | number };
   'nucleo-planejamento-divida-erro-conciliar-sem-conta': never;
+  'nucleo-planejamento-divida-erro-custo-inicial-maior': never;
+  'nucleo-planejamento-divida-erro-custo-inicial-negativo': never;
   'nucleo-planejamento-divida-erro-defasagem-diaria': never;
   'nucleo-planejamento-divida-erro-defasagem-mensal': never;
   'nucleo-planejamento-divida-erro-dfi-sem-imovel': never;
@@ -25704,8 +25754,42 @@ export const KEYS: readonly MessageKey[] = [
   'dividas-calculando',
   'dividas-carregando-contratos',
   'dividas-categoria-pagamentos',
+  'dividas-cet-amortizacao',
+  'dividas-cet-apr-nominal',
+  'dividas-cet-calculado',
   'dividas-cet-contratado',
+  'dividas-cet-diferenca',
+  'dividas-cet-diferenca-confira',
+  'dividas-cet-diferenca-custos',
+  'dividas-cet-diferenca-titulo',
+  'dividas-cet-do-total',
+  'dividas-cet-explicacao-intro',
+  'dividas-cet-explicacao-titulo',
+  'dividas-cet-fonte-br',
+  'dividas-cet-fonte-eua',
+  'dividas-cet-fonte-outros',
+  'dividas-cet-formula',
+  'dividas-cet-formula-legenda',
+  'dividas-cet-indice-fora',
+  'dividas-cet-iof',
+  'dividas-cet-juros',
+  'dividas-cet-liberado',
+  'dividas-cet-nao-informado',
+  'dividas-cet-parcelas',
+  'dividas-cet-passo-liberado',
+  'dividas-cet-passo-pagamentos',
+  'dividas-cet-passo-resultado',
+  'dividas-cet-quedas',
   'dividas-cet-realizado',
+  'dividas-cet-resultado-valor',
+  'dividas-cet-seguro-vista',
+  'dividas-cet-seguros',
+  'dividas-cet-sem-custos',
+  'dividas-cet-sigla',
+  'dividas-cet-tarifas',
+  'dividas-cet-taxas',
+  'dividas-cet-total-pago',
+  'dividas-cet-valor-contrato',
   'dividas-col-custo-real',
   'dividas-col-numero',
   'dividas-col-progresso',
@@ -25835,6 +25919,8 @@ export const KEYS: readonly MessageKey[] = [
   'dividas-form-conta-dica',
   'dividas-form-correcao-dica',
   'dividas-form-correcao-valor',
+  'dividas-form-custos-iniciais',
+  'dividas-form-custos-iniciais-dica',
   'dividas-form-dados',
   'dividas-form-data-contrato',
   'dividas-form-data-contrato-dica',
@@ -25879,6 +25965,7 @@ export const KEYS: readonly MessageKey[] = [
   'dividas-form-indice-usado',
   'dividas-form-informar-taxa',
   'dividas-form-instituicao',
+  'dividas-form-iof',
   'dividas-form-ja-paguei',
   'dividas-form-ja-paguei-dica',
   'dividas-form-juros-dica',
@@ -25921,11 +26008,13 @@ export const KEYS: readonly MessageKey[] = [
   'dividas-form-prorata-dica',
   'dividas-form-prorata-pos',
   'dividas-form-salvar',
+  'dividas-form-seguro-vista',
   'dividas-form-seguros',
   'dividas-form-seguros-dica',
   'dividas-form-sistema',
   'dividas-form-spread',
   'dividas-form-spread-dica',
+  'dividas-form-tarifas-iniciais',
   'dividas-form-taxa-adm',
   'dividas-form-taxa-adm-dica',
   'dividas-form-taxa-calculada',
@@ -33065,6 +33154,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-planejamento-divida-erro-categoria-despesa',
   'nucleo-planejamento-divida-erro-categoria-ligada',
   'nucleo-planejamento-divida-erro-conciliar-sem-conta',
+  'nucleo-planejamento-divida-erro-custo-inicial-maior',
+  'nucleo-planejamento-divida-erro-custo-inicial-negativo',
   'nucleo-planejamento-divida-erro-defasagem-diaria',
   'nucleo-planejamento-divida-erro-defasagem-mensal',
   'nucleo-planejamento-divida-erro-dfi-sem-imovel',

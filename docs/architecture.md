@@ -239,6 +239,7 @@ retorno_real = (1 + retorno_nominal) / (1 + inflação[t₀→t₁]) − 1
 - SAC and Price schedule generation, with adjustment by the contract's index.
 - Charges beyond interest: home insurance (MIP and DFI), administration fee, IOF; the CET stated in the contract is recorded and compared with the realized one.
 - Realized total effective cost (interest + insurance + fees) and comparison with inflation over the period (the debt's "real cost").
+- Contract total effective cost computed by Res. CMN 4.881/2020 (upfront IOF and fees out of the amount released, floating index left out), next to the one typed from the contract, with the US APR and the local name per country (design/loan-cet.md).
 
 ### Cash flow
 - Transfers between accounts, card statement payments and investment contributions/redemptions do **not** count as income or expense; card spending counts at purchase.

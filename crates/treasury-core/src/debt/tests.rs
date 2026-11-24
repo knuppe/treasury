@@ -1229,3 +1229,92 @@ fn statement_as_proposal_reports_the_simulated_result() {
     assert!(s.contains("Proposta"), "{s}");
     assert!(s.contains("99.025,79"), "{s}");
 }
+
+#[test]
+fn contract_cet_takes_upfront_costs_out_of_the_amount_released() {
+    let (_d, api, _acc) = api();
+    // Made-up personal loan: R$ 10.000,00 released, R$ 850,00 of IOF and fees financed, 1.9% a
+    // month, 12 Price installments.
+    let l = api
+        .call(
+            "debt.create",
+            json!({"name": "Pessoal", "kind": "personal", "principal": 1_085_000, "annual_rate": "25.340149",
+                   "system": "price", "contract_date": "2026-03-10", "first_due_date": "2026-04-10", "term_months": 12,
+                   "upfront_iof": 25_000, "upfront_fees": 60_000, "cet_annual": "46,5"}),
+        )
+        .unwrap();
+    let v = api
+        .call("debt.get", json!({"id": l["id"].as_str().unwrap()}))
+        .unwrap();
+    let c = &v["cet"];
+    assert_eq!(c["annual_pct"], "46.49");
+    assert_eq!(c["released"], 1_000_000);
+    assert_eq!(c["upfront"]["iof"], 25_000);
+    assert_eq!(c["installments"], 12);
+    assert_eq!(c["index_excluded"], serde_json::Value::Null);
+    let gap = c["contracted_gap_pp"].as_f64().unwrap();
+    assert!((gap - 0.01).abs() < 1e-9, "{gap}");
+    let apr = c["us_apr"].as_f64().unwrap();
+    assert!((apr - 0.39).abs() < 0.0005, "{apr}");
+    // Costs at or above the principal are refused.
+    let err = api
+        .call(
+            "debt.create",
+            json!({"name": "X", "kind": "personal", "principal": 100_000, "annual_rate": "10", "system": "price",
+                   "contract_date": "2026-03-10", "first_due_date": "2026-04-10", "term_months": 12,
+                   "upfront_fees": 100_000}),
+        )
+        .unwrap_err();
+    assert!(err.to_string().contains("menores"), "{err}");
+}
+
+#[test]
+fn contract_cet_leaves_the_floating_index_out() {
+    let (_d, api, _acc) = api();
+    seed_monthly(&api, "tr", &[("2026-01-01", "0.2"), ("2026-02-01", "0.2")]);
+    let l = api
+        .call(
+            "debt.create",
+            json!({"name": "Casa", "kind": "mortgage", "principal": 30_000_000, "annual_rate": "9.5", "system": "price",
+                   "indexer": "tr", "contract_date": "2026-01-10", "first_due_date": "2026-02-10", "term_months": 360}),
+        )
+        .unwrap();
+    let v = api
+        .call("debt.get", json!({"id": l["id"].as_str().unwrap()}))
+        .unwrap();
+    assert_eq!(v["cet"]["index_excluded"], "TR");
+    let a = v["cet"]["annual"].as_f64().unwrap();
+    assert!((a - 0.095).abs() < 0.002, "only the fixed 9.5% counts: {a}");
+    assert_eq!(v["cet"]["upfront"]["iof"], 0);
+}
+
+#[test]
+fn realized_cet_counts_extra_payments() {
+    let (_d, api, _acc) = api();
+    let l = api
+        .call(
+            "debt.create",
+            json!({"name": "Carro", "kind": "vehicle", "principal": 1_000_000, "annual_rate": "12.682503", "system": "price",
+                   "contract_date": "2025-01-10", "first_due_date": "2025-02-10", "term_months": 12}),
+        )
+        .unwrap();
+    let id = l["id"].as_str().unwrap();
+    api.call(
+        "debt.add_extra_payment",
+        json!({"loan_id": id, "date": "2025-04-10", "amount": 300_000, "mode": "reduce_term", "without_txn": true}),
+    )
+    .unwrap();
+    api.call(
+        "debt.mark_paid_until",
+        json!({"loan_id": id, "before": "2026-01-01"}),
+    )
+    .unwrap();
+    let v = api.call("debt.get", json!({"id": id})).unwrap();
+    assert_eq!(v["balance"], 0);
+    let r = v["realized_cet"].as_f64().unwrap();
+    assert!(
+        (r - 0.1268).abs() < 0.002,
+        "the extra payment is money paid: {r}"
+    );
+    assert_eq!(v["realized_drops"].as_array().unwrap().len(), 0);
+}

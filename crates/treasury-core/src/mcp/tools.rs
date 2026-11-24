@@ -1331,7 +1331,14 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         description: "Loan and financing contracts: amount, effective annual and monthly rate, \
             system (SAC/Price), index, term, outstanding balance today, installments paid, \
             remaining and overdue, next installment, interest paid and still to pay, realized CET \
-            (total effective cost) and real cost (net of IPCA). Amounts in cents.",
+            (total effective cost of what was paid, with `realized_drops`: balance drops with no \
+            payment that it counted as paid) and real cost (net of IPCA). `cet_annual` is the CET \
+            typed from the contract; `cet` is the CET computed from the contract as signed by Res. \
+            CMN 4.881/2020 (`annual` effective a year, `annual_pct`, `monthly_pct`, `us_apr` = \
+            nominal APR of Regulation Z, `released` = principal minus `upfront` costs, the sums of \
+            the installments, `index_excluded` = floating index left out, `contracted_gap_pp` = \
+            typed minus computed). Outside Brazil the same rate is the APR/TAEG/TAE of the \
+            contract. Amounts in cents.",
         command: "debt.list",
         list_key: Some("loans"),
         schema: schema::<ListLoansInput>,

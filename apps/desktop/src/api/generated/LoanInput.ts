@@ -65,7 +65,12 @@ mip_amount?: number,
 /**
  * DFI em valor fixo por mês (centavos).
  */
-dfi_amount?: number, cet_annual?: string, debit_account_id?: string, 
+dfi_amount?: number, cet_annual?: string, 
+/**
+ * Costs paid on day zero (IOF, one-time fees, single-premium insurance), in cents. They
+ * come out of the amount released in the CET, whether financed or paid apart.
+ */
+upfront_iof?: number, upfront_fees?: number, upfront_insurance?: number, debit_account_id?: string, 
 /**
  * Categoria dos pagamentos: um lançamento nela marca a parcela mais próxima como paga.
  */

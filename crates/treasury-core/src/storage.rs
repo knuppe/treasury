@@ -712,9 +712,10 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let db = Db::open(&copy(V0938_FIXTURE, &dir), V0938_PASSWORD).unwrap();
         assert_eq!(objects(db.conn()).unwrap(), v1_objects().unwrap());
+        // A new vault gets V1 and every migration published after it.
         let fresh = Db::create(&dir.path().join("novo.db"), "senha", KDF_TEST).unwrap();
-        assert_eq!(objects(fresh.conn()).unwrap(), v1_objects().unwrap());
-        assert_eq!(fresh.schema_version().unwrap(), 1);
+        assert_eq!(objects(fresh.conn()).unwrap(), all_objects());
+        assert_eq!(fresh.schema_version().unwrap(), latest_schema_version());
     }
 
     /// A 0.9.38 vault opens, swaps the V1-V164 history for V1 and keeps the data; opening
@@ -727,7 +728,14 @@ mod tests {
         assert_eq!(db.schema_version().unwrap(), 164);
         assert!(db.needs_migration().unwrap());
         db.migrate().unwrap();
-        assert_eq!(history(db.conn()).unwrap(), [(1, "esquema".to_string())]);
+        // V1 replaces the old chain; the migrations after 1.0.0 run on top of it.
+        let h = history(db.conn()).unwrap();
+        assert_eq!(h[0], (1, "esquema".to_string()));
+        assert_eq!(
+            h.iter().map(|(v, _)| *v).collect::<Vec<_>>(),
+            embedded_versions()
+        );
+        assert_eq!(objects(db.conn()).unwrap(), all_objects());
         let st = db.schema_status().unwrap();
         assert!(st.pending.is_empty() && st.unknown.is_empty(), "{st:?}");
         let (desc, amount): (String, i64) = db
@@ -742,7 +750,18 @@ mod tests {
         drop(db);
         let db = Db::open(&p, V0938_PASSWORD).unwrap();
         assert!(!db.needs_migration().unwrap());
-        assert_eq!(db.schema_version().unwrap(), 1);
+        assert_eq!(db.schema_version().unwrap(), latest_schema_version());
+    }
+
+    /// Schema objects after every embedded migration, in order, in an in-memory database.
+    fn all_objects() -> Vec<(String, String, String)> {
+        let conn = Connection::open_in_memory().unwrap();
+        let mut ms = embedded::migrations::runner().get_migrations().to_vec();
+        ms.sort_by_key(|m| m.version());
+        for m in ms {
+            conn.execute_batch(m.sql().unwrap_or_default()).unwrap();
+        }
+        objects(&conn).unwrap()
     }
 
     /// A 0.9.38 vault with a tampered schema (one index fewer) does not swap the history.

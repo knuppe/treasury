@@ -201,7 +201,7 @@ glossario-rotativo-busca = revolving
 
 glossario-cet-termo = Total effective cost (CET)
 glossario-cet-simples = How much a loan really costs per year, adding up interest, fees, insurance and taxes. It's the number to compare offers with.
-glossario-cet-busca = \bcet\b|effective cost
+glossario-cet-busca = \bcet\b|effective cost|\btaeg?\b|\bapr\b|\bcft\b|\bcae\b
 
 glossario-amortizacao-termo = Amortization
 glossario-amortizacao-simples = The part of the installment that actually reduces the debt (the rest of the installment is interest). Paying amortization early reduces the interest you would still pay.

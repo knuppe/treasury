@@ -35,7 +35,7 @@ describe('Debts in English', () => {
     expect(screen.getByRole('button', { name: 'New loan' })).toBeTruthy();
 
     const detail = screen.getByRole('region', { name: 'Loan Financiamento do apartamento' });
-    expect(within(detail).getByText('Actual CET')).toBeTruthy();
+    expect(within(detail).getByText('CET of what was paid')).toBeTruthy();
     expect(within(detail).getByText(/TR adjustment \(on the anniversary\)/)).toBeTruthy();
     const table = await within(detail).findByRole('grid', {
       name: 'Amortization table · Financiamento do apartamento',

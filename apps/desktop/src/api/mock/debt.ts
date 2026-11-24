@@ -20,6 +20,7 @@ import type { SpreadMode } from '@/api/generated/SpreadMode';
 import type { CorrectionReference } from '@/api/generated/CorrectionReference';
 import type { InterestBasis } from '@/api/generated/InterestBasis';
 import type { Prorata } from '@/api/generated/Prorata';
+import type { UpfrontCosts } from '@/api/generated/UpfrontCosts';
 
 import { rateString, solveLoanRate } from '@/lib/loanRate';
 
@@ -32,8 +33,8 @@ import {
   type Params,
   type Period,
   type Row,
-  xirr,
 } from './debt/schedule';
+import { contractCet, realizedCet, upfrontTotal } from './debt/cet';
 import { guarded } from './ledger/boot';
 import { addDays, addMonths, diffDays, isIsoDate, monthOf, today } from './ledger/dates';
 import { checkCategory, currencyAndKind, insertTxn } from './ledger/domain';
@@ -95,6 +96,8 @@ interface LoanRec {
   /** Extrato importado: última parcela com valores do banco e de onde a projeção parte. */
   rebase?: { number: number; balance: number; term: number } | null;
   cet_annual: string | null;
+  /** Costs paid on day zero (IOF, one-time fees, single-premium insurance). */
+  upfront: UpfrontCosts;
   debit_account_id: string | null;
   category_id: string | null;
   member_id: string | null;
@@ -152,7 +155,7 @@ function nextWeekday(iso: string): string {
 }
 
 /** Espelho simplificado de `postfixed.rs`: fator por período com CDI constante. */
-function postPeriods(l: LoanRec, count: number): Period[] {
+function postPeriods(l: LoanRec, count: number, withIndex = true): Period[] {
   if (l.indexer !== 'cdi' && l.indexer !== 'selic') return [];
   const pct = Number(l.index_pct) / 100;
   const s = Number(l.annual_rate) / 100;
@@ -162,7 +165,7 @@ function postPeriods(l: LoanRec, count: number): Period[] {
     const due = nextWeekday(addMonths(l.first_due_date, k));
     let du = 0;
     for (let d = start; d < due; d = addDays(d, 1)) if (isWeekday(d)) du += 1;
-    const fdi = (1 + (MOCK_DAILY_PCT / 100) * pct) ** du;
+    const fdi = withIndex ? (1 + (MOCK_DAILY_PCT / 100) * pct) ** du : 1;
     const days = diffDays(due, start);
     const spread = l.spread_mode === 'lin360' ? 1 + (s * days) / 360 : (1 + s) ** (du / 252);
     out.push({ due, factor: fdi * spread, businessDays: du, estimated: due > today() });
@@ -233,6 +236,36 @@ function paramsFor(l0: LoanRec, extra?: Extra): Params {
     periods: postPeriods(l, l.term_months + 120),
   };
 }
+
+/** Contract as signed with the floating index at zero (art. 5º of Res. 4.881), for the CET. */
+function contractParams(l: LoanRec): Params {
+  return {
+    principal: l.principal,
+    annualRatePct: Number(l.annual_rate),
+    system: l.system,
+    term: l.term_months,
+    grace: l.grace_months,
+    firstDue: l.first_due_date,
+    insurance: l.insurance_monthly,
+    fees: l.fees_monthly,
+    ...housing(l),
+    indexFactors: [],
+    extras: [],
+    periods: postPeriods(l, l.term_months, false),
+  };
+}
+
+const INDEX_LABEL: Record<LoanIndexer, string | null> = {
+  none: null,
+  tr: 'TR',
+  ipca: 'IPCA',
+  igpm: 'IGP-M',
+  cdi: 'CDI',
+  selic: 'Selic',
+  inpc: 'INPC',
+  incc: 'INCC',
+  poupanca: 'Poupança',
+};
 
 /** Seguros do financiamento imobiliário: MIP em fração do saldo e DFI do mês. */
 function housing(l: LoanRec): { mipRate: number; mipFixed: number; dfi: number } {
@@ -596,16 +629,13 @@ function view(l: LoanRec): LoanView {
   const inst = withVersions(l.installments, t);
   const paid = inst.filter((i) => i.paid);
   const balance = balanceAt(l, t);
-  // CET realizado: XIRR de quem toma, com o saldo devedor de hoje como fluxo final.
-  let realized: number | null = null;
-  if (paid.length > 0) {
-    const flows = [
-      { date: l.contract_date, amount: -l.principal },
-      ...paid.map((i) => ({ date: i.paid_date ?? i.due_date, amount: i.paid_amount ?? i.total })),
-    ];
-    if (balance > 0) flows.push({ date: t, amount: balance });
-    realized = xirr(flows);
-  }
+  const realizedCost = realizedCet(
+    l.principal - upfrontTotal(l.upfront),
+    l.principal,
+    l.contract_date,
+    inst,
+  );
+  const realized = realizedCost.rate;
   let realCost: number | null = null;
   if (realized != null) {
     const f = deflatorFactor('ipca', l.contract_date, t);
@@ -648,6 +678,15 @@ function view(l: LoanRec): LoanView {
     statement_until: l.rebase?.number ?? null,
     fees_monthly: l.fees_monthly,
     cet_annual: l.cet_annual,
+    upfront: l.upfront,
+    cet: contractCet(
+      build(contractParams(l)),
+      l.contract_date,
+      l.principal,
+      l.upfront,
+      INDEX_LABEL[l.indexer],
+      l.cet_annual,
+    ),
     debit_account_id: l.debit_account_id,
     category_id: l.category_id,
     member_id: l.member_id,
@@ -662,6 +701,7 @@ function view(l: LoanRec): LoanView {
     interest_remaining: inst.filter((i) => !i.paid).reduce((s, i) => s + i.interest, 0),
     charges_paid: paid.reduce((s, i) => s + i.insurance + i.fees, 0),
     realized_cet: realized,
+    realized_drops: realizedCost.drops,
     real_cost: realCost,
   };
 }
@@ -691,7 +731,9 @@ type Seed = Omit<
   | 'dfi_rate'
   | 'mip_amount'
   | 'dfi_amount'
+  | 'upfront'
 > & {
+  upfront?: UpfrontCosts;
   extras: Omit<ExtraRec, 'id'>[];
   /** Parcelas vencidas que ficam em aberto (atrasadas): os n últimos vencimentos. */
   unpaidRecent?: number;
@@ -737,6 +779,7 @@ const SEEDS: Seed[] = [
     insurance_monthly: 0,
     fees_monthly: 0,
     cet_annual: '24.9',
+    upfront: { iof: 168_400, fees: 85_000, insurance: 0 },
     debit_account_id: 'acc-itau',
     member_id: 'mem-bruno',
     notes: null,
@@ -766,10 +809,12 @@ const SEEDS: Seed[] = [
   },
 ];
 
+const NO_UPFRONT: UpfrontCosts = { iof: 0, fees: 0, insurance: 0 };
+
 function seed(t: string): State {
   state = { today: t, loans: [], seq: 0 };
   SEEDS.forEach((s, n) => {
-    const { unpaidRecent = 0, extras, ...rest } = s;
+    const { unpaidRecent = 0, extras, upfront = NO_UPFRONT, ...rest } = s;
     const l: LoanRec = {
       index_pct: '100',
       spread_mode: 'exp252',
@@ -786,6 +831,7 @@ function seed(t: string): State {
       mip_amount: null,
       dfi_amount: null,
       ...rest,
+      upfront,
       id: `loan-${n + 1}`,
       archived: false,
       extras: extras.filter((e) => e.date <= t).map((e) => ({ ...e, id: nextId('extra') })),
@@ -919,6 +965,15 @@ function fromInput(i: LoanInput): LoanRec {
   if (!(i.term_months > 0) || (i.grace_months ?? 0) >= i.term_months)
     invalid('prazo inválido (a carência deve ser menor que o prazo)');
   if (i.cet_annual) rate(i.cet_annual, 'CET');
+  const upfront: UpfrontCosts = {
+    iof: i.upfront_iof ?? 0,
+    fees: i.upfront_fees ?? 0,
+    insurance: i.upfront_insurance ?? 0,
+  };
+  if (upfront.iof < 0 || upfront.fees < 0 || upfront.insurance < 0)
+    invalid('os custos iniciais (IOF, tarifas, seguro) não podem ser negativos');
+  if (upfrontTotal(upfront) >= i.principal)
+    invalid('os custos iniciais somados precisam ser menores que o valor do contrato');
   if (i.debit_account_id) currencyAndKind(i.debit_account_id);
   const post = i.indexer === 'cdi' || i.indexer === 'selic';
   const l: LoanRec = {
@@ -953,6 +1008,7 @@ function fromInput(i: LoanInput): LoanRec {
     dfi_amount: null,
     fees_monthly: i.fees_monthly ?? 0,
     cet_annual: i.cet_annual ?? null,
+    upfront,
     debit_account_id: i.debit_account_id ?? null,
     category_id: null,
     member_id: i.member_id ?? null,

@@ -55,7 +55,10 @@ fn a_0_9_38_vault_opens_backed_up_and_records_where_it_came_from() {
     assert_eq!(backups[0]["verified"], true);
     let v = versions(&api);
     assert_eq!(v.history.len(), 1);
-    assert_eq!((v.history[0].schema_from, v.history[0].schema_to), (164, 1));
+    assert_eq!(
+        (v.history[0].schema_from, v.history[0].schema_to),
+        (164, crate::storage::latest_schema_version())
+    );
     assert_eq!(v.last_app_version, crate::config::app_version());
     for cmd in [
         "household.get",

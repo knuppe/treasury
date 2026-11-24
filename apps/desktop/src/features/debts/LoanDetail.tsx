@@ -28,6 +28,7 @@ import { t } from '@/i18n';
 import { formatDate, todayIso } from '@/lib/format';
 
 import { AnticipateCard } from './AnticipateCard';
+import { CetExplanation, cetItems, RealizedDrops, useCountryCode } from './cet';
 import { BalanceFigure, BreakdownFigure } from './DebtFigures';
 import { INDEXER_LABEL, isPostIndexer, KIND_LABEL, SYSTEM_LABEL } from './labels';
 import { ExtraPaymentDialog, LoanFormDialog, type ExtraPreset } from './LoanDialogs';
@@ -104,6 +105,8 @@ export function LoanDetail({
   const schedule = useLoanSchedule(loan.id);
   // Portabilidade e juros de mercado do Banco Central: só no Brasil (docs/countries.md).
   const features = useCountryFeatures();
+  const country = useCountryCode();
+  const sigla = t('dividas-cet-sigla', { pais: country });
   const institutions = useInstitutions().data ?? [];
   const members = useMembers().data ?? [];
   const accounts = useAccounts().data ?? [];
@@ -272,12 +275,7 @@ export function LoanDetail({
                   : `${t('dividas-taxa-aa', { taxa: rateText(loan.annual_rate) })} · ${t('dividas-taxa-am', { taxa: rateText(loan.monthly_rate, 4) })}`,
               },
               { label: t('dividas-sistema'), value: systemText(loan) },
-              {
-                label: t('dividas-cet-contratado'),
-                value: loan.cet_annual
-                  ? t('dividas-taxa-aa', { taxa: rateText(loan.cet_annual) })
-                  : '—',
-              },
+              ...cetItems(loan, country, sigla),
             ]}
           />
         </InstrumentCard>
@@ -285,7 +283,7 @@ export function LoanDetail({
           <KeyValue
             items={[
               {
-                label: t('dividas-cet-realizado'),
+                label: t('dividas-cet-realizado', { sigla }),
                 value: <Pct value={loan.realized_cet} decimals={2} />,
               },
               {
@@ -307,8 +305,11 @@ export function LoanDetail({
                 : []),
             ]}
           />
+          <RealizedDrops loan={loan} />
         </InstrumentCard>
       </div>
+
+      <CetExplanation loan={loan} index="06.4b" />
 
       <QueryState
         loading={schedule.isPending}

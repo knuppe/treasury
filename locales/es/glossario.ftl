@@ -201,7 +201,7 @@ glossario-rotativo-busca = rotativo
 
 glossario-cet-termo = Costo efectivo total (CET)
 glossario-cet-simples = Cuánto cuesta de verdad un préstamo por año, sumando intereses, comisiones, seguros e impuestos. Es el número para comparar ofertas.
-glossario-cet-busca = \bcet\b|costo efectivo
+glossario-cet-busca = \bcet\b|costo efectivo|\btaeg?\b|\bapr\b|\bcft\b
 
 glossario-amortizacao-termo = Amortización
 glossario-amortizacao-simples = La parte de la cuota que de verdad reduce la deuda (el resto de la cuota son los intereses). Adelantar amortización reduce los intereses que todavía pagarías.

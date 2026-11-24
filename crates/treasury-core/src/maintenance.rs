@@ -784,7 +784,10 @@ mod tests {
         let (_d, api) = api();
         let i = api.call("database.info", json!({})).unwrap();
         assert!(i["file_bytes"].as_i64().unwrap() > 0);
-        assert_eq!(i["schema_version"].as_i64().unwrap(), 1);
+        assert_eq!(
+            i["schema_version"].as_i64().unwrap(),
+            crate::storage::latest_schema_version() as i64
+        );
         let tables = i["tables"].as_array().unwrap();
         assert!(
             tables

@@ -3,6 +3,7 @@
 //! extraordinária (reduzir prazo × parcela), portabilidade e o custo real da dívida.
 
 pub mod api;
+pub mod cet;
 pub mod link;
 pub mod market_rates;
 pub mod payoff;
@@ -224,6 +225,14 @@ pub struct LoanInput {
     pub dfi_amount: Option<i64>,
     #[ts(optional)]
     pub cet_annual: Option<String>,
+    /// Costs paid on day zero (IOF, one-time fees, single-premium insurance), in cents. They
+    /// come out of the amount released in the CET, whether financed or paid apart.
+    #[ts(optional, type = "number")]
+    pub upfront_iof: Option<i64>,
+    #[ts(optional, type = "number")]
+    pub upfront_fees: Option<i64>,
+    #[ts(optional, type = "number")]
+    pub upfront_insurance: Option<i64>,
     #[ts(optional)]
     pub debit_account_id: Option<Id>,
     /// Categoria dos pagamentos: um lançamento nela marca a parcela mais próxima como paga.
@@ -330,6 +339,10 @@ pub struct LoanView {
     #[ts(type = "number | null")]
     pub statement_until: Option<u32>,
     pub cet_annual: Option<String>,
+    /// Costs paid on day zero (IOF, one-time fees, single-premium insurance).
+    pub upfront: cet::UpfrontCosts,
+    /// CET of the contract as signed, computed by Res. CMN 4.881/2020 (see `debt::cet`).
+    pub cet: Option<cet::CetReport>,
     pub debit_account_id: Option<Id>,
     /// Categoria dos pagamentos (liga os lançamentos às parcelas).
     pub category_id: Option<Id>,
@@ -352,6 +365,8 @@ pub struct LoanView {
     pub charges_paid: i64,
     /// Custo efetivo realizado (XIRR dos fluxos pagos) ao ano.
     pub realized_cet: Option<f64>,
+    /// Balance drops with no payment recorded that the realized CET counted as paid.
+    pub realized_drops: Vec<cet::UnrecordedDrop>,
     /// Custo real: realizado descontado pelo IPCA no período.
     pub real_cost: Option<f64>,
 }
@@ -1256,6 +1271,7 @@ pub fn create(tx: &Transaction<'_>, i: &LoanInput) -> Result<Id> {
             dfi_amount: i.dfi_amount,
         },
     )?;
+    set_upfront_costs(tx, &id, i)?;
     regenerate(tx, &id)?;
     if i.mark_past_paid.unwrap_or(false) {
         mark_paid_until(tx, &id, &fmt_date(today_local()))?;
@@ -1330,6 +1346,7 @@ pub fn update_terms(tx: &Transaction<'_>, id: &str, i: &LoanInput) -> Result<()>
             dfi_amount: i.dfi_amount,
         },
     )?;
+    set_upfront_costs(tx, id, i)?;
     regenerate(tx, id)?;
     if i.mark_past_paid.unwrap_or(false) {
         mark_paid_until(tx, id, &fmt_date(today_local()))?;
@@ -1918,6 +1935,12 @@ pub fn view(conn: &Connection, id: &str) -> Result<LoanView> {
                 dfi_amount: r.get("dfi_amount")?,
                 statement_until: r.get("rebase_number")?,
                 cet_annual: r.get("cet_annual")?,
+                upfront: cet::UpfrontCosts {
+                    iof: r.get::<_, Option<i64>>("upfront_iof")?.unwrap_or(0),
+                    fees: r.get::<_, Option<i64>>("upfront_fees")?.unwrap_or(0),
+                    insurance: r.get::<_, Option<i64>>("upfront_insurance")?.unwrap_or(0),
+                },
+                cet: None,
                 debit_account_id: r.get("debit_account_id")?,
                 category_id: r.get("category_id")?,
                 member_id: r.get("member_id")?,
@@ -1932,6 +1955,7 @@ pub fn view(conn: &Connection, id: &str) -> Result<LoanView> {
                 interest_remaining: 0,
                 charges_paid: 0,
                 realized_cet: None,
+                realized_drops: vec![],
                 real_cost: None,
             })
         })
@@ -1955,42 +1979,11 @@ pub fn view(conn: &Connection, id: &str) -> Result<LoanView> {
         .filter(|i| i.paid)
         .map(|i| i.insurance + i.fees)
         .sum();
-    // CET realizado: +principal no contrato, −pagamentos efetivos.
-    let mut flows = vec![crate::finance::returns::Flow {
-        date: parse_date(&v.contract_date)?,
-        amount: v.principal as f64,
-    }];
-    for i in inst.iter().filter(|i| i.paid) {
-        let d = i
-            .paid_date
-            .as_deref()
-            .map(parse_date)
-            .transpose()?
-            .unwrap_or(parse_date(&i.due_date)?);
-        flows.push(crate::finance::returns::Flow {
-            date: d,
-            amount: -(i.paid_amount.unwrap_or(i.total) as f64),
-        });
-    }
-    // XIRR de quem toma: inverte o sinal (dinheiro recebido é "aporte" negativo do ponto de vista do credor).
-    let lender: Vec<_> = flows
-        .iter()
-        .map(|f| crate::finance::returns::Flow {
-            date: f.date,
-            amount: -f.amount,
-        })
-        .collect();
-    if v.paid_count > 0 && v.balance == 0 {
-        v.realized_cet = crate::finance::returns::xirr(&lender);
-    } else if v.paid_count > 0 {
-        // Em aberto: inclui o saldo devedor como fluxo final de hoje.
-        let mut f = lender.clone();
-        f.push(crate::finance::returns::Flow {
-            date: today_local(),
-            amount: v.balance as f64,
-        });
-        v.realized_cet = crate::finance::returns::xirr(&f);
-    }
+    let contract_date = parse_date(&v.contract_date)?;
+    let released = v.principal - v.upfront.total();
+    (v.realized_cet, v.realized_drops) =
+        cet::realized(released, v.principal, contract_date, &inst)?;
+    v.cet = cet::contract(conn, id, v.indexer, v.upfront, v.cet_annual.as_deref())?;
     if let Some(cet) = v.realized_cet {
         let from = parse_date(&v.contract_date)?;
         let days = (today_local() - from).num_days().max(1);
@@ -2190,6 +2183,29 @@ pub fn set_housing_insurance(tx: &Transaction<'_>, id: &str, h: &HousingInput<'_
           WHERE id = ?1 AND (property_value IS NOT ?2 OR mip_rate IS NOT ?3 OR dfi_rate IS NOT ?4
                              OR mip_amount IS NOT ?5 OR dfi_amount IS NOT ?6)",
         params![id, h.property_value, mip, dfi, mip_amount, dfi_amount, now_utc()],
+    )?;
+    Ok(())
+}
+
+/// Stores the costs paid on day zero (zero or empty clears each one). Together they must stay
+/// below the principal, since they come out of the amount released.
+fn set_upfront_costs(tx: &Transaction<'_>, id: &str, i: &LoanInput) -> Result<()> {
+    let costs = [i.upfront_iof, i.upfront_fees, i.upfront_insurance];
+    if costs.iter().flatten().any(|v| *v < 0) {
+        return Err(Error::invalid(t(
+            "nucleo-planejamento-divida-erro-custo-inicial-negativo",
+        )));
+    }
+    if costs.iter().flatten().sum::<i64>() >= i.principal {
+        return Err(Error::invalid(t(
+            "nucleo-planejamento-divida-erro-custo-inicial-maior",
+        )));
+    }
+    let [iof, fees, insurance] = costs.map(|v| v.filter(|v| *v > 0));
+    tx.execute(
+        "UPDATE loan SET upfront_iof = ?2, upfront_fees = ?3, upfront_insurance = ?4, updated_at = ?5
+          WHERE id = ?1 AND (upfront_iof IS NOT ?2 OR upfront_fees IS NOT ?3 OR upfront_insurance IS NOT ?4)",
+        params![id, iof, fees, insurance, now_utc()],
     )?;
     Ok(())
 }

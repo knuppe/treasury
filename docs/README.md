@@ -93,6 +93,7 @@ A few more rules:
 | [account-freshness.md](account-freshness.md) | Accounts up to date and possibly incomplete balance |
 | [design/cartoes.md](design/cards.md) | Cards: additional cards, limit, costs, cashback, points |
 | [design/parcelas-detectadas.md](design/detected-installments.md) | Installments detected from the description |
+| [design/loan-cet.md](design/loan-cet.md) | Total effective cost (CET, APR, TAEG) of loans: study and plan |
 | [learned-rules.md](learned-rules.md) | Learned rules and annual expenses in the forecast |
 | [subscriptions.md](subscriptions.md) | Subscriptions and recurring charges |
 | [forecast.md](forecast.md) | Balance forecast and how much to spend today |

@@ -49,7 +49,13 @@ describe('07 · Dívidas with the mock', () => {
     // Financing detail (the first contract).
     const detail = screen.getByRole('region', { name: 'Contrato Financiamento do apartamento' });
     expect(await within(detail).findByText(/Caixa · de Ana/)).toBeTruthy();
-    expect(within(detail).getByText('CET realizado')).toBeTruthy();
+    expect(within(detail).getByText('CET do que já foi pago')).toBeTruthy();
+    // The contract's CET next to ours, and ours explained: TR left out (art. 5º), no upfront costs.
+    expect(within(detail).getAllByText('CET do contrato').length).toBeGreaterThan(0);
+    expect(within(detail).getAllByText('CET pelo nosso cálculo').length).toBeGreaterThan(0);
+    const how = within(detail).getByRole('region', { name: /Como calculamos o CET/ });
+    expect(within(how).getByText(/Índice fora do cálculo: TR/)).toBeTruthy();
+    expect(within(how).getByText(/Resolução CMN nº 4\.881\/2020/)).toBeTruthy();
     expect(within(detail).getByText(/correção TR \(no aniversário\)/)).toBeTruthy();
     const table = await within(detail).findByRole('grid', {
       name: 'Tabela de amortização · Financiamento do apartamento',
