@@ -2844,6 +2844,28 @@ export interface Messages {
   'ativos-remover': never;
   'ativos-resultado': never;
   'ativos-resultado-total': never;
+  'ativos-resumo-ops-ajustado': never;
+  'ativos-resumo-ops-aria': never;
+  'ativos-resumo-ops-compras': never;
+  'ativos-resumo-ops-custo-posicao': never;
+  'ativos-resumo-ops-custos': never;
+  'ativos-resumo-ops-do-volume': never;
+  'ativos-resumo-ops-eventos': { n: string | number };
+  'ativos-resumo-ops-ir': never;
+  'ativos-resumo-ops-operacoes': never;
+  'ativos-resumo-ops-periodo': { ate: string | number; de: string | number };
+  'ativos-resumo-ops-periodo-um-dia': { data: string | number };
+  'ativos-resumo-ops-posicao': never;
+  'ativos-resumo-ops-preco-medio-compra': never;
+  'ativos-resumo-ops-preco-medio-venda': never;
+  'ativos-resumo-ops-resultado': never;
+  'ativos-resumo-ops-situacao': never;
+  'ativos-resumo-ops-taxas': never;
+  'ativos-resumo-ops-total-comprado': never;
+  'ativos-resumo-ops-total-custos': never;
+  'ativos-resumo-ops-total-vendido': never;
+  'ativos-resumo-ops-vendas': never;
+  'ativos-resumo-ops-zerada': never;
   'ativos-retorno-anual': never;
   'ativos-salvar-cotacao': never;
   'ativos-score-classe-sem-score': never;
@@ -10957,6 +10979,7 @@ export interface Messages {
   'mcp-resumo-noticias': { n: string | number };
   'mcp-resumo-operacoes': { n: string | number };
   'mcp-resumo-operacoes-nenhuma': never;
+  'mcp-resumo-operacoes-totais': never;
   'mcp-resumo-orcamento': {
     mes: string | number;
     previsto: string | number;
@@ -21646,6 +21669,28 @@ export const KEYS: readonly MessageKey[] = [
   'ativos-remover',
   'ativos-resultado',
   'ativos-resultado-total',
+  'ativos-resumo-ops-ajustado',
+  'ativos-resumo-ops-aria',
+  'ativos-resumo-ops-compras',
+  'ativos-resumo-ops-custo-posicao',
+  'ativos-resumo-ops-custos',
+  'ativos-resumo-ops-do-volume',
+  'ativos-resumo-ops-eventos',
+  'ativos-resumo-ops-ir',
+  'ativos-resumo-ops-operacoes',
+  'ativos-resumo-ops-periodo',
+  'ativos-resumo-ops-periodo-um-dia',
+  'ativos-resumo-ops-posicao',
+  'ativos-resumo-ops-preco-medio-compra',
+  'ativos-resumo-ops-preco-medio-venda',
+  'ativos-resumo-ops-resultado',
+  'ativos-resumo-ops-situacao',
+  'ativos-resumo-ops-taxas',
+  'ativos-resumo-ops-total-comprado',
+  'ativos-resumo-ops-total-custos',
+  'ativos-resumo-ops-total-vendido',
+  'ativos-resumo-ops-vendas',
+  'ativos-resumo-ops-zerada',
   'ativos-retorno-anual',
   'ativos-salvar-cotacao',
   'ativos-score-classe-sem-score',
@@ -29159,6 +29204,7 @@ export const KEYS: readonly MessageKey[] = [
   'mcp-resumo-noticias',
   'mcp-resumo-operacoes',
   'mcp-resumo-operacoes-nenhuma',
+  'mcp-resumo-operacoes-totais',
   'mcp-resumo-orcamento',
   'mcp-resumo-orcamento-consultado',
   'mcp-resumo-painel',

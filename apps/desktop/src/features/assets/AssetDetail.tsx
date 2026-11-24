@@ -92,6 +92,7 @@ import { IntradayChart } from '../market/IntradayChart';
 import { AssetFormDialog } from './AssetFormDialog';
 import { WatchDialog } from './Watchlist';
 import { AssetStatement } from './AssetStatement';
+import { TradeSummaryCards } from './TradeSummaryCards';
 
 type Range = '6m' | '1a' | '2a' | 'max';
 
@@ -633,7 +634,10 @@ export function AssetDetail({
           <AssetStatement assetId={asset.id} currency={asset.currency} assetClass={asset.class} />
         </TabsContent>
         <TabsContent value="operacoes">
-          <TradesTable assetId={asset.id} compact />
+          <div className="flex flex-col gap-5">
+            <TradeSummaryCards asset={asset} position={p} />
+            <TradesTable assetId={asset.id} compact />
+          </div>
         </TabsContent>
         <TabsContent value="proventos">
           <div className="flex flex-col gap-5">

@@ -14,6 +14,7 @@ pub const READ_ONLY: &[&str] = &[
     "benchmark_series",
     "contributions",
     "list_trades",
+    "trade_summary",
     "get_trade",
     "list_actions",
     "list_income",
@@ -207,6 +208,11 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
         "list_trades" => to_value(records::list_trades(
             ctx.conn(),
             &parse_args::<TradeFilter>(args)?,
+        )?),
+        // Totals of an asset's trades (summary above the trade list on the asset page).
+        "trade_summary" => to_value(super::trade_summary::summary(
+            ctx.conn(),
+            &parse_args(args)?,
         )?),
         "get_trade" => to_value(records::get_trade(
             ctx.conn(),

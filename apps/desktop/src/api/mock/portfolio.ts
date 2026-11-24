@@ -54,6 +54,8 @@ import type { SalesReport } from '../generated/SalesReport';
 import type { SalesTotals } from '../generated/SalesTotals';
 import type { Target } from '../generated/Target';
 import type { Trade } from '../generated/Trade';
+import type { TradeSideTotals } from '../generated/TradeSideTotals';
+import type { TradeSummary } from '../generated/TradeSummary';
 import type { TradeSide } from '../generated/TradeSide';
 import type { TwrMethod } from '../generated/TwrMethod';
 import type { Valuation } from '../generated/Valuation';
@@ -3089,6 +3091,57 @@ registerMockHandlers({
       .sort((x, y) => y.date.localeCompare(x.date) || y.seq - x.seq)
       .slice(offset, offset + limit)
       .map(toTrade);
+  },
+
+  // Totals of an asset's trades (mirror of `portfolio::trade_summary`).
+  'portfolio.trade_summary': (a): TradeSummary => {
+    requireUnlocked();
+    const asset = getAsset(String(a.asset_id));
+    const trades = state.trades
+      .filter((t) => t.asset_id === asset.id)
+      .filter((t) => !a.account_id || t.account_id === a.account_id)
+      .map(toTrade);
+    const dec = (n: number) => String(Number(n.toFixed(8)));
+    const actions = state.actions.filter((x) => x.asset_id === asset.id);
+    const isSplit = (k: string) => k === 'split' || k === 'reverse_split';
+    // Quantities in today's units: later splits multiply them (events of a date come first).
+    const factor = (date: string) =>
+      actions
+        .filter((x) => isSplit(x.kind) && x.date > date && Number(x.factor) > 0)
+        .reduce((f, x) => f * Number(x.factor), 1);
+    const side = (s: 'buy' | 'sell'): TradeSideTotals => {
+      const rows = trades.filter((t) => t.side === s);
+      const qty = rows.reduce((acc, t) => acc + Number(t.quantity) * factor(t.date), 0);
+      const value = rows.reduce((acc, t) => acc + Number(t.quantity) * Number(t.price), 0);
+      return {
+        count: rows.length,
+        quantity: dec(qty),
+        gross: rows.reduce((acc, t) => acc + t.gross, 0),
+        fees: rows.reduce((acc, t) => acc + t.fees, 0),
+        taxes: rows.reduce((acc, t) => acc + t.taxes, 0),
+        avg_price: qty ? dec(value / qty) : null,
+      };
+    };
+    const buys = side('buy');
+    const sells = side('sell');
+    const costs = buys.fees + buys.taxes + sells.fees + sells.taxes;
+    const volume = buys.gross + sells.gross;
+    const dates = trades.map((t) => t.date).sort();
+    return {
+      asset_id: asset.id,
+      currency: asset.currency,
+      by_value: asset.class === 'fixed_income',
+      buys,
+      sells,
+      costs,
+      volume,
+      cost_share: volume > 0 ? costs / volume : null,
+      net_quantity: dec(Number(buys.quantity) - Number(sells.quantity)),
+      split_adjusted: trades.some((t) => factor(t.date) !== 1),
+      events: actions.filter((x) => !isSplit(x.kind)).length,
+      first_date: dates[0] ?? null,
+      last_date: dates[dates.length - 1] ?? null,
+    };
   },
 
   'portfolio.get_trade': (a) => {

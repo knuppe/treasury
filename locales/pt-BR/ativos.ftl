@@ -595,3 +595,31 @@ ativos-prev-saldo-salvo = Saldo salvo
 # Renda fixa sem quantidade (CDB, RDB, LCI…): só valores.
 ativos-aplicado = Valor aplicado
 ativos-extrato-custo-depois = Custo depois
+
+## Resumo da aba Operações
+
+ativos-resumo-ops-aria = Resumo das operações
+ativos-resumo-ops-compras = Compras
+ativos-resumo-ops-vendas = Vendas
+ativos-resumo-ops-custos = Custos
+ativos-resumo-ops-posicao = Posição atual
+ativos-resumo-ops-total-comprado = Total comprado
+ativos-resumo-ops-total-vendido = Total vendido
+ativos-resumo-ops-total-custos = Taxas e impostos
+ativos-resumo-ops-operacoes = Operações
+ativos-resumo-ops-preco-medio-compra = Preço médio de compra
+ativos-resumo-ops-preco-medio-venda = Preço médio de venda
+ativos-resumo-ops-resultado = Resultado realizado
+ativos-resumo-ops-taxas = Corretagem e taxas
+ativos-resumo-ops-ir = IR retido
+ativos-resumo-ops-do-volume = Do volume negociado
+ativos-resumo-ops-custo-posicao = Custo da posição
+ativos-resumo-ops-situacao = Situação
+ativos-resumo-ops-zerada = Posição zerada
+ativos-resumo-ops-periodo = Operações de { $de } a { $ate }
+ativos-resumo-ops-periodo-um-dia = Operações em { $data }
+ativos-resumo-ops-ajustado = Quantidades e preços médios ajustados por desdobramentos e grupamentos
+ativos-resumo-ops-eventos = { $n ->
+        [one] A posição atual considera um evento (bonificação, come-cotas ou mudança de ticker), por isso difere de comprado − vendido.
+       *[other] A posição atual considera { $n } eventos (bonificações, come-cotas ou mudança de ticker), por isso difere de comprado − vendido.
+    }

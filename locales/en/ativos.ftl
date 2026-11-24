@@ -610,3 +610,31 @@ ativos-prev-saldo-salvo = Balance saved
 # Fixed income without quantity (CDB, RDB, LCI…): values only.
 ativos-aplicado = Amount invested
 ativos-extrato-custo-depois = Cost after
+
+## Trades tab summary
+
+ativos-resumo-ops-aria = Trade summary
+ativos-resumo-ops-compras = Buys
+ativos-resumo-ops-vendas = Sells
+ativos-resumo-ops-custos = Costs
+ativos-resumo-ops-posicao = Current position
+ativos-resumo-ops-total-comprado = Total bought
+ativos-resumo-ops-total-vendido = Total sold
+ativos-resumo-ops-total-custos = Fees and taxes
+ativos-resumo-ops-operacoes = Trades
+ativos-resumo-ops-preco-medio-compra = Average buy price
+ativos-resumo-ops-preco-medio-venda = Average sell price
+ativos-resumo-ops-resultado = Realized gain
+ativos-resumo-ops-taxas = Brokerage and fees
+ativos-resumo-ops-ir = Tax withheld
+ativos-resumo-ops-do-volume = Of traded volume
+ativos-resumo-ops-custo-posicao = Position cost
+ativos-resumo-ops-situacao = Status
+ativos-resumo-ops-zerada = Position closed
+ativos-resumo-ops-periodo = Trades from { $de } to { $ate }
+ativos-resumo-ops-periodo-um-dia = Trades on { $data }
+ativos-resumo-ops-ajustado = Quantities and average prices adjusted for splits and reverse splits
+ativos-resumo-ops-eventos = { $n ->
+        [one] The current position includes one event (bonus, come-cotas or ticker change), so it differs from bought − sold.
+       *[other] The current position includes { $n } events (bonuses, come-cotas or ticker changes), so it differs from bought − sold.
+    }

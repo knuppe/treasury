@@ -20,6 +20,7 @@ pub mod records;
 pub mod risk;
 pub mod sales;
 pub mod statement;
+pub mod trade_summary;
 
 #[cfg(test)]
 mod tests;

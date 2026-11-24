@@ -3003,3 +3003,105 @@ fn treasury_and_fgc_covered_fixed_income_are_outside_the_default_limit() {
             .any(|a| a.reference == tesouro)
     );
 }
+
+#[test]
+fn trade_summary_totals_both_sides_and_counts_events() {
+    let (_d, mut db) = db();
+    let fii = asset(&mut db, "ABCD11", AssetClass::Fii, None);
+    for (date, side, qty, price, fees) in [
+        ("2025-01-10", TradeSide::Buy, "100", "10", 300),
+        ("2025-03-10", TradeSide::Buy, "50", "13", 150),
+        ("2025-05-10", TradeSide::Sell, "30", "12.5", 90),
+    ] {
+        trade(&mut db, &fii, "xp", date, side, qty, price, fees).unwrap();
+    }
+    let s = trade_summary::summary(
+        db.conn(),
+        &trade_summary::TradeSummaryArgs {
+            asset_id: fii.clone(),
+            account_id: None,
+        },
+    )
+    .unwrap();
+    assert_eq!(s.buys.count, 2);
+    assert_eq!(s.buys.quantity, "150");
+    assert_eq!(s.buys.gross, 165000);
+    assert_eq!(s.buys.fees, 450);
+    assert_eq!(s.buys.avg_price.as_deref(), Some("11"));
+    assert_eq!(s.sells.count, 1);
+    assert_eq!(s.sells.gross, 37500);
+    assert_eq!(s.sells.avg_price.as_deref(), Some("12.5"));
+    assert_eq!(s.costs, 540);
+    assert_eq!(s.volume, 202500);
+    assert!((s.cost_share.unwrap() - 540.0 / 202500.0).abs() < 1e-12);
+    assert_eq!(s.net_quantity, "120");
+    assert_eq!(s.events, 0);
+    assert_eq!(s.first_date.as_deref(), Some("2025-01-10"));
+    assert_eq!(s.last_date.as_deref(), Some("2025-05-10"));
+    assert!(!s.by_value);
+
+    assert!(!s.split_adjusted);
+
+    let action = |db: &mut Db, date: &str, kind, factor: &str, unit_cost: Option<&str>| {
+        record(db.conn_mut(), &Author::user(), "event", |tx| {
+            records::create_action(
+                tx,
+                &CorporateActionInput {
+                    asset_id: fii.clone(),
+                    date: date.into(),
+                    kind,
+                    factor: Some(factor.into()),
+                    unit_cost: unit_cost.map(Into::into),
+                    amount: None,
+                    new_asset_id: None,
+                    notes: None,
+                },
+            )
+        })
+        .unwrap();
+    };
+    let summary = |db: &Db, account_id: Option<&str>| {
+        trade_summary::summary(
+            db.conn(),
+            &trade_summary::TradeSummaryArgs {
+                asset_id: fii.clone(),
+                account_id: account_id.map(Into::into),
+            },
+        )
+        .unwrap()
+    };
+
+    // A later split puts the quantities in today's units; the gross stays.
+    action(&mut db, "2025-06-01", CorporateActionKind::Split, "2", None);
+    let s = summary(&db, None);
+    assert!(s.split_adjusted);
+    assert_eq!(s.buys.quantity, "300");
+    assert_eq!(s.buys.gross, 165000);
+    assert_eq!(s.buys.avg_price.as_deref(), Some("5.5"));
+    assert_eq!(s.sells.avg_price.as_deref(), Some("6.25"));
+    assert_eq!(s.net_quantity, "240");
+    assert_eq!(s.events, 0);
+
+    // A bonus is not a trade: it counts as an event that explains the difference.
+    action(
+        &mut db,
+        "2025-07-01",
+        CorporateActionKind::Bonus,
+        "0.1",
+        Some("5"),
+    );
+    assert_eq!(summary(&db, None).events, 1);
+
+    // Another account: no trades, but the events are still the asset's.
+    let s = summary(&db, Some("avenue"));
+    assert_eq!(
+        s.buys,
+        trade_summary::TradeSideTotals {
+            quantity: "0".into(),
+            ..Default::default()
+        }
+    );
+    assert_eq!(s.cost_share, None);
+    assert_eq!(s.first_date, None);
+    assert_eq!(s.events, 1);
+}

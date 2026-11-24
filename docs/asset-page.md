@@ -16,6 +16,12 @@ are in [asset-overview.md](asset-overview.md).
 - **Content**: position, statement, trades, dividends, events, chart, fundamentals
   (indicators, calculated price, history, documents), health, AI study and the record with the sources
   of each piece of data. A security outside the portfolio shows the fundamental analysis and "Watch".
+- **Trade summary**: the Trades tab opens with four cards above the list: buys and sells
+  (count, quantity, gross value, average price without costs), costs (fees, withheld tax and
+  their share of the traded volume) and the current position. Totals come from
+  `portfolio.trade_summary` (MCP `get_trade_summary`); the position and the realized gain from
+  `portfolio.position`. When splits, bonuses, come-cotas or a ticker change make the position
+  differ from bought − sold, a line under the cards says so.
 - **Conversation focused on the asset**: "Ask the agent" opens the agent panel beside the page.
   The screen context says the user is on an asset page, and the core adds the
   guidance to focus on it and the right tools.
@@ -29,7 +35,7 @@ are in [asset-overview.md](asset-overview.md).
 
 | For what | MCP tools |
 |---|---|
-| Record and position | `list_assets`, `get_position`, `list_trades`, `list_income_events`, `list_corporate_actions`, `get_returns` |
+| Record and position | `list_assets`, `get_position`, `list_trades`, `get_trade_summary`, `list_income_events`, `list_corporate_actions`, `get_returns` |
 | Price | `get_price_history` (`market.prices`: closes by day, week or month, with change, low and high; up to 400 points) |
 | Fundamentals | `get_fundamentals`, `get_fundamentus`, `fair_price`, `compare_assets`, `rank_assets` |
 | Documents and news | `list_corporate_documents`, `read_corporate_document`, `get_asset_news` |

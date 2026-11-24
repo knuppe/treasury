@@ -1024,6 +1024,21 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         summarize: |v| count_summary(v, "trades", "mcp-resumo-n-operacoes"),
     },
     ToolSpec {
+        name: "get_trade_summary",
+        title: "Trade totals of an asset",
+        description: "Totals of the trades in one asset (all accounts or one): number of buys \
+            and sells, quantity, gross value and average price of each side (decimal strings, \
+            without costs), fees and withheld tax, costs as a share of the traded volume, \
+            bought − sold and the first and last trade dates. Amounts in cents of the asset's \
+            currency. `events` counts splits, bonuses, come-cotas and ticker changes, which \
+            make the current position (`get_position`) differ from bought − sold.",
+        command: "portfolio.trade_summary",
+        list_key: None,
+        schema: schema::<TradeSummaryInput>,
+        prepare: prepare::<TradeSummaryInput>,
+        summarize: |_| tx("mcp-resumo-operacoes-totais"),
+    },
+    ToolSpec {
         name: "list_income_events",
         title: "Income distributions received",
         description: "Dividends, JCP, FII distributions, coupons and interest received (or \

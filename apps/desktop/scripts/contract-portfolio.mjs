@@ -523,6 +523,7 @@ async function main() {
   const t0 = trades?.find((t) => t.asset_id === hglg.id);
   if (t0) {
     await expectShape('portfolio.get_trade', { id: t0.id }, 'Trade');
+    await expectShape('portfolio.trade_summary', { asset_id: hglg.id }, 'TradeSummary');
     const upd = await expectShape(
       'portfolio.update_trade',
       { id: t0.id, notes: 'contrato' },

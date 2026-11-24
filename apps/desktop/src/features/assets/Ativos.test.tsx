@@ -335,6 +335,24 @@ describe('09 · Ativos with the mock', () => {
     ).toHaveLength(trades.length);
   });
 
+  it('trades tab: summary of buys, sells, costs and the position above the list', async () => {
+    open('?ativo=ast-bbas3&secao=operacoes');
+    const summary = await screen.findByRole('region', { name: 'Resumo das operações' });
+    for (const title of ['Compras', 'Vendas', 'Custos', 'Posição atual']) {
+      expect(within(summary).getByRole('heading', { level: 3, name: title })).toBeTruthy();
+    }
+    expect(within(summary).getByText('Preço médio de compra')).toBeTruthy();
+    expect(within(summary).getByText('Resultado realizado')).toBeTruthy();
+    // Two buys of 100 and one sale of 50; the 1:2 split after the first buy puts the
+    // quantities in today's units: 300 bought, 250 held, no unexplained difference.
+    expect(within(summary).getByText('300')).toBeTruthy();
+    expect(await within(summary).findByText('250')).toBeTruthy();
+    expect(within(summary).queryByText(/A posição atual considera/)).toBeNull();
+    expect(within(summary).getByText(/ajustados por desdobramentos e grupamentos/)).toBeTruthy();
+    expect(within(summary).getByText(/^Operações de 15\/01\/2024 a 20\/01\/2026/)).toBeTruthy();
+    expect(screen.getByRole('grid', { name: 'Operações' })).toBeTruthy();
+  });
+
   it('asset row context menu: statement and follow', async () => {
     const user = userEvent.setup();
     open();

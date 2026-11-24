@@ -31,6 +31,7 @@ import type { CorporateAction } from '@/api/generated/CorporateAction';
 import type { CostMethodState } from '@/api/generated/CostMethodState';
 import type { SetCostMethodArgs } from '@/api/generated/SetCostMethodArgs';
 import type { FeeCost } from '@/api/generated/FeeCost';
+import type { TradeSummary } from '@/api/generated/TradeSummary';
 import type { FixedIncomeComparison } from '@/api/generated/FixedIncomeComparison';
 import type { FixedIncomeSale } from '@/api/generated/FixedIncomeSale';
 import type { FixedIncomeSaleArgs } from '@/api/generated/FixedIncomeSaleArgs';
@@ -192,6 +193,11 @@ export function useSetCostMethod() {
 
 export function useTrades(filter: TradeFilter = {}) {
   return useQuery({ ...query<Trade[]>('list_trades', filter), placeholderData: keepPreviousData });
+}
+
+/** Totals of an asset's trades (summary above the trade list). */
+export function useTradeSummary(assetId: string) {
+  return useQuery(query<TradeSummary>('trade_summary', { asset_id: assetId }));
 }
 
 /** Extrato do ativo: operações e eventos com a posição depois de cada linha. */

@@ -230,6 +230,22 @@ impl ToolInput for ListTradesInput {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
+pub struct TradeSummaryInput {
+    /// Asset id (see `list_assets`).
+    pub asset_id: String,
+    /// Only this brokerage account (default: all).
+    pub account_id: Option<String>,
+}
+
+impl ToolInput for TradeSummaryInput {
+    fn to_api_args(&self) -> Result<Value, String> {
+        check_non_empty("asset_id", &self.asset_id)?;
+        to_object(self)
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct ListIncomeInput {
     /// Asset id (see `list_assets`).
     pub asset_id: Option<String>,

@@ -122,3 +122,31 @@ ativo-noticias-falhou = Não foi possível ler agora: { $fontes }.
 ativo-noticia-origem-cvm = CVM
 ativo-noticia-origem-portal = portal
 ativo-resumo-do-ativo = Resumo do ativo
+
+## Resumo do separador Operações
+
+ativos-resumo-ops-aria = Resumo das operações
+ativos-resumo-ops-compras = Compras
+ativos-resumo-ops-vendas = Vendas
+ativos-resumo-ops-custos = Custos
+ativos-resumo-ops-posicao = Posição atual
+ativos-resumo-ops-total-comprado = Total comprado
+ativos-resumo-ops-total-vendido = Total vendido
+ativos-resumo-ops-total-custos = Comissões e impostos
+ativos-resumo-ops-operacoes = Operações
+ativos-resumo-ops-preco-medio-compra = Preço médio de compra
+ativos-resumo-ops-preco-medio-venda = Preço médio de venda
+ativos-resumo-ops-resultado = Mais-valia realizada
+ativos-resumo-ops-taxas = Corretagem e comissões
+ativos-resumo-ops-ir = Imposto retido
+ativos-resumo-ops-do-volume = Do volume transacionado
+ativos-resumo-ops-custo-posicao = Custo da posição
+ativos-resumo-ops-situacao = Situação
+ativos-resumo-ops-zerada = Posição encerrada
+ativos-resumo-ops-periodo = Operações de { $de } a { $ate }
+ativos-resumo-ops-periodo-um-dia = Operações em { $data }
+ativos-resumo-ops-ajustado = Quantidades e preços médios ajustados por desdobramentos e agrupamentos
+ativos-resumo-ops-eventos = { $n ->
+        [one] A posição atual considera um evento (bonificação, come-cotas ou mudança de ticker), pelo que difere de comprado − vendido.
+       *[other] A posição atual considera { $n } eventos (bonificações, come-cotas ou mudança de ticker), pelo que difere de comprado − vendido.
+    }

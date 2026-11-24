@@ -335,6 +335,7 @@ mcp-resumo-entradas-projeto = { $n ->
        *[other] { $n } entradas del proyecto.
     }
 mcp-resumo-posicao = Posición calculada.
+mcp-resumo-operacoes-totais = Totales de las operaciones calculados.
 mcp-resumo-rebalanceamento = Desvío de la asignación objetivo calculado (análisis, no recomendación).
 mcp-resumo-renda-passiva = Ingreso pasivo promedio: { $valor } por mes.
 mcp-resumo-renda-passiva-calculada = Ingreso pasivo calculado.
