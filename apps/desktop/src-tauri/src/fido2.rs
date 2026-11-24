@@ -76,9 +76,24 @@ fn random32() -> Result<[u8; 32], ApiError> {
     Ok(b)
 }
 
-fn fido_err(e: impl std::fmt::Display) -> ApiError {
+/// The key's answer, in the person's terms. `pin_given`: a PIN was sent with the request, so
+/// "the key asked for the PIN" would be wrong; the real code goes in the message instead.
+fn fido_err(e: impl std::fmt::Display, pin_given: bool) -> ApiError {
     let m = e.to_string();
-    if m.to_lowercase().contains("pin") {
+    let u = m.to_uppercase();
+    if u.contains("PIN_INVALID") {
+        err(
+            "pin_invalid",
+            "PIN incorreto: confira e tente de novo (a chave bloqueia o PIN depois de várias tentativas erradas)",
+        )
+    } else if u.contains("PIN_BLOCKED") || u.contains("PIN_AUTH_BLOCKED") {
+        err(
+            "pin_blocked",
+            "a chave física bloqueou o PIN depois de tentativas erradas: tire a chave, coloque de novo e tente outra vez",
+        )
+    } else if !pin_given
+        && (u.contains("PIN_REQUIRED") || u.contains("PUAT_REQUIRED") || u.contains("PIN NOT SET"))
+    {
         err(
             "pin_required",
             "a chave física pediu o PIN dela: informe e tente de novo",
@@ -91,7 +106,28 @@ fn fido_err(e: impl std::fmt::Display) -> ApiError {
     }
 }
 
+/// Precisa do PIN para responder (chave com "sempre verificar o usuário")?
+fn needs_pin(e: &ApiError) -> bool {
+    e.code == "pin_required"
+}
+
+/// The hmac-secret of a credential. First without the PIN: the secret does not need user
+/// verification, and asking for the PIN token here makes the library open a second key
+/// agreement after the one that encrypted the salt, which the key rejects (`PIN_AUTH_INVALID`
+/// with the right PIN). Only a key that always demands verification gets the PIN.
 fn hmac_secret(
+    dev: &FidoKeyHid,
+    credential_id: &[u8],
+    salt: [u8; 32],
+    pin: Option<&str>,
+) -> Result<Zeroizing<[u8; 32]>, ApiError> {
+    match hmac_secret_with(dev, credential_id, salt, None) {
+        Err(e) if needs_pin(&e) && pin.is_some() => hmac_secret_with(dev, credential_id, salt, pin),
+        other => other,
+    }
+}
+
+fn hmac_secret_with(
     dev: &FidoKeyHid,
     credential_id: &[u8],
     salt: [u8; 32],
@@ -106,7 +142,7 @@ fn hmac_secret(
             pin,
             Some(&vec![Gext::HmacSecret(Some(salt))]),
         )
-        .map_err(fido_err)?;
+        .map_err(|e| fido_err(e, pin.is_some()))?;
     ass.extensions
         .iter()
         .find_map(|e| match e {
@@ -139,7 +175,7 @@ pub async fn fido2_register(
                 pin,
                 Some(&vec![Mext::HmacSecret(Some(true))]),
             )
-            .map_err(fido_err)?;
+            .map_err(|e| fido_err(e, pin.is_some()))?;
         let cred = att.credential_descriptor.id.clone();
         let salt = random32()?;
         let secret = hmac_secret(&dev, &cred, salt, pin)?;

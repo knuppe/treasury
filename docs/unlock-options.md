@@ -22,6 +22,9 @@ of them are optional. They are in Settings › Security.
 - **FIDO2 hardware key** (with hmac-secret)
   - **Use:** recovery
   - **How it works:** Each key has a slot with `R` encrypted by the hmac-secret output
+  - **PIN:** a key with a PIN asks for it only to create the credential. The hmac-secret is read
+    with a touch, without the PIN (the PIN goes along only for a key that always demands
+    verification), so the secret is the same at registration and at recovery.
   - **Effect on security:** Stronger than the password; losing the hardware key does not lock the vault if there is another method.
 - **Split recovery** (Shamir 2 of 3)
   - **Use:** recovery
