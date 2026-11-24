@@ -5,6 +5,9 @@
 
 [English](README.md)
 
+**[Baixar a versão mais recente](https://github.com/knuppe/treasury/releases/latest)** · [Guia de
+instalação passo a passo](https://knuppe.github.io/treasury-site/pt/installation/) · [Como instalar](#instalar)
+
 O Treasury é um aplicativo de computador para a família cuidar do dinheiro inteiro num lugar só:
 contas, cartões, orçamento, dívidas, bens, investimentos e impostos. Os dados ficam no
 computador, num banco cifrado, e um agente de IA opcional ajuda a analisar e a cadastrar, sempre
@@ -58,7 +61,81 @@ com aprovação.
 Detalhes em [docs/security.md](docs/security.md) e [docs/local-security.md](docs/local-security.md).
 Para relatar uma falha, veja o [SECURITY.md](SECURITY.md).
 
-## Plataformas
+## Instalar
+
+Não precisa saber programar. Leva uns cinco minutos.
+
+1. Abra a página da [versão mais recente](https://github.com/knuppe/treasury/releases/latest).
+2. Desça até a seção **Assets** no fim da página. Se só aparecerem dois arquivos "Source code",
+   clique em **Assets** para mostrar a lista inteira.
+3. Baixe **um arquivo só**, o do seu computador:
+
+| Seu computador | Arquivo para baixar |
+|---|---|
+| Mac com chip Apple (M1 ou mais novo) | `Treasury_<versão>_aarch64.dmg` |
+| Ubuntu, Debian, Linux Mint, Pop!_OS | `Treasury_<versão>_amd64.deb` |
+| Fedora, openSUSE | `Treasury-<versão>-1.x86_64.rpm` |
+| Qualquer outro Linux | `Treasury_<versão>_amd64.AppImage` |
+| Windows 10 ou 11 | `Treasury_<versão>_x64-setup.exe` |
+
+Não sabe qual é o seu Mac? Abra o menu Apple › **Sobre Este Mac**: se em "Chip" aparecer Apple M1,
+M2, M3 ou mais novo, esta versão serve. Macs com processador Intel não são compatíveis.
+
+Pode ignorar todos os outros arquivos da página. Os `.sig`, o `latest.json`, o `allowed_signers` e o
+`.app.tar.gz` são usados pela atualização automática e por quem confere assinaturas, o `.msi` é
+para empresas que instalam programas em muitos computadores, e o `SHA256SUMS.txt` serve para a
+[conferência opcional](#conferir-o-download-opcional) mais abaixo.
+
+### macOS
+
+O app do macOS ainda não é notarizado pela Apple, então o macOS bloqueia a primeira abertura. Uma
+vez por instalação:
+
+1. Abra o `.dmg` baixado e arraste o **Treasury** para a pasta **Aplicativos**.
+2. Abra o Treasury pelos Aplicativos. O macOS avisa que ele "não pode ser verificado"; clique em
+   **OK** (não em "Mover para o Lixo").
+3. Abra Ajustes do Sistema › Privacidade e Segurança, desça até o aviso sobre o Treasury e clique
+   em **Abrir Mesmo Assim**; confirme com a senha ou o Touch ID.
+4. O Treasury abre. Daí em diante ele abre normalmente, e as atualizações se instalam sozinhas.
+
+### Linux
+
+- **`.deb`**: dê dois cliques no arquivo e clique em **Instalar** na central de programas, ou rode
+  `sudo apt install ./Treasury_*_amd64.deb` na pasta Downloads. Depois abra o **Treasury** pelo menu
+  de aplicativos.
+- **`.rpm`**: dê dois cliques no arquivo e clique em **Instalar**, ou rode
+  `sudo dnf install ./Treasury-*-1.x86_64.rpm` (no openSUSE, `sudo zypper install ...`).
+- **AppImage**: clique com o botão direito no arquivo › **Propriedades** › **Permissões** e ligue
+  **Permitir execução do arquivo como programa** (ou rode `chmod +x Treasury_*_amd64.AppImage`), e
+  depois dê dois cliques nele. Ele precisa do FUSE (`fuse3`) e das bibliotecas EGL/GLES do sistema
+  (`libegl1`, `libgles2`), que a maioria dos desktops já tem. Se não abrir, rode
+  `sudo apt install fuse3 libegl1 libgles2` e tente de novo. Guarde o arquivo numa pasta fixa, como
+  `~/Applications`.
+
+### Windows
+
+1. Dê dois cliques em `Treasury_<versão>_x64-setup.exe`.
+2. O instalador ainda não tem assinatura de código, então o SmartScreen mostra "O Windows protegeu
+   o computador": clique em **Mais informações** e depois em **Executar assim mesmo**.
+3. Siga o instalador e abra o **Treasury** pelo menu Iniciar.
+
+### Deu certo?
+
+Na primeira vez, o Treasury pergunta o idioma, mostra os termos de uso e oferece um cofre de
+**demonstração** (uma família fictícia, para explorar sem digitar nada) ou um cofre **real**,
+protegido por uma senha mestra. A versão instalada aparece em Ajustes › Atualizações.
+Próximos passos: [primeiros passos](https://knuppe.github.io/treasury-site/pt/getting-started/).
+
+### Conferir o download (opcional)
+
+Cada versão traz um `SHA256SUMS.txt` com a impressão digital de cada arquivo. Coloque-o na mesma
+pasta do arquivo baixado e rode `shasum -a 256 -c --ignore-missing SHA256SUMS.txt` no macOS ou
+`sha256sum -c --ignore-missing SHA256SUMS.txt` no Linux; a linha do seu arquivo precisa terminar
+em `OK`. No Windows, compare a saída de `Get-FileHash .\Treasury_*_x64-setup.exe` no PowerShell
+com a linha do arquivo. Como conferir também a assinatura do mantenedor:
+[docs/distribution.md](docs/distribution.md).
+
+### Situação de cada sistema
 
 | Sistema | Pacote | Situação |
 |---|---|---|
@@ -66,20 +143,9 @@ Para relatar uma falha, veja o [SECURITY.md](SECURITY.md).
 | Linux (x86_64) | AppImage, `.deb`, `.rpm` | Gerado pelo CI; atualização automática; instalação conferida no Ubuntu 22.04/24.04, Debian 12/13 e Fedora 42 (atualização ainda sem teste) |
 | Windows (x64) | instalador NSIS, `.msi` | Gerado pelo CI; atualização automática; pré-visualização, ainda sem assinatura de código |
 
-O app do macOS ainda não é notarizado, então o macOS bloqueia a primeira abertura. Uma vez por
-instalação:
-
-1. Abra o `.dmg` e arraste o Treasury para Aplicativos.
-2. Abra o Treasury. O macOS avisa que ele "não pode ser verificado"; clique em **OK** (não em
-   "Mover para o Lixo").
-3. Abra Ajustes do Sistema › Privacidade e Segurança, desça até o aviso sobre o Treasury e clique
-   em **Abrir Mesmo Assim**; confirme com a senha ou o Touch ID.
-4. O Treasury abre. Daí em diante ele abre normalmente, e as atualizações se instalam sozinhas.
-
-No Windows, o SmartScreen mostra "O Windows protegeu o computador": clique em **Mais informações** e
-depois em **Executar assim mesmo**. Confira os downloads com o `SHA256SUMS.txt`
-([docs/distribution.md](docs/distribution.md)). O AppImage precisa do FUSE (`fuse3`) e das
-bibliotecas EGL/GLES do sistema (`libegl1`, `libgles2`), que a maioria dos desktops já tem.
+Os dados ficam na pasta `.treasury` dentro da sua pasta pessoal, fora do app, então atualizar ou
+desinstalar o Treasury não apaga nada. Como desinstalar e outros detalhes:
+[guia de instalação](https://knuppe.github.io/treasury-site/pt/installation/).
 
 ## Compilar
 

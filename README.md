@@ -5,6 +5,9 @@
 
 [Português](README.pt-BR.md)
 
+**[Download the latest version](https://github.com/knuppe/treasury/releases/latest)** · [Step-by-step
+install guide](https://knuppe.github.io/treasury-site/installation/) · [How to install](#install)
+
 Treasury is a desktop app for a family to keep all of its money in one place: bank accounts,
 credit cards, budget, debts, property, investments and taxes. The data stays on your computer, in
 an encrypted database, and an optional AI agent helps analyze and record things, always asking for
@@ -56,7 +59,80 @@ approval first.
 Details: [docs/security.md](docs/security.md) and [docs/local-security.md](docs/local-security.md).
 To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
-## Platforms
+## Install
+
+You don't need to know how to program. It takes about five minutes.
+
+1. Open the [latest release](https://github.com/knuppe/treasury/releases/latest) page.
+2. Scroll down to the **Assets** section at the bottom of the page. If you only see two "Source
+   code" files, click **Assets** to show the full list.
+3. Download **only one** file, the one for your computer:
+
+| Your computer | File to download |
+|---|---|
+| Mac with an Apple chip (M1 or newer) | `Treasury_<version>_aarch64.dmg` |
+| Ubuntu, Debian, Linux Mint, Pop!_OS | `Treasury_<version>_amd64.deb` |
+| Fedora, openSUSE | `Treasury-<version>-1.x86_64.rpm` |
+| Any other Linux | `Treasury_<version>_amd64.AppImage` |
+| Windows 10 or 11 | `Treasury_<version>_x64-setup.exe` |
+
+Not sure which Mac you have? Open the Apple menu › **About This Mac**: if "Chip" says Apple M1,
+M2, M3 or newer, this version is for you. Macs with an Intel processor are not supported.
+
+You can ignore every other file on the page. The `.sig` files, `latest.json`, `allowed_signers`
+and `.app.tar.gz` are used by the automatic updates and by people who check signatures, the
+`.msi` is for companies that install software on many computers, and `SHA256SUMS.txt` is for the
+[optional check](#check-the-download-optional) below.
+
+### macOS
+
+The Mac version is not notarized by Apple yet, so macOS blocks the first launch. Once per
+installation:
+
+1. Open the downloaded `.dmg` and drag **Treasury** onto the **Applications** folder.
+2. Open Treasury from Applications. macOS says it "cannot be verified"; click **Done** (not "Move
+   to Trash").
+3. Open System Settings › Privacy & Security, scroll to the message about Treasury and click
+   **Open Anyway**, then confirm with your password or Touch ID.
+4. Treasury opens. From then on it opens normally, and updates install by themselves.
+
+### Linux
+
+- **`.deb`**: double-click the file and click **Install** in the software center, or run
+  `sudo apt install ./Treasury_*_amd64.deb` in the Downloads folder. Then open **Treasury** from the
+  applications menu.
+- **`.rpm`**: double-click the file and click **Install**, or run
+  `sudo dnf install ./Treasury-*-1.x86_64.rpm` (on openSUSE, `sudo zypper install ...`).
+- **AppImage**: right-click the file › **Properties** › **Permissions** and turn on **Allow
+  executing file as program** (or run `chmod +x Treasury_*_amd64.AppImage`), then double-click it.
+  It needs FUSE (`fuse3`) and the system EGL/GLES libraries (`libegl1`, `libgles2`), already
+  present on most desktops. If it doesn't open, run
+  `sudo apt install fuse3 libegl1 libgles2` and try again. Keep the file in a permanent folder,
+  such as `~/Applications`.
+
+### Windows
+
+1. Double-click `Treasury_<version>_x64-setup.exe`.
+2. The installer is not code-signed yet, so SmartScreen shows "Windows protected your PC": click
+   **More info** and then **Run anyway**.
+3. Follow the installer and open **Treasury** from the Start menu.
+
+### Did it work?
+
+The first time, Treasury asks for your language, shows the terms of use and then offers a **demo**
+vault (a fictional family, to explore without typing anything) or a **real** vault protected by a
+master password. The installed version is in Settings › Updates. Next steps:
+[getting started](https://knuppe.github.io/treasury-site/getting-started/).
+
+### Check the download (optional)
+
+Each release has a `SHA256SUMS.txt` with the fingerprint of every file. Put it in the same folder
+as the file you downloaded and run `shasum -a 256 -c --ignore-missing SHA256SUMS.txt` on macOS or
+`sha256sum -c --ignore-missing SHA256SUMS.txt` on Linux; your file's line must end in `OK`. On
+Windows, compare the output of `Get-FileHash .\Treasury_*_x64-setup.exe` in PowerShell with the
+file's line. How to check the maintainer's signature too: [docs/distribution.md](docs/distribution.md).
+
+### Platform status
 
 | System | Package | Status |
 |---|---|---|
@@ -64,18 +140,9 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md).
 | Linux (x86_64) | AppImage, `.deb`, `.rpm` | Built by CI; automatic updates; install checked on Ubuntu 22.04/24.04, Debian 12/13 and Fedora 42 (update not yet tested) |
 | Windows (x64) | NSIS installer, `.msi` | Built by CI; automatic updates; preview, no code signing yet |
 
-The macOS build is not notarized yet, so macOS blocks the first launch. Once per installation:
-
-1. Open the `.dmg` and drag Treasury to Applications.
-2. Open Treasury. macOS says it "cannot be verified"; click **Done** (not "Move to Trash").
-3. Open System Settings › Privacy & Security, scroll to the message about Treasury and click
-   **Open Anyway**, then confirm with your password or Touch ID.
-4. Treasury opens. From then on it opens normally, and updates install by themselves.
-
-On Windows, SmartScreen shows "Windows protected your PC": click **More info** and then **Run
-anyway**. Check downloads against `SHA256SUMS.txt` ([docs/distribution.md](docs/distribution.md)).
-The AppImage needs FUSE (`fuse3`) and the system EGL/GLES libraries (`libegl1`, `libgles2`), already
-present on most desktops.
+Your data lives in the `.treasury` folder in your home folder, outside the app, so updating or
+uninstalling Treasury doesn't delete it. Uninstalling and other details:
+[installation guide](https://knuppe.github.io/treasury-site/installation/).
 
 ## Build from source
 
