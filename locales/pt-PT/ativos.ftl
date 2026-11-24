@@ -122,7 +122,6 @@ ativo-noticias-falhou = Não foi possível ler agora: { $fontes }.
 ativo-noticia-origem-cvm = CVM
 ativo-noticia-origem-portal = portal
 ativo-resumo-do-ativo = Resumo do ativo
-ativos-proventos-lancados = Rendimentos registados
 
 ## Resumo do separador Operações
 

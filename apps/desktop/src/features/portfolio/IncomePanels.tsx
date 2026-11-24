@@ -21,25 +21,49 @@ import { PeriodSelect, periodRange, usePeriod } from './components/PeriodSelect'
 import { Pct } from './components/Pct';
 import { ErrorBlock, LoadingBlock, Notice } from './components/States';
 import { maskAmount } from './incomeMasks';
-import { IncomeLedgerSummary } from './IncomeLedger';
+import { IncomeByAsset, IncomeLedgerHeader } from './IncomeLedger';
+import { Segmented } from './components/Segmented';
 import { IncomeByMonth } from './PortfolioCards';
 import { classLabel } from './labels';
 import { IncomeTable } from './RecordsPanels';
 import { capitalGap } from './transform';
 import type { PassiveIncomeAsset } from '@/api/generated/PassiveIncomeAsset';
 
+type IncomeView = 'assets' | 'months' | 'records';
+
+/**
+ * Income tab of Portfolio: the header (what the sources say was received, what to check) and
+ * one view at a time: by asset since the purchase, by month, or the records of a period.
+ */
 export function IncomePanel() {
+  const [view, setView] = useState<IncomeView>('assets');
   const [period, setPeriod] = usePeriod('proventos', '12m');
   const range = periodRange(period);
   return (
-    <div className="flex flex-col gap-3">
-      <IncomeLedgerSummary />
-      <PeriodSelect scope="proventos" value={period} onChange={setPeriod} />
-      <IncomeByMonth />
-      <IncomeTable
-        {...(range.fromDate ? { from: range.fromDate } : {})}
-        {...(range.toDate ? { to: range.toDate } : {})}
+    <div className="flex flex-col gap-4">
+      <IncomeLedgerHeader />
+      <Segmented
+        label={t('carteira-razao-visao')}
+        value={view}
+        onChange={setView}
+        size="sm"
+        options={[
+          { value: 'assets', label: t('carteira-razao-ver-ativos') },
+          { value: 'months', label: t('carteira-razao-ver-meses') },
+          { value: 'records', label: t('carteira-razao-ver-lancamentos') },
+        ]}
       />
+      {view === 'assets' ? <IncomeByAsset /> : null}
+      {view === 'months' ? <IncomeByMonth /> : null}
+      {view === 'records' ? (
+        <>
+          <PeriodSelect scope="proventos" value={period} onChange={setPeriod} />
+          <IncomeTable
+            {...(range.fromDate ? { from: range.fromDate } : {})}
+            {...(range.toDate ? { to: range.toDate } : {})}
+          />
+        </>
+      ) : null}
     </div>
   );
 }

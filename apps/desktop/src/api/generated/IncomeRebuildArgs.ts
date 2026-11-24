@@ -2,7 +2,8 @@
 
 export type IncomeRebuildArgs = { 
 /**
- * Keys of the entries to fix (from the ledger). Empty or absent = every proposed fix.
+ * Keys of the entries to fix (from the ledger), including distributions without an
+ * official notice that the family checked. Empty or absent = every official fix.
  */
 keys?: Array<string>, 
 /**

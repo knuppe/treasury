@@ -2834,7 +2834,6 @@ export interface Messages {
   'ativos-prev-valor-bruto': never;
   'ativos-prev-valor-hoje': never;
   'ativos-provento': never;
-  'ativos-proventos-lancados': never;
   'ativos-qtd': never;
   'ativos-quantidade': never;
   'ativos-real': never;
@@ -4319,7 +4318,6 @@ export interface Messages {
   'carteira-razao-acao-apagar': never;
   'carteira-razao-acao-corrigir': never;
   'carteira-razao-acao-lancar': never;
-  'carteira-razao-anos-tabela': never;
   'carteira-razao-aplicar': { n: string | number };
   'carteira-razao-ativos-tabela': never;
   'carteira-razao-automatico-depois': never;
@@ -4328,9 +4326,8 @@ export interface Messages {
   'carteira-razao-calculando': never;
   'carteira-razao-col-a-receber': never;
   'carteira-razao-col-acao': never;
-  'carteira-razao-col-ano': never;
   'carteira-razao-col-bruto': never;
-  'carteira-razao-col-correcoes': never;
+  'carteira-razao-col-conferir': never;
   'carteira-razao-col-data-com': never;
   'carteira-razao-col-desde': never;
   'carteira-razao-col-fica': never;
@@ -4342,12 +4339,7 @@ export interface Messages {
   'carteira-razao-col-recebido': never;
   'carteira-razao-col-situacao': never;
   'carteira-razao-col-tipo': never;
-  'carteira-razao-correcoes': { n: string | number };
-  'carteira-razao-correcoes-detalhe': {
-    faltando: string | number;
-    repetidos: string | number;
-    valor: string | number;
-  };
+  'carteira-razao-conferir': { n: string | number };
   'carteira-razao-estado-a-receber': never;
   'carteira-razao-estado-confere': never;
   'carteira-razao-estado-faltando': never;
@@ -4361,10 +4353,15 @@ export interface Messages {
     lancados: string | number;
   };
   'carteira-razao-lancado': never;
-  'carteira-razao-lancado-hoje': never;
   'carteira-razao-marcar': { acao: string | number; ativo: string | number };
+  'carteira-razao-na-carteira': { valor: string | number };
   'carteira-razao-nada': never;
   'carteira-razao-pago-em': { data: string | number };
+  'carteira-razao-parte-faltando': { n: string | number };
+  'carteira-razao-parte-repetidos': { n: string | number };
+  'carteira-razao-parte-sem-aviso': { n: string | number };
+  'carteira-razao-parte-valor': { n: string | number };
+  'carteira-razao-por-ano': never;
   'carteira-razao-recebido': never;
   'carteira-razao-recebido-desde': { data: string | number };
   'carteira-razao-recebido-dica': never;
@@ -4372,10 +4369,17 @@ export interface Messages {
   'carteira-razao-revisar-tabela': never;
   'carteira-razao-revisar-texto': never;
   'carteira-razao-revisar-titulo': never;
-  'carteira-razao-sem-aviso': { n: string | number };
+  'carteira-razao-sem-aviso-tag': { fonte: string | number };
   'carteira-razao-tabela': never;
-  'carteira-razao-tabela-titulo': never;
   'carteira-razao-titulo': never;
+  'carteira-razao-vazio': never;
+  'carteira-razao-ver-ativos': never;
+  'carteira-razao-ver-conferir': { n: string | number };
+  'carteira-razao-ver-lancamentos': never;
+  'carteira-razao-ver-meses': never;
+  'carteira-razao-ver-receber': { n: string | number };
+  'carteira-razao-ver-todos': { n: string | number };
+  'carteira-razao-visao': never;
   'carteira-real-de': { deflator: string | number };
   'carteira-real-descontado-por': never;
   'carteira-realizado': never;
@@ -21744,7 +21748,6 @@ export const KEYS: readonly MessageKey[] = [
   'ativos-prev-valor-bruto',
   'ativos-prev-valor-hoje',
   'ativos-provento',
-  'ativos-proventos-lancados',
   'ativos-qtd',
   'ativos-quantidade',
   'ativos-real',
@@ -23155,7 +23158,6 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-acao-apagar',
   'carteira-razao-acao-corrigir',
   'carteira-razao-acao-lancar',
-  'carteira-razao-anos-tabela',
   'carteira-razao-aplicar',
   'carteira-razao-ativos-tabela',
   'carteira-razao-automatico-depois',
@@ -23164,9 +23166,8 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-calculando',
   'carteira-razao-col-a-receber',
   'carteira-razao-col-acao',
-  'carteira-razao-col-ano',
   'carteira-razao-col-bruto',
-  'carteira-razao-col-correcoes',
+  'carteira-razao-col-conferir',
   'carteira-razao-col-data-com',
   'carteira-razao-col-desde',
   'carteira-razao-col-fica',
@@ -23178,8 +23179,7 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-col-recebido',
   'carteira-razao-col-situacao',
   'carteira-razao-col-tipo',
-  'carteira-razao-correcoes',
-  'carteira-razao-correcoes-detalhe',
+  'carteira-razao-conferir',
   'carteira-razao-estado-a-receber',
   'carteira-razao-estado-confere',
   'carteira-razao-estado-faltando',
@@ -23189,10 +23189,15 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-estado-valor',
   'carteira-razao-feito',
   'carteira-razao-lancado',
-  'carteira-razao-lancado-hoje',
   'carteira-razao-marcar',
+  'carteira-razao-na-carteira',
   'carteira-razao-nada',
   'carteira-razao-pago-em',
+  'carteira-razao-parte-faltando',
+  'carteira-razao-parte-repetidos',
+  'carteira-razao-parte-sem-aviso',
+  'carteira-razao-parte-valor',
+  'carteira-razao-por-ano',
   'carteira-razao-recebido',
   'carteira-razao-recebido-desde',
   'carteira-razao-recebido-dica',
@@ -23200,10 +23205,17 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-revisar-tabela',
   'carteira-razao-revisar-texto',
   'carteira-razao-revisar-titulo',
-  'carteira-razao-sem-aviso',
+  'carteira-razao-sem-aviso-tag',
   'carteira-razao-tabela',
-  'carteira-razao-tabela-titulo',
   'carteira-razao-titulo',
+  'carteira-razao-vazio',
+  'carteira-razao-ver-ativos',
+  'carteira-razao-ver-conferir',
+  'carteira-razao-ver-lancamentos',
+  'carteira-razao-ver-meses',
+  'carteira-razao-ver-receber',
+  'carteira-razao-ver-todos',
+  'carteira-razao-visao',
   'carteira-real-de',
   'carteira-real-descontado-por',
   'carteira-realizado',

@@ -67,7 +67,7 @@ import { Segmented } from '../portfolio/components/Segmented';
 import { ConfirmButton, ErrorBlock, LoadingBlock, Notice } from '../portfolio/components/States';
 import { formatQuantity, formatUnitPrice } from '../portfolio/decimal';
 import { IncomeDialog } from '../portfolio/IncomeDialog';
-import { IncomeLedgerSummary, IncomeLedgerTable } from '../portfolio/IncomeLedger';
+import { AssetIncome } from '../portfolio/IncomeLedger';
 import {
   FIXED_INCOME_KIND_LABEL,
   INDEXER_LABEL,
@@ -78,14 +78,13 @@ import {
   termsSummary,
 } from '../portfolio/labels';
 import { useDeflatorLabel } from '@/features/portfolio/useDeflatorLabel';
-import { ActionsTable, IncomeTable, TradesTable } from '../portfolio/RecordsPanels';
+import { ActionsTable, TradesTable } from '../portfolio/RecordsPanels';
 import { usePortfolioUi } from '../portfolio/state';
 import { TradeDialog } from '../portfolio/TradeDialog';
 import { meterScale, priceChartData } from '../portfolio/transform';
 import { hasFundamentals } from '../research/labels';
 import { ResearchSection } from '../research/ResearchSection';
 import { AssetScorePanel } from '../score/AssetScorePanel';
-import { AnnouncedIncome } from './AnnouncedIncome';
 import { assetSections } from './assetSections';
 import { PensionPanel } from './PensionPanel';
 import { FUNDAMENTUS_CLASSES, FundamentusPanel } from './FundamentusPanel';
@@ -641,15 +640,7 @@ export function AssetDetail({
           </div>
         </TabsContent>
         <TabsContent value="proventos">
-          <div className="flex flex-col gap-5">
-            <IncomeLedgerSummary assetId={asset.id} />
-            {fundamentus && asset.ticker ? <AnnouncedIncome asset={asset} /> : null}
-            <IncomeLedgerTable assetId={asset.id} />
-            <section className="flex flex-col gap-2">
-              <h3 className="label-caps text-fg">{t('ativos-proventos-lancados')}</h3>
-              <IncomeTable assetId={asset.id} />
-            </section>
-          </div>
+          <AssetIncome assetId={asset.id} fundamentus={fundamentus && Boolean(asset.ticker)} />
         </TabsContent>
         <TabsContent value="eventos">
           <div className="flex flex-col gap-3">

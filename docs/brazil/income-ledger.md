@@ -3,10 +3,12 @@
 The income ledger answers "how much did this asset pay me while I held it": for every
 distribution (FII and Fiagro income and amortizations, dividends, JCP) it takes the position of
 each account at the end of the record date and the amount per share of the official notice, and
-compares the result with what is recorded. It appears in the Income tab of Portfolio (totals by
-year and by asset since the first purchase, and the fixes to review) and in the Income tab of
-each asset page (every distribution, with quantity, amount per share, gross, tax, net, source and
-status).
+compares the result with what is recorded. It appears in the Income tab of Portfolio and of each asset
+page: on top, what the sources say was received (since the first purchase, on the asset page),
+what is still to be paid and the years in one line, with a notice of what to check; below, one
+list at a time. In Portfolio: by asset since the purchase, by month, or the records of a period.
+On the asset page: every distribution (quantity, amount per share, gross, tax, net, source and
+status), the ones to check, the upcoming ones, or the records themselves to edit or delete.
 
 ## Sources, in order
 
@@ -20,7 +22,8 @@ status).
    reference (full history of amounts and record dates; the payment date only for the last
    ~12 months, completed by the agenda when it has it).
 3. **Agenda** (Fundamentus, Yahoo): only when no official source describes the distribution. These
-   distributions are not recorded by themselves; they wait in Record dividends › To confirm.
+   distributions are not recorded by themselves: they show up unchecked in the review of the fixes
+   and in Record dividends › To confirm, to be checked against the statement first.
 
 A value from a secondary source never replaces the official one, even when they are within 2%:
 Fundamentus keeps two decimals (0.055 becomes 0.06) and Yahoo rewrites past amounts

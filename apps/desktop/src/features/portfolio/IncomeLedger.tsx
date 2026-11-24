@@ -8,9 +8,9 @@
  */
 import { useMemo, useState } from 'react';
 
+import type { IncomeLedgerCounts } from '@/api/generated/IncomeLedgerCounts';
 import type { IncomeLedgerEntry } from '@/api/generated/IncomeLedgerEntry';
 import type { IncomeLedgerFix } from '@/api/generated/IncomeLedgerFix';
-import type { IncomeLedgerPeriod } from '@/api/generated/IncomeLedgerPeriod';
 import type { IncomeLedgerState } from '@/api/generated/IncomeLedgerState';
 import {
   useIncomeAuto,
@@ -18,10 +18,12 @@ import {
   useIncomeRebuild,
   useInvestmentAccounts,
 } from '@/api/hooks/portfolio';
+import { useSyncFundamentusIncome } from '@/api/hooks/dataSources';
 import {
   Button,
   Dialog,
   DialogClose,
+  Icon,
   Measure,
   Money,
   TechTable,
@@ -35,9 +37,13 @@ import { t } from '@/i18n';
 import { formatDate } from '@/lib/format';
 import { FormError } from '@/vault/FormError';
 
+import { slot, withSlots } from '@/features/transactions/ui/slots';
+
 import { ErrorBlock, LoadingBlock, Notice } from './components/States';
+import { Segmented } from './components/Segmented';
 import { formatQuantity, formatUnitPrice } from './decimal';
 import { INCOME_KIND_LABEL, sourceName } from './labels';
+import { IncomeTable } from './RecordsPanels';
 
 const STATE_TONE: Record<IncomeLedgerState, string> = {
   matches: 'text-positive',
@@ -221,60 +227,29 @@ function useAccountName() {
   return (id: string) => accounts.find((a) => a.id === id)?.name ?? t('carteira-conta');
 }
 
-/** Totals per year: received by the sources, what is recorded, and what is still to be paid. */
-function YearsTable({
-  years,
-  currency,
-}: {
-  years: readonly IncomeLedgerPeriod[];
-  currency: string;
-}) {
-  const rows = [...years].reverse();
-  const differs = rows.some((y) => y.recorded_base !== y.received_base);
-  return (
-    <TechTable
-      label={t('carteira-razao-anos-tabela')}
-      prefsId="Proventos por ano"
-      dense
-      rows={rows}
-      getRowId={(y) => y.period}
-      columns={[
-        { key: 'year', header: t('carteira-razao-col-ano'), cell: (y) => y.period },
-        {
-          key: 'received',
-          header: t('carteira-razao-col-recebido'),
-          align: 'right',
-          cell: (y) => <Money cents={y.received_base} currency={currency} />,
-        },
-        ...(differs
-          ? [
-              {
-                key: 'recorded',
-                header: t('carteira-razao-col-lancado'),
-                align: 'right' as const,
-                cell: (y: IncomeLedgerPeriod) => (
-                  <Money cents={y.recorded_base} currency={currency} />
-                ),
-              },
-            ]
-          : []),
-        {
-          key: 'upcoming',
-          header: t('carteira-razao-col-a-receber'),
-          align: 'right',
-          cell: (y) =>
-            y.upcoming_base ? <Money cents={y.upcoming_base} currency={currency} /> : '—',
-        },
-      ]}
-    />
-  );
+/** What there is to check, only the parts that happen ("2 not recorded; 1 recorded twice"). */
+function checkParts(c: IncomeLedgerCounts): string {
+  const official = c.missing - c.unofficial_missing;
+  const diff = c.value_diff + c.tax_diff;
+  return [
+    official > 0 && t('carteira-razao-parte-faltando', { n: official }),
+    c.duplicate > 0 && t('carteira-razao-parte-repetidos', { n: c.duplicate }),
+    diff > 0 && t('carteira-razao-parte-valor', { n: diff }),
+    c.unofficial_missing > 0 && t('carteira-razao-parte-sem-aviso', { n: c.unofficial_missing }),
+  ]
+    .filter(Boolean)
+    .join('; ');
 }
 
+/** Entries to check: everything with a fix, and the paid ones without an official notice. */
+const toCheck = (e: IncomeLedgerEntry) => e.fix != null;
+
 /**
- * Summary of the ledger: totals, years and the fixes to review. With `assetId`, only that
- * asset (its page); without it, the whole portfolio with one line per asset.
+ * Header of the income: what the sources say was received (since the first purchase, on the
+ * asset page), what is still to be paid, the years in one line, and what to check, with the
+ * review of the fixes.
  */
-export function IncomeLedgerSummary({ assetId }: { assetId?: string }) {
+export function IncomeLedgerHeader({ assetId }: { assetId?: string }) {
   const q = useIncomeLedger(assetId ? { asset_id: assetId } : { only_problems: true });
   const auto = useIncomeAuto();
   const [open, setOpen] = useState(false);
@@ -285,9 +260,11 @@ export function IncomeLedgerSummary({ assetId }: { assetId?: string }) {
   const cur = l.base_currency;
   const first = assetId ? l.assets[0]?.first_date : null;
   const c = l.counts;
+  const pending = c.fixes + c.unofficial_missing;
+  const years = [...l.years].reverse().filter((y) => y.received_base || y.upcoming_base);
   return (
     <section className="flex flex-col gap-3" aria-label={t('carteira-razao-titulo')}>
-      <div className="flex flex-wrap gap-6">
+      <div className="flex flex-wrap items-end gap-x-8 gap-y-3">
         <Measure
           label={
             first
@@ -303,29 +280,43 @@ export function IncomeLedgerSummary({ assetId }: { assetId?: string }) {
             value={<Money cents={l.upcoming_base} currency={cur} />}
           />
         ) : null}
-        {l.recorded_base !== l.received_base ? (
-          <Measure
-            label={t('carteira-razao-lancado-hoje')}
-            value={<Money cents={l.recorded_base} currency={cur} />}
-          />
+        {years.length > 1 ? (
+          <dl
+            className="flex flex-wrap gap-x-4 gap-y-1 pb-1 text-[12.5px]"
+            aria-label={t('carteira-razao-por-ano')}
+          >
+            {years.map((y) => (
+              <div key={y.period} className="flex gap-1.5">
+                <dt className="text-dim">{y.period}</dt>
+                <dd className="num">
+                  <Money cents={y.received_base} currency={cur} />
+                </dd>
+              </div>
+            ))}
+          </dl>
         ) : null}
       </div>
-      {c.fixes > 0 ? (
+      {pending > 0 ? (
         <Notice
           tone="warning"
-          title={t('carteira-razao-correcoes', { n: c.fixes })}
+          title={t('carteira-razao-conferir', { n: pending })}
           actions={
             <Button size="sm" variant="primary" onClick={() => setOpen(true)}>
               {t('carteira-razao-revisar')}
             </Button>
           }
         >
-          {t('carteira-razao-correcoes-detalhe', {
-            faltando: c.missing - c.unofficial_missing,
-            repetidos: c.duplicate,
-            valor: c.value_diff + c.tax_diff,
-          })}
-          {!l.auto ? ` ${t('carteira-razao-automatico-depois')}` : ''}
+          <span className="block">{checkParts(c)}</span>
+          {l.recorded_base !== l.received_base ? (
+            <span className="block text-dim">
+              {withSlots(t('carteira-razao-na-carteira', { valor: slot(0) }), [
+                <Money key="v" cents={l.recorded_base} currency={cur} />,
+              ])}
+            </span>
+          ) : null}
+          {!l.auto ? (
+            <span className="block text-dim">{t('carteira-razao-automatico-depois')}</span>
+          ) : null}
         </Notice>
       ) : null}
       {l.auto ? (
@@ -343,81 +334,150 @@ export function IncomeLedgerSummary({ assetId }: { assetId?: string }) {
           </Button>
         </p>
       ) : null}
-      {c.unofficial_missing > 0 ? (
-        <p className="text-[12px] text-dim">
-          {t('carteira-razao-sem-aviso', { n: c.unofficial_missing })}
-        </p>
-      ) : null}
-      {l.years.length ? <YearsTable years={l.years} currency={cur} /> : null}
-      {!assetId && l.assets.length > 1 ? (
-        <TechTable
-          label={t('carteira-razao-ativos-tabela')}
-          prefsId="Proventos por ativo desde a compra"
-          dense
-          rows={l.assets}
-          getRowId={(a) => a.asset.id}
-          defaultSort={{ key: 'received', direction: 'desc' }}
-          columns={[
-            {
-              key: 'asset',
-              header: t('carteira-col-ativo'),
-              cell: (a) => <span className="font-medium">{a.asset.ticker ?? a.asset.name}</span>,
-              sortValue: (a) => a.asset.ticker ?? a.asset.name,
-            },
-            {
-              key: 'since',
-              header: t('carteira-razao-col-desde'),
-              cell: (a) => (a.first_date ? formatDate(a.first_date) : '—'),
-              sortValue: (a) => a.first_date ?? '',
-            },
-            {
-              key: 'received',
-              header: t('carteira-razao-col-recebido'),
-              align: 'right',
-              cell: (a) => <Money cents={a.received_base} currency={cur} />,
-              sortValue: (a) => a.received_base,
-            },
-            {
-              key: 'upcoming',
-              header: t('carteira-razao-col-a-receber'),
-              align: 'right',
-              cell: (a) =>
-                a.upcoming_base ? <Money cents={a.upcoming_base} currency={cur} /> : '—',
-              sortValue: (a) => a.upcoming_base,
-            },
-            {
-              key: 'fixes',
-              header: t('carteira-razao-col-correcoes'),
-              align: 'right',
-              cell: (a) => (a.fixes ? <span className="text-warning">{a.fixes}</span> : '—'),
-              sortValue: (a) => a.fixes,
-            },
-          ]}
-        />
-      ) : null}
       <IncomeRebuildDialog open={open} onOpenChange={setOpen} {...(assetId ? { assetId } : {})} />
     </section>
   );
 }
 
-/** Every distribution of the asset, newest first. */
-export function IncomeLedgerTable({ assetId }: { assetId: string }) {
+/** Income by asset since the first purchase (Portfolio). */
+export function IncomeByAsset() {
+  const q = useIncomeLedger({ only_problems: true });
+  if (!q.data?.assets.length) return null;
+  const cur = q.data.base_currency;
+  return (
+    <TechTable
+      label={t('carteira-razao-ativos-tabela')}
+      prefsId="Proventos por ativo desde a compra"
+      dense
+      rows={q.data.assets}
+      getRowId={(a) => a.asset.id}
+      defaultSort={{ key: 'received', direction: 'desc' }}
+      columns={[
+        {
+          key: 'asset',
+          header: t('carteira-col-ativo'),
+          cell: (a) => <span className="font-medium">{a.asset.ticker ?? a.asset.name}</span>,
+          sortValue: (a) => a.asset.ticker ?? a.asset.name,
+        },
+        {
+          key: 'since',
+          header: t('carteira-razao-col-desde'),
+          cell: (a) => (a.first_date ? formatDate(a.first_date) : '—'),
+          sortValue: (a) => a.first_date ?? '',
+        },
+        {
+          key: 'received',
+          header: t('carteira-razao-col-recebido'),
+          align: 'right',
+          cell: (a) => <Money cents={a.received_base} currency={cur} />,
+          sortValue: (a) => a.received_base,
+        },
+        {
+          key: 'upcoming',
+          header: t('carteira-razao-col-a-receber'),
+          align: 'right',
+          cell: (a) => (a.upcoming_base ? <Money cents={a.upcoming_base} currency={cur} /> : '—'),
+          sortValue: (a) => a.upcoming_base,
+        },
+        {
+          key: 'fixes',
+          header: t('carteira-razao-col-conferir'),
+          align: 'right',
+          cell: (a) => (a.fixes ? <span className="text-warning">{a.fixes}</span> : '—'),
+          sortValue: (a) => a.fixes,
+        },
+      ]}
+    />
+  );
+}
+
+type AssetView = 'all' | 'check' | 'upcoming' | 'records';
+
+/**
+ * Income tab of the asset page: the header and one list, filtered: every distribution while
+ * the family held the asset, the ones to check, the upcoming ones, or the records themselves
+ * (to edit or delete one).
+ */
+export function AssetIncome({
+  assetId,
+  fundamentus = false,
+}: {
+  assetId: string;
+  /** B3 asset: offer the lookup of the announced distributions on Fundamentus. */
+  fundamentus?: boolean;
+}) {
+  const sync = useSyncFundamentusIncome();
   const q = useIncomeLedger({ asset_id: assetId });
   const accountName = useAccountName();
   const cols = useMemo(() => columns(accountName, false), [accountName]);
-  if (!q.data?.entries.length) return null;
+  const [view, setView] = useState<AssetView>('all');
+  const entries = q.data?.entries ?? [];
+  const rows =
+    view === 'check'
+      ? entries.filter(toCheck)
+      : view === 'upcoming'
+        ? entries.filter((e) => e.state === 'upcoming')
+        : entries;
+  const count = (f: (e: IncomeLedgerEntry) => boolean) => entries.filter(f).length;
   return (
-    <section className="flex flex-col gap-2">
-      <h3 className="label-caps text-fg">{t('carteira-razao-tabela-titulo')}</h3>
-      <TechTable
-        label={t('carteira-razao-tabela')}
-        prefsId="Razão de proventos do ativo"
-        dense
-        rows={q.data.entries}
-        getRowId={(e) => e.key}
-        columns={cols}
-      />
-    </section>
+    <div className="flex flex-col gap-4">
+      <IncomeLedgerHeader assetId={assetId} />
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Segmented
+          label={t('carteira-razao-visao')}
+          value={view}
+          onChange={setView}
+          size="sm"
+          options={[
+            { value: 'all', label: t('carteira-razao-ver-todos', { n: entries.length }) },
+            { value: 'check', label: t('carteira-razao-ver-conferir', { n: count(toCheck) }) },
+            {
+              value: 'upcoming',
+              label: t('carteira-razao-ver-receber', {
+                n: count((e) => e.state === 'upcoming'),
+              }),
+            },
+            { value: 'records', label: t('carteira-razao-ver-lancamentos') },
+          ]}
+        />
+        {fundamentus ? (
+          <Button
+            size="sm"
+            variant="ghost"
+            loading={sync.isPending}
+            icon={<Icon name="refresh" size={13} />}
+            onClick={() =>
+              sync.mutate(
+                { asset_id: assetId, refresh: true },
+                {
+                  onSuccess: (r) =>
+                    toast({
+                      tone: 'success',
+                      title: t('ativos-anunciados-novos', { n: r.events_added }),
+                      description: t('ativos-anunciados-novos-dica'),
+                    }),
+                },
+              )
+            }
+          >
+            {t('ativos-anunciados-buscar')}
+          </Button>
+        ) : null}
+      </div>
+      {view === 'records' ? (
+        <IncomeTable assetId={assetId} />
+      ) : (
+        <TechTable
+          label={t('carteira-razao-tabela')}
+          prefsId="Razão de proventos do ativo"
+          dense
+          rows={rows}
+          getRowId={(e) => e.key}
+          columns={cols}
+          empty={t('carteira-razao-vazio')}
+        />
+      )}
+    </div>
   );
 }
 
@@ -450,18 +510,15 @@ function RebuildBody({ assetId, onDone }: { assetId?: string; onDone: () => void
   const q = useIncomeLedger(assetId ? { asset_id: assetId } : { only_problems: true });
   const save = useIncomeRebuild();
   const accountName = useAccountName();
-  const [off, setOff] = useState<ReadonlySet<string>>(new Set());
-  const rows = (q.data?.entries ?? []).filter(proposable);
+  // Official fixes start checked; distributions without an official notice start unchecked
+  // (check them against the statement first).
+  const [picked, setPicked] = useState<ReadonlyMap<string, boolean>>(new Map());
+  const rows = (q.data?.entries ?? []).filter(toCheck);
   if (q.isPending) return <LoadingBlock label={t('carteira-razao-calculando')} />;
   if (!rows.length) return <p className="text-[13px] text-dim">{t('carteira-razao-nada')}</p>;
-  const chosen = rows.filter((e) => !off.has(e.key));
-  const toggle = (k: string, on: boolean) =>
-    setOff((prev) => {
-      const next = new Set(prev);
-      if (on) next.delete(k);
-      else next.add(k);
-      return next;
-    });
+  const isOn = (e: IncomeLedgerEntry) => picked.get(e.key) ?? proposable(e);
+  const chosen = rows.filter(isOn);
+  const toggle = (k: string, on: boolean) => setPicked((prev) => new Map(prev).set(k, on));
   const submit = () =>
     save.mutate(
       { keys: chosen.map((e) => e.key), ...(assetId ? { asset_id: assetId } : {}) },
@@ -479,7 +536,7 @@ function RebuildBody({ assetId, onDone }: { assetId?: string; onDone: () => void
         },
       },
     );
-  const allOn = off.size === 0;
+  const allOn = chosen.length === rows.length;
   return (
     <div className="flex flex-col gap-3">
       <table
@@ -493,8 +550,8 @@ function RebuildBody({ assetId, onDone }: { assetId?: string; onDone: () => void
                 label={t('carteira-pend-marcar-todos')}
                 hideLabel
                 checked={allOn}
-                indeterminate={!allOn && off.size < rows.length}
-                onChange={(on) => setOff(on ? new Set() : new Set(rows.map((e) => e.key)))}
+                indeterminate={!allOn && chosen.length > 0}
+                onChange={(on) => setPicked(new Map(rows.map((e) => [e.key, on])))}
               />
             </th>
             <th className="pb-1.5 pr-2 font-normal">{t('carteira-razao-col-acao')}</th>
@@ -508,7 +565,7 @@ function RebuildBody({ assetId, onDone }: { assetId?: string; onDone: () => void
         </thead>
         <tbody>
           {rows.map((e) => {
-            const on = !off.has(e.key);
+            const on = isOn(e);
             const label = e.asset.ticker ?? e.asset.name;
             return (
               <tr key={e.key} className={cx('border-t border-line align-top', !on && 'opacity-50')}>
@@ -526,6 +583,11 @@ function RebuildBody({ assetId, onDone }: { assetId?: string; onDone: () => void
                     <span className={cx('text-[11.5px]', STATE_TONE[e.state])}>
                       {stateLabel(e.state)}
                     </span>
+                    {!e.official && e.fix === 'create' ? (
+                      <span className="text-[11.5px] text-dim">
+                        {t('carteira-razao-sem-aviso-tag', { fonte: sourceName(e.source) })}
+                      </span>
+                    ) : null}
                   </span>
                 </td>
                 <td className="py-1.5 pr-2">

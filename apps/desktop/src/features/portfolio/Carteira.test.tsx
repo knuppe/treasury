@@ -455,6 +455,7 @@ describe('08 · Portfolio with the mock', () => {
     await user.type(meta, '5.000,00');
     expect(await screen.findByText('Patrimônio necessário')).toBeTruthy();
     await user.click(screen.getByRole('tab', { name: 'Proventos' }));
+    await user.click(await screen.findByRole('radio', { name: 'Lançamentos' }));
     expect(await screen.findByRole('grid', { name: 'Proventos' })).toBeTruthy();
   });
 

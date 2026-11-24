@@ -31,13 +31,21 @@ describe('income ledger', () => {
       name: 'Corrigir os proventos pelos avisos oficiais',
     });
     const table = await within(dialog).findByRole('table', { name: 'Correções propostas' });
-    expect(within(table).getAllByText('Lançar').length).toBe(official.length);
+    const missing = before.entries.filter((e) => e.state === 'missing');
+    expect(within(table).getAllByText('Lançar').length).toBe(missing.length);
+    // Without an official notice: listed, but unchecked (check the statement first).
+    expect(within(table).getAllByText(/sem aviso oficial/).length).toBe(
+      missing.length - official.length,
+    );
     await user.click(within(dialog).getByRole('button', { name: /^Aplicar/ }));
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
 
     const after = (await mockCall('portfolio.income_ledger', {})) as IncomeLedger;
     expect(after.auto).toBe(true);
     expect(after.entries.filter((e) => e.state === 'missing' && e.official)).toHaveLength(0);
+    expect(after.entries.filter((e) => e.state === 'missing' && !e.official).length).toBe(
+      missing.length - official.length,
+    );
     expect(await screen.findByText(/Proventos oficiais entram sozinhos desde/)).toBeTruthy();
   });
 });

@@ -70,16 +70,13 @@ describe('external sources and Fundamentus', () => {
     vi.useRealTimers();
   });
 
-  it('FII: announced yields in the Proventos tab and lookup on Fundamentus', async () => {
+  it('FII: lookup of the announced yields on Fundamentus from the Proventos tab', async () => {
     quietCanvas();
     fixToday();
     const user = userEvent.setup();
     renderApp('unlocked', {}, '#/ativos?ativo=ast-hglg11&secao=proventos');
-    const card = await screen.findByRole('region', { name: 'Rendimentos anunciados pelo fundo' });
-    expect(
-      await within(card).findByRole('grid', { name: 'Proventos anunciados de HGLG11' }),
-    ).toBeTruthy();
-    await user.click(within(card).getByRole('button', { name: 'Buscar no Fundamentus' }));
+    await screen.findByRole('region', { name: 'Proventos pelas fontes oficiais' });
+    await user.click(await screen.findByRole('button', { name: 'Buscar no Fundamentus' }));
     expect(await screen.findByText(/proventos novos anunciados/)).toBeTruthy();
     vi.useRealTimers();
   });

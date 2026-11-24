@@ -3094,7 +3094,7 @@ function incomeLedger(a: Record<string, unknown>): IncomeLedger {
         upcoming_base: 0,
         recorded_base: sum(rows, recordedBase),
         years: [...years.values()].sort((x, y) => x.period.localeCompare(y.period)),
-        fixes: rows.filter((e) => fixes.includes(e)).length,
+        fixes: rows.filter((e) => e.fix != null).length,
       };
     }),
     years: periods(4),
@@ -3646,7 +3646,7 @@ registerMockHandlers({
     requireUnlocked();
     const keys = Array.isArray(a.keys) ? (a.keys as string[]) : [];
     const chosen = ledgerEntries(a).filter(
-      (e) => e.fix === 'create' && e.official && (!keys.length || keys.includes(e.key)),
+      (e) => e.fix === 'create' && (keys.length ? keys.includes(e.key) : e.official),
     );
     for (const e of chosen) {
       createIncome({

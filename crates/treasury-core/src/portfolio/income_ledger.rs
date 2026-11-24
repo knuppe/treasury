@@ -205,7 +205,7 @@ pub struct AssetTotal {
     #[ts(type = "number")]
     pub recorded_base: i64,
     pub years: Vec<PeriodTotal>,
-    /// Entries with a fix to apply.
+    /// Entries to check (with a fix, official or not).
     pub fixes: u32,
 }
 
@@ -768,7 +768,8 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
         if e.net_base != 0 || e.upcoming_base != 0 {
             p.count += 1;
         }
-        if e.fix.is_some() && (e.official || e.state != EntryState::Missing) {
+        // Everything to check, including distributions without an official notice.
+        if e.fix.is_some() {
             a.2 += 1;
         }
     }
@@ -825,7 +826,8 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
 #[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]
 #[ts(export, rename = "IncomeRebuildArgs")]
 pub struct RebuildArgs {
-    /// Keys of the entries to fix (from the ledger). Empty or absent = every proposed fix.
+    /// Keys of the entries to fix (from the ledger), including distributions without an
+    /// official notice that the family checked. Empty or absent = every official fix.
     #[serde(default)]
     #[ts(optional)]
     pub keys: Option<Vec<String>>,
@@ -881,7 +883,8 @@ fn apply_fixes(
                     status: Some(IncomeStatus::Received),
                     cash_movement: Some(cash(e)),
                 };
-                records::create_income_with(tx, &input, source, Some(&e.key))?;
+                let origin = if e.official { source } else { "agenda" };
+                records::create_income_with(tx, &input, origin, Some(&e.key))?;
                 rep.created += 1;
             }
             Some(Fix::Update) => {
@@ -921,10 +924,10 @@ fn rebuild_plan(
     let chosen: Vec<LedgerEntry> = ledger
         .entries
         .into_iter()
-        .filter(proposable)
         .filter(|e| match &args.keys {
-            Some(k) if !k.is_empty() => k.contains(&e.key),
-            _ => true,
+            // Chosen by the family: also the distributions without an official notice.
+            Some(k) if !k.is_empty() => e.fix.is_some() && k.contains(&e.key),
+            _ => proposable(e),
         })
         .collect();
     let reason = t_args(

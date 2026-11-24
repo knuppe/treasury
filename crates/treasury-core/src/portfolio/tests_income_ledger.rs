@@ -568,3 +568,52 @@ fn the_credited_amount_of_the_b3_statement_prevails() {
     assert_eq!(e.fix, None);
     assert_eq!(l.received_base, 5100);
 }
+
+#[test]
+fn a_distribution_without_an_official_notice_is_recorded_only_when_chosen() {
+    let (_d, mut db) = db();
+    let a = asset(&mut db, "ACME3", AssetClass::StockBr);
+    trade(&mut db, &a, "2025-01-10", TradeSide::Buy, "100", "10");
+    db.conn()
+        .execute(
+            "INSERT INTO dividend_event (id, asset_id, kind, ex_date, pay_date, amount_per_share, currency, estimated, source, fetched_at)
+             VALUES ('f1', ?1, 'dividend', '2025-03-10', '2025-03-20', '0.25', 'BRL', 0, 'fundamentus', 'x')",
+            [&a],
+        )
+        .unwrap();
+    let l = ledger(&db, "2025-04-01");
+    let e = entry(&l, "2025-03-10", IncomeKind::Dividend, EntryState::Missing);
+    assert!(!e.official);
+    assert_eq!(l.counts.fixes, 0);
+    let key = e.key.clone();
+    // The rebuild of everything leaves it to the family.
+    let rep = income_ledger::rebuild_as(
+        db.conn_mut(),
+        &Author::user(),
+        &RebuildArgs::default(),
+        day("2025-04-01"),
+    )
+    .unwrap();
+    assert_eq!(rep.created, 0);
+    // Checked by the family: recorded, with the agenda as the origin.
+    let rep = income_ledger::rebuild_as(
+        db.conn_mut(),
+        &Author::user(),
+        &RebuildArgs {
+            keys: Some(vec![key]),
+            asset_id: None,
+        },
+        day("2025-04-01"),
+    )
+    .unwrap();
+    assert_eq!(rep.created, 1);
+    let src: String = db
+        .conn()
+        .query_row(
+            "SELECT source FROM income_event WHERE asset_id = ?1",
+            [&a],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(src, "agenda");
+}

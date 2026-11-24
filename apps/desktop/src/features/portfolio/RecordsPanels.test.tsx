@@ -17,10 +17,12 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-async function openTab(asset: string, tab: string, grid: string) {
+async function openTab(asset: string, tab: string, grid: string, view?: string) {
   const user = userEvent.setup();
   renderApp('unlocked', {}, `#/ativos?ativo=${asset}`);
   await user.click(await screen.findByRole('tab', { name: tab }));
+  // The Income tab shows the distributions first; the records are one of its views.
+  if (view) await user.click(await screen.findByRole('radio', { name: view }));
   return { user, grid: await screen.findByRole('grid', { name: grid }) };
 }
 
@@ -91,7 +93,7 @@ describe('asset records: multi-row selection', () => {
   });
 
   it('income: ⌘A selects all and the delete shortcut deletes all at once', async () => {
-    const { user, grid } = await openTab('ast-hglg11', 'Proventos', 'Proventos');
+    const { user, grid } = await openTab('ast-hglg11', 'Proventos', 'Proventos', 'Lançamentos');
     const total = bodyRows(grid).length;
     expect(total).toBeGreaterThan(2);
     await user.click(bodyRows(grid)[0]!.querySelector('td')!);

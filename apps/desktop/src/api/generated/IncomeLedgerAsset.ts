@@ -8,6 +8,6 @@ export type IncomeLedgerAsset = { asset: AssetBrief,
  */
 first_date: string | null, received_base: number, upcoming_base: number, recorded_base: number, years: Array<IncomeLedgerPeriod>, 
 /**
- * Entries with a fix to apply.
+ * Entries to check (with a fix, official or not).
  */
 fixes: number, };
