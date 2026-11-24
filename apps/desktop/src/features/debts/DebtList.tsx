@@ -81,7 +81,8 @@ export function LoanTable({
           sortValue: (l) => l.name,
           cell: (l) => (
             <span className="flex flex-col">
-              <span className="font-medium whitespace-nowrap">{l.name}</span>
+              {/* Long names wrap: with nowrap the table outgrew the default window (Linux fonts). */}
+              <span className="font-medium break-words">{l.name}</span>
               <span className="text-[11.5px] text-dim">
                 {KIND_LABEL[l.kind]}
                 {l.contract_number ? (
@@ -128,7 +129,7 @@ export function LoanTable({
         {
           key: 'progress',
           header: t('dividas-col-progresso'),
-          width: '150px',
+          width: '120px',
           sortValue: (l) => progress(l),
           cell: (l) => {
             const p = progress(l);
