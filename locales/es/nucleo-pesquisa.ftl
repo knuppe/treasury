@@ -359,6 +359,12 @@ nucleo-pesquisa-b3-passo-resumo =
     }
 nucleo-pesquisa-b3-parou = la B3 no respondió { $vezes } veces seguidas; el resto queda para la próxima recolección
 nucleo-pesquisa-b3-nada-a-atualizar = nada que actualizar: todos se consultaron hace poco
+nucleo-pesquisa-fnet-resumo =
+    { $documentos ->
+        [one] Fundos.NET · avisos de rendimientos ({ $fundos } fondos, { $documentos } aviso nuevo)
+       *[other] Fundos.NET · avisos de rendimientos ({ $fundos } fondos, { $documentos } avisos nuevos)
+    }
+nucleo-pesquisa-fnet-parou = Fundos.NET no respondió { $vezes } veces seguidas; el resto queda para la próxima recolección
 nucleo-pesquisa-erro-brapi-invalida = respuesta no válida de brapi: { $erro }
 nucleo-pesquisa-erro-brapi-sem-resultados = brapi: respuesta sin resultados
 
@@ -570,3 +576,5 @@ nucleo-pesquisa-ind-fonte-declarados-fii = rendimientos declarados en los inform
 nucleo-pesquisa-ind-formula-dy-fii-declarados = Rendimientos declarados en los 4 últimos informes trimestrales ÷ cuotas emitidas ÷ cotización (estimación: sin los proventos de la B3)
 nucleo-pesquisa-ind-formula-dy-fii-meses = Suma del rendimiento por cuota de los informes mensuales (DY del mes × VP por cuota) ÷ cotización (estimación: sin los proventos de la B3). Meses: { $meses }
 nucleo-pesquisa-div-fonte-b3-amortizacao = { $fonte }; rendimientos anteriores a las amortizaciones del { $datas } en la escala de la cuota de hoy (sin el capital devuelto)
+
+nucleo-pesquisa-aviso-proventos-automaticos = no se pudieron registrar los dividendos oficiales: { $erro }

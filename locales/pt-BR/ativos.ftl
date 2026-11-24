@@ -24,6 +24,7 @@ ativos-menu-evento-corporativo = Evento corporativo
 ativos-menu-ver-extrato = Ver extrato
 ativos-menu-operacoes = Operações
 ativos-menu-proventos = Proventos
+ativos-proventos-lancados = Proventos lançados
 ativos-menu-grafico = Gráfico de preço
 ativos-menu-fundamentos = Fundamentos
 ativos-menu-acompanhar = Acompanhar na watchlist…

@@ -259,6 +259,7 @@ nucleo-importacao-b3-nota-ja-liquidacao = ya importada por los movimientos (liqu
 nucleo-importacao-b3-nota-ja-negociacao = ya importada por el informe de negociación
 nucleo-importacao-b3-nota-operacao-manual = parecida a una operación registrada a mano (misma fecha, activo y cantidad)
 nucleo-importacao-b3-nota-provento-manual = parecido a un rendimiento registrado a mano (misma fecha e importe)
+nucleo-importacao-b3-nota-provento-oficial = ya registrado con el aviso oficial (mismo pago)
 nucleo-importacao-b3-nota-evento-cadastrado = evento ya registrado el { $data }
 nucleo-importacao-b3-nota-leilao-venda = venta de la fracción que sobró en la posición, por el valor de la subasta
 nucleo-importacao-b3-nota-leilao-provento = subasta de fracciones; sin fracción en la posición, entra como rendimiento (otros)

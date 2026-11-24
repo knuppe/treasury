@@ -1,7 +1,14 @@
 //! Proventos a confirmar: um candidato por provento, cruzando as fontes. A agenda do ativo
-//! (`dividend_event`: Yahoo, Fundamentus) e os eventos oficiais da B3 (`research_dividend`)
-//! descrevem os mesmos pagamentos com datas e valores às vezes diferentes; aqui eles viram um
-//! só, com a conferência de cada fonte.
+//! (`dividend_event`: Yahoo, Fundamentus), os eventos oficiais da B3 (`research_dividend`) e os
+//! avisos oficiais dos fundos no Fundos.NET (`research_fund_notice`) descrevem os mesmos
+//! pagamentos com datas e valores às vezes diferentes; aqui eles viram um só, com a conferência
+//! de cada fonte.
+//!
+//! - **Official sources**: for funds, the Fundos.NET notice (exact amount, whole history) comes
+//!   first and B3's row of the same distribution becomes a check; without a notice, B3.
+//! - **Dates**: the record date ("data-com") of the official sources and the ex date of Yahoo
+//!   are one session apart, which can be five calendar days around Carnival: dates are compared
+//!   in business days of the B3 calendar ([`crate::finance::calendar`]).
 //!
 //! - **Mesmo provento**: mesmo ativo, data-com até [`MAX_DAYS_APART`] dias (o Yahoo usa a data
 //!   ex, um pregão depois da data-com). O Yahoo não distingue JCP de dividendo e às vezes soma
@@ -32,8 +39,9 @@ use crate::time::{fmt_date, parse_date};
 
 /// Diferença de valor aceita entre as fontes (fração).
 pub const TOLERANCE: f64 = 0.02;
-/// Distância máxima entre as datas do mesmo provento, em dias corridos.
-pub const MAX_DAYS_APART: i64 = 4;
+/// Business days between the dates of the same distribution (record date x ex date, plus one
+/// of slack).
+pub const MAX_DAYS_APART: i64 = 2;
 /// Entre fontes da agenda com tipos diferentes: dias úteis entre as datas.
 pub const MAX_BUSINESS_DAYS_APART: i64 = 3;
 
@@ -85,6 +93,17 @@ pub struct Candidate {
     pub currency: String,
     pub source: String,
     pub check: Check,
+    /// The reference is an official source (Fundos.NET or B3).
+    pub official: bool,
+    /// Fund income tax exempt for individuals, as the notice says (`None`: not informed).
+    pub exempt: Option<bool>,
+    /// Reference month, as the fund's notice writes it.
+    pub period: Option<String>,
+}
+
+/// Official sources: their record date is the last day with the right.
+pub fn is_official(source: &str) -> bool {
+    source == crate::research::b3_listados::SOURCE || source == crate::research::fundos_net::SOURCE
 }
 
 #[derive(Debug, Clone)]
@@ -97,6 +116,8 @@ struct Row {
     per: Decimal,
     currency: String,
     source: String,
+    exempt: Option<bool>,
+    period: Option<String>,
 }
 
 impl Row {
@@ -123,23 +144,27 @@ fn close(a: Decimal, b: Decimal) -> bool {
     d <= Decimal::from_f64_retain(TOLERANCE).unwrap_or(Decimal::new(2, 2))
 }
 
-fn near(a: NaiveDate, b: NaiveDate) -> bool {
-    (a - b).num_days().abs() <= MAX_DAYS_APART
+/// Same distribution by date: at most [`MAX_DAYS_APART`] business days apart.
+pub fn near(a: NaiveDate, b: NaiveDate) -> bool {
+    business_days_apart(a, b) <= MAX_DAYS_APART
 }
 
-/// Dias úteis (segunda a sexta) entre duas datas.
-fn business_days_apart(a: NaiveDate, b: NaiveDate) -> i64 {
-    use chrono::Datelike;
-    let (lo, hi) = if a <= b { (a, b) } else { (b, a) };
-    let mut n = 0;
-    let mut d = lo;
-    while d < hi {
-        d = d.succ_opt().expect("data válida");
-        if d.weekday().number_from_monday() <= 5 {
-            n += 1;
-        }
+/// Business days of the B3 calendar (weekends and national holidays off) between two dates.
+pub fn business_days_apart(a: NaiveDate, b: NaiveDate) -> i64 {
+    if (a - b).num_days().abs() > 60 {
+        return (a - b).num_days().abs();
     }
-    n
+    crate::finance::calendar::business_days_between(a, b).abs()
+}
+
+/// Kind families that describe the same payment: JCP, amortization, and the other cash
+/// distributions (the agenda sometimes calls a fund's income a dividend).
+pub fn kind_group(k: IncomeKind) -> u8 {
+    match k {
+        IncomeKind::Jcp => 1,
+        IncomeKind::Amortization => 2,
+        _ => 0,
+    }
 }
 
 /// Mesmo provento na agenda: mesmo tipo e data perto, ou fontes diferentes (o tipo varia de
@@ -154,6 +179,7 @@ fn same_payment(a: &Row, b: &Row) -> bool {
 fn label(source: &str) -> &str {
     match source {
         s if s == crate::research::b3_listados::SOURCE => "B3",
+        s if s == crate::research::fundos_net::SOURCE => "Fundos.NET",
         "yahoo" => "Yahoo",
         "tiingo" => "Tiingo",
         "eodhd" => "EODHD",
@@ -192,6 +218,8 @@ fn agenda(conn: &Connection, since: NaiveDate) -> Result<Vec<Row>> {
                     per: per.parse().ok()?,
                     currency: r.get(6).ok()?,
                     source: r.get(7).ok()?,
+                    exempt: None,
+                    period: None,
                 })
             })())
         })?
@@ -226,6 +254,8 @@ fn official(conn: &Connection, since: NaiveDate) -> Result<Vec<Row>> {
                     per: (v / Decimal::from(per.max(1))).normalize(),
                     currency: r.get(1).ok()?,
                     source: src.to_string(),
+                    exempt: None,
+                    period: None,
                 })
             })())
         })?
@@ -233,33 +263,111 @@ fn official(conn: &Connection, since: NaiveDate) -> Result<Vec<Row>> {
     Ok(rows.into_iter().flatten().collect())
 }
 
+/// Fundos.NET notices of the registered fund assets.
+fn fund_notices(conn: &Connection, since: NaiveDate) -> Result<Vec<Row>> {
+    let assets: Vec<(String, String, String)> = conn
+        .prepare("SELECT id, upper(ticker), currency FROM asset WHERE class = 'fii' AND ticker IS NOT NULL")?
+        .query_map([], |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)))?
+        .collect::<rusqlite::Result<_>>()?;
+    let src = crate::research::fundos_net::SOURCE;
+    let mut out = vec![];
+    for (asset_id, ticker, currency) in assets {
+        for n in crate::research::fundos_net::notices(conn, &ticker, since)? {
+            out.push(Row {
+                id: format!(
+                    "{src}:{}:{}:{}:{}",
+                    n.document_id,
+                    n.ticker,
+                    n.kind,
+                    fmt_date(n.ex_date)
+                ),
+                asset_id: asset_id.clone(),
+                kind: kind_of(&n.kind),
+                ex: n.ex_date,
+                pay: n.pay_date,
+                per: n.value,
+                currency: currency.clone(),
+                source: src.to_string(),
+                exempt: n.exempt,
+                period: n.period,
+            });
+        }
+    }
+    Ok(out)
+}
+
 /// Candidatos já pagos (ou com a data-com passada, sem data de pagamento) até hoje.
 pub fn candidates(conn: &Connection, since: NaiveDate, today: NaiveDate) -> Result<Vec<Candidate>> {
-    let mut by_asset: BTreeMap<String, (Vec<Row>, Vec<Row>)> = BTreeMap::new();
+    let mut out = all_candidates(conn, since)?;
+    out.retain(|c| c.pay_date.unwrap_or(c.ex_date) <= today);
+    Ok(out)
+}
+
+/// Every distribution since `since`, paid or announced, one per payment, with the reference
+/// and the check between the sources.
+pub fn all_candidates(conn: &Connection, since: NaiveDate) -> Result<Vec<Candidate>> {
+    #[derive(Default)]
+    struct PerAsset {
+        agenda: Vec<Row>,
+        funds: Vec<Row>,
+        b3: Vec<Row>,
+    }
+    let mut by_asset: BTreeMap<String, PerAsset> = BTreeMap::new();
     for r in agenda(conn, since)? {
-        by_asset.entry(r.asset_id.clone()).or_default().0.push(r);
+        by_asset
+            .entry(r.asset_id.clone())
+            .or_default()
+            .agenda
+            .push(r);
+    }
+    for r in fund_notices(conn, since)? {
+        by_asset
+            .entry(r.asset_id.clone())
+            .or_default()
+            .funds
+            .push(r);
     }
     for r in official(conn, since)? {
-        by_asset.entry(r.asset_id.clone()).or_default().1.push(r);
+        by_asset.entry(r.asset_id.clone()).or_default().b3.push(r);
     }
     let mut out = vec![];
-    for (_, (agenda, b3)) in by_asset {
-        let mut used = vec![false; agenda.len()];
-        // 1) Cada provento da B3, conferido com a agenda do mesmo dia.
-        for o in &b3 {
-            let same_day: Vec<&Row> = b3.iter().filter(|x| x.ex == o.ex).collect();
+    for (_, a) in by_asset {
+        // Official distributions: the fund's notice first; B3's row of the same payment checks it.
+        let mut official: Vec<(Row, Vec<Row>)> = a.funds.into_iter().map(|r| (r, vec![])).collect();
+        for b in a.b3 {
+            match official
+                .iter_mut()
+                .find(|(o, _)| kind_group(o.kind) == kind_group(b.kind) && near(o.ex, b.ex))
+            {
+                Some((_, extra)) => extra.push(b),
+                None => official.push((b, vec![])),
+            }
+        }
+        let mut used = vec![false; a.agenda.len()];
+        // 1) Cada provento oficial, conferido com a agenda do mesmo dia.
+        for (o, extra) in &official {
+            let same_day: Vec<&Row> = official
+                .iter()
+                .map(|(x, _)| x)
+                .filter(|x| x.ex == o.ex)
+                .collect();
             let sum: Decimal = same_day.iter().map(|x| x.per).sum();
-            let mut others = vec![];
-            for (i, a) in agenda.iter().enumerate() {
-                if near(a.ex, o.ex) {
+            let mut others: Vec<&Row> = extra.iter().collect();
+            for (i, r) in a.agenda.iter().enumerate() {
+                // A JCP never pairs with an amortization; same-day dividend and JCP both see
+                // Yahoo's sum.
+                let compatible = kind_group(r.kind) == kind_group(o.kind)
+                    || (kind_group(r.kind) == 0 && o.kind == IncomeKind::Jcp);
+                if compatible && near(r.ex, o.ex) {
                     used[i] = true;
-                    others.push(a);
+                    others.push(r);
                 }
             }
             out.push(official_candidate(o, &others, sum, same_day.len()));
         }
         // 2) O que só a agenda traz, agrupado por provento.
-        let rest: Vec<&Row> = agenda
+        let rest: Vec<&Row> = a
+            .agenda
             .iter()
             .zip(used)
             .filter(|(_, u)| !u)
@@ -279,7 +387,6 @@ pub fn candidates(conn: &Connection, since: NaiveDate, today: NaiveDate) -> Resu
             out.push(agenda_candidate(&g));
         }
     }
-    out.retain(|c| c.pay_date.unwrap_or(c.ex_date) <= today);
     out.sort_by(|a, b| {
         a.pay_date
             .unwrap_or(a.ex_date)
@@ -350,6 +457,9 @@ fn official_candidate(o: &Row, others: &[&Row], day_sum: Decimal, day_events: us
             sources,
             note: (!notes.is_empty()).then(|| notes.join("; ")),
         },
+        official: true,
+        exempt: o.exempt,
+        period: o.period.clone(),
     }
 }
 
@@ -429,5 +539,8 @@ fn agenda_candidate(g: &[&Row]) -> Candidate {
             sources: g.iter().map(|r| r.value()).collect(),
             note,
         },
+        official: false,
+        exempt: None,
+        period: None,
     }
 }

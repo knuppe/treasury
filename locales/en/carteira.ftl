@@ -1205,3 +1205,72 @@ carteira-etiqueta-outros =
         [one] plus 1 asset outside the portfolio
        *[other] plus { $n } assets outside the portfolio
     }
+
+## Income ledger (features/portfolio/IncomeLedger.tsx)
+carteira-fonte-aviso-oficial = Official notice
+carteira-fonte-extrato-b3 = B3 statement
+carteira-razao-titulo = Income by the official sources
+carteira-razao-calculando = Checking the income…
+carteira-razao-recebido = Received by the sources
+carteira-razao-recebido-desde = Received since { $data }
+carteira-razao-recebido-dica = Quantity on the record date × amount of the official notice, net of tax withheld
+carteira-razao-a-receber = Upcoming
+carteira-razao-lancado-hoje = Recorded today
+carteira-razao-lancado = recorded
+carteira-razao-correcoes =
+    { $n ->
+        [one] { $n } fix to the recorded income
+       *[other] { $n } fixes to the recorded income
+    }
+carteira-razao-correcoes-detalhe = { $faltando } not recorded, { $repetidos } repeated and { $valor } with an amount or tax different from the official notice.
+carteira-razao-automatico-depois = After the review, new official distributions are recorded by themselves on the payment date.
+carteira-razao-automatico-ligado = Official distributions are recorded by themselves since { $data }.
+carteira-razao-automatico-desligar = Turn off
+carteira-razao-sem-aviso =
+    { $n ->
+        [one] { $n } distribution without an official notice waits for your confirmation in Record dividends.
+       *[other] { $n } distributions without an official notice wait for your confirmation in Record dividends.
+    }
+carteira-razao-revisar = Review and fix
+carteira-razao-revisar-titulo = Fix the income from the official notices
+carteira-razao-revisar-texto = Each line says what changes. Everything goes in a single change, with Undo. Older distributions are recorded without touching the brokerage cash.
+carteira-razao-revisar-tabela = Proposed fixes
+carteira-razao-nada = Nothing to fix: the recorded income matches the sources.
+carteira-razao-feito = Income fixed: { $lancados } recorded, { $corrigidos } fixed and { $apagados } deleted.
+carteira-razao-marcar = { $acao } { $ativo }
+carteira-razao-pago-em = paid on { $data }
+carteira-razao-aplicar =
+    { $n ->
+        [one] Apply { $n } fix
+       *[other] Apply { $n } fixes
+    }
+carteira-razao-acao-lancar = Record
+carteira-razao-acao-corrigir = Fix amount
+carteira-razao-acao-apagar = Delete repeated
+carteira-razao-estado-confere = Matches
+carteira-razao-estado-faltando = Not recorded
+carteira-razao-estado-a-receber = Upcoming
+carteira-razao-estado-valor = Different amount
+carteira-razao-estado-ir = Different tax
+carteira-razao-estado-repetido = Repeated
+carteira-razao-estado-sem-fonte = No source
+carteira-razao-tabela-titulo = Income while you held the asset
+carteira-razao-tabela = Income, one per payment
+carteira-razao-anos-tabela = Income by year
+carteira-razao-ativos-tabela = Income by asset since the purchase
+carteira-razao-col-data-com = Record date
+carteira-razao-col-tipo = Kind
+carteira-razao-col-qtd-valor = Qty × amount
+carteira-razao-col-bruto = Gross
+carteira-razao-col-ir = Tax
+carteira-razao-col-liquido = Net
+carteira-razao-col-fonte = Source
+carteira-razao-col-situacao = Status
+carteira-razao-col-ano = Year
+carteira-razao-col-recebido = Received
+carteira-razao-col-lancado = Recorded
+carteira-razao-col-a-receber = Upcoming
+carteira-razao-col-desde = Since
+carteira-razao-col-correcoes = Fixes
+carteira-razao-col-acao = What changes
+carteira-razao-col-fica = Becomes

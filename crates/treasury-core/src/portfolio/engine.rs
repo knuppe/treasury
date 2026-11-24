@@ -2060,7 +2060,7 @@ pub fn dividend_calendar(
 
 /// Dia cuja posição dá direito ao provento. Para a B3 guardamos a data-com; o Yahoo, a Tiingo
 /// e a EODHD informam a data-ex (primeiro pregão sem direito), então vale a posição do dia anterior.
-fn entitled_on(ex: NaiveDate, source: &str) -> NaiveDate {
+pub(crate) fn entitled_on(ex: NaiveDate, source: &str) -> NaiveDate {
     if matches!(source, "yahoo" | "tiingo" | "eodhd") {
         ex.pred_opt().expect("data válida")
     } else {
@@ -2072,7 +2072,7 @@ fn entitled_on(ex: NaiveDate, source: &str) -> NaiveDate {
 /// sido deslistado ou incorporado.
 const STALE_QUOTE_DAYS: i64 = 60;
 
-fn stale_quote_warning(
+pub(crate) fn stale_quote_warning(
     conn: &Connection,
     asset_id: &str,
     today: NaiveDate,
@@ -2101,130 +2101,81 @@ fn stale_quote_warning(
     )
 }
 
-/// Proventos anunciados já pagos (ou com data-ex passada) que ninguém lançou, por conta.
+/// Proventos anunciados já pagos (ou com data-ex passada) que ninguém lançou, por conta: the
+/// ledger's missing entries ([`super::income_ledger`]). With the automatic recording on, the
+/// official ones are recorded by the collection and only the others wait here.
 pub fn pending_income(conn: &Connection, args: &PendingIncomeArgs) -> Result<Vec<PendingIncome>> {
     let today = crate::time::today_local();
     let since = match &args.since {
         Some(s) => parse_date(s)?,
         None => add_months(today, -12),
     };
-    let mut out = vec![];
+    let ledger = super::income_ledger::build_on(
+        conn,
+        &super::income_ledger::LedgerArgs {
+            account_id: args.account_id.clone(),
+            from: Some(fmt_date(since)),
+            ..Default::default()
+        },
+        today,
+    )?;
     let mut stale: std::collections::HashMap<String, Option<String>> = Default::default();
-    let mut accounts_of: std::collections::HashMap<String, Vec<String>> = Default::default();
-    let mut books: std::collections::HashMap<(String, String), Book> = Default::default();
-    for c in super::pending::candidates(conn, since, today)? {
-        let asset_warning = match stale.get(&c.asset_id) {
+    let mut out = vec![];
+    for e in ledger.entries.into_iter().rev() {
+        if e.state != super::income_ledger::EntryState::Missing || (ledger.auto && e.official) {
+            continue;
+        }
+        let (Some(ex), Some(gross), Some(tax), Some(qty), Some(per), Some(check)) = (
+            e.ex_date.clone(),
+            e.expected_gross,
+            e.expected_tax,
+            e.quantity.clone(),
+            e.amount_per_share.clone(),
+            e.check.clone(),
+        ) else {
+            continue;
+        };
+        let asset_warning = match stale.get(&e.asset.id) {
             Some(w) => w.clone(),
             None => {
-                let w = stale_quote_warning(conn, &c.asset_id, today)?;
-                stale.insert(c.asset_id.clone(), w.clone());
+                let w = stale_quote_warning(conn, &e.asset.id, today)?;
+                stale.insert(e.asset.id.clone(), w.clone());
                 w
             }
         };
-        let ev_id = c.id.clone();
-        let asset_id = c.asset_id.clone();
-        let kind = c.kind;
-        let ex = fmt_date(c.ex_date);
-        let pay = c.pay_date.map(fmt_date);
-        let per = c.per_share;
-        let cur = c.currency.clone();
-        let source = c.source.clone();
-        let on = entitled_on(c.ex_date, &source);
-        // Contas do ativo: uma vez por ativo (antes, a cada provento).
-        if !accounts_of.contains_key(&asset_id) {
-            let mut accounts: Vec<String> = conn
-                .prepare_cached(
-                    "SELECT DISTINCT account_id FROM trade WHERE asset_id = ?1 ORDER BY account_id",
-                )?
-                .query_map([&asset_id], |r| r.get(0))?
-                .collect::<rusqlite::Result<_>>()?;
-            // Contas que receberam o ativo por mudança de ticker também têm direito.
-            for (acc,) in conn
-                .prepare_cached(
-                    "SELECT DISTINCT t.account_id FROM corporate_action ca JOIN trade t ON t.asset_id = ca.asset_id
-                     WHERE ca.new_asset_id = ?1 AND ca.kind IN ('ticker_change', 'merger')",
-                )?
-                .query_map([&asset_id], |r| Ok((r.get::<_, String>(0)?,)))?
-                .collect::<rusqlite::Result<Vec<_>>>()?
-            {
-                if !accounts.contains(&acc) {
-                    accounts.push(acc);
-                }
-            }
-            accounts_of.insert(asset_id.clone(), accounts);
-        }
-        let mut accounts = accounts_of[&asset_id].clone();
-        if let Some(a) = &args.account_id {
-            accounts.retain(|x| x == a);
-        }
-        for acc in accounts {
-            // Já lançado: mesma data-com (até 3 dias: o Yahoo usa a data ex, um pregão depois
-            // da data-com da B3) ou, sem data-com, pago até 60 dias depois dela.
-            let recorded: bool = conn.prepare_cached(
-                "SELECT EXISTS (SELECT 1 FROM income_event WHERE asset_id = ?1 AND account_id = ?2
-                   AND ((ex_date IS NOT NULL AND abs(julianday(ex_date) - julianday(?3)) <= 3)
-                     OR (ex_date IS NULL AND pay_date BETWEEN ?3 AND date(?3, '+60 days'))))",
-            )?
-            .query_row(params![asset_id, acc, ex], |r| r.get(0))?;
-            if recorded {
-                continue;
-            }
-            // Livro do ativo na conta: carregado uma vez por ativo e conta.
-            let key = (asset_id.clone(), acc.clone());
-            if !books.contains_key(&key) {
-                books.insert(
-                    key.clone(),
-                    load_book(conn, &asset_id, Some(std::slice::from_ref(&acc)))?,
-                );
-            }
-            let book = &books[&key];
-            let qty = replay(conn, book, on)?.quantity();
-            if qty <= Decimal::ZERO {
-                continue;
-            }
-            let gross = to_minor(qty * per, &cur);
-            if gross <= 0 {
-                continue;
-            }
-            let pay_date = pay.clone().unwrap_or_else(|| ex.clone());
-            let on = super::records::credit_date(
-                parse_date(&ex).ok(),
-                parse_date(&pay_date).unwrap_or(on),
-            );
-            let tax = super::records::default_withholding(kind, book.asset.class, gross, on);
-            let quantity = qty.normalize().to_string();
-            out.push(PendingIncome {
-                dividend_event_id: ev_id.clone(),
-                asset: brief_of(&book.asset),
-                account_id: acc.clone(),
-                kind,
-                ex_date: ex.clone(),
-                pay_date: pay_date.clone(),
-                pay_date_guessed: pay.is_none(),
-                quantity: quantity.clone(),
-                amount_per_share: per.normalize().to_string(),
-                currency: cur.clone(),
+        let pay_date = e.pay_date.clone().unwrap_or_else(|| ex.clone());
+        let event_id = e.key.split('|').next().unwrap_or(&e.key).to_string();
+        out.push(PendingIncome {
+            dividend_event_id: event_id,
+            account_id: e.account_id.clone(),
+            kind: e.kind,
+            ex_date: ex.clone(),
+            pay_date: pay_date.clone(),
+            pay_date_guessed: e.pay_date_estimated,
+            quantity: qty.clone(),
+            amount_per_share: per,
+            currency: e.currency.clone(),
+            gross,
+            tax_withheld: tax,
+            net: gross - tax,
+            source: e.source.clone().unwrap_or_default(),
+            check,
+            asset_warning,
+            input: IncomeInput {
+                asset_id: e.asset.id.clone(),
+                account_id: e.account_id.clone(),
+                kind: e.kind,
+                ex_date: Some(ex),
+                pay_date,
+                quantity: Some(qty),
                 gross,
-                tax_withheld: tax,
-                net: gross - tax,
-                source: source.clone(),
-                check: c.check.clone(),
-                asset_warning: asset_warning.clone(),
-                input: IncomeInput {
-                    asset_id: asset_id.clone(),
-                    account_id: acc,
-                    kind,
-                    ex_date: Some(ex.clone()),
-                    pay_date,
-                    quantity: Some(quantity),
-                    gross,
-                    tax_withheld: Some(tax),
-                    fx_rate: None,
-                    status: None,
-                    cash_movement: None,
-                },
-            });
-        }
+                tax_withheld: Some(tax),
+                fx_rate: None,
+                status: None,
+                cash_movement: None,
+            },
+            asset: e.asset,
+        });
     }
     Ok(out)
 }

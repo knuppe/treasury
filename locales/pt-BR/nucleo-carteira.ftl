@@ -173,12 +173,12 @@ nucleo-carteira-rapido-e-mais = { $lista } e mais { $n }
 
 ## Proventos anunciados a conferir (`pending`)
 
-nucleo-carteira-pendente-data-agenda = data de pagamento da agenda (a B3 ainda não informou)
-nucleo-carteira-pendente-valor-divergente = { $fonte } dizia { $valor } por cota; usado o da B3 ({ $b3 })
-nucleo-carteira-pendente-data-divergente = { $fonte } dizia pagamento em { $data }; usado o da B3 ({ $b3 })
+nucleo-carteira-pendente-data-agenda = data de pagamento da agenda (a fonte oficial ainda não informou)
+nucleo-carteira-pendente-valor-divergente = { $fonte } dizia { $valor } por cota; usado o oficial ({ $b3 })
+nucleo-carteira-pendente-data-divergente = { $fonte } dizia pagamento em { $data }; usado o oficial ({ $b3 })
 nucleo-carteira-pendente-tipos-divergentes = as fontes dão tipos diferentes ({ $lista }); usado o do { $fonte }
-nucleo-carteira-pendente-fontes-discordam = sem o provento na B3 e as fontes discordam ({ $lista }); usado o do { $fonte }: confira no extrato
-nucleo-carteira-pendente-so-uma-fonte = só no { $fonte }: a B3 não tem este provento (ainda não baixado ou fora da lista oficial)
+nucleo-carteira-pendente-fontes-discordam = sem o provento nas fontes oficiais e as fontes discordam ({ $lista }); usado o do { $fonte }: confira no extrato
+nucleo-carteira-pendente-so-uma-fonte = só no { $fonte }: sem aviso oficial deste provento (ainda não baixado ou fora da lista oficial)
 
 ## Posições, desempenho e rebalanceamento (`engine`)
 
@@ -412,3 +412,21 @@ nucleo-ativos-motivo-etiquetas = Etiquetas de ativos
 nucleo-carteira-limite-invalido = o limite precisa ficar entre 0 e 100% da carteira
 nucleo-carteira-limite-sem-ativo = informe o ativo do limite
 nucleo-carteira-motivo-limite = Limite de concentração
+
+## Income ledger (portfolio/income_ledger.rs)
+nucleo-carteira-razao-nota-creditado = valor creditado pela B3 no extrato importado: ele vale sobre o cálculo
+nucleo-carteira-razao-nota-pagamento-estimado = nenhuma fonte informou a data de pagamento: usada a data-com
+nucleo-carteira-razao-nota-repete = repete o provento pago em { $data }
+nucleo-carteira-razao-nota-data-improvavel = data de pagamento muito no futuro: confira se o ano foi digitado certo
+nucleo-carteira-razao-nota-sem-fonte = nenhuma fonte descreve este provento: confira no extrato da corretora
+nucleo-carteira-razao-motivo-reconstruir =
+    { $n ->
+        [one] Proventos reconstruídos pelos avisos oficiais ({ $n } correção)
+       *[other] Proventos reconstruídos pelos avisos oficiais ({ $n } correções)
+    }
+nucleo-carteira-razao-motivo-automatico =
+    { $n ->
+        [one] Provento oficial lançado automaticamente ({ $n })
+       *[other] Proventos oficiais lançados automaticamente ({ $n })
+    }
+nucleo-carteira-razao-erro-so-usuario = Só você pode ligar ou desligar o lançamento automático dos proventos.

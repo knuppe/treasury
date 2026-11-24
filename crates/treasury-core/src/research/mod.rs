@@ -30,6 +30,7 @@ pub mod data;
 pub mod dividends;
 pub mod doc_read;
 pub mod fundamentus;
+pub mod fundos_net;
 pub mod ifdata;
 pub mod indicators;
 pub mod market;

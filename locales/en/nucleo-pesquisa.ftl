@@ -354,6 +354,12 @@ nucleo-pesquisa-b3-passo-resumo =
     }
 nucleo-pesquisa-b3-parou = B3 didn't respond { $vezes } times in a row; the rest is left for the next collection
 nucleo-pesquisa-b3-nada-a-atualizar = nothing to update: all checked recently
+nucleo-pesquisa-fnet-resumo =
+    { $documentos ->
+        [one] Fundos.NET · income notices ({ $fundos } funds, { $documentos } new notice)
+       *[other] Fundos.NET · income notices ({ $fundos } funds, { $documentos } new notices)
+    }
+nucleo-pesquisa-fnet-parou = Fundos.NET didn't respond { $vezes } times in a row; the rest is left for the next collection
 nucleo-pesquisa-erro-brapi-invalida = invalid response from brapi: { $erro }
 nucleo-pesquisa-erro-brapi-sem-resultados = brapi: response without results
 
@@ -557,3 +563,5 @@ nucleo-pesquisa-ind-fonte-declarados-fii = distributions declared in the CVM qua
 nucleo-pesquisa-ind-formula-dy-fii-declarados = Distributions declared in the last 4 quarterly reports ÷ units issued ÷ price (estimate: no B3 distributions)
 nucleo-pesquisa-ind-formula-dy-fii-meses = Sum of the distribution per unit in the monthly reports (monthly DY × NAV per unit) ÷ price (estimate: no B3 distributions). Months: { $meses }
 nucleo-pesquisa-div-fonte-b3-amortizacao = { $fonte }; distributions before the amortizations of { $datas } scaled to today's unit (without the capital returned)
+
+nucleo-pesquisa-aviso-proventos-automaticos = couldn't record the official distributions: { $erro }

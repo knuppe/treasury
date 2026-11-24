@@ -25,6 +25,7 @@ ativos-menu-evento-corporativo = Corporate action
 ativos-menu-ver-extrato = View statement
 ativos-menu-operacoes = Trades
 ativos-menu-proventos = Income
+ativos-proventos-lancados = Recorded income
 ativos-menu-grafico = Price chart
 ativos-menu-fundamentos = Fundamentals
 ativos-menu-acompanhar = Add to watchlist…

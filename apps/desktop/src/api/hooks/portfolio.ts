@@ -49,6 +49,10 @@ import type { PlanConfirmArgs } from '@/api/generated/PlanConfirmArgs';
 import type { PlanDue } from '@/api/generated/PlanDue';
 import type { PlanSkipArgs } from '@/api/generated/PlanSkipArgs';
 import type { IncomeInput } from '@/api/generated/IncomeInput';
+import type { IncomeLedger } from '@/api/generated/IncomeLedger';
+import type { IncomeLedgerArgs } from '@/api/generated/IncomeLedgerArgs';
+import type { IncomeRebuildArgs } from '@/api/generated/IncomeRebuildArgs';
+import type { IncomeRebuildReport } from '@/api/generated/IncomeRebuildReport';
 import type { PassiveIncome } from '@/api/generated/PassiveIncome';
 import type { PassiveIncomeArgs } from '@/api/generated/PassiveIncomeArgs';
 import type { PendingIncome } from '@/api/generated/PendingIncome';
@@ -324,6 +328,14 @@ export function usePendingIncome(args: PendingIncomeArgs = {}) {
   return useQuery(query<PendingIncome[]>('pending_income', args));
 }
 
+/** Income ledger: every distribution the family was entitled to against what is recorded. */
+export function useIncomeLedger(args: IncomeLedgerArgs = {}) {
+  return useQuery({
+    ...query<IncomeLedger>('income_ledger', args),
+    placeholderData: keepPreviousData,
+  });
+}
+
 /** Aportes programados (os planos, com a próxima data e quantos esperam decisão). */
 export function useInvestmentPlans() {
   return useQuery(query<InvestmentPlanView[]>('plans', {}));
@@ -418,6 +430,11 @@ export const useCreateIncomes = () =>
     'portfolio.create_incomes',
   );
 export const useDeleteIncome = () => useWrite<{ id: string }, null>('portfolio.delete_income');
+/** Applies the ledger's fixes in one change set (and turns the automatic recording on). */
+export const useIncomeRebuild = () =>
+  useWrite<IncomeRebuildArgs, IncomeRebuildReport>('portfolio.income_rebuild');
+export const useIncomeAuto = () =>
+  useWrite<{ enabled: boolean }, { auto: boolean }>('portfolio.income_auto');
 
 /** Apagar em lote: um conjunto de alterações só (um "Desfazer" restaura todos). */
 export const useDeleteTrades = () =>

@@ -134,6 +134,9 @@ export const SYNC_SOURCE_LABEL: Record<SyncSource, string> = {
   get b3_listados() {
     return t('pesquisa-fonte-b3-listados');
   },
+  get fundos_net() {
+    return 'Fundos.NET';
+  },
   get sec() {
     return t('pesquisa-fonte-sec');
   },

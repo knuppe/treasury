@@ -1247,6 +1247,23 @@ fn mark_duplicates(b: &mut Builder<'_>) -> Result<()> {
                     continue;
                 }
                 let Some(asset) = asset else { continue };
+                // Recorded from the official notice (income ledger): the same payment, with the
+                // custodian's rounding of a cent and the payment a few days apart at most.
+                let official: Vec<Id> = conn
+                    .prepare_cached(
+                        "SELECT id FROM income_event WHERE asset_id = ?1 AND account_id = ?2 AND source = 'official'
+                           AND abs(julianday(pay_date) - julianday(?3)) <= 3 AND abs(net - ?4) <= 1
+                         ORDER BY abs(julianday(pay_date) - julianday(?3)), abs(net - ?4)",
+                    )?
+                    .query_map(params![asset, account, fmt_date(it.date), net], |r| r.get(0))?
+                    .collect::<rusqlite::Result<_>>()?;
+                if let Some(id) = official.into_iter().find(|id| !consumed.contains(id)) {
+                    consumed.insert(id.clone());
+                    it.status = B3RowStatus::Duplicate;
+                    it.duplicate_of = Some(id);
+                    it.note = Some(t("nucleo-importacao-b3-nota-provento-oficial"));
+                    continue;
+                }
                 let mut stmt = conn.prepare_cached(
                     "SELECT id FROM income_event WHERE asset_id = ?1 AND account_id = ?2 AND pay_date = ?3 AND net = ?4
                        AND (external_id IS NULL OR external_id NOT LIKE 'b3:%') ORDER BY created_at",

@@ -259,6 +259,7 @@ nucleo-importacao-b3-nota-ja-liquidacao = already imported from the movements (s
 nucleo-importacao-b3-nota-ja-negociacao = already imported from the trading report
 nucleo-importacao-b3-nota-operacao-manual = similar to an operation entered by hand (same date, asset and quantity)
 nucleo-importacao-b3-nota-provento-manual = similar to an income payment entered by hand (same date and amount)
+nucleo-importacao-b3-nota-provento-oficial = already recorded from the official notice (same payment)
 nucleo-importacao-b3-nota-evento-cadastrado = event already registered on { $data }
 nucleo-importacao-b3-nota-leilao-venda = sale of the leftover fraction in the position, at the auction value
 nucleo-importacao-b3-nota-leilao-provento = fraction auction; with no fraction in the position, it comes in as income (other)

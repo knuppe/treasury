@@ -627,6 +627,32 @@ pub struct PendingIncomeInput {
     pub account_id: Option<String>,
 }
 
+/// Income ledger.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct IncomeLedgerInput {
+    /// Only this asset (see `list_assets`).
+    pub asset_id: Option<String>,
+    /// Only this account (see `list_accounts`).
+    pub account_id: Option<String>,
+    /// Payment date from `YYYY-MM-DD` on.
+    #[schemars(pattern(DATE_PATTERN))]
+    pub from: Option<String>,
+    /// Payment date until `YYYY-MM-DD`.
+    #[schemars(pattern(DATE_PATTERN))]
+    pub to: Option<String>,
+    /// Leave out the distributions that match (totals, fixes and upcoming only).
+    pub only_problems: Option<bool>,
+}
+
+impl ToolInput for IncomeLedgerInput {
+    fn to_api_args(&self) -> Result<Value, String> {
+        check_date("from", &self.from)?;
+        check_date("to", &self.to)?;
+        to_object(self)
+    }
+}
+
 impl ToolInput for PendingIncomeInput {
     fn to_api_args(&self) -> Result<Value, String> {
         check_date("since", &self.since)?;

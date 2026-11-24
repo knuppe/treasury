@@ -30,6 +30,9 @@ import type { Deflator } from '../generated/Deflator';
 import type { DividendCalendarItem } from '../generated/DividendCalendarItem';
 import type { IncomeEvent } from '../generated/IncomeEvent';
 import type { IncomeKind } from '../generated/IncomeKind';
+import type { IncomeLedger } from '../generated/IncomeLedger';
+import type { IncomeLedgerEntry } from '../generated/IncomeLedgerEntry';
+import type { IncomeLedgerPeriod } from '../generated/IncomeLedgerPeriod';
 import type { InvestmentPlan } from '../generated/InvestmentPlan';
 import type { InvestmentPlanView } from '../generated/InvestmentPlanView';
 import type { PlanDue } from '../generated/PlanDue';
@@ -2574,8 +2577,22 @@ function pendingEvents(): DividendRec[] {
       estimated: false,
       source: 'yahoo',
     },
+    {
+      // Fund amortization from the official notice (Fundos.NET) that nobody recorded, older
+      // than the year that "To confirm" shows by default.
+      asset_id: 'ast-knri11',
+      kind: 'amortization',
+      ex_date: previousBusinessDay(addDays(today, -400)),
+      pay_date: previousBusinessDay(addDays(today, -393)),
+      amount_per_share: 0.35,
+      currency: 'BRL',
+      estimated: false,
+      source: 'fundos_net',
+    },
   ];
 }
+
+const OFFICIAL_SOURCES = new Set(['b3_listados', 'fundos_net']);
 
 /**
  * `portfolio.quick_income(_preview)`: data, ticker e valor recebido; o resto sai da agenda
@@ -2750,7 +2767,7 @@ function pendingCheck(ev: DividendRec, pay: string): PendingIncome['check'] {
         { ...own, source: 'b3_listados', pay_date: pay },
         { ...own, amount_per_share: dec(ev.amount_per_share + 0.02) },
       ],
-      note: `Yahoo dizia ${dec(ev.amount_per_share + 0.02).replace('.', ',')} por cota; usado o da B3 (${dec(ev.amount_per_share).replace('.', ',')})`,
+      note: `Yahoo dizia ${dec(ev.amount_per_share + 0.02).replace('.', ',')} por cota; usado o oficial (${dec(ev.amount_per_share).replace('.', ',')})`,
     };
   }
   return {
@@ -2922,6 +2939,183 @@ function pendingIncome(a: Record<string, unknown>): PendingIncome[] {
     }
   }
   return out;
+}
+
+// Income ledger (`portfolio.income_ledger`): the recorded distributions match; what the
+// family was entitled to and nobody recorded is missing (official when B3 is the source).
+let incomeAuto: string | null = null;
+onMockReset(() => {
+  incomeAuto = null;
+});
+
+function ledgerEntries(a: Record<string, unknown>): IncomeLedgerEntry[] {
+  const fxBase = (cur: string, on: string, v: number) =>
+    cur === 'BRL' ? v : Math.round(v * (fxToBrl(cur, on)?.rate ?? 5));
+  const out: IncomeLedgerEntry[] = [];
+  for (const i of state.incomes) {
+    if (typeof a.asset_id === 'string' && i.asset_id !== a.asset_id) continue;
+    if (typeof a.account_id === 'string' && i.account_id !== a.account_id) continue;
+    if (!hasAsset(i.asset_id)) continue;
+    const asset = getAsset(i.asset_id);
+    out.push({
+      key: `rec:${i.id}`,
+      asset: brief(asset),
+      account_id: i.account_id,
+      kind: i.kind,
+      ex_date: i.ex_date,
+      pay_date: i.pay_date,
+      pay_date_estimated: false,
+      quantity: i.quantity,
+      amount_per_share: null,
+      currency: i.currency,
+      expected_gross: i.gross,
+      expected_tax: i.tax_withheld,
+      expected_net: i.net,
+      recorded: {
+        id: i.id,
+        kind: i.kind,
+        ex_date: i.ex_date,
+        pay_date: i.pay_date,
+        quantity: i.quantity,
+        gross: i.gross,
+        tax_withheld: i.tax_withheld,
+        net: i.net,
+        status: i.status,
+        source: i.source,
+        cash: i.txn_id != null,
+      },
+      state: 'matches',
+      fix: null,
+      official: true,
+      source: i.source === 'manual' ? 'b3_listados' : i.source,
+      period: null,
+      exempt: asset.class === 'fii' ? true : null,
+      check: null,
+      note: null,
+      net_base: i.status === 'received' ? fxBase(i.currency, i.pay_date, i.net) : 0,
+      upcoming_base: 0,
+    });
+  }
+  const pending = pendingIncome({
+    since: '2000-01-01',
+    ...(typeof a.account_id === 'string' ? { account_id: a.account_id } : {}),
+  });
+  for (const p of pending) {
+    if (typeof a.asset_id === 'string' && p.asset.id !== a.asset_id) continue;
+    const official = OFFICIAL_SOURCES.has(p.source);
+    out.push({
+      key: `${p.dividend_event_id}|${p.account_id}`,
+      asset: p.asset,
+      account_id: p.account_id,
+      kind: p.kind,
+      ex_date: p.ex_date,
+      pay_date: p.pay_date,
+      pay_date_estimated: p.pay_date_guessed,
+      quantity: p.quantity,
+      amount_per_share: p.amount_per_share,
+      currency: p.currency,
+      expected_gross: p.gross,
+      expected_tax: p.tax_withheld,
+      expected_net: p.net,
+      recorded: null,
+      state: 'missing',
+      fix: 'create',
+      official,
+      source: p.source,
+      period: null,
+      exempt: null,
+      check: p.check,
+      note: null,
+      net_base: fxBase(p.currency, p.pay_date, p.net),
+      upcoming_base: 0,
+    });
+  }
+  return out.sort((x, y) => (y.pay_date ?? '').localeCompare(x.pay_date ?? ''));
+}
+
+function incomeLedger(a: Record<string, unknown>): IncomeLedger {
+  const all = ledgerEntries(a);
+  const sum = (rows: IncomeLedgerEntry[], f: (e: IncomeLedgerEntry) => number) =>
+    rows.reduce((acc, e) => acc + f(e), 0);
+  const recordedBase = (e: IncomeLedgerEntry) =>
+    e.recorded && e.recorded.status === 'received' ? e.net_base : 0;
+  const periods = (len: number): IncomeLedgerPeriod[] => {
+    const map = new Map<string, IncomeLedgerPeriod>();
+    for (const e of all) {
+      const k = (e.pay_date ?? e.ex_date ?? '').slice(0, len);
+      if (!k) continue;
+      const p = map.get(k) ?? {
+        period: k,
+        received_base: 0,
+        upcoming_base: 0,
+        recorded_base: 0,
+        count: 0,
+      };
+      p.received_base += e.net_base;
+      p.upcoming_base += e.upcoming_base;
+      p.recorded_base += recordedBase(e);
+      p.count += 1;
+      map.set(k, p);
+    }
+    return [...map.values()].sort((x, y) => x.period.localeCompare(y.period));
+  };
+  const byAsset = new Map<string, IncomeLedgerEntry[]>();
+  for (const e of all) byAsset.set(e.asset.id, [...(byAsset.get(e.asset.id) ?? []), e]);
+  const missing = all.filter((e) => e.state === 'missing');
+  const fixes = all.filter((e) => e.fix != null && (e.official || e.fix !== 'create'));
+  const entries = a.only_problems === true ? all.filter((e) => e.state !== 'matches') : all;
+  return {
+    base_currency: 'BRL',
+    entries,
+    assets: [...byAsset.values()].map((rows) => {
+      const first = state.trades
+        .filter((t) => t.asset_id === rows[0]!.asset.id)
+        .map((t) => t.date)
+        .sort()[0];
+      const years = new Map<string, IncomeLedgerPeriod>();
+      for (const e of rows) {
+        const k = (e.pay_date ?? '').slice(0, 4);
+        const p = years.get(k) ?? {
+          period: k,
+          received_base: 0,
+          upcoming_base: 0,
+          recorded_base: 0,
+          count: 0,
+        };
+        p.received_base += e.net_base;
+        p.recorded_base += recordedBase(e);
+        p.count += 1;
+        years.set(k, p);
+      }
+      return {
+        asset: rows[0]!.asset,
+        first_date: first ?? null,
+        received_base: sum(rows, (e) => e.net_base),
+        upcoming_base: 0,
+        recorded_base: sum(rows, recordedBase),
+        years: [...years.values()].sort((x, y) => x.period.localeCompare(y.period)),
+        fixes: rows.filter((e) => fixes.includes(e)).length,
+      };
+    }),
+    years: periods(4),
+    months: periods(7),
+    received_base: sum(all, (e) => e.net_base),
+    upcoming_base: 0,
+    recorded_base: sum(all, recordedBase),
+    counts: {
+      matches: all.filter((e) => e.state === 'matches').length,
+      missing: missing.length,
+      upcoming: 0,
+      value_diff: 0,
+      tax_diff: 0,
+      duplicate: 0,
+      unexpected: 0,
+      fixes: fixes.length,
+      unofficial_missing: missing.filter((e) => !e.official).length,
+    },
+    auto: incomeAuto != null,
+    auto_since: incomeAuto,
+  };
 }
 
 function listWatch(): WatchlistItem[] {
@@ -3439,7 +3633,48 @@ registerMockHandlers({
 
   'portfolio.pending_income': (a) => {
     requireUnlocked();
-    return pendingIncome(a);
+    const rows = pendingIncome(a);
+    return incomeAuto ? rows.filter((p) => !OFFICIAL_SOURCES.has(p.source)) : rows;
+  },
+
+  'portfolio.income_ledger': (a) => {
+    requireUnlocked();
+    return incomeLedger(a);
+  },
+
+  'portfolio.income_rebuild': (a) => {
+    requireUnlocked();
+    const keys = Array.isArray(a.keys) ? (a.keys as string[]) : [];
+    const chosen = ledgerEntries(a).filter(
+      (e) => e.fix === 'create' && e.official && (!keys.length || keys.includes(e.key)),
+    );
+    for (const e of chosen) {
+      createIncome({
+        asset_id: e.asset.id,
+        account_id: e.account_id,
+        kind: e.kind,
+        ex_date: e.ex_date,
+        pay_date: e.pay_date ?? e.ex_date,
+        quantity: e.quantity,
+        gross: e.expected_gross,
+        tax_withheld: e.expected_tax,
+        cash_movement: false,
+      });
+    }
+    if (typeof a.asset_id !== 'string') incomeAuto ??= mockToday();
+    return {
+      created: chosen.length,
+      updated: 0,
+      deleted: 0,
+      change_set_id: null,
+      auto: incomeAuto != null,
+    };
+  },
+
+  'portfolio.income_auto': (a) => {
+    requireUnlocked();
+    incomeAuto = a.enabled === true ? (incomeAuto ?? mockToday()) : null;
+    return { auto: incomeAuto != null };
   },
 
   'portfolio.delete_income': (a) => {

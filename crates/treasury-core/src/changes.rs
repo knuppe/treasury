@@ -82,6 +82,8 @@ pub const UNTRACKED_TABLES: &[&str] = &[
     "research_dividend",
     "research_stock_event",
     "research_fetch_log",
+    // Structured income notices of the listed funds (Fundos.NET, V3).
+    "research_fund_notice",
     // Dados do score (V99): entregas de documentos, auditores e IF.data do Banco Central.
     "research_filing",
     "research_auditor",

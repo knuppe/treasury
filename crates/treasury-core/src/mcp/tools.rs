@@ -1082,6 +1082,25 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         summarize: sum_pending_income,
     },
     ToolSpec {
+        name: "get_income_ledger",
+        title: "Income received, distribution by distribution",
+        description: "Income ledger of the portfolio (or of one asset): for each distribution \
+            (official Fundos.NET notice for real estate funds, official B3 events, the agenda), \
+            the position on the record date, the expected gross, tax withheld and net, and what \
+            is recorded. `state`: `matches`, `missing` (paid, not recorded), `upcoming` (paid \
+            after today), `value_diff`, `tax_diff` (same net, gross and tax at another rate), \
+            `duplicate` (repeats a recorded payment) or `unexpected` (no source describes it); \
+            `fix` is what the rebuild in Portfolio would do. Totals by asset, year and month in \
+            cents of the base currency (`received_base`: what the sources say was paid). Amounts \
+            per share as decimal strings. `auto`: the official distributions are recorded \
+            automatically after each collection.",
+        command: "portfolio.income_ledger",
+        list_key: None,
+        schema: schema::<IncomeLedgerInput>,
+        prepare: prepare::<IncomeLedgerInput>,
+        summarize: sum_income_ledger,
+    },
+    ToolSpec {
         name: "simulate_retirement",
         title: "Retirement simulation",
         description: "Monte Carlo retirement simulation in real terms (above IPCA): today's wealth \
@@ -5445,6 +5464,27 @@ fn sum_pending_income(v: &Value) -> String {
             ("conferidos", count("confirmed").into()),
             ("divergentes", count("divergent").into()),
             ("fonte_unica", count("single").into()),
+        ],
+    )
+}
+
+fn sum_income_ledger(v: &Value) -> String {
+    let c = &v["counts"];
+    let n = |k: &str| c[k].as_u64().unwrap_or(0);
+    let cur = v["base_currency"].as_str().unwrap_or("BRL");
+    tx_args(
+        "mcp-resumo-razao-proventos",
+        &[
+            (
+                "recebido",
+                money(v, "received_base", cur).unwrap_or_default().into(),
+            ),
+            (
+                "a_receber",
+                money(v, "upcoming_base", cur).unwrap_or_default().into(),
+            ),
+            ("faltando", n("missing").into()),
+            ("correcoes", n("fixes").into()),
         ],
     )
 }

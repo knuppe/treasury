@@ -13,6 +13,7 @@ pub mod contrib;
 pub mod cost_method;
 pub mod engine;
 pub mod fee_cost;
+pub mod income_ledger;
 pub mod pending;
 pub mod plans;
 pub mod quick_income;
@@ -24,6 +25,8 @@ pub mod trade_summary;
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_income_ledger;
 
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;

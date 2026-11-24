@@ -548,6 +548,7 @@ mcp-resumo-custo-taxas-sem-total =
        *[other] { $n } fundos/planos com taxa conhecida.
     }
 mcp-resumo-proventos-a-confirmar = { $n } provento(s) a confirmar: { $conferidos } conferido(s) entre fontes, { $divergentes } com divergência, { $fonte_unica } de fonte única.
+mcp-resumo-razao-proventos = Proventos pelas fontes: { $recebido } recebidos e { $a_receber } a receber; { $faltando } sem lançamento e { $correcoes } correção(ões) propostas.
 mcp-resumo-linha-erro = linha { $linha } ({ $ticker }): { $erro }
 mcp-resumo-proventos-rapidos = { $prontos } pronto(s), { $registrados } já registrado(s), { $erros } com erro.
 mcp-resumo-proventos-nada = Nada gravado: { $registrados } já registrado(s), { $erros } com erro.

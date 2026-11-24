@@ -17,6 +17,7 @@ computer, with the vault's data and the public sources listed in
 | Target price | Per asset, with an alert |
 | Rankings and screener | Generated on the computer over the downloaded universe; any indicator becomes a ranking; combinable filters saved as "screens"; the agent also builds filters from natural language |
 | Comparator | 2 to 6 assets side by side, with indicators and normalized price |
+| Income received | Per distribution, by the position on the record date and the official notice (Fundos.NET for funds, B3 for companies), against what is recorded; totals since the first purchase, fixes in one change and automatic recording ([income-ledger.md](brazil/income-ledger.md)) |
 | Dividend calendar and radar | Ex-date, payment and amount per share, filterable to "only my portfolio"; projection from the payment history, marked as **estimated** |
 | Passive income | Projected income of the current portfolio and a monthly income goal |
 | Material facts and notices | CVM IPE documents for the assets in the portfolio and the watchlist; the agent summarizes the new ones |

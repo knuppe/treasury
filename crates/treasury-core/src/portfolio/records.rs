@@ -574,18 +574,51 @@ pub fn default_withholding(
     gross: i64,
     on: NaiveDate,
 ) -> i64 {
+    withholding(kind, class, gross, on, None)
+}
+
+/// Rate of the income tax withheld on FII and Fiagro income that the fund's notice marks as not
+/// exempt for individuals (Lei 8.668/1993 art. 17; the exemption is Lei 11.033/2004 art. 3º, III).
+pub const FII_TAXED_RATE: Decimal = Decimal::from_parts(20, 0, 0, false, 2);
+
+/// Income tax withheld at source. JCP at the rate of the date (`on`, see [`jcp_rate`]) and fund
+/// income the notice marks as taxed (`exempt = Some(false)`, [`FII_TAXED_RATE`]): Brazilian
+/// withholding drops the fraction of a cent (a JCP of R$ 141,98 at 17,5% withholds R$ 24,84, not
+/// R$ 24,85). US dividends: 30% presumed, rounded.
+pub fn withholding(
+    kind: IncomeKind,
+    class: crate::assets::AssetClass,
+    gross: i64,
+    on: NaiveDate,
+    exempt: Option<bool>,
+) -> i64 {
     use crate::assets::AssetClass as C;
-    let rate = match (kind, class) {
-        (IncomeKind::Jcp, _) => jcp_rate(on),
-        (IncomeKind::Dividend, C::StockUs | C::EtfUs | C::Reit) => Decimal::new(30, 2),
+    let g = Decimal::from(gross);
+    match (kind, class) {
+        (IncomeKind::Jcp, _) => (g * jcp_rate(on)).floor().to_i64().unwrap_or(0),
+        (IncomeKind::FiiIncome, _) if exempt == Some(false) => {
+            (g * FII_TAXED_RATE).floor().to_i64().unwrap_or(0)
+        }
+        (IncomeKind::Dividend, C::StockUs | C::EtfUs | C::Reit) => {
+            (g * Decimal::new(30, 2)).round().to_i64().unwrap_or(0)
+        }
         // Outras bolsas: a retenção depende do país e do tratado; o usuário informa.
-        (IncomeKind::Dividend, C::StockIntl | C::EtfIntl) => return 0,
-        _ => return 0,
-    };
-    (Decimal::from(gross) * rate).round().to_i64().unwrap_or(0)
+        _ => 0,
+    }
 }
 
 pub fn create_income(tx: &Transaction<'_>, i: &IncomeInput) -> Result<Id> {
+    create_income_with(tx, i, "manual", None)
+}
+
+/// Records a distribution with its origin (`source`: `manual`, `official`, `agenda`…) and the
+/// reference it came from (`external_id`: the ledger key of an official notice).
+pub fn create_income_with(
+    tx: &Transaction<'_>,
+    i: &IncomeInput,
+    source: &str,
+    external_id: Option<&str>,
+) -> Result<Id> {
     parse_date(&i.pay_date)?;
     if let Some(d) = &i.ex_date {
         parse_date(d)?;
@@ -639,8 +672,8 @@ pub fn create_income(tx: &Transaction<'_>, i: &IncomeInput) -> Result<Id> {
     let now = now_utc();
     tx.execute(
         "INSERT INTO income_event (id, asset_id, account_id, kind, ex_date, pay_date, quantity, gross, tax_withheld, net, currency,
-                                   fx_rate, status, txn_id, source, created_at, updated_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, 'manual', ?15, ?15)",
+                                   fx_rate, status, txn_id, source, external_id, created_at, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?16, ?17, ?15, ?15)",
         params![
             id,
             i.asset_id,
@@ -656,10 +689,63 @@ pub fn create_income(tx: &Transaction<'_>, i: &IncomeInput) -> Result<Id> {
             fx.map(|f| f.normalize().to_string()),
             if status == IncomeStatus::Announced { "announced" } else { "received" },
             txn_id,
-            now
+            now,
+            source,
+            external_id
         ],
     )?;
     Ok(id)
+}
+
+/// Fixes the amounts of a recorded distribution (gross, tax, quantity) and, when it moved the
+/// brokerage cash, the amount of that entry too.
+pub fn update_income_values(
+    tx: &Transaction<'_>,
+    id: &str,
+    gross: i64,
+    tax_withheld: i64,
+    quantity: Option<&str>,
+) -> Result<()> {
+    if gross <= 0 {
+        return Err(Error::invalid(t("nucleo-carteira-erro-bruto")));
+    }
+    if tax_withheld < 0 || tax_withheld > gross {
+        return Err(Error::invalid(t("nucleo-carteira-erro-imposto-retido")));
+    }
+    let (account_id, currency, fx, txn_id, pay_date): (String, String, Option<String>, Option<String>, String) = tx
+        .query_row(
+            "SELECT account_id, currency, fx_rate, txn_id, pay_date FROM income_event WHERE id = ?1",
+            [id],
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?, r.get(4)?)),
+        )
+        .optional()?
+        .ok_or_else(|| Error::not_found(format!("provento {id}")))?;
+    let net = gross - tax_withheld;
+    let now = now_utc();
+    tx.execute(
+        "UPDATE income_event SET gross = ?2, tax_withheld = ?3, net = ?4, quantity = COALESCE(?5, quantity), updated_at = ?6
+          WHERE id = ?1",
+        params![id, gross, tax_withheld, net, quantity, now],
+    )?;
+    if let Some(txn) = txn_id {
+        let (acc_cur, _) = crate::accounts::currency_and_kind(tx, &account_id)?;
+        let fx = fx
+            .as_deref()
+            .map(|s| dec(s, "nucleo-carteira-campo-cambio"))
+            .transpose()?
+            .or_else(|| {
+                crate::fx::rate(tx, &currency, &acc_cur, &pay_date)
+                    .ok()
+                    .flatten()
+                    .map(|(r, ..)| r)
+            });
+        let amount = cash_in_account(&acc_cur, &currency, net, fx)?;
+        tx.execute(
+            "UPDATE txn SET amount = ?2, updated_at = ?3 WHERE id = ?1",
+            params![txn, amount, now],
+        )?;
+    }
+    Ok(())
 }
 
 pub fn delete_income(tx: &Transaction<'_>, id: &str) -> Result<()> {

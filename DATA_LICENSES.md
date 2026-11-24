@@ -189,7 +189,7 @@ sources and attributions, always in English:
 - **ODbL:** CVM (Open Data Portal) and Tesouro Transparente. The vault is private: there is no
   public derived database.
 - **CC0:** GLEIF (LEI data).
-- **Personal use, no redistribution:** B3 (site terms), brapi.dev (the person's own token), Yahoo
+- **Personal use, no redistribution:** B3 (site terms; also Fundos.NET, its disclosure system for funds), brapi.dev (the person's own token), Yahoo
   Finance (unofficial source: the terms do not authorize automatic collection; the app warns on the
   sources screen) and the FIPE table (queried through an unofficial service, one vehicle at a time,
   at the person's request).

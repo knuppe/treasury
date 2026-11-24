@@ -298,6 +298,9 @@ export const VALUATION_LABEL: Record<Valuation, string> = labels({
 const SOURCE_NAMES: Record<string, string> = labels({
   b3_cotahist: { fixed: 'B3 COTAHIST' },
   b3_listados: 'carteira-fonte-b3-listados',
+  fundos_net: { fixed: 'Fundos.NET' },
+  official: 'carteira-fonte-aviso-oficial',
+  b3: 'carteira-fonte-extrato-b3',
   fundamentus: { fixed: 'Fundamentus' },
   brapi: { fixed: 'brapi.dev' },
   yahoo: { fixed: 'Yahoo Finance' },

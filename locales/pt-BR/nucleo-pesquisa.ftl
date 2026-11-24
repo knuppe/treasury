@@ -357,6 +357,12 @@ nucleo-pesquisa-b3-passo-resumo =
     }
 nucleo-pesquisa-b3-parou = a B3 não respondeu { $vezes } vezes seguidas; o resto fica para a próxima coleta
 nucleo-pesquisa-b3-nada-a-atualizar = nada a atualizar: todos consultados há pouco
+nucleo-pesquisa-fnet-resumo =
+    { $documentos ->
+        [one] Fundos.NET · avisos de rendimentos ({ $fundos } fundos, { $documentos } aviso novo)
+       *[other] Fundos.NET · avisos de rendimentos ({ $fundos } fundos, { $documentos } avisos novos)
+    }
+nucleo-pesquisa-fnet-parou = o Fundos.NET não respondeu { $vezes } vezes seguidas; o resto fica para a próxima coleta
 nucleo-pesquisa-erro-brapi-invalida = resposta inválida da brapi: { $erro }
 nucleo-pesquisa-erro-brapi-sem-resultados = brapi: resposta sem resultados
 
@@ -560,3 +566,5 @@ nucleo-pesquisa-ind-fonte-declarados-fii = rendimentos declarados nos informes t
 nucleo-pesquisa-ind-formula-dy-fii-declarados = Rendimentos declarados nos 4 últimos informes trimestrais ÷ cotas emitidas ÷ cotação (estimativa: sem os proventos da B3)
 nucleo-pesquisa-ind-formula-dy-fii-meses = Soma do rendimento por cota dos informes mensais (DY do mês × VP por cota) ÷ cotação (estimativa: sem os proventos da B3). Meses: { $meses }
 nucleo-pesquisa-div-fonte-b3-amortizacao = { $fonte }; rendimentos de antes das amortizações de { $datas } na escala da cota de hoje (sem o capital devolvido)
+
+nucleo-pesquisa-aviso-proventos-automaticos = não foi possível lançar os proventos oficiais: { $erro }

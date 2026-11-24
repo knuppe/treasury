@@ -2834,6 +2834,7 @@ export interface Messages {
   'ativos-prev-valor-bruto': never;
   'ativos-prev-valor-hoje': never;
   'ativos-provento': never;
+  'ativos-proventos-lancados': never;
   'ativos-qtd': never;
   'ativos-quantidade': never;
   'ativos-real': never;
@@ -4028,11 +4029,13 @@ export interface Messages {
   'carteira-fator-custo': { custo: string | number; fator: string | number };
   'carteira-filtrar-ativo': never;
   'carteira-filtrar-conta': never;
+  'carteira-fonte-aviso-oficial': never;
   'carteira-fonte-b3-listados': never;
   'carteira-fonte-bcb': never;
   'carteira-fonte-bce': never;
   'carteira-fonte-bce-ref': never;
   'carteira-fonte-catalogo': { indice: string | number };
+  'carteira-fonte-extrato-b3': never;
   'carteira-fonte-manual': never;
   'carteira-fonte-manual-bolsa': never;
   'carteira-fonte-manual-sem-fonte': never;
@@ -4312,6 +4315,67 @@ export interface Messages {
   'carteira-quantidade': never;
   'carteira-quantidade-base': never;
   'carteira-quanto-receber': never;
+  'carteira-razao-a-receber': never;
+  'carteira-razao-acao-apagar': never;
+  'carteira-razao-acao-corrigir': never;
+  'carteira-razao-acao-lancar': never;
+  'carteira-razao-anos-tabela': never;
+  'carteira-razao-aplicar': { n: string | number };
+  'carteira-razao-ativos-tabela': never;
+  'carteira-razao-automatico-depois': never;
+  'carteira-razao-automatico-desligar': never;
+  'carteira-razao-automatico-ligado': { data: string | number };
+  'carteira-razao-calculando': never;
+  'carteira-razao-col-a-receber': never;
+  'carteira-razao-col-acao': never;
+  'carteira-razao-col-ano': never;
+  'carteira-razao-col-bruto': never;
+  'carteira-razao-col-correcoes': never;
+  'carteira-razao-col-data-com': never;
+  'carteira-razao-col-desde': never;
+  'carteira-razao-col-fica': never;
+  'carteira-razao-col-fonte': never;
+  'carteira-razao-col-ir': never;
+  'carteira-razao-col-lancado': never;
+  'carteira-razao-col-liquido': never;
+  'carteira-razao-col-qtd-valor': never;
+  'carteira-razao-col-recebido': never;
+  'carteira-razao-col-situacao': never;
+  'carteira-razao-col-tipo': never;
+  'carteira-razao-correcoes': { n: string | number };
+  'carteira-razao-correcoes-detalhe': {
+    faltando: string | number;
+    repetidos: string | number;
+    valor: string | number;
+  };
+  'carteira-razao-estado-a-receber': never;
+  'carteira-razao-estado-confere': never;
+  'carteira-razao-estado-faltando': never;
+  'carteira-razao-estado-ir': never;
+  'carteira-razao-estado-repetido': never;
+  'carteira-razao-estado-sem-fonte': never;
+  'carteira-razao-estado-valor': never;
+  'carteira-razao-feito': {
+    apagados: string | number;
+    corrigidos: string | number;
+    lancados: string | number;
+  };
+  'carteira-razao-lancado': never;
+  'carteira-razao-lancado-hoje': never;
+  'carteira-razao-marcar': { acao: string | number; ativo: string | number };
+  'carteira-razao-nada': never;
+  'carteira-razao-pago-em': { data: string | number };
+  'carteira-razao-recebido': never;
+  'carteira-razao-recebido-desde': { data: string | number };
+  'carteira-razao-recebido-dica': never;
+  'carteira-razao-revisar': never;
+  'carteira-razao-revisar-tabela': never;
+  'carteira-razao-revisar-texto': never;
+  'carteira-razao-revisar-titulo': never;
+  'carteira-razao-sem-aviso': { n: string | number };
+  'carteira-razao-tabela': never;
+  'carteira-razao-tabela-titulo': never;
+  'carteira-razao-titulo': never;
   'carteira-real-de': { deflator: string | number };
   'carteira-real-descontado-por': never;
   'carteira-realizado': never;
@@ -11100,6 +11164,12 @@ export interface Messages {
   'mcp-resumo-proximo-passo': { n: string | number; titulo: string | number };
   'mcp-resumo-quitacao': never;
   'mcp-resumo-ranking': { indicador: string | number; n: string | number; total: string | number };
+  'mcp-resumo-razao-proventos': {
+    a_receber: string | number;
+    correcoes: string | number;
+    faltando: string | number;
+    recebido: string | number;
+  };
   'mcp-resumo-rebalanceamento': never;
   'mcp-resumo-regras': { ativas: string | number; n: string | number };
   'mcp-resumo-regras-aprendidas': { n: string | number };
@@ -12340,6 +12410,14 @@ export interface Messages {
   'nucleo-carteira-rapido-nota-sem-anuncio': { data: string | number; tipo: string | number };
   'nucleo-carteira-rapido-nota-sem-posicao': { ticker: string | number };
   'nucleo-carteira-rapido-repetido': never;
+  'nucleo-carteira-razao-erro-so-usuario': never;
+  'nucleo-carteira-razao-motivo-automatico': { n: string | number };
+  'nucleo-carteira-razao-motivo-reconstruir': { n: string | number };
+  'nucleo-carteira-razao-nota-creditado': never;
+  'nucleo-carteira-razao-nota-data-improvavel': never;
+  'nucleo-carteira-razao-nota-pagamento-estimado': never;
+  'nucleo-carteira-razao-nota-repete': { data: string | number };
+  'nucleo-carteira-razao-nota-sem-fonte': never;
   'nucleo-carteira-rebalanceamento-aviso': never;
   'nucleo-carteira-risco-erro-meses': never;
   'nucleo-carteira-risco-nota-estimados': never;
@@ -12882,6 +12960,9 @@ export interface Messages {
   'nucleo-fontes-fundamentus-nome': never;
   'nucleo-fontes-fundamentus-termos': never;
   'nucleo-fontes-fundamentus-uso': never;
+  'nucleo-fontes-fundos_net-nome': never;
+  'nucleo-fontes-fundos_net-termos': never;
+  'nucleo-fontes-fundos_net-uso': never;
   'nucleo-fontes-gleif-nome': never;
   'nucleo-fontes-gleif-termos': never;
   'nucleo-fontes-gleif-uso': never;
@@ -13440,6 +13521,7 @@ export interface Messages {
   'nucleo-importacao-b3-nota-leilao-venda': never;
   'nucleo-importacao-b3-nota-operacao-manual': never;
   'nucleo-importacao-b3-nota-provento-manual': never;
+  'nucleo-importacao-b3-nota-provento-oficial': never;
   'nucleo-importacao-b3-nota-repasse': never;
   'nucleo-importacao-b3-nota-repetida': { origem: string | number };
   'nucleo-importacao-b3-origem-leilao': never;
@@ -14941,6 +15023,7 @@ export interface Messages {
   'nucleo-pesquisa-aviso-alerta-tela': { erro: string | number };
   'nucleo-pesquisa-aviso-lucro-controladores': { companhias: string | number; n: string | number };
   'nucleo-pesquisa-aviso-preco-justo': never;
+  'nucleo-pesquisa-aviso-proventos-automaticos': { erro: string | number };
   'nucleo-pesquisa-aviso-score-lote': { erro: string | number };
   'nucleo-pesquisa-aviso-sec': never;
   'nucleo-pesquisa-b3-log-proventos': { n: string | number };
@@ -15058,6 +15141,8 @@ export interface Messages {
   'nucleo-pesquisa-filtro-ou': never;
   'nucleo-pesquisa-filtro-todos': never;
   'nucleo-pesquisa-filtro-value': never;
+  'nucleo-pesquisa-fnet-parou': { vezes: string | number };
+  'nucleo-pesquisa-fnet-resumo': { documentos: string | number; fundos: string | number };
   'nucleo-pesquisa-fonte-cotacao': { data: string | number; fonte: string | number };
   'nucleo-pesquisa-hist-centavos': never;
   'nucleo-pesquisa-hist-sem-demonstracoes': never;
@@ -21659,6 +21744,7 @@ export const KEYS: readonly MessageKey[] = [
   'ativos-prev-valor-bruto',
   'ativos-prev-valor-hoje',
   'ativos-provento',
+  'ativos-proventos-lancados',
   'ativos-qtd',
   'ativos-quantidade',
   'ativos-real',
@@ -22787,11 +22873,13 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-fator-custo',
   'carteira-filtrar-ativo',
   'carteira-filtrar-conta',
+  'carteira-fonte-aviso-oficial',
   'carteira-fonte-b3-listados',
   'carteira-fonte-bcb',
   'carteira-fonte-bce',
   'carteira-fonte-bce-ref',
   'carteira-fonte-catalogo',
+  'carteira-fonte-extrato-b3',
   'carteira-fonte-manual',
   'carteira-fonte-manual-bolsa',
   'carteira-fonte-manual-sem-fonte',
@@ -23063,6 +23151,59 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-quantidade',
   'carteira-quantidade-base',
   'carteira-quanto-receber',
+  'carteira-razao-a-receber',
+  'carteira-razao-acao-apagar',
+  'carteira-razao-acao-corrigir',
+  'carteira-razao-acao-lancar',
+  'carteira-razao-anos-tabela',
+  'carteira-razao-aplicar',
+  'carteira-razao-ativos-tabela',
+  'carteira-razao-automatico-depois',
+  'carteira-razao-automatico-desligar',
+  'carteira-razao-automatico-ligado',
+  'carteira-razao-calculando',
+  'carteira-razao-col-a-receber',
+  'carteira-razao-col-acao',
+  'carteira-razao-col-ano',
+  'carteira-razao-col-bruto',
+  'carteira-razao-col-correcoes',
+  'carteira-razao-col-data-com',
+  'carteira-razao-col-desde',
+  'carteira-razao-col-fica',
+  'carteira-razao-col-fonte',
+  'carteira-razao-col-ir',
+  'carteira-razao-col-lancado',
+  'carteira-razao-col-liquido',
+  'carteira-razao-col-qtd-valor',
+  'carteira-razao-col-recebido',
+  'carteira-razao-col-situacao',
+  'carteira-razao-col-tipo',
+  'carteira-razao-correcoes',
+  'carteira-razao-correcoes-detalhe',
+  'carteira-razao-estado-a-receber',
+  'carteira-razao-estado-confere',
+  'carteira-razao-estado-faltando',
+  'carteira-razao-estado-ir',
+  'carteira-razao-estado-repetido',
+  'carteira-razao-estado-sem-fonte',
+  'carteira-razao-estado-valor',
+  'carteira-razao-feito',
+  'carteira-razao-lancado',
+  'carteira-razao-lancado-hoje',
+  'carteira-razao-marcar',
+  'carteira-razao-nada',
+  'carteira-razao-pago-em',
+  'carteira-razao-recebido',
+  'carteira-razao-recebido-desde',
+  'carteira-razao-recebido-dica',
+  'carteira-razao-revisar',
+  'carteira-razao-revisar-tabela',
+  'carteira-razao-revisar-texto',
+  'carteira-razao-revisar-titulo',
+  'carteira-razao-sem-aviso',
+  'carteira-razao-tabela',
+  'carteira-razao-tabela-titulo',
+  'carteira-razao-titulo',
   'carteira-real-de',
   'carteira-real-descontado-por',
   'carteira-realizado',
@@ -29246,6 +29387,7 @@ export const KEYS: readonly MessageKey[] = [
   'mcp-resumo-proximo-passo',
   'mcp-resumo-quitacao',
   'mcp-resumo-ranking',
+  'mcp-resumo-razao-proventos',
   'mcp-resumo-rebalanceamento',
   'mcp-resumo-regras',
   'mcp-resumo-regras-aprendidas',
@@ -30352,6 +30494,14 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-rapido-nota-sem-anuncio',
   'nucleo-carteira-rapido-nota-sem-posicao',
   'nucleo-carteira-rapido-repetido',
+  'nucleo-carteira-razao-erro-so-usuario',
+  'nucleo-carteira-razao-motivo-automatico',
+  'nucleo-carteira-razao-motivo-reconstruir',
+  'nucleo-carteira-razao-nota-creditado',
+  'nucleo-carteira-razao-nota-data-improvavel',
+  'nucleo-carteira-razao-nota-pagamento-estimado',
+  'nucleo-carteira-razao-nota-repete',
+  'nucleo-carteira-razao-nota-sem-fonte',
   'nucleo-carteira-rebalanceamento-aviso',
   'nucleo-carteira-risco-erro-meses',
   'nucleo-carteira-risco-nota-estimados',
@@ -30838,6 +30988,9 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-fontes-fundamentus-nome',
   'nucleo-fontes-fundamentus-termos',
   'nucleo-fontes-fundamentus-uso',
+  'nucleo-fontes-fundos_net-nome',
+  'nucleo-fontes-fundos_net-termos',
+  'nucleo-fontes-fundos_net-uso',
   'nucleo-fontes-gleif-nome',
   'nucleo-fontes-gleif-termos',
   'nucleo-fontes-gleif-uso',
@@ -31352,6 +31505,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-nota-leilao-venda',
   'nucleo-importacao-b3-nota-operacao-manual',
   'nucleo-importacao-b3-nota-provento-manual',
+  'nucleo-importacao-b3-nota-provento-oficial',
   'nucleo-importacao-b3-nota-repasse',
   'nucleo-importacao-b3-nota-repetida',
   'nucleo-importacao-b3-origem-leilao',
@@ -32724,6 +32878,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-aviso-alerta-tela',
   'nucleo-pesquisa-aviso-lucro-controladores',
   'nucleo-pesquisa-aviso-preco-justo',
+  'nucleo-pesquisa-aviso-proventos-automaticos',
   'nucleo-pesquisa-aviso-score-lote',
   'nucleo-pesquisa-aviso-sec',
   'nucleo-pesquisa-b3-log-proventos',
@@ -32824,6 +32979,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-filtro-ou',
   'nucleo-pesquisa-filtro-todos',
   'nucleo-pesquisa-filtro-value',
+  'nucleo-pesquisa-fnet-parou',
+  'nucleo-pesquisa-fnet-resumo',
   'nucleo-pesquisa-fonte-cotacao',
   'nucleo-pesquisa-hist-centavos',
   'nucleo-pesquisa-hist-sem-demonstracoes',

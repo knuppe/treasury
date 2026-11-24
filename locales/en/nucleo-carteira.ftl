@@ -173,12 +173,12 @@ nucleo-carteira-rapido-e-mais = { $lista } and { $n } more
 
 ## Announced dividends to check (`pending`)
 
-nucleo-carteira-pendente-data-agenda = payment date from the calendar (B3 hasn't announced it yet)
-nucleo-carteira-pendente-valor-divergente = { $fonte } said { $valor } per share; B3's was used ({ $b3 })
-nucleo-carteira-pendente-data-divergente = { $fonte } said payment on { $data }; B3's was used ({ $b3 })
+nucleo-carteira-pendente-data-agenda = payment date from the calendar (the official source hasn't announced it yet)
+nucleo-carteira-pendente-valor-divergente = { $fonte } said { $valor } per share; the official amount was used ({ $b3 })
+nucleo-carteira-pendente-data-divergente = { $fonte } said payment on { $data }; the official date was used ({ $b3 })
 nucleo-carteira-pendente-tipos-divergentes = the sources give different kinds ({ $lista }); the one from { $fonte } was used
-nucleo-carteira-pendente-fontes-discordam = the dividend isn't on B3 and the sources disagree ({ $lista }); the one from { $fonte } was used: check your statement
-nucleo-carteira-pendente-so-uma-fonte = only on { $fonte }: B3 doesn't have this dividend (not downloaded yet or not on the official list)
+nucleo-carteira-pendente-fontes-discordam = the dividend isn't in the official sources and the sources disagree ({ $lista }); the one from { $fonte } was used: check your statement
+nucleo-carteira-pendente-so-uma-fonte = only on { $fonte }: no official notice of this dividend (not downloaded yet or not on the official list)
 
 ## Positions, performance and rebalancing (`engine`)
 
@@ -418,3 +418,21 @@ nucleo-ativos-motivo-etiquetas = Asset labels
 nucleo-carteira-limite-invalido = the limit must be between 0 and 100% of the portfolio
 nucleo-carteira-limite-sem-ativo = give the asset for the limit
 nucleo-carteira-motivo-limite = Concentration limit
+
+## Income ledger (portfolio/income_ledger.rs)
+nucleo-carteira-razao-nota-creditado = amount credited by B3 in the imported statement: it prevails over the calculation
+nucleo-carteira-razao-nota-pagamento-estimado = no source gave the payment date: the record date was used
+nucleo-carteira-razao-nota-repete = repeats the distribution paid on { $data }
+nucleo-carteira-razao-nota-data-improvavel = payment date far in the future: check the year
+nucleo-carteira-razao-nota-sem-fonte = no source describes this distribution: check your brokerage statement
+nucleo-carteira-razao-motivo-reconstruir =
+    { $n ->
+        [one] Distributions rebuilt from the official notices ({ $n } fix)
+       *[other] Distributions rebuilt from the official notices ({ $n } fixes)
+    }
+nucleo-carteira-razao-motivo-automatico =
+    { $n ->
+        [one] Official distribution recorded automatically ({ $n })
+       *[other] Official distributions recorded automatically ({ $n })
+    }
+nucleo-carteira-razao-erro-so-usuario = Only you can turn the automatic recording of distributions on or off.

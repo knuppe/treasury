@@ -603,6 +603,7 @@ mcp-resumo-proventos-a-confirmar = { $n ->
         [one] { $n } income distribution to confirm
        *[other] { $n } income distributions to confirm
     }: { $conferidos } checked across sources, { $divergentes } with a mismatch, { $fonte_unica } from a single source.
+mcp-resumo-razao-proventos = Income by the sources: { $recebido } received and { $a_receber } upcoming; { $faltando } not recorded and { $correcoes } fix(es) proposed.
 mcp-resumo-linha-erro = row { $linha } ({ $ticker }): { $erro }
 mcp-resumo-proventos-rapidos = { $prontos } ready, { $registrados } already recorded, { $erros } with errors.
 mcp-resumo-proventos-nada = Nothing saved: { $registrados } already recorded, { $erros } with errors.

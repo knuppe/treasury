@@ -67,6 +67,7 @@ import { Segmented } from '../portfolio/components/Segmented';
 import { ConfirmButton, ErrorBlock, LoadingBlock, Notice } from '../portfolio/components/States';
 import { formatQuantity, formatUnitPrice } from '../portfolio/decimal';
 import { IncomeDialog } from '../portfolio/IncomeDialog';
+import { IncomeLedgerSummary, IncomeLedgerTable } from '../portfolio/IncomeLedger';
 import {
   FIXED_INCOME_KIND_LABEL,
   INDEXER_LABEL,
@@ -641,8 +642,13 @@ export function AssetDetail({
         </TabsContent>
         <TabsContent value="proventos">
           <div className="flex flex-col gap-5">
+            <IncomeLedgerSummary assetId={asset.id} />
             {fundamentus && asset.ticker ? <AnnouncedIncome asset={asset} /> : null}
-            <IncomeTable assetId={asset.id} />
+            <IncomeLedgerTable assetId={asset.id} />
+            <section className="flex flex-col gap-2">
+              <h3 className="label-caps text-fg">{t('ativos-proventos-lancados')}</h3>
+              <IncomeTable assetId={asset.id} />
+            </section>
           </div>
         </TabsContent>
         <TabsContent value="eventos">

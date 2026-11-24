@@ -63,6 +63,7 @@ const EXPECTED_TOOLS: [(&str, &str); 162] = [
     ("list_income_events", "portfolio.list_income"),
     ("dividend_calendar", "portfolio.dividend_calendar"),
     ("list_pending_income", "portfolio.pending_income"),
+    ("get_income_ledger", "portfolio.income_ledger"),
     ("simulate_retirement", "goals.retirement"),
     ("estimate_inss", "goals.inss_estimate"),
     ("list_retirement_scenarios", "goals.retirement_scenarios"),
@@ -930,6 +931,7 @@ async fn errors_are_readable_tool_errors() {
         ("list_income_events", json!({})),
         ("dividend_calendar", json!({})),
         ("list_pending_income", json!({})),
+        ("get_income_ledger", json!({"only_problems": true})),
         ("simulate_retirement", json!({"current_age": 40})),
         (
             "estimate_inss",

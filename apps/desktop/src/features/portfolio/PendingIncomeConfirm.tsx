@@ -28,7 +28,9 @@ import { maskAmount, typeAmount } from './incomeMasks';
 
 /** Nome curto da fonte no selo da conferência. */
 const shortSource = (s: string) =>
-  ({ b3_listados: 'B3', yahoo: 'Yahoo', fundamentus: 'Fundamentus' })[s] ?? sourceName(s);
+  ({ b3_listados: 'B3', fundos_net: 'Fundos.NET', yahoo: 'Yahoo', fundamentus: 'Fundamentus' })[
+    s
+  ] ?? sourceName(s);
 
 const STATUS: Record<
   PendingIncome['check']['status'],

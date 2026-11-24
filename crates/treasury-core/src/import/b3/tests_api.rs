@@ -719,3 +719,43 @@ fn ai_client_can_preview_and_propose_the_import() {
         .is_err()
     );
 }
+
+#[test]
+fn income_recorded_from_the_official_notice_is_not_imported_again() {
+    let env = setup();
+    let api = &env.api;
+    let mxrf = api
+        .call(
+            "assets.create",
+            json!({"ticker": "MXRF11", "name": "Maxi Renda", "class": "fii"}),
+        )
+        .unwrap()["id"]
+        .as_str()
+        .unwrap()
+        .to_string();
+    // Recorded by the income ledger one day off the statement's credit date.
+    let id = api
+        .call(
+            "portfolio.create_income",
+            json!({"asset_id": mxrf, "account_id": env.nu, "kind": "fii_income", "ex_date": "2024-01-31",
+                   "pay_date": "2024-02-19", "gross": 1000, "cash_movement": false}),
+        )
+        .unwrap()["id"]
+        .as_str()
+        .unwrap()
+        .to_string();
+    api.with_session(|s, _| {
+        s.db.conn().execute(
+            "UPDATE income_event SET source = 'official' WHERE id = ?1",
+            [&id],
+        )?;
+        Ok(())
+    })
+    .unwrap();
+    let p = api
+        .call("b3.preview", json!({"files": all_files()}))
+        .unwrap();
+    let row = find(&p, "incomes", |i| i["ticker"] == "MXRF11");
+    assert_eq!(row["status"], "duplicate", "{row:#}");
+    assert_eq!(row["duplicate_of"], id.as_str());
+}

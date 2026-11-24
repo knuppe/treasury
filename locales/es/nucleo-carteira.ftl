@@ -178,12 +178,12 @@ nucleo-carteira-rapido-e-mais = { $lista } y { $n } más
 
 ## Dividendos anunciados a revisar (`pending`)
 
-nucleo-carteira-pendente-data-agenda = fecha de pago de la agenda (la B3 todavía no la informó)
-nucleo-carteira-pendente-valor-divergente = { $fonte } decía { $valor } por acción; se usó el de la B3 ({ $b3 })
-nucleo-carteira-pendente-data-divergente = { $fonte } decía pago el { $data }; se usó el de la B3 ({ $b3 })
+nucleo-carteira-pendente-data-agenda = fecha de pago de la agenda (la fuente oficial todavía no la informó)
+nucleo-carteira-pendente-valor-divergente = { $fonte } decía { $valor } por acción; se usó el valor oficial ({ $b3 })
+nucleo-carteira-pendente-data-divergente = { $fonte } decía pago el { $data }; se usó la fecha oficial ({ $b3 })
 nucleo-carteira-pendente-tipos-divergentes = las fuentes dan tipos distintos ({ $lista }); se usó el de { $fonte }
-nucleo-carteira-pendente-fontes-discordam = el dividendo no está en la B3 y las fuentes no coinciden ({ $lista }); se usó el de { $fonte }: revísalo en el extracto
-nucleo-carteira-pendente-so-uma-fonte = solo en { $fonte }: la B3 no tiene este dividendo (todavía no descargado o fuera de la lista oficial)
+nucleo-carteira-pendente-fontes-discordam = el dividendo no está en las fuentes oficiales y las fuentes no coinciden ({ $lista }); se usó el de { $fonte }: revísalo en el extracto
+nucleo-carteira-pendente-so-uma-fonte = solo en { $fonte }: no hay aviso oficial de este dividendo (todavía no descargado o fuera de la lista oficial)
 
 ## Posiciones, rendimiento y rebalanceo (`engine`)
 
@@ -423,3 +423,21 @@ nucleo-ativos-motivo-etiquetas = Etiquetas de activos
 nucleo-carteira-limite-invalido = el límite debe quedar entre 0 y 100% de la cartera
 nucleo-carteira-limite-sem-ativo = indica el activo del límite
 nucleo-carteira-motivo-limite = Límite de concentración
+
+## Income ledger (portfolio/income_ledger.rs)
+nucleo-carteira-razao-nota-creditado = valor acreditado por la B3 en el extracto importado: prevalece sobre el cálculo
+nucleo-carteira-razao-nota-pagamento-estimado = ninguna fuente informó la fecha de pago: se usó la fecha de corte
+nucleo-carteira-razao-nota-repete = repite el dividendo pagado el { $data }
+nucleo-carteira-razao-nota-data-improvavel = fecha de pago muy en el futuro: revisa si el año está bien escrito
+nucleo-carteira-razao-nota-sem-fonte = ninguna fuente describe este dividendo: revísalo en el extracto de la corredora
+nucleo-carteira-razao-motivo-reconstruir =
+    { $n ->
+        [one] Dividendos reconstruidos con los avisos oficiales ({ $n } corrección)
+       *[other] Dividendos reconstruidos con los avisos oficiales ({ $n } correcciones)
+    }
+nucleo-carteira-razao-motivo-automatico =
+    { $n ->
+        [one] Dividendo oficial registrado automáticamente ({ $n })
+       *[other] Dividendos oficiales registrados automáticamente ({ $n })
+    }
+nucleo-carteira-razao-erro-so-usuario = Solo tú puedes activar o desactivar el registro automático de dividendos.

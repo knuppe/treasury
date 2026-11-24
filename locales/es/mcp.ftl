@@ -633,6 +633,7 @@ mcp-resumo-proventos-a-confirmar = { $n ->
         [one] { $n } rendimiento por confirmar
        *[other] { $n } rendimientos por confirmar
     }: { $conferidos } verificados entre fuentes, { $divergentes } con divergencia, { $fonte_unica } de fuente única.
+mcp-resumo-razao-proventos = Dividendos según las fuentes: { $recebido } recibidos y { $a_receber } por recibir; { $faltando } sin registrar y { $correcoes } corrección(es) propuestas.
 mcp-resumo-linha-erro = fila { $linha } ({ $ticker }): { $erro }
 mcp-resumo-proventos-rapidos = { $prontos } listos, { $registrados } ya registrados, { $erros } con error.
 mcp-resumo-proventos-nada = Nada guardado: { $registrados } ya registrados, { $erros } con error.

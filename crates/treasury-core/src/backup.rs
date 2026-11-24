@@ -273,6 +273,7 @@ pub const PUBLIC_DATA_TABLES: &[&str] = &[
     "research_dividend",
     "research_stock_event",
     "research_fetch_log",
+    "research_fund_notice",
     "research_filing",
     "research_auditor",
     "bank_institution",

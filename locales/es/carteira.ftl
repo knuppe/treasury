@@ -1231,3 +1231,72 @@ carteira-etiqueta-outros =
         [one] y 1 activo fuera de la cartera
        *[other] y { $n } activos fuera de la cartera
     }
+
+## Income ledger (features/portfolio/IncomeLedger.tsx)
+carteira-fonte-aviso-oficial = Aviso oficial
+carteira-fonte-extrato-b3 = Extracto de la B3
+carteira-razao-titulo = Rendimientos según las fuentes oficiales
+carteira-razao-calculando = Revisando los rendimientos…
+carteira-razao-recebido = Recibido según las fuentes
+carteira-razao-recebido-desde = Recibido desde el { $data }
+carteira-razao-recebido-dica = Cantidad en la fecha de corte × valor del aviso oficial, neto del impuesto retenido
+carteira-razao-a-receber = Por recibir
+carteira-razao-lancado-hoje = Registrado hoy
+carteira-razao-lancado = registrado
+carteira-razao-correcoes =
+    { $n ->
+        [one] { $n } corrección en los rendimientos registrados
+       *[other] { $n } correcciones en los rendimientos registrados
+    }
+carteira-razao-correcoes-detalhe = { $faltando } sin registrar, { $repetidos } repetido(s) y { $valor } con valor o impuesto distinto del aviso oficial.
+carteira-razao-automatico-depois = Después de la revisión, los rendimientos oficiales nuevos se registran solos en la fecha de pago.
+carteira-razao-automatico-ligado = Los rendimientos oficiales se registran solos desde el { $data }.
+carteira-razao-automatico-desligar = Desactivar
+carteira-razao-sem-aviso =
+    { $n ->
+        [one] { $n } rendimiento sin aviso oficial espera tu confirmación en Registrar dividendos.
+       *[other] { $n } rendimientos sin aviso oficial esperan tu confirmación en Registrar dividendos.
+    }
+carteira-razao-revisar = Revisar y corregir
+carteira-razao-revisar-titulo = Corregir los rendimientos con los avisos oficiales
+carteira-razao-revisar-texto = Cada línea dice qué cambia. Todo va en un solo cambio, con Deshacer. Los rendimientos antiguos se registran sin tocar la caja de la corredora.
+carteira-razao-revisar-tabela = Correcciones propuestas
+carteira-razao-nada = Nada que corregir: los rendimientos registrados coinciden con las fuentes.
+carteira-razao-feito = Rendimientos corregidos: { $lancados } registrado(s), { $corrigidos } corregido(s) y { $apagados } borrado(s).
+carteira-razao-marcar = { $acao } { $ativo }
+carteira-razao-pago-em = pagado el { $data }
+carteira-razao-aplicar =
+    { $n ->
+        [one] Aplicar { $n } corrección
+       *[other] Aplicar { $n } correcciones
+    }
+carteira-razao-acao-lancar = Registrar
+carteira-razao-acao-corrigir = Corregir valor
+carteira-razao-acao-apagar = Borrar repetido
+carteira-razao-estado-confere = Coincide
+carteira-razao-estado-faltando = Sin registrar
+carteira-razao-estado-a-receber = Por recibir
+carteira-razao-estado-valor = Valor distinto
+carteira-razao-estado-ir = Impuesto distinto
+carteira-razao-estado-repetido = Repetido
+carteira-razao-estado-sem-fonte = Sin fuente
+carteira-razao-tabela-titulo = Rendimientos del período en que tuviste el activo
+carteira-razao-tabela = Rendimientos, uno por pago
+carteira-razao-anos-tabela = Rendimientos por año
+carteira-razao-ativos-tabela = Rendimientos por activo desde la compra
+carteira-razao-col-data-com = Fecha de corte
+carteira-razao-col-tipo = Tipo
+carteira-razao-col-qtd-valor = Cant. × valor
+carteira-razao-col-bruto = Bruto
+carteira-razao-col-ir = Impuesto
+carteira-razao-col-liquido = Neto
+carteira-razao-col-fonte = Fuente
+carteira-razao-col-situacao = Situación
+carteira-razao-col-ano = Año
+carteira-razao-col-recebido = Recibido
+carteira-razao-col-lancado = Registrado
+carteira-razao-col-a-receber = Por recibir
+carteira-razao-col-desde = Desde
+carteira-razao-col-correcoes = Correcciones
+carteira-razao-col-acao = Qué cambia
+carteira-razao-col-fica = Queda

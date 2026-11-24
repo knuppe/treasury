@@ -47,9 +47,11 @@ pub enum SyncSource {
     Brapi,
     /// Proventos e eventos em ações oficiais da B3 (API das empresas e fundos listados).
     B3Listados,
+    /// Structured income notices of the listed funds (Fundos.NET, CVM and B3).
+    FundosNet,
 }
 
-const ALL_SOURCES: [SyncSource; 13] = [
+const ALL_SOURCES: [SyncSource; 14] = [
     SyncSource::Fca,
     SyncSource::Dfp,
     SyncSource::Itr,
@@ -63,6 +65,7 @@ const ALL_SOURCES: [SyncSource; 13] = [
     SyncSource::Crypto,
     SyncSource::Brapi,
     SyncSource::B3Listados,
+    SyncSource::FundosNet,
 ];
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]
@@ -126,6 +129,10 @@ pub struct ResearchSyncReport {
     #[serde(default)]
     #[ts(optional, type = "number")]
     pub market_scores: Option<u64>,
+    /// Official distributions recorded automatically at the end of the collection.
+    #[serde(default)]
+    #[ts(optional, type = "number")]
+    pub income_recorded: Option<u64>,
     pub warnings: Vec<String>,
 }
 
@@ -263,6 +270,7 @@ pub fn plan(conn: &Connection, today: NaiveDate, args: &SyncArgs) -> Result<Plan
         let crypto = enabled(conn, SourceId::Coingecko) || enabled(conn, SourceId::Defillama);
         sources.retain(|s| match s {
             SyncSource::B3 | SyncSource::B3Listados => b3,
+            SyncSource::FundosNet => enabled(conn, SourceId::FundosNet),
             SyncSource::Sec => sec,
             SyncSource::Ifdata => bcb,
             SyncSource::Funds => cvm || b3,
@@ -1063,6 +1071,9 @@ pub fn run_with(
     if on(SyncSource::B3Listados) {
         super::b3_listados::sync(&mut r, today)?;
     }
+    if on(SyncSource::FundosNet) {
+        super::fundos_net::sync(&mut r, today)?;
+    }
     if on(SyncSource::Sec) && !plan.us_tickers.is_empty() {
         let ua = plan.sec_user_agent.clone();
         let wanted = plan.us_tickers.clone();
@@ -1219,6 +1230,15 @@ pub fn run_with(
         let res = super::radar::run(c, &ids, today)?;
         Ok(res.written)
     })?;
+    // Official distributions already paid are recorded once the family turned it on (after the
+    // rebuild of the history); a failure here does not stop the collection.
+    match r.with(|c| crate::portfolio::income_ledger::auto_record(c, today)) {
+        Ok(n) => r.rep.income_recorded = (n > 0).then_some(u64::from(n)),
+        Err(e) => warnings.push(crate::i18n::t_args(
+            "nucleo-pesquisa-aviso-proventos-automaticos",
+            &crate::i18n::args(&[("erro", e.to_string().into())]),
+        )),
+    }
     warnings.sort();
     warnings.dedup();
     // Correções de escala das ações viram um aviso só.

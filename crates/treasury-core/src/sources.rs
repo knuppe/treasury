@@ -83,6 +83,8 @@ pub enum SourceId {
     /// Open Food Facts: nome, marca, nutrientes, grupo NOVA e alérgenos pelo código de barras
     /// (só o GTIN vai). Desligada por padrão (docs/gtin-inflation.md §7).
     OpenFoodFacts,
+    /// Fundos.NET (CVM and B3): structured income notices of the listed funds.
+    FundosNet,
     /// Feeds RSS de portais de economia (notícias do ativo): o mesmo pedido para todos; o
     /// filtro pelo ticker é feito no computador (docs/asset-overview.md).
     NewsFeeds,
@@ -119,12 +121,13 @@ pub struct SourceToggleArgs {
 }
 
 impl SourceId {
-    pub const ALL: [SourceId; 32] = [
+    pub const ALL: [SourceId; 33] = [
         SourceId::Yahoo,
         SourceId::Fundamentus,
         SourceId::Tesouro,
         SourceId::Cvm,
         SourceId::B3,
+        SourceId::FundosNet,
         SourceId::Bcb,
         SourceId::Sec,
         SourceId::Fred,
@@ -160,6 +163,7 @@ impl SourceId {
             SourceId::Tesouro => "tesouro",
             SourceId::Cvm => "cvm",
             SourceId::B3 => "b3",
+            SourceId::FundosNet => "fundos_net",
             SourceId::Sec => "sec",
             SourceId::Bcb => "bcb",
             SourceId::Fred => "fred",
@@ -199,6 +203,9 @@ impl SourceId {
             SourceId::Tesouro => "https://www.tesourotransparente.gov.br",
             SourceId::Cvm => "https://dados.cvm.gov.br",
             SourceId::B3 => "https://www.b3.com.br",
+            SourceId::FundosNet => {
+                "https://fnet.bmfbovespa.com.br/fnet/publico/abrirGerenciadorDocumentosCVM"
+            }
             SourceId::Bcb => "https://dadosabertos.bcb.gov.br",
             SourceId::Sec => "https://www.sec.gov/edgar",
             SourceId::Fred => "https://fred.stlouisfed.org",
@@ -262,6 +269,7 @@ impl SourceId {
             | SourceId::Tesouro
             | SourceId::Cvm
             | SourceId::B3
+            | SourceId::FundosNet
             | SourceId::Bcb
             | SourceId::Fipe
             | SourceId::Brapi

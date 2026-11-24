@@ -21,6 +21,7 @@ import { PeriodSelect, periodRange, usePeriod } from './components/PeriodSelect'
 import { Pct } from './components/Pct';
 import { ErrorBlock, LoadingBlock, Notice } from './components/States';
 import { maskAmount } from './incomeMasks';
+import { IncomeLedgerSummary } from './IncomeLedger';
 import { IncomeByMonth } from './PortfolioCards';
 import { classLabel } from './labels';
 import { IncomeTable } from './RecordsPanels';
@@ -32,6 +33,7 @@ export function IncomePanel() {
   const range = periodRange(period);
   return (
     <div className="flex flex-col gap-3">
+      <IncomeLedgerSummary />
       <PeriodSelect scope="proventos" value={period} onChange={setPeriod} />
       <IncomeByMonth />
       <IncomeTable

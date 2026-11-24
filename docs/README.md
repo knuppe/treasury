@@ -182,6 +182,7 @@ Brazilian vaults ([countries.md](countries.md)).
 | [fgts.md](brazil/fgts.md) | FGTS accounts |
 | [iptu.md](brazil/iptu.md) | IPTU of the properties |
 | [floating-rate-loans.md](brazil/floating-rate-loans.md) | Floating-rate loans and loans indexed to an index (CDI, Selic, IPCA, TR) |
+| [income-ledger.md](brazil/income-ledger.md) | Income received per distribution, by the official notices (Fundos.NET, B3) |
 | [brapi.md](brazil/brapi.md) | brapi.dev as a fallback for the B3 price and a secondary source |
 | [caixa-statement-by-period.md](brazil/caixa-statement-by-period.md) | Caixa statement that is image only |
 | [pension-statement.md](brazil/pension-statement.md) | Pension fund statement |

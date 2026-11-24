@@ -126,7 +126,7 @@ All public, free and keyless. Each series stores in `index_series.source` the pr
 | Tesouro Direto | **Tesouro Transparente** (CSV of historical prices and rates) | |
 | Investment funds | **CVM Open Data**, daily report (quota value by CNPJ) | |
 | CDB, LCI, LCA, debentures | Mark to the curve from CDI/IPCA/fixed rate | manual entry |
-| Corporate events and dividends | B3 (listed companies and funds), Yahoo, Fundamentus | manual entry or note reading by the agent |
+| Corporate events and dividends | **Fundos.NET** (income notices of the funds), B3 (listed companies and funds), Yahoo, Fundamentus | manual entry or note reading by the agent |
 | Investor's trades and position | **B3 Investor Area** (trading, movement and position reports in Excel) | file import (manual or from the Downloads folder) |
 | Fundamentals of listed companies | **CVM Open Data** (DFP, ITR, FCA, IPE) | |
 | Fundamentals of FIIs | **CVM Open Data**, monthly FII report | |
@@ -216,11 +216,40 @@ Official source of dividends for the whole universe of stocks and FIIs: the publ
 - Use of the data: 12-month DY, last dividend and Bazin for the whole universe (screener, rankings and peers of the score). The values are adjusted by later splits, reverse splits and bonus shares (per share of today); amortizations do not enter the DY. Registered assets keep the schedule (`dividend_event`: Yahoo, Fundamentus) while it agrees with B3; with a material divergence, B3 (official) becomes the reference. Without a schedule, B3 comes before recorded dividends.
 - Check (`research.dividends_check {asset_id | ticker}`, MCP tool `check_dividends`, read-only): over the last 24 months, it pairs by record date (up to 3 business days: Yahoo uses the ex date) and nature (dividend or amortization) the B3 dividends, summed by date, with those of each schedule source; it flags amounts off by more than 2% (`value_diff`), dividends only on B3 (`only_b3`, only in the period the source covers) or only on the schedule (`only_other`) and compares the 12-month sum. A value that only matches after the split counts as equal, with a note (Yahoo adjusts past values; B3 and Fundamentus do not). `material = true` = the indicators use B3. The health score shows the same in "Cross-check with other sources", without lowering confidence.
 
+## Fundos.NET: official income notices of the listed funds
+
+The structured notice "Rendimentos e Amortizações" that every listed FII and Fiagro files on
+Fundos.NET, the disclosure system of the CVM and B3 (`https://fnet.bmfbovespa.com.br/fnet/publico`,
+public pages, no key; the host publishes no `robots.txt`). It is the reference for the income of
+the funds in the income ledger ([income-ledger.md](brazil/income-ledger.md)).
+
+| Request | Argument | Use |
+|---|---|---|
+| `pesquisarGerenciadorDocumentosDados` | fund CNPJ, category 14, type 41, active only, pages of 100 | the fund's notices: id, version, record date, filing time |
+| `downloadDocumento?id=…` | document id | XML of ~1 KB: ISIN, trading code, income or amortization (total, partial), record date, amount per unit, payment date, reference month, tax exemption |
+
+- Two XML layouts: until 2022 one document per security, with the codes in the header
+  (`CodNegociacaoCota`, `CodISINCota`, `ValorProventoCota`); since then one `Provento` block per
+  security (unit and subscription receipts), with `CodNegociacao` and `ValorProvento`. The name and
+  phone of the person in charge at the administrator are in the XML and are not read.
+- Corrected filings: the list only brings active documents; a notice whose document left the list
+  is removed. When two active documents report the same distribution, the latest filing wins.
+- Storage: `research_fund_notice` (document, version, CNPJ, code, ISIN, kind, amortization type,
+  record date, exact decimal amount, payment, reference month, exemption, filing time), a technical
+  table outside the change history and the backups.
+- Considerate use: only the funds the family holds or held (class FII, with a trade or received
+  through a ticker change), by the CNPJ of the asset registry or of the CVM data; the list again
+  every ~20 h; each document downloaded once (a filed notice does not change); notices with a
+  record date more than 40 days before the first purchase are not downloaded; one request at a time
+  with 1.5 s between requests; five failures in a row stop the collection until the next one.
+- Terms: the B3 site terms (strictly personal use); nothing leaves the vault. Turns on and off in
+  Settings › Data sources (`fundos_net`); failures count toward the source's health.
+
 ### Dividends to confirm (cross-checking sources)
 
-`portfolio.pending_income` (Portfolio › Record dividends › To confirm; MCP tool `list_pending_income`) suggests one dividend per event, crossing the asset's schedule (Yahoo, Fundamentus) with the official B3 events (`portfolio/pending.rs`):
+`portfolio.pending_income` (Portfolio › Record dividends › To confirm; MCP tool `list_pending_income`) suggests one dividend per event, crossing the asset's schedule (Yahoo, Fundamentus) with the official events, the funds' Fundos.NET notices first and B3's (`portfolio/pending.rs`). It is the missing part of the income ledger ([income-ledger.md](brazil/income-ledger.md)): with the automatic recording on, only the distributions without an official source wait there.
 
-- same dividend = same asset and record date within 4 days (Yahoo uses the ex date); Yahoo does not separate JCP (interest on equity) from dividends and sometimes sums the two of the same day, so its amount is checked against each B3 event or against the sum;
+- same dividend = same asset and record date up to 2 business days apart in the B3 calendar (Yahoo uses the ex date, which can be five calendar days later around Carnival); Yahoo does not separate JCP (interest on equity) from dividends and sometimes sums the two of the same day, so its amount is checked against each official event or against the sum;
 - without B3, schedule sources with different types (Yahoo calls income what Fundamentus calls amortization) are the same dividend when the dates are within 3 business days and the amounts within 2%: a single suggestion, with Fundamentus's type and payment;
 - reference: B3 when it has the dividend; without it, the schedule (with Fundamentus and Yahoo diverging in amount or type, Fundamentus);
 - `asset_warning`: an asset with no new quote for more than 60 days and with the last one having no trades, a sign of a delisted or merged fund (check before recording);

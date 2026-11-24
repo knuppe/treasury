@@ -17,4 +17,8 @@ radar: number,
 /**
  * Papéis do universo com score em lote (explorador de mercado).
  */
-market_scores?: number, warnings: Array<string>, };
+market_scores?: number, 
+/**
+ * Official distributions recorded automatically at the end of the collection.
+ */
+income_recorded?: number, warnings: Array<string>, };

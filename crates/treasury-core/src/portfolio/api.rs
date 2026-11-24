@@ -24,6 +24,7 @@ pub const READ_ONLY: &[&str] = &[
     "dividend_calendar",
     "passive_income",
     "pending_income",
+    "income_ledger",
     "come_cotas",
     "fee_cost",
     "concentration",
@@ -200,6 +201,24 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
             ctx.conn(),
             &parse_args::<PendingIncomeArgs>(args)?,
         )?),
+        "income_ledger" => to_value(income_ledger::build(
+            ctx.conn(),
+            &parse_args::<income_ledger::LedgerArgs>(args)?,
+        )?),
+        "income_rebuild" => {
+            let a: income_ledger::RebuildArgs = parse_args(args)?;
+            to_value(income_ledger::rebuild(ctx, &a)?)
+        }
+        "income_auto" => {
+            #[derive(Deserialize)]
+            struct AutoArgs {
+                enabled: bool,
+            }
+            income_ledger::ensure_user(ctx)?;
+            let a: AutoArgs = parse_args(args)?;
+            income_ledger::set_auto(ctx.conn(), a.enabled)?;
+            Ok(serde_json::json!({ "auto": a.enabled }))
+        }
         "passive_income" => to_value(engine::passive_income(
             ctx.conn(),
             &parse_args::<PassiveIncomeArgs>(args)?,

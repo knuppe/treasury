@@ -1182,3 +1182,72 @@ carteira-etiqueta-outros =
         [1] mais 1 ativo fora da carteira
        *[other] mais { $n } ativos fora da carteira
     }
+
+## Income ledger (features/portfolio/IncomeLedger.tsx)
+carteira-fonte-aviso-oficial = Aviso oficial
+carteira-fonte-extrato-b3 = Extrato da B3
+carteira-razao-titulo = Proventos pelas fontes oficiais
+carteira-razao-calculando = Conferindo os proventos…
+carteira-razao-recebido = Recebido pelas fontes
+carteira-razao-recebido-desde = Recebido desde { $data }
+carteira-razao-recebido-dica = Quantidade na data-com × valor do aviso oficial, líquido do IR retido
+carteira-razao-a-receber = A receber
+carteira-razao-lancado-hoje = Lançado hoje
+carteira-razao-lancado = lançado
+carteira-razao-correcoes =
+    { $n ->
+        [one] { $n } correção nos proventos lançados
+       *[other] { $n } correções nos proventos lançados
+    }
+carteira-razao-correcoes-detalhe = { $faltando } sem lançamento, { $repetidos } repetido(s) e { $valor } com valor ou IR diferente do aviso oficial.
+carteira-razao-automatico-depois = Depois da revisão, os proventos oficiais novos entram sozinhos na data do pagamento.
+carteira-razao-automatico-ligado = Proventos oficiais entram sozinhos desde { $data }.
+carteira-razao-automatico-desligar = Desligar
+carteira-razao-sem-aviso =
+    { $n ->
+        [one] { $n } provento sem aviso oficial espera a sua confirmação em Registrar proventos.
+       *[other] { $n } proventos sem aviso oficial esperam a sua confirmação em Registrar proventos.
+    }
+carteira-razao-revisar = Revisar e corrigir
+carteira-razao-revisar-titulo = Corrigir os proventos pelos avisos oficiais
+carteira-razao-revisar-texto = Cada linha diz o que muda. Tudo vai numa alteração só, com Desfazer. Os proventos antigos entram sem mexer no caixa da corretora.
+carteira-razao-revisar-tabela = Correções propostas
+carteira-razao-nada = Nada a corrigir: os proventos lançados conferem com as fontes.
+carteira-razao-feito = Proventos corrigidos: { $lancados } lançado(s), { $corrigidos } corrigido(s) e { $apagados } apagado(s).
+carteira-razao-marcar = { $acao } { $ativo }
+carteira-razao-pago-em = pago em { $data }
+carteira-razao-aplicar =
+    { $n ->
+        [one] Aplicar { $n } correção
+       *[other] Aplicar { $n } correções
+    }
+carteira-razao-acao-lancar = Lançar
+carteira-razao-acao-corrigir = Corrigir valor
+carteira-razao-acao-apagar = Apagar repetido
+carteira-razao-estado-confere = Confere
+carteira-razao-estado-faltando = Sem lançamento
+carteira-razao-estado-a-receber = A receber
+carteira-razao-estado-valor = Valor diferente
+carteira-razao-estado-ir = IR diferente
+carteira-razao-estado-repetido = Repetido
+carteira-razao-estado-sem-fonte = Sem fonte
+carteira-razao-tabela-titulo = Proventos do período em que você teve o ativo
+carteira-razao-tabela = Proventos, um por pagamento
+carteira-razao-anos-tabela = Proventos por ano
+carteira-razao-ativos-tabela = Proventos por ativo desde a compra
+carteira-razao-col-data-com = Data-com
+carteira-razao-col-tipo = Tipo
+carteira-razao-col-qtd-valor = Qtd. × valor
+carteira-razao-col-bruto = Bruto
+carteira-razao-col-ir = IR
+carteira-razao-col-liquido = Líquido
+carteira-razao-col-fonte = Fonte
+carteira-razao-col-situacao = Situação
+carteira-razao-col-ano = Ano
+carteira-razao-col-recebido = Recebido
+carteira-razao-col-lancado = Lançado
+carteira-razao-col-a-receber = A receber
+carteira-razao-col-desde = Desde
+carteira-razao-col-correcoes = Correções
+carteira-razao-col-acao = O que muda
+carteira-razao-col-fica = Fica
