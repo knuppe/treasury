@@ -7,7 +7,10 @@
 use std::sync::{Mutex, OnceLock, mpsc};
 
 use base64::Engine as _;
-use ctap_hid_fido2::fidokey::{AssertionExtension as Gext, CredentialExtension as Mext};
+use ctap_hid_fido2::fidokey::{
+    AssertionExtension as Gext, CredentialExtension as Mext, GetAssertionArgsBuilder,
+    MakeCredentialArgsBuilder,
+};
 use ctap_hid_fido2::{FidoKeyHid, FidoKeyHidFactory, LibCfg};
 use serde_json::{Value, json};
 use tauri::{AppHandle, Manager};
@@ -134,15 +137,23 @@ fn hmac_secret_with(
     pin: Option<&str>,
 ) -> Result<Zeroizing<[u8; 32]>, ApiError> {
     let challenge = random32()?;
+    let ext = [Gext::HmacSecret(Some(salt))];
+    let builder = GetAssertionArgsBuilder::new(RP_ID, &challenge)
+        .credential_id(credential_id)
+        .extensions(&ext);
+    // Without the PIN, no "uv" option either: the library sends `uv: true` by default, and a key
+    // without built-in verification (YubiKey) refuses it (`CTAP2_ERR_INVALID_OPTION`).
+    let args = match pin {
+        Some(p) => builder.pin(p),
+        None => builder.without_pin_and_uv(),
+    }
+    .build();
     let ass = dev
-        .get_assertion_with_extensions(
-            RP_ID,
-            &challenge,
-            &[credential_id.to_vec()],
-            pin,
-            Some(&vec![Gext::HmacSecret(Some(salt))]),
-        )
-        .map_err(|e| fido_err(e, pin.is_some()))?;
+        .get_assertion_with_args(&args)
+        .map_err(|e| fido_err(e, pin.is_some()))?
+        .into_iter()
+        .next()
+        .ok_or_else(|| err("fido2", "a chave física não respondeu"))?;
     ass.extensions
         .iter()
         .find_map(|e| match e {
@@ -168,13 +179,17 @@ pub async fn fido2_register(
     let (cred, salt, secret) = on_hid(move || {
         let dev = device()?;
         let pin = pin.as_deref().filter(|p| !p.is_empty());
+        let challenge = random32()?;
+        let ext = [Mext::HmacSecret(Some(true))];
+        let builder = MakeCredentialArgsBuilder::new(RP_ID, &challenge).extensions(&ext);
+        // The PIN when there is one; without it, no "uv" option (see `hmac_secret_with`).
+        let args = match pin {
+            Some(p) => builder.pin(p),
+            None => builder.without_pin_and_uv(),
+        }
+        .build();
         let att = dev
-            .make_credential_with_extensions(
-                RP_ID,
-                &random32()?,
-                pin,
-                Some(&vec![Mext::HmacSecret(Some(true))]),
-            )
+            .make_credential_with_args(&args)
             .map_err(|e| fido_err(e, pin.is_some()))?;
         let cred = att.credential_descriptor.id.clone();
         let salt = random32()?;
