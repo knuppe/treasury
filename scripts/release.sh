@@ -236,7 +236,8 @@ if [ -n "$version" ]; then
   fi
   git add -A "$DESKTOP/src-tauri/Cargo.toml" "$DESKTOP/src-tauri/tauri.conf.json" "$DESKTOP/package.json" \
     "$DESKTOP/package-lock.json" "$DESKTOP/src/app/Brand.tsx" "$DESKTOP/src/api/mock/settings.ts" Cargo.lock "$LOCK"
-  git -c commit.gpgsign=false commit --quiet -m "$subject"
+  # Signed like every commit on main (the ruleset requires it); it asks for the key once.
+  git commit --quiet -m "$subject"
   echo "commit: $(git log -1 --format='%h %s')"
   step_done "versão"
 fi
