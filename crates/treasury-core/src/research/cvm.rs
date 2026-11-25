@@ -1906,8 +1906,12 @@ const WALT_BUCKETS: [(&str, Decimal); 13] = [
     ("30a33Meses", Decimal::from_parts(2625, 0, 0, false, 3)),
     ("33a36Meses", Decimal::from_parts(2875, 0, 0, false, 3)),
     // Premissa: contratos com mais de 3 anos contam como 5 anos.
-    ("Acima_36Meses", Decimal::from_parts(5, 0, 0, false, 0)),
+    ("Acima_36Meses", WALT_OVER_36M),
 ];
+
+/// Years counted for the "above 36 months" band (premise of the methodology: the report has no
+/// band beyond it).
+pub const WALT_OVER_36M: Decimal = Decimal::from_parts(5, 0, 0, false, 0);
 
 /// Linhas da última versão de cada (fundo, data de referência) de uma entrada do zip.
 type Latest<T> = HashMap<(String, NaiveDate), (u32, Vec<T>)>;
@@ -1947,15 +1951,32 @@ fn latest_rows<T>(
 }
 
 struct PropRow {
+    /// Normalized name (to find the property of a tenant row).
+    name: String,
     area: Option<Decimal>,
     vacancy: Option<Decimal>,
     default: Option<Decimal>,
     revenue: Option<Decimal>,
 }
 
+/// Revenue share of each property by normalized name, and the largest.
+type PropertyShares = (HashMap<String, Decimal>, Option<Decimal>);
+
 /// Resultado do trimestre: (resultado financeiro do trimestre, resultado financeiro acumulado,
 /// rendimentos declarados).
 type ResultRow = (Option<Decimal>, Option<Decimal>, Option<Decimal>);
+
+/// Cash-basis lines of a quarter's income statement (every line of the file is quarterly; only
+/// the accumulated result and the declared distributions run for the semester).
+struct ResultLines {
+    row: ResultRow,
+    rent: Option<Decimal>,
+    securities: Option<Decimal>,
+    liquidity: Option<Decimal>,
+    sales: Option<Decimal>,
+    expenses: Option<Decimal>,
+    fees: Option<Decimal>,
+}
 
 /// Rendimentos declarados de cada trimestre. A maioria dos fundos informa
 /// `Rendimentos_Declarados` acumulado no semestre (como `Resultado_Financeiro_Liquido_Acumulado`:
@@ -2050,6 +2071,7 @@ pub fn parse_fii_quarterly(bytes: &[u8], keep: &dyn Fn(&str) -> bool) -> Res<Fii
 
     let props = latest_rows(&mut zip, "inf_trimestral_fii_imovel_2", keep, |h, r| {
         Some(PropRow {
+            name: norm(&field(r, h.idx(&["Nome_Imovel"]))),
             area: num(h, r, "Area").filter(|a| *a > Decimal::ZERO),
             vacancy: num(h, r, "Percentual_Vacancia").map(pct_fraction),
             default: num(h, r, "Percentual_Inadimplencia").map(pct_fraction),
@@ -2156,16 +2178,61 @@ pub fn parse_fii_quarterly(bytes: &[u8], keep: &dyn Fn(&str) -> bool) -> Res<Fii
             *v,
         );
     }
+    // Revenue share of each property (by name) and the largest, to check the tenant rows.
+    let shares: HashMap<(String, NaiveDate), PropertyShares> = props
+        .iter()
+        .map(|(k, (_, rows))| {
+            let mut by: HashMap<String, Decimal> = HashMap::new();
+            for r in rows {
+                if let Some(x) = r.revenue.filter(|x| *x > Decimal::ZERO) {
+                    let e = by.entry(r.name.clone()).or_default();
+                    *e = (*e).max(x);
+                }
+            }
+            let top = by.values().copied().max();
+            (k.clone(), (by, top))
+        })
+        .collect();
     drop(props);
 
+    // Tenant rows: property × tenant sector, with the row's share of the fund's revenue and of
+    // the property's. A row cannot weigh more than its property (some administrators put the
+    // share of the property in the fund's column): capped at the property's share, or at the
+    // largest property when the name does not match. Without the fund's share, the property's
+    // share × the property's weight in the fund.
     let tenants = latest_rows(
         &mut zip,
         "inf_trimestral_fii_imovel_renda_acabado_inquilino",
         keep,
-        |h, r| num(h, r, "Percentual_Receitas_FII").map(pct_fraction),
+        |h, r| {
+            Some((
+                norm(&field(r, h.idx(&["Nome_Imovel"]))),
+                num(h, r, "Percentual_Receitas_FII").map(pct_fraction),
+                num(h, r, "Percentual_Receita_Imovel").map(pct_fraction),
+            ))
+        },
     )?;
-    for ((cnpj, end), (v, shares)) in &tenants {
-        if let Some(top) = shares.iter().copied().max().filter(|t| *t > Decimal::ZERO) {
+    for ((cnpj, end), (v, rows)) in &tenants {
+        let (by, top_property) = shares
+            .get(&(cnpj.clone(), *end))
+            .map(|(b, t)| (Some(b), *t))
+            .unwrap_or((None, None));
+        let tenant_share = |(name, fund, prop): &(String, Option<Decimal>, Option<Decimal>)| {
+            let property = by.and_then(|b| b.get(name)).copied();
+            match fund.filter(|x| *x > Decimal::ZERO) {
+                Some(x) => Some(match property.or(top_property) {
+                    Some(cap) => x.min(cap),
+                    None => x,
+                }),
+                None => Some((prop.as_ref()?.min(&Decimal::ONE) * property?).round_dp(6)),
+            }
+        };
+        if let Some(top) = rows
+            .iter()
+            .filter_map(tenant_share)
+            .max()
+            .filter(|t| *t > Decimal::ZERO)
+        {
             push(
                 cnpj,
                 items::FII_TOP_TENANT_SHARE,
@@ -2210,6 +2277,42 @@ pub fn parse_fii_quarterly(bytes: &[u8], keep: &dyn Fn(&str) -> bool) -> Res<Fii
                 "ratio",
                 *v,
             );
+            // The report stops at "above 36 months": how much of the revenue is there, and the
+            // WALT with that band at 3 years (the least it can be), so the 5-year premise shows.
+            let over: Decimal = buckets
+                .iter()
+                .filter(|(_, m)| *m == WALT_OVER_36M)
+                .map(|(w, _)| *w)
+                .sum();
+            let min = buckets
+                .iter()
+                .map(|(w, m)| {
+                    *w * if *m == WALT_OVER_36M {
+                        Decimal::from(3)
+                    } else {
+                        *m
+                    }
+                })
+                .sum::<Decimal>()
+                / den;
+            push(
+                cnpj,
+                items::FII_LEASE_OVER_36M_SHARE,
+                PeriodType::Instant,
+                *end,
+                (over / den).round_dp(6),
+                "ratio",
+                *v,
+            );
+            push(
+                cnpj,
+                items::FII_WALT_MIN_YEARS,
+                PeriodType::Instant,
+                *end,
+                min.round_dp(4),
+                "ratio",
+                *v,
+            );
         }
         if den > Decimal::ZERO || undetermined.is_some_and(|u| u > Decimal::ZERO) {
             push(
@@ -2229,31 +2332,56 @@ pub fn parse_fii_quarterly(bytes: &[u8], keep: &dyn Fn(&str) -> bool) -> Res<Fii
         "inf_trimestral_fii_resultado_contabil_financeiro",
         keep,
         |h, r| {
-            Some((
-                num(h, r, "Resultado_Trimestral_Liquido_Financeiro"),
-                num(h, r, "Resultado_Financeiro_Liquido_Acumulado"),
-                num(h, r, "Rendimentos_Declarados"),
-            ))
+            let n = |c: &str| num(h, r, c);
+            // Sum of the columns present (`None` if all are empty).
+            let sum = |cols: &[&str]| cols.iter().filter_map(|c| n(c)).reduce(|a, b| a + b);
+            Some(ResultLines {
+                row: (
+                    n("Resultado_Trimestral_Liquido_Financeiro"),
+                    n("Resultado_Financeiro_Liquido_Acumulado"),
+                    n("Rendimentos_Declarados"),
+                ),
+                rent: n("Receita_Aluguel_Investimento_Financeiro"),
+                securities: n("Receita_Juros_TVM_Financeiro"),
+                liquidity: n("Resultado_Liquido_Recurso_Liquidez_Financeiro"),
+                sales: sum(&[
+                    "Receita_Venda_Investimento_Financeiro",
+                    "Custo_Investimento_Financeiro",
+                    "Resultado_Liquido_Estoque_Financeiro",
+                    "Resultado_Venda_TVM_Financeiro",
+                    "Resultado_Venda_Aplicacao_Financeiro",
+                ]),
+                expenses: n("Total_Receitas_Despesas_Financeiro"),
+                fees: sum(&[
+                    "Taxa_Administracao_Financeiro",
+                    "Taxa_Desempenho_Financeiro",
+                ]),
+            })
         },
     )?;
     let mut by_fund: HashMap<&str, BTreeMap<NaiveDate, ResultRow>> = HashMap::new();
     for ((cnpj, end), (v, rows)) in &results {
-        let Some(row) = rows.first() else { continue };
+        let Some(lines) = rows.first() else { continue };
         if !matches!(end.month(), 3 | 6 | 9 | 12) {
             continue;
         }
-        if let Some(x) = row.0 {
-            push(
-                cnpj,
-                items::FII_RECURRING_RESULT,
-                PeriodType::Quarter,
-                *end,
-                x,
-                "BRL",
-                *v,
-            );
+        for (item, x) in [
+            (items::FII_RECURRING_RESULT, lines.row.0),
+            (items::FII_RENT_REVENUE, lines.rent),
+            (items::FII_SECURITIES_INCOME, lines.securities),
+            (items::FII_LIQUIDITY_INCOME, lines.liquidity),
+            (items::FII_SALES_RESULT, lines.sales),
+            (items::FII_EXPENSES, lines.expenses),
+            (items::FII_FEES_PAID, lines.fees),
+        ] {
+            if let Some(x) = x {
+                push(cnpj, item, PeriodType::Quarter, *end, x, "BRL", *v);
+            }
         }
-        by_fund.entry(cnpj.as_str()).or_default().insert(*end, *row);
+        by_fund
+            .entry(cnpj.as_str())
+            .or_default()
+            .insert(*end, lines.row);
     }
     for (cnpj, rows) in &by_fund {
         for (end, x) in declared_by_quarter(rows) {
@@ -3012,7 +3140,9 @@ pub(crate) mod fixtures {
             "CNPJ_Fundo_Classe;Data_Referencia;Versao;Nome_Imovel;Setor_Atuacao;Percentual_Receita_Imovel;Percentual_Receitas_FII\n\
              {FII};2026-03-31;2;Galpão A;Varejo;0.8;0.4\n\
              {FII};2026-03-31;2;Galpão A;Logística;0.2;0.1\n\
-             {FII};2026-03-31;2;Galpão B;Varejo;1;0.3\n"
+             {FII};2026-03-31;2;Galpão B;Varejo;1;0.3\n\
+             {FII};2026-03-31;2;Galpão C;Saúde;1;0.9\n\
+             {FII};2026-03-31;2;galpao b;Escritório;0.5;\n"
         );
         let faixas = [
             "Ate_3Meses",
@@ -3051,10 +3181,11 @@ pub(crate) mod fixtures {
             vals.join(";")
         );
         // Income: year-to-date for the semester (Q2 = Q1 + Q2); declared ones too.
+        // Q1: rent 1100 + securities 50 + liquidity 30 + sale 100 (500 − 400) − expenses 280.
         let res = format!(
-            "CNPJ_Fundo_Classe;Data_Referencia;Versao;Resultado_Trimestral_Liquido_Financeiro;Resultado_Financeiro_Liquido_Acumulado;Rendimentos_Declarados\n\
-             {FII};2026-03-31;2;1000;1000;950\n\
-             {FII};2026-06-30;1;1200;2200;2090\n"
+            "CNPJ_Fundo_Classe;Data_Referencia;Versao;Receita_Aluguel_Investimento_Financeiro;Receita_Venda_Investimento_Financeiro;Custo_Investimento_Financeiro;Receita_Juros_TVM_Financeiro;Resultado_Venda_TVM_Financeiro;Resultado_Liquido_Recurso_Liquidez_Financeiro;Taxa_Administracao_Financeiro;Taxa_Desempenho_Financeiro;Total_Receitas_Despesas_Financeiro;Resultado_Trimestral_Liquido_Financeiro;Resultado_Financeiro_Liquido_Acumulado;Rendimentos_Declarados\n\
+             {FII};2026-03-31;2;1100;500;-400;50;;30;-150;-20;-280;1000;1000;950\n\
+             {FII};2026-06-30;1;1300;;;60;;40;-160;;-200;1200;2200;2090\n"
         );
         let ativo = format!(
             "CNPJ_Fundo_Classe;Data_Referencia;Versao;Tipo;Emissor;CNPJ_Emissor;Emissao;Serie;Codigo_Acao;Nome_Ativo;Data_Vencimento;Quantidade;Valor\n\
@@ -3455,14 +3586,28 @@ mod tests {
         assert_eq!(v(items::FII_DEFAULT_RATE), Some(dec!(0.03)));
         assert_eq!(v(items::FII_TOP_PROPERTY_SHARE), Some(dec!(0.5)));
         assert_eq!(v(items::FII_PROPERTIES), Some(dec!(4)));
+        // Galpão C's row says 0.9 of the fund, more than the property itself (0.2): capped.
+        // The row without the fund's share: 0.5 of Galpão B (0.3) = 0.15.
         assert_eq!(v(items::FII_TOP_TENANT_SHARE), Some(dec!(0.4)));
         // (0.2×0.125 + 0.4×1.125 + 0.2×5) ÷ 0.8.
         assert_eq!(v(items::FII_WALT_YEARS), Some(dec!(1.8438)));
         assert_eq!(v(items::FII_UNDETERMINED_SHARE), Some(dec!(0.2)));
+        // 0.2 of 0.8 above 36 months; with that band at 3 years: (0.025 + 0.45 + 0.6) ÷ 0.8.
+        assert_eq!(v(items::FII_LEASE_OVER_36M_SHARE), Some(dec!(0.25)));
+        assert_eq!(v(items::FII_WALT_MIN_YEARS), Some(dec!(1.3438)));
         assert_eq!(v(items::FII_CRI_TOP_ISSUER_SHARE), Some(dec!(0.75)));
+        // Income statement lines of Q1 (cash basis).
+        assert_eq!(v(items::FII_RENT_REVENUE), Some(dec!(1100)));
+        assert_eq!(v(items::FII_SECURITIES_INCOME), Some(dec!(50)));
+        assert_eq!(v(items::FII_LIQUIDITY_INCOME), Some(dec!(30)));
+        assert_eq!(v(items::FII_SALES_RESULT), Some(dec!(100)));
+        assert_eq!(v(items::FII_EXPENSES), Some(dec!(-280)));
+        assert_eq!(v(items::FII_FEES_PAID), Some(dec!(-170)));
+        let v2 = |item: &str| get(item, "2026-06-30").map(|f| f.value);
+        assert_eq!(v2(items::FII_SALES_RESULT), None, "no sale in Q2");
+        assert_eq!(v2(items::FII_FEES_PAID), Some(dec!(-160)));
         // Q2 without revenue per property: nothing weighted by revenue, nor a zero largest
         // property; vacancy and delinquency by area (0.2×6000 ÷ 10000; 0.05×6000 ÷ 10000).
-        let v2 = |item: &str| get(item, "2026-06-30").map(|f| f.value);
         assert_eq!(v2(items::FII_VACANCY_FINANCIAL), None);
         assert_eq!(v2(items::FII_DEFAULT_RATE), None);
         assert_eq!(v2(items::FII_TOP_PROPERTY_SHARE), None);

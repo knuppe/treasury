@@ -7,6 +7,7 @@ Weights, thresholds and formulas of the score do not change; some inputs do ([in
 - Net income attributable to owners: when a company leaves the owners' line at zero in the consolidated statements (about one filing in five), the parent-only net income of the same period is used (before, the zero was used, and metrics like ROE and the earnings yield came out at zero). Banks use the parent-only statements (Central Bank standard) for net income and equity.
 - Share count checked against the B3 capital stock count (scale, treasury shares already excluded, stock events).
 - Cross-check with Fundamentus in its own convention: the confidence drops only when the data disagrees, no longer because of a formula difference (EBIT margin, net margin, EV/EBITDA).
+- FII largest tenant: a tenant row of the quarterly report can no longer weigh more than its own property in the fund's revenue (about one report in twenty put the property's share in the fund's column, which made the largest tenant exceed the largest property); without the fund's share, the row's share of the property times the property's weight. The WALT keeps the 5-year premise for leases above 36 months, and the metric now carries a note with the revenue share in that band and the WALT with 3 years, the least the report allows. The income coverage gets a note when sales of assets are more than 10% of the 4-quarter result.
 
 ## 0.1.0 (2026-10-16)
 

@@ -1,8 +1,9 @@
 /**
  * Fatos relevantes, comunicados, assembleias e reuniões do emissor (`research.documents`, IPE
- * da CVM), com o link oficial. Assunto e nome são textos da companhia: aparecem como texto
- * puro (nunca HTML). Sem documento, o diagnóstico (`research.documents_status`) diz por quê:
- * classe sem fonte (FIIs, ETFs), emissor não encontrado, coleta pendente ou companhia quieta
+ * da CVM; nos FIIs, relatórios gerenciais, fatos relevantes e comunicados do Fundos.NET), com o
+ * link oficial. Assunto e nome são textos da companhia: aparecem como texto puro (nunca HTML).
+ * Sem documento, o diagnóstico (`research.documents_status`) diz por quê: classe sem fonte
+ * (ETFs, fundos), emissor não encontrado, coleta pendente ou companhia quieta
  * (docs/design/market-explorer.md, seção 3.5).
  */
 import { useState } from 'react';
@@ -21,9 +22,10 @@ import { LoadingBlock } from '../portfolio/components/States';
 import { safeDate } from '../portfolio/labels';
 import { SubjectError } from './common';
 
-type Cat = 'todos' | 'fato' | 'comunicado' | 'aviso' | 'assembleia';
+type Cat = 'todos' | 'relatorio' | 'fato' | 'comunicado' | 'aviso' | 'assembleia';
 /** Categorias do IPE como o núcleo filtra (texto da CVM, não traduzido). */
 const CATEGORY: Record<Exclude<Cat, 'todos'>, string[]> = {
+  relatorio: ['Relatório Gerencial'],
   fato: ['Fato Relevante'],
   comunicado: ['Comunicado ao Mercado'],
   aviso: ['Aviso aos Acionistas'],
@@ -118,7 +120,11 @@ function Diagnosis({ status }: { status: DocumentsStatus }) {
       </summary>
       <dl className="mt-2 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
         <dt>{t('pesquisa-doc-diag-fonte')}</dt>
-        <dd className="text-fg">{t('pesquisa-doc-diag-fonte-ipe')}</dd>
+        <dd className="text-fg">
+          {status.source === 'fundos_net'
+            ? t('pesquisa-doc-diag-fonte-fnet')
+            : t('pesquisa-doc-diag-fonte-ipe')}
+        </dd>
         <dt>{t('pesquisa-doc-diag-emissor')}</dt>
         <dd className="text-fg">
           {status.issuer_id
@@ -189,18 +195,19 @@ const columns = (): TechColumn<CorporateDocument>[] => [
     width: '130px',
     cell: (d) => {
       const href = safeLink(d.link);
+      const fnet = d.source === 'fundos_net';
       return href ? (
         <a
           href={href}
           target="_blank"
           rel="noreferrer noopener"
           className="font-sans text-accent underline-offset-2 hover:underline"
-          aria-label={t('pesquisa-doc-abrir-cvm-rotulo', {
+          aria-label={t(fnet ? 'pesquisa-doc-abrir-fnet-rotulo' : 'pesquisa-doc-abrir-cvm-rotulo', {
             categoria: d.category,
             data: safeDate(d.delivered_at),
           })}
         >
-          {t('pesquisa-doc-abrir-cvm')}
+          {t(fnet ? 'pesquisa-doc-abrir-fnet' : 'pesquisa-doc-abrir-cvm')}
         </a>
       ) : (
         <span className="text-dim">—</span>
@@ -214,6 +221,8 @@ export function DocumentsPanel({ subject }: { subject: SubjectArgs }) {
   const [win, setWin] = useState<Window>('1a');
   const today = todayIso();
   const status = useDocumentsStatus(subject);
+  // Funds: management reports instead of shareholder notices and meetings.
+  const fund = status.data?.source === 'fundos_net';
   const from = win === 'tudo' && status.data ? status.data.collected_since : yearAgo(today);
   const q = useDocuments({
     ...subject,
@@ -229,13 +238,22 @@ export function DocumentsPanel({ subject }: { subject: SubjectArgs }) {
           label={t('pesquisa-doc-categorias')}
           value={cat}
           onChange={setCat}
-          options={[
-            { value: 'todos', label: t('controles-todos') },
-            { value: 'fato', label: t('pesquisa-doc-fatos') },
-            { value: 'comunicado', label: t('pesquisa-doc-comunicados') },
-            { value: 'aviso', label: t('pesquisa-doc-avisos') },
-            { value: 'assembleia', label: t('pesquisa-doc-assembleias') },
-          ]}
+          options={
+            fund
+              ? [
+                  { value: 'todos', label: t('controles-todos') },
+                  { value: 'relatorio', label: t('pesquisa-doc-relatorios') },
+                  { value: 'fato', label: t('pesquisa-doc-fatos') },
+                  { value: 'comunicado', label: t('pesquisa-doc-comunicados') },
+                ]
+              : [
+                  { value: 'todos', label: t('controles-todos') },
+                  { value: 'fato', label: t('pesquisa-doc-fatos') },
+                  { value: 'comunicado', label: t('pesquisa-doc-comunicados') },
+                  { value: 'aviso', label: t('pesquisa-doc-avisos') },
+                  { value: 'assembleia', label: t('pesquisa-doc-assembleias') },
+                ]
+          }
         />
         <Segmented<Window>
           label={t('pesquisa-doc-janela')}
@@ -265,7 +283,9 @@ export function DocumentsPanel({ subject }: { subject: SubjectArgs }) {
           />
         </div>
       )}
-      <p className="text-[12px] text-dim">{t('pesquisa-doc-rodape')}</p>
+      <p className="text-[12px] text-dim">
+        {t(fund ? 'pesquisa-doc-rodape-fnet' : 'pesquisa-doc-rodape')}
+      </p>
       {status.data ? <Diagnosis status={status.data} /> : null}
     </div>
   );

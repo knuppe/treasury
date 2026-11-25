@@ -29,6 +29,7 @@ pub mod cvm;
 pub mod data;
 pub mod dividends;
 pub mod doc_read;
+pub mod fii_result;
 pub mod fundamentus;
 pub mod fundos_net;
 pub mod ifdata;
@@ -383,8 +384,24 @@ pub mod items {
     pub const FII_TOP_TENANT_SHARE: &str = "fii_top_tenant_share";
     pub const FII_WALT_YEARS: &str = "fii_walt_years";
     pub const FII_UNDETERMINED_SHARE: &str = "fii_undetermined_share";
+    /// Net financial result of the quarter (`Resultado_Trimestral_Liquido_Financeiro`), sales
+    /// of assets included.
     pub const FII_RECURRING_RESULT: &str = "fii_recurring_result";
     pub const FII_DECLARED_INCOME: &str = "fii_declared_income";
+    /// Lines of the quarter's income statement, cash basis (the `_Financeiro` columns).
+    pub const FII_RENT_REVENUE: &str = "fii_rent_revenue";
+    pub const FII_SECURITIES_INCOME: &str = "fii_securities_income";
+    pub const FII_LIQUIDITY_INCOME: &str = "fii_liquidity_income";
+    /// Result of selling properties, inventory, securities and liquid investments.
+    pub const FII_SALES_RESULT: &str = "fii_sales_result";
+    /// Fund expenses (`Total_Receitas_Despesas_Financeiro`, negative).
+    pub const FII_EXPENSES: &str = "fii_expenses";
+    /// Administration and performance fees paid (negative), part of the expenses.
+    pub const FII_FEES_PAID: &str = "fii_fees_paid";
+    /// Revenue share of leases ending in more than 36 months (the last band of the report).
+    pub const FII_LEASE_OVER_36M_SHARE: &str = "fii_lease_over_36m_share";
+    /// WALT counting the band above 36 months as 3 years (the least the report allows).
+    pub const FII_WALT_MIN_YEARS: &str = "fii_walt_min_years";
     pub const FII_CRI_TOP_ISSUER_SHARE: &str = "fii_cri_top_issuer_share";
 
     /// Fluxos (somam no tempo e têm LTM).

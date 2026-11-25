@@ -581,6 +581,7 @@ mcp-resumo-operacoes = { $n ->
         [one] { $n } operación puede ser la de este movimiento.
        *[other] { $n } operaciones pueden ser la de este movimiento.
     }
+mcp-resumo-fii-resultado = { $ticker }: { $n } trimestres del informe de la CVM, el último el { $data }.
 mcp-resumo-proventos-b3 = { $ticker }: { $iguais } iguales, { $diferentes } con valor diferente, { $so_b3 } solo en la B3, { $so_agenda } solo en la agenda{ $dy_b3 ->
         [sim] ; el DY usa la B3
        *[nao] {""}

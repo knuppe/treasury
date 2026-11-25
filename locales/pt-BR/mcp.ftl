@@ -499,6 +499,7 @@ mcp-resumo-iptu =
     }
 mcp-resumo-operacoes-nenhuma = Nenhuma operação parece ser a deste lançamento.
 mcp-resumo-operacoes = { $n } operação(ões) podem ser a deste lançamento.
+mcp-resumo-fii-resultado = { $ticker }: { $n } trimestres do informe da CVM, o último em { $data }.
 mcp-resumo-proventos-b3 = { $ticker }: { $iguais } iguais, { $diferentes } com valor diferente, { $so_b3 } só na B3, { $so_agenda } só na agenda{ $dy_b3 ->
         [sim] ; o DY usa a B3
        *[nao] {""}

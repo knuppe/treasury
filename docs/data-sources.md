@@ -245,6 +245,35 @@ the funds in the income ledger ([income-ledger.md](brazil/income-ledger.md)).
 - Terms: the B3 site terms (strictly personal use); nothing leaves the vault. Turns on and off in
   Settings › Data sources (`fundos_net`); failures count toward the source's health.
 
+### Fund filings (Documents tab)
+
+The same list, by category, gives the Documents tab of a real estate fund (`fundos_net.rs`,
+`sync_docs`): management reports (category 7, "Relatórios", only the type "Relatório Gerencial"),
+material facts (category 1) and market announcements (category 3), active filings delivered from
+January 1 of the previous year (as the CVM IPE collection), for the funds held now, before or on the
+watchlist. Only the list is stored, in `corporate_document` (id `fnet-<id>`, source `fundos_net`,
+the download link); the PDF is downloaded only when the agent reads it (`read_corporate_document`,
+only links of `fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento`). The monthly and quarterly
+reports are not listed there: their data already comes structured from the CVM open data. The
+list again every ~20 h, three requests per fund (more pages only when a category has more than
+100 filings in the period); a filing that left the list is removed.
+
+### FII result from the CVM quarterly report
+
+`research.fii_result {asset_id | ticker}` (MCP tool `get_fii_result`, read-only) shows the
+income statement of the quarterly report (`inf_trimestral_fii_resultado_contabil_financeiro`,
+cash-basis `_Financeiro` columns), the same lines behind the income coverage of the score: rent
+(`Receita_Aluguel_Investimento`), interest on securities (`Receita_Juros_TVM`), cash investments
+(`Resultado_Liquido_Recurso_Liquidez`), sales of assets (sale of properties less their cost,
+inventory, sale of securities and of cash investments), the remaining lines, expenses
+(`Total_Receitas_Despesas`, of which administration and performance fees), the net result
+(`Resultado_Trimestral_Liquido_Financeiro`), the result without sales and the distributions
+declared per quarter (the semester figure split by quarter). Every line in the file is quarterly
+and adds up to the net result (checked on all 3,937 rows of the 2026 file). Per quarter (the last
+eight), for the last 12 months (four quarters in a row) and the last quarter, in cents, per unit
+by the units of the latest monthly report, with each quarter's document and filing date and the
+obligations for property acquisitions of the monthly report.
+
 ### Dividends to confirm (cross-checking sources)
 
 `portfolio.pending_income` (Portfolio › Record dividends › To confirm; MCP tool `list_pending_income`) suggests one dividend per event, crossing the asset's schedule (Yahoo, Fundamentus) with the official events, the funds' Fundos.NET notices first and B3's (`portfolio/pending.rs`). It is the missing part of the income ledger ([income-ledger.md](brazil/income-ledger.md)): with the automatic recording on, only the distributions without an official source wait there.

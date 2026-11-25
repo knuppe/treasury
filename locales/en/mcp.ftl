@@ -551,6 +551,7 @@ mcp-resumo-operacoes = { $n ->
         [one] { $n } trade may be the one for this transaction.
        *[other] { $n } trades may be the one for this transaction.
     }
+mcp-resumo-fii-resultado = { $ticker }: { $n } quarters from the CVM report, the latest on { $data }.
 mcp-resumo-proventos-b3 = { $ticker }: { $iguais } equal, { $diferentes } with a different amount, { $so_b3 } only at B3, { $so_agenda } only in the calendar{ $dy_b3 ->
         [sim] ; the DY uses B3
        *[nao] {""}

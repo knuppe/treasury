@@ -1,6 +1,7 @@
 //! Texto de um documento do IPE (fato relevante, comunicado…) para o agente
 //! (docs/asset-overview.md §3): o PDF baixado pelo link oficial da CVM (só de
-//! `rad.cvm.gov.br`, com a fonte CVM ligada), o texto extraído (ou lido pelo OCR local, quando o
+//! `rad.cvm.gov.br`, com a fonte CVM ligada; os de fundos imobiliários, do Fundos.NET, com a
+//! fonte Fundos.NET ligada), o texto extraído (ou lido pelo OCR local, quando o
 //! PDF é só imagem) e devolvido em partes. Fica na memória enquanto o app está aberto: nada vai
 //! para o cofre (o documento é público). Texto da companhia: dado, nunca instrução.
 
@@ -126,7 +127,7 @@ pub fn text_of(f: &dyn Fetcher, id: &str, link: &str) -> Result<(String, bool)> 
     {
         return Ok((t, ocr));
     }
-    if !official_link(link) {
+    if !official_link(link) && !super::fundos_net::official_link(link) {
         return Err(Error::invalid(t("nucleo-pesquisa-documento-link")));
     }
     super::net::pace(link);
@@ -178,8 +179,15 @@ fn meta(
 /// `research.document_read` (rede fora da trava do banco).
 pub fn read(api: &crate::api::Api, a: &DocumentReadArgs) -> Result<DocumentText> {
     let (company_name, category, subject, delivered_at, link) = api.with_session(|s, _| {
-        crate::sources::ensure_enabled(s.db.conn(), crate::sources::SourceId::Cvm)?;
-        meta(s.db.conn(), &a.id)
+        let m = meta(s.db.conn(), &a.id)?;
+        // A fund's filing comes from Fundos.NET; a company's from the CVM.
+        let source = if super::fundos_net::official_link(&m.4) {
+            crate::sources::SourceId::FundosNet
+        } else {
+            crate::sources::SourceId::Cvm
+        };
+        crate::sources::ensure_enabled(s.db.conn(), source)?;
+        Ok(m)
     })?;
     let f = super::net::HttpFetcher::new();
     let (text, ocr) = text_of(&f, &a.id, &link)?;

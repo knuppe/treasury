@@ -9,7 +9,7 @@ export type DocumentsStatus = { reason: DocumentsReason,
  */
 asset_id: string | null, class: AssetClass | null, issuer_id: string | null, issuer_name: string | null, 
 /**
- * Fonte consultada (`cvm_ipe`).
+ * Fonte consultada (`cvm_ipe`; FIIs: `fundos_net`).
  */
 source: string, 
 /**

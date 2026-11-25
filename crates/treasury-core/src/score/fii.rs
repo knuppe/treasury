@@ -40,7 +40,18 @@ pub mod keys {
     pub const RECURRING: &str = "fii_recurring_result";
     pub const DECLARED: &str = "fii_declared_income";
     pub const CRI_TOP_ISSUER: &str = "fii_cri_top_issuer_share";
+    pub const SALES: &str = "fii_sales_result";
+    pub const LEASE_OVER_36M: &str = "fii_lease_over_36m_share";
+    pub const WALT_MIN: &str = "fii_walt_min_years";
 }
+
+/// Two decimals in the installation's language (`1,34`, `1.34`).
+fn dec2(v: f64) -> String {
+    crate::i18n::number(crate::i18n::current(), (v * 100.0).round() as i64)
+}
+
+/// Share of the 4-quarter result from sales of assets above which the coverage gets a note.
+const SALES_NOTE_SHARE: f64 = 0.10;
 
 /// Quantas vezes a taxa de administração do informe mensal é anualizada (o informe traz a
 /// despesa do mês sobre o patrimônio).
@@ -179,6 +190,22 @@ pub fn fii_metrics(i: &FiiInput<'_>) -> FiiOutput {
             },
         );
     }
+    // WALT: the report stops at "above 36 months", counted as 5 years (premise). When part of
+    // the revenue is there, the note gives that share and the WALT with 3 years (the least).
+    if let Some(w) = m.get_mut("walt_years")
+        && let Some(end) = w.period_end
+        && let Some(over) = inst(keys::LEASE_OVER_36M)
+            .filter(|x| x.end == end && x.value > rust_decimal::Decimal::ZERO)
+        && let Some(min) = inst(keys::WALT_MIN).filter(|x| x.end == end)
+    {
+        w.note = Some(crate::i18n::t_args(
+            "nucleo-score-fii-nota-walt-acima-36",
+            &crate::i18n::args(&[
+                ("pct", format!("{:.0}%", to_f64(over.value) * 100.0).into()),
+                ("minimo", dec2(to_f64(min.value)).into()),
+            ]),
+        ));
+    }
     // Resultado recorrente × rendimentos declarados nos últimos 4 trimestres.
     let quarters = |k: &str| -> Vec<&Fact> {
         let mut v: Vec<&Fact> = f
@@ -194,8 +221,27 @@ pub fn fii_metrics(i: &FiiInput<'_>) -> FiiOutput {
         if rec.len() == 4 && dec.len() == 4 {
             let r: f64 = rec.iter().map(|x| to_f64(x.value)).sum();
             let d: f64 = dec.iter().map(|x| to_f64(x.value)).sum();
+            // Sales of assets in the same quarters (not recurring): a note when they weigh.
+            let sales: f64 = rec
+                .iter()
+                .filter_map(|q| {
+                    f.iter()
+                        .find(|x| x.item == keys::SALES && x.end == q.end)
+                        .map(|x| to_f64(x.value))
+                })
+                .sum();
+            let note = (r > 0.0 && sales / r > SALES_NOTE_SHARE).then(|| {
+                crate::i18n::t_args(
+                    "nucleo-score-fii-nota-cobertura-vendas",
+                    &crate::i18n::args(&[
+                        ("pct", format!("{:.0}%", sales / r * 100.0).into()),
+                        ("sem", dec2((r - sales) / d).into()),
+                    ]),
+                )
+            });
             if d > 0.0 {
                 MetricValue {
+                    note,
                     period: Some(crate::i18n::t_args(
                         "nucleo-score-fii-periodo-4-trimestres",
                         &crate::i18n::args(&[("data", br(rec[0].end).into())]),
@@ -684,5 +730,43 @@ mod tests {
                 "{k}"
             );
         }
+    }
+
+    /// WALT with most contracts above 36 months: the value keeps the 5-year premise and the
+    /// note gives the share and the minimum; a sale of assets in the coverage gets a note.
+    #[test]
+    fn walt_premise_and_sales_in_the_coverage_are_explained() {
+        let quarter = |item: &str, end: &str, v: i64| Fact {
+            period_type: PeriodType::Quarter,
+            currency: "BRL".into(),
+            ..q(item, end, Decimal::from(v))
+        };
+        let mut facts = vec![
+            q(keys::WALT, "2026-09-30", Decimal::new(44, 1)),
+            q(keys::LEASE_OVER_36M, "2026-09-30", Decimal::new(8, 1)),
+            q(keys::WALT_MIN, "2026-09-30", Decimal::new(28, 1)),
+        ];
+        for end in ["2025-12-31", "2026-03-31", "2026-06-30", "2026-09-30"] {
+            facts.push(quarter(keys::RECURRING, end, 1000));
+            facts.push(quarter(keys::DECLARED, end, 900));
+        }
+        facts.push(quarter(keys::SALES, "2026-09-30", 600));
+        let o = fii_metrics(&FiiInput {
+            facts: &facts,
+            today: crate::time::parse_date("2026-11-24").unwrap(),
+            pvp: None,
+            dy: None,
+            liquidity: None,
+            cdi_12m: None,
+            inflation: &|_, _| None,
+        });
+        let w = &o.metrics["walt_years"];
+        assert_eq!(w.value, Some(4.4));
+        let note = w.note.as_deref().unwrap();
+        assert!(note.contains("80%") && note.contains("2,80"), "{note}");
+        let c = &o.metrics["income_coverage"];
+        assert!((c.value.unwrap() - 4000.0 / 3600.0).abs() < 1e-9);
+        let note = c.note.as_deref().unwrap();
+        assert!(note.contains("15%") && note.contains("0,94"), "{note}");
     }
 }

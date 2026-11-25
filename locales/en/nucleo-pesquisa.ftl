@@ -318,6 +318,14 @@ nucleo-pesquisa-item-fii_undetermined_share = Revenue from leases with no fixed 
 nucleo-pesquisa-item-fii_recurring_result = Net financial result of the quarter
 nucleo-pesquisa-item-fii_declared_income = Distributions declared in the quarter
 nucleo-pesquisa-item-fii_cri_top_issuer_share = Largest issuer in the CRI/CRA (approximation of the debtor)
+nucleo-pesquisa-item-fii_rent_revenue = Rent revenue of the quarter (cash)
+nucleo-pesquisa-item-fii_securities_income = Interest on securities and CRI of the quarter (cash)
+nucleo-pesquisa-item-fii_liquidity_income = Result of the cash investments of the quarter
+nucleo-pesquisa-item-fii_sales_result = Result of sales of assets in the quarter
+nucleo-pesquisa-item-fii_expenses = Fund expenses in the quarter
+nucleo-pesquisa-item-fii_fees_paid = Administration and performance fees of the quarter
+nucleo-pesquisa-item-fii_lease_over_36m_share = Revenue from leases longer than 36 months
+nucleo-pesquisa-item-fii_walt_min_years = Weighted average lease term, minimum (WALT with 3 years in the last band)
 nucleo-pesquisa-item-desconhecido = Item
 nucleo-pesquisa-doc-b3-capital = B3, listed companies (capital stock) on { $data }
 nucleo-pesquisa-erro-tipo-periodo = invalid period type: { $tipo }
@@ -565,3 +573,13 @@ nucleo-pesquisa-ind-formula-dy-fii-meses = Sum of the distribution per unit in t
 nucleo-pesquisa-div-fonte-b3-amortizacao = { $fonte }; distributions before the amortizations of { $datas } scaled to today's unit (without the capital returned)
 
 nucleo-pesquisa-aviso-proventos-automaticos = couldn't record the official distributions: { $erro }
+
+## FII result from the quarterly report
+
+nucleo-pesquisa-fii-resultado-fonte = CVM, FII quarterly report (open data), income statement on a cash basis
+nucleo-pesquisa-fii-resultado-nota-caixa = Cash-basis amounts (the "financeiro" columns of the quarterly report), the same ones behind the income coverage in the score. The result includes sales of assets, shown apart in sales_result and left out of result_ex_sales.
+nucleo-pesquisa-fii-resultado-nota-vendas = { $pct } of the result of the last 12 months came from sales of assets, which do not repeat every quarter.
+nucleo-pesquisa-fii-resultado-nota-poucos = The report does not have four quarters in a row: no 12-month totals and no coverage.
+nucleo-pesquisa-fii-resultado-nota-fundamentus = Fundamentus uses its own definitions of FFO, revenue and distribution: its figures do not match the report line by line.
+nucleo-pesquisa-fii-resultado-so-fii = The result from the quarterly report only exists for real estate funds.
+nucleo-pesquisa-fii-resultado-sem-emissor = Fund not found in the CVM reports: check the asset's ticker or CNPJ.

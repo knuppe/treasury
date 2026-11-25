@@ -2008,6 +2008,17 @@ const DOC_TEMPLATES: [category: string, docType: string | null, subject: string]
   ],
 ];
 
+/** Filings of a real estate fund on Fundos.NET (invented subjects). */
+const FNET_TEMPLATES: [category: string, docType: string | null, subject: string | null][] = [
+  ['Relatório Gerencial', 'Relatório Gerencial', null],
+  ['Comunicado ao Mercado', 'Outros Comunicados Não Considerados Fatos Relevantes', null],
+  ['Relatório Gerencial', 'Relatório Gerencial', null],
+  ['Fato Relevante', null, 'Venda de imóvel'],
+];
+
+/** Categories kept from Fundos.NET (as `fundos_net::DOC_CATEGORIES`). */
+const FNET_KEPT = ['Relatório Gerencial', 'Fato Relevante', 'Comunicado ao Mercado'];
+
 /** Categorias guardadas pela coleta do IPE (como `cvm::IPE_CATEGORIES`). */
 const IPE_KEPT = [
   'Fato Relevante',
@@ -2034,7 +2045,8 @@ function documentsStatus(a: Record<string, unknown>): DocumentsStatus {
   })();
   const cls =
     entry?.subject.class ?? (assetId && hasAsset(assetId) ? getAsset(assetId).class : null);
-  const covered = cls == null || cls === 'stock_br' || cls === 'bdr';
+  const fund = cls === 'fii';
+  const covered = fund || cls == null || cls === 'stock_br' || cls === 'bdr';
   const issuer = entry?.subject.issuer_id ?? null;
   const docs =
     issuer && covered
@@ -2062,8 +2074,8 @@ function documentsStatus(a: Record<string, unknown>): DocumentsStatus {
     class: cls,
     issuer_id: issuer,
     issuer_name: entry?.subject.issuer_name ?? null,
-    source: 'cvm_ipe',
-    kept_categories: IPE_KEPT,
+    source: fund ? 'fundos_net' : 'cvm_ipe',
+    kept_categories: fund ? FNET_KEPT : IPE_KEPT,
     collected_since: `${Number(today.slice(0, 4)) - 1}-01-01`,
     last_sync_at: lastSync,
     stored: docs.length,
@@ -2087,8 +2099,33 @@ function documents(a: Record<string, unknown>): CorporateDocument[] {
   const limit = Math.min(500, Math.max(1, typeof a.limit === 'number' ? a.limit : 50));
   const out: CorporateDocument[] = [];
   for (const e of entries) {
-    // IPE: só companhias abertas na CVM (FIIs publicam no Fundos.NET, ainda não coletado).
-    if ((e.spec.kind === 'stock' && e.spec.us) || e.spec.kind === 'fii') continue;
+    // IPE: só companhias abertas na CVM; FIIs: Fundos.NET.
+    if (e.spec.kind === 'stock' && e.spec.us) continue;
+    if (e.spec.kind === 'fii') {
+      if (!e.subject.issuer_id) continue;
+      for (let i = 0; i < FNET_TEMPLATES.length; i += 1) {
+        const t = FNET_TEMPLATES[i]!;
+        const delivered = addDays(today, -(5 + i * 30 + (hashSeed(`${e.ticker}${i}`) % 7)));
+        const id = 1_300_000 + (hashSeed(e.ticker) % 50_000) * 10 + i;
+        out.push({
+          id: `fnet-${id}`,
+          issuer_id: e.subject.issuer_id,
+          company_name: e.subject.issuer_name ?? e.subject.name,
+          tickers: [e.ticker],
+          asset_ids: e.assetId ? [e.assetId] : [],
+          category: t[0],
+          doc_type: t[1],
+          species: null,
+          subject: t[2],
+          reference_date: delivered,
+          delivered_at: delivered,
+          link: `https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=${id}`,
+          summary: null,
+          source: 'fundos_net',
+        });
+      }
+      continue;
+    }
     const n = 2 + (hashSeed(e.ticker) % 3);
     for (let i = 0; i < n; i += 1) {
       const t = DOC_TEMPLATES[(hashSeed(e.ticker) + i) % DOC_TEMPLATES.length]!;

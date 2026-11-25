@@ -19,7 +19,7 @@ use crate::paths::TreasuryPaths;
 const PASSWORD: &str = "senha-mestra-forte";
 
 /// Query tools (what an external client gets by default).
-const EXPECTED_TOOLS: [(&str, &str); 162] = [
+const EXPECTED_TOOLS: [(&str, &str); 164] = [
     ("get_net_worth", "reports.net_worth"),
     ("list_accounts", "accounts.list"),
     ("get_account_balance", "accounts.get"),
@@ -125,6 +125,7 @@ const EXPECTED_TOOLS: [(&str, &str); 162] = [
     ),
     ("get_fundamentus", "research.fundamentus"),
     ("check_dividends", "research.dividends_check"),
+    ("get_fii_result", "research.fii_result"),
     ("get_come_cotas", "portfolio.come_cotas"),
     ("get_asset_statement", "portfolio.statement"),
     ("preview_brokerage_notes", "notes.preview"),
@@ -973,6 +974,7 @@ async fn errors_are_readable_tool_errors() {
         ("compare_assets", json!({"tickers": ["PETR4", "VALE3"]})),
         ("fair_price", json!({"ticker": "PETR4"})),
         ("list_corporate_documents", json!({})),
+        ("get_fii_result", json!({"ticker": "XPTO11"})),
         ("list_physical_assets", json!({})),
         ("get_physical_asset", json!({"asset_id": "x"})),
     ];

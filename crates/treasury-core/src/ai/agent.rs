@@ -228,7 +228,8 @@ const ASSET_PAGE_NOTE: &str = " The user is on the page of ONE asset (`selection
     list_income_events, list_corporate_actions, get_returns, get_fundamentals, get_fundamentus, \
     fair_price, compare_assets, list_corporate_documents, get_asset_score, get_asset_data_gaps, \
     get_asset_field_sources, get_price_history, get_asset_news, list_asset_studies and \
-    get_asset_study; read_corporate_document reads a filing listed by list_corporate_documents; \
+    get_asset_study (for a real estate fund, get_fii_result has the result line by line); \
+    read_corporate_document reads a filing listed by list_corporate_documents; \
     start_asset_study when the user wants a full, saved study (a proposal the user approves \
     before it runs). Data you researched and cross-checked goes through \
     propose_asset_enrichment (a proposal the user approves), never stated as already \

@@ -153,6 +153,7 @@ impl ToolSpec {
             "tax_burden.city",
             "research.fundamentus",
             "research.dividends_check",
+            "research.fii_result",
             "research.documents",
             "research.documents_status",
             "research.methods",
@@ -1951,6 +1952,26 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         schema: schema::<GetFundamentalsInput>,
         prepare: prepare::<GetFundamentalsInput>,
         summarize: sum_dividends_check,
+    },
+    ToolSpec {
+        name: "get_fii_result",
+        title: "Real estate fund result from the CVM quarterly report",
+        description: "Result of a real estate fund (FII) line by line, from the CVM quarterly \
+            report (cash basis): rent, interest on securities and CRI, cash investments, sales of \
+            assets, other lines, expenses and fees, net result, result without sales and \
+            distributions declared, for each of the last 8 quarters (`quarters`, newest first), \
+            the last quarter and the last 12 months (four quarters in a row). Amounts in cents of \
+            BRL; per-unit values as decimal strings (units of the latest monthly report). \
+            `coverage` is the score's income coverage (result ÷ declared, last 4 quarters) and \
+            `ex_sales` the same without the sales. Also the obligations for property \
+            acquisitions (latest monthly report), each quarter's document and filing date, and \
+            the open data file. Fundamentus figures use other definitions: compare with these \
+            lines, not the other way round.",
+        command: "research.fii_result",
+        list_key: Some("quarters"),
+        schema: schema::<GetFundamentalsInput>,
+        prepare: prepare::<GetFundamentalsInput>,
+        summarize: sum_fii_result,
     },
     ToolSpec {
         name: "get_come_cotas",
@@ -5221,6 +5242,18 @@ fn sum_dividends_check(v: &Value) -> String {
             ("so_b3", n("only_b3")),
             ("so_agenda", n("only_other")),
             ("dy_b3", sim_nao(v["material"] == true)),
+        ],
+    )
+}
+
+fn sum_fii_result(v: &Value) -> String {
+    let n = v["quarters"].as_array().map_or(0, Vec::len);
+    tx_args(
+        "mcp-resumo-fii-resultado",
+        &[
+            ("ticker", txt(v["ticker"].as_str().unwrap_or("?"))),
+            ("n", (n as i64).into()),
+            ("data", txt(v["data_date"].as_str().unwrap_or("?"))),
         ],
     )
 }

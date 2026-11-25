@@ -323,6 +323,14 @@ nucleo-pesquisa-item-fii_undetermined_share = Ingresos de contratos con plazo in
 nucleo-pesquisa-item-fii_recurring_result = Resultado financiero neto del trimestre
 nucleo-pesquisa-item-fii_declared_income = Rendimientos declarados en el trimestre
 nucleo-pesquisa-item-fii_cri_top_issuer_share = Mayor emisor en los CRI/CRA (aproximación del deudor)
+nucleo-pesquisa-item-fii_rent_revenue = Ingresos por alquiler del trimestre (caja)
+nucleo-pesquisa-item-fii_securities_income = Intereses de títulos y CRI del trimestre (caja)
+nucleo-pesquisa-item-fii_liquidity_income = Resultado de las inversiones de liquidez del trimestre
+nucleo-pesquisa-item-fii_sales_result = Resultado de venta de activos del trimestre
+nucleo-pesquisa-item-fii_expenses = Gastos del fondo en el trimestre
+nucleo-pesquisa-item-fii_fees_paid = Comisiones de administración y de desempeño del trimestre
+nucleo-pesquisa-item-fii_lease_over_36m_share = Ingresos de contratos de más de 36 meses
+nucleo-pesquisa-item-fii_walt_min_years = Plazo medio de los contratos, mínimo (WALT con 3 años en la última franja)
 nucleo-pesquisa-item-desconhecido = Partida
 nucleo-pesquisa-doc-b3-capital = B3, empresas listadas (capital social) el { $data }
 nucleo-pesquisa-erro-tipo-periodo = tipo de período no válido: { $tipo }
@@ -578,3 +586,13 @@ nucleo-pesquisa-ind-formula-dy-fii-meses = Suma del rendimiento por cuota de los
 nucleo-pesquisa-div-fonte-b3-amortizacao = { $fonte }; rendimientos anteriores a las amortizaciones del { $datas } en la escala de la cuota de hoy (sin el capital devuelto)
 
 nucleo-pesquisa-aviso-proventos-automaticos = no se pudieron registrar los dividendos oficiales: { $erro }
+
+## Resultado de FII por el informe trimestral
+
+nucleo-pesquisa-fii-resultado-fonte = CVM, informe trimestral de FII (datos abiertos), estado de resultados en base de caja
+nucleo-pesquisa-fii-resultado-nota-caixa = Valores en base de caja (columnas "financeiro" del informe trimestral), los mismos de la cobertura del rendimiento en el score. El resultado incluye la venta de activos, que aparece aparte en sales_result y queda fuera de result_ex_sales.
+nucleo-pesquisa-fii-resultado-nota-vendas = { $pct } del resultado de los últimos 12 meses vino de venta de activos, que no se repite cada trimestre.
+nucleo-pesquisa-fii-resultado-nota-poucos = El informe no tiene cuatro trimestres seguidos: sin totales de 12 meses ni cobertura.
+nucleo-pesquisa-fii-resultado-nota-fundamentus = Fundamentus usa definiciones propias de FFO, ingresos y distribución: sus cifras no coinciden línea por línea con el informe.
+nucleo-pesquisa-fii-resultado-so-fii = El resultado por el informe trimestral solo existe para fondos inmobiliarios.
+nucleo-pesquisa-fii-resultado-sem-emissor = Fondo no encontrado en los informes de la CVM: revise el ticker o el CNPJ del activo.

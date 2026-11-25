@@ -619,6 +619,18 @@ pub struct CorporateDocument {
     pub source: String,
 }
 
+/// Issuer of an asset for its documents: the research one, or the registry CNPJ of a real
+/// estate fund (its filings on Fundos.NET are stored by the fund's CNPJ).
+fn doc_issuer(conn: &Connection, asset: &crate::assets::Asset) -> Result<Option<String>> {
+    if let Some(i) = data::issuer_of_asset(conn, asset)? {
+        return Ok(Some(i));
+    }
+    Ok((asset.class == crate::assets::AssetClass::Fii)
+        .then(|| asset.cnpj.as_deref().map(super::cnpj_digits))
+        .flatten()
+        .filter(|c| c.len() == 14))
+}
+
 pub fn documents(
     conn: &Connection,
     a: &DocumentsArgs,
@@ -635,7 +647,7 @@ pub fn documents(
     // Emissores → ativos cadastrados.
     let mut by_issuer: HashMap<String, Vec<(String, Option<String>)>> = HashMap::new();
     for asset in crate::assets::list(conn, &Default::default())? {
-        if let Some(i) = data::issuer_of_asset(conn, &asset)? {
+        if let Some(i) = doc_issuer(conn, &asset)? {
             by_issuer
                 .entry(i)
                 .or_default()
@@ -652,7 +664,11 @@ pub fn documents(
             today,
             &mut Cache::default(),
         )?;
-        d.subject.issuer_id.into_iter().collect()
+        let registered = match &d.subject.asset_id {
+            Some(id) => doc_issuer(conn, &crate::assets::get(conn, id)?)?,
+            None => None,
+        };
+        d.subject.issuer_id.or(registered).into_iter().collect()
     } else {
         let mine: HashSet<String> = data::held_or_watched(conn)?.into_iter().collect();
         by_issuer
@@ -719,7 +735,7 @@ pub fn documents(
 pub enum DocumentsReason {
     /// Há documentos guardados.
     Ok,
-    /// Classe sem fonte de documentos ainda (FIIs, ETFs e fundos publicam no Fundos.NET).
+    /// Classe sem fonte de documentos ainda (ETFs e fundos; os FIIs vêm do Fundos.NET).
     NotCovered,
     /// Companhia aberta sem emissor encontrado (sem CNPJ no cadastro e ticker fora do FCA).
     NoIssuer,
@@ -747,7 +763,7 @@ pub struct DocumentsStatus {
     pub class: Option<crate::assets::AssetClass>,
     pub issuer_id: Option<String>,
     pub issuer_name: Option<String>,
-    /// Fonte consultada (`cvm_ipe`).
+    /// Fonte consultada (`cvm_ipe`; FIIs: `fundos_net`).
     pub source: String,
     /// Categorias guardadas pela coleta (as demais do IPE são descartadas).
     pub kept_categories: Vec<String>,
@@ -788,9 +804,17 @@ pub fn documents_status(
         .as_ref()
         .map(|x| x.class)
         .or(subject.as_ref().map(|s| s.class));
-    let issuer_id = subject.as_ref().and_then(|s| s.issuer_id.clone());
+    let issuer_id = match subject.as_ref().and_then(|s| s.issuer_id.clone()) {
+        Some(i) => Some(i),
+        None => match &asset {
+            Some(a) => doc_issuer(conn, a)?,
+            None => None,
+        },
+    };
     let issuer_name = subject.as_ref().and_then(|s| s.issuer_name.clone());
-    let covered = matches!(class, Some(C::StockBr | C::Bdr) | None);
+    // Real estate funds: Fundos.NET (management reports, material facts, announcements).
+    let fund = matches!(class, Some(C::Fii));
+    let covered = fund || matches!(class, Some(C::StockBr | C::Bdr) | None);
     let mut by_category = vec![];
     if let Some(i) = &issuer_id {
         let mut stmt = conn.prepare(
@@ -809,8 +833,19 @@ pub fn documents_status(
     }
     let stored: u64 = by_category.iter().map(|c| c.count).sum();
     let latest = by_category.iter().map(|c| c.latest.clone()).max();
-    let last_sync_at: Option<String> =
-        crate::settings::get(conn, super::config::LAST_SYNC_SETTING)?;
+    let last_sync_at: Option<String> = if fund {
+        // The fund's last list on Fundos.NET.
+        issuer_id.as_ref().and_then(|i| {
+            conn.query_row(
+                "SELECT fetched_at FROM research_fetch_log WHERE source = ?1 AND key = ?2 AND status = 'ok'",
+                params![super::fundos_net::SOURCE, format!("docs:{i}")],
+                |r| r.get(0),
+            )
+            .ok()
+        })
+    } else {
+        crate::settings::get(conn, super::config::LAST_SYNC_SETTING)?
+    };
     let reason = if !covered {
         DocumentsReason::NotCovered
     } else if issuer_id.is_none() {
@@ -828,8 +863,20 @@ pub fn documents_status(
         class,
         issuer_id,
         issuer_name,
-        source: "cvm_ipe".into(),
-        kept_categories: cvm::IPE_CATEGORIES.iter().map(|c| c.to_string()).collect(),
+        source: if fund {
+            super::fundos_net::DOC_SOURCE
+        } else {
+            "cvm_ipe"
+        }
+        .into(),
+        kept_categories: if fund {
+            super::fundos_net::DOC_CATEGORIES
+                .iter()
+                .map(|(_, c, _)| c.to_string())
+                .collect()
+        } else {
+            cvm::IPE_CATEGORIES.iter().map(|c| c.to_string()).collect()
+        },
         collected_since: format!("{}-01-01", today.year() - 1),
         last_sync_at,
         stored,

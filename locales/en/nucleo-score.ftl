@@ -637,4 +637,6 @@ nucleo-score-fundo-dado-cotas-extrato = Plan units (statement)
 nucleo-score-fundo-efpc-sem-cotas = a pension fund plan (EFPC, supervised by Previc) is not a CVM fund: the plan's unit price only comes from the participant's statement; import the PDF statement on the asset to record the unit price month by month
 nucleo-score-fii-trimestral-sem-item = the quarterly report to { $data } does not include it (field blank or zero)
 nucleo-score-fii-nota-por-area = weighted by area: the quarterly report does not give each property's share of revenue
+nucleo-score-fii-nota-walt-acima-36 = { $pct } of the revenue ends in more than 36 months, the report's last band; it counts as 5 years (premise). With 3 years in that band, the least possible, the average term would be { $minimo } years.
+nucleo-score-fii-nota-cobertura-vendas = { $pct } of the result of these quarters came from sales of assets; without them, the coverage would be { $sem }.
 nucleo-score-confianca-dy-estimado = DY estimated from the CVM reports (no distributions paid on the B3)

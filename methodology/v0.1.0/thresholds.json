@@ -1614,7 +1614,7 @@
       "label": "Prazo médio dos contratos (WALT)",
       "unit": "years",
       "direction": "higher",
-      "formula": "Média dos vencimentos dos contratos ponderada pela receita (faixas do informe trimestral; acima de 36 meses = 5 anos)",
+      "formula": "Média dos vencimentos dos contratos ponderada pela receita (faixas do informe trimestral; acima de 36 meses = 5 anos, premissa: a nota dá a fatia nessa faixa e o prazo com 3 anos, o mínimo)",
       "anchor": [
         [
           0,
@@ -1730,7 +1730,7 @@
       "label": "Maior inquilino (% da receita)",
       "unit": "percent",
       "direction": "lower",
-      "formula": "Maior participação de um inquilino (por imóvel e setor) na receita do fundo; aproximação a partir do informe trimestral",
+      "formula": "Maior participação de um inquilino (por imóvel e setor) na receita do fundo, limitada à participação do próprio imóvel; aproximação a partir do informe trimestral",
       "anchor": [
         [
           0.1,

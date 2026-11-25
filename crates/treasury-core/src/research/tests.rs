@@ -766,11 +766,32 @@ fn full_sync_with_fixtures_and_commands() {
             .iter()
             .any(|c| c == "Assembleia")
     );
-    // FII: the funds' documents live in Fundos.NET (source not yet collected).
+    // FII: the funds' filings come from Fundos.NET (listed, nothing in the fixture).
     let fii = api
         .call("research.documents_status", json!({"asset_id": e.xpto}))
         .unwrap();
-    assert_eq!(fii["reason"], "not_covered");
+    assert_eq!(fii["reason"], "quiet", "{fii}");
+    assert_eq!(fii["source"], "fundos_net");
+    assert!(
+        fii["kept_categories"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|c| c == "Relatório Gerencial")
+    );
+    // The fund's result line by line, from the quarterly report of the fixture.
+    let res = api
+        .call("research.fii_result", json!({"asset_id": e.xpto}))
+        .unwrap();
+    assert_eq!(res["last_quarter"]["end"], "2026-06-30", "{res}");
+    assert_eq!(res["last_quarter"]["lines"]["result"], 120_000);
+    assert_eq!(res["last_quarter"]["lines"]["rent_revenue"], 130_000);
+    assert_eq!(res["last_quarter"]["filed_at"], "2026-08-12");
+    assert!(
+        api.call("research.fii_result", json!({"asset_id": e.xmpl4}))
+            .is_err(),
+        "only for real estate funds"
+    );
     // Ticker that neither the registry nor the FCA knows: no issuer, with a warning.
     let none = api
         .call("research.documents_status", json!({"ticker": "ZZZZ3"}))

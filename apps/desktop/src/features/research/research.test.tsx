@@ -180,16 +180,17 @@ describe('09 · Ativos · fundamental analysis on the asset page', () => {
     expect(link.getAttribute('rel')).toContain('noopener');
   });
 
-  it('documents: FII with no source says why, and the diagnosis shows source and issuer', async () => {
+  it('documents: a FII lists its Fundos.NET filings, with the source in the diagnosis', async () => {
     const user = userEvent.setup();
     open('?ativo=ast-hglg11&secao=fundamentos');
     const section = await analysis();
     await user.click(within(section).getByRole('tab', { name: 'Documentos' }));
     expect(
-      await within(section).findByText('Sem fonte de documentos para esta classe'),
-    ).toBeTruthy();
+      (await within(section).findAllByRole('link', { name: /Abrir no Fundos\.NET/ })).length,
+    ).toBeGreaterThan(0);
+    expect(within(section).getByRole('radio', { name: 'Relatórios gerenciais' })).toBeTruthy();
     expect(within(section).getByText('Diagnóstico dos documentos')).toBeTruthy();
-    expect(within(section).getByText(/IPE da CVM \(companhias abertas\)/)).toBeTruthy();
+    expect(within(section).getByText(/Fundos\.NET \(CVM e B3\)/)).toBeTruthy();
   });
 
   it('batch score: the screener filters by score, band and method indicators', async () => {

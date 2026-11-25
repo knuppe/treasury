@@ -10939,6 +10939,11 @@ export interface Messages {
     real: string | number;
     saldo: string | number;
   };
+  'mcp-resumo-fii-resultado': {
+    data: string | number;
+    n: string | number;
+    ticker: string | number;
+  };
   'mcp-resumo-fluxo': {
     despesas: string | number;
     meses: string | number;
@@ -15212,6 +15217,13 @@ export interface Messages {
   'nucleo-pesquisa-feedback-faixa-corpo': { lista: string | number; n: string | number };
   'nucleo-pesquisa-feedback-faixa-resolvido': never;
   'nucleo-pesquisa-feedback-faixa-titulo': never;
+  'nucleo-pesquisa-fii-resultado-fonte': never;
+  'nucleo-pesquisa-fii-resultado-nota-caixa': never;
+  'nucleo-pesquisa-fii-resultado-nota-fundamentus': never;
+  'nucleo-pesquisa-fii-resultado-nota-poucos': never;
+  'nucleo-pesquisa-fii-resultado-nota-vendas': { pct: string | number };
+  'nucleo-pesquisa-fii-resultado-sem-emissor': never;
+  'nucleo-pesquisa-fii-resultado-so-fii': never;
   'nucleo-pesquisa-filtro-between': never;
   'nucleo-pesquisa-filtro-comparacao': never;
   'nucleo-pesquisa-filtro-contains': never;
@@ -15567,13 +15579,20 @@ export interface Messages {
   'nucleo-pesquisa-item-fii_declared_income': never;
   'nucleo-pesquisa-item-fii_default_rate': never;
   'nucleo-pesquisa-item-fii_equity_return_month': never;
+  'nucleo-pesquisa-item-fii_expenses': never;
+  'nucleo-pesquisa-item-fii_fees_paid': never;
   'nucleo-pesquisa-item-fii_fii_shares': never;
+  'nucleo-pesquisa-item-fii_lease_over_36m_share': never;
   'nucleo-pesquisa-item-fii_liabilities': never;
   'nucleo-pesquisa-item-fii_liquidity': never;
+  'nucleo-pesquisa-item-fii_liquidity_income': never;
   'nucleo-pesquisa-item-fii_properties': never;
   'nucleo-pesquisa-item-fii_real_estate': never;
   'nucleo-pesquisa-item-fii_recurring_result': never;
   'nucleo-pesquisa-item-fii_rent_receivable': never;
+  'nucleo-pesquisa-item-fii_rent_revenue': never;
+  'nucleo-pesquisa-item-fii_sales_result': never;
+  'nucleo-pesquisa-item-fii_securities_income': never;
   'nucleo-pesquisa-item-fii_securitization': never;
   'nucleo-pesquisa-item-fii_shares': never;
   'nucleo-pesquisa-item-fii_top_property_share': never;
@@ -15582,6 +15601,7 @@ export interface Messages {
   'nucleo-pesquisa-item-fii_undetermined_share': never;
   'nucleo-pesquisa-item-fii_vacancy_financial': never;
   'nucleo-pesquisa-item-fii_vacancy_physical': never;
+  'nucleo-pesquisa-item-fii_walt_min_years': never;
   'nucleo-pesquisa-item-fii_walt_years': never;
   'nucleo-pesquisa-item-fin_expense': never;
   'nucleo-pesquisa-item-fin_income': never;
@@ -16639,12 +16659,14 @@ export interface Messages {
   'nucleo-score-fii-fonte-trimestrais': never;
   'nucleo-score-fii-fonte-vp-cota': never;
   'nucleo-score-fii-ipca-descontado': never;
+  'nucleo-score-fii-nota-cobertura-vendas': { pct: string | number; sem: string | number };
   'nucleo-score-fii-nota-composicao': {
     cri: string | number;
     fii: string | number;
     imoveis: string | number;
   };
   'nucleo-score-fii-nota-por-area': never;
+  'nucleo-score-fii-nota-walt-acima-36': { minimo: string | number; pct: string | number };
   'nucleo-score-fii-periodo-4-trimestres': { data: string | number };
   'nucleo-score-fii-periodo-mensal': { mes: string | number };
   'nucleo-score-fii-periodo-pvp': never;
@@ -17619,6 +17641,8 @@ export interface Messages {
   'pesquisa-doc-12-meses': never;
   'pesquisa-doc-abrir-cvm': never;
   'pesquisa-doc-abrir-cvm-rotulo': { categoria: string | number; data: string | number };
+  'pesquisa-doc-abrir-fnet': never;
+  'pesquisa-doc-abrir-fnet-rotulo': { categoria: string | number; data: string | number };
   'pesquisa-doc-ampliar': { data: string | number };
   'pesquisa-doc-assembleias': never;
   'pesquisa-doc-assunto': never;
@@ -17631,6 +17655,7 @@ export interface Messages {
   'pesquisa-doc-diag-coleta-em': { data: string | number; desde: string | number };
   'pesquisa-doc-diag-emissor': never;
   'pesquisa-doc-diag-fonte': never;
+  'pesquisa-doc-diag-fonte-fnet': never;
   'pesquisa-doc-diag-fonte-ipe': never;
   'pesquisa-doc-diag-guardados': never;
   'pesquisa-doc-diag-nenhum': never;
@@ -17645,7 +17670,9 @@ export interface Messages {
   'pesquisa-doc-periodo': never;
   'pesquisa-doc-quieta': { data: string | number };
   'pesquisa-doc-quieta-texto': never;
+  'pesquisa-doc-relatorios': never;
   'pesquisa-doc-rodape': never;
+  'pesquisa-doc-rodape-fnet': never;
   'pesquisa-doc-sem-assunto': never;
   'pesquisa-doc-sem-coleta': never;
   'pesquisa-doc-sem-coleta-texto': never;
@@ -29389,6 +29416,7 @@ export const KEYS: readonly MessageKey[] = [
   'mcp-resumo-fgts-extrato',
   'mcp-resumo-fgts-lancamentos',
   'mcp-resumo-fgts-projecao',
+  'mcp-resumo-fii-resultado',
   'mcp-resumo-fluxo',
   'mcp-resumo-fluxo-calculado',
   'mcp-resumo-fontes-ativo',
@@ -33132,6 +33160,13 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-feedback-faixa-corpo',
   'nucleo-pesquisa-feedback-faixa-resolvido',
   'nucleo-pesquisa-feedback-faixa-titulo',
+  'nucleo-pesquisa-fii-resultado-fonte',
+  'nucleo-pesquisa-fii-resultado-nota-caixa',
+  'nucleo-pesquisa-fii-resultado-nota-fundamentus',
+  'nucleo-pesquisa-fii-resultado-nota-poucos',
+  'nucleo-pesquisa-fii-resultado-nota-vendas',
+  'nucleo-pesquisa-fii-resultado-sem-emissor',
+  'nucleo-pesquisa-fii-resultado-so-fii',
   'nucleo-pesquisa-filtro-between',
   'nucleo-pesquisa-filtro-comparacao',
   'nucleo-pesquisa-filtro-contains',
@@ -33424,13 +33459,20 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-item-fii_declared_income',
   'nucleo-pesquisa-item-fii_default_rate',
   'nucleo-pesquisa-item-fii_equity_return_month',
+  'nucleo-pesquisa-item-fii_expenses',
+  'nucleo-pesquisa-item-fii_fees_paid',
   'nucleo-pesquisa-item-fii_fii_shares',
+  'nucleo-pesquisa-item-fii_lease_over_36m_share',
   'nucleo-pesquisa-item-fii_liabilities',
   'nucleo-pesquisa-item-fii_liquidity',
+  'nucleo-pesquisa-item-fii_liquidity_income',
   'nucleo-pesquisa-item-fii_properties',
   'nucleo-pesquisa-item-fii_real_estate',
   'nucleo-pesquisa-item-fii_recurring_result',
   'nucleo-pesquisa-item-fii_rent_receivable',
+  'nucleo-pesquisa-item-fii_rent_revenue',
+  'nucleo-pesquisa-item-fii_sales_result',
+  'nucleo-pesquisa-item-fii_securities_income',
   'nucleo-pesquisa-item-fii_securitization',
   'nucleo-pesquisa-item-fii_shares',
   'nucleo-pesquisa-item-fii_top_property_share',
@@ -33439,6 +33481,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-pesquisa-item-fii_undetermined_share',
   'nucleo-pesquisa-item-fii_vacancy_financial',
   'nucleo-pesquisa-item-fii_vacancy_physical',
+  'nucleo-pesquisa-item-fii_walt_min_years',
   'nucleo-pesquisa-item-fii_walt_years',
   'nucleo-pesquisa-item-fin_expense',
   'nucleo-pesquisa-item-fin_income',
@@ -34249,8 +34292,10 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-score-fii-fonte-trimestrais',
   'nucleo-score-fii-fonte-vp-cota',
   'nucleo-score-fii-ipca-descontado',
+  'nucleo-score-fii-nota-cobertura-vendas',
   'nucleo-score-fii-nota-composicao',
   'nucleo-score-fii-nota-por-area',
+  'nucleo-score-fii-nota-walt-acima-36',
   'nucleo-score-fii-periodo-4-trimestres',
   'nucleo-score-fii-periodo-mensal',
   'nucleo-score-fii-periodo-pvp',
@@ -35102,6 +35147,8 @@ export const KEYS: readonly MessageKey[] = [
   'pesquisa-doc-12-meses',
   'pesquisa-doc-abrir-cvm',
   'pesquisa-doc-abrir-cvm-rotulo',
+  'pesquisa-doc-abrir-fnet',
+  'pesquisa-doc-abrir-fnet-rotulo',
   'pesquisa-doc-ampliar',
   'pesquisa-doc-assembleias',
   'pesquisa-doc-assunto',
@@ -35114,6 +35161,7 @@ export const KEYS: readonly MessageKey[] = [
   'pesquisa-doc-diag-coleta-em',
   'pesquisa-doc-diag-emissor',
   'pesquisa-doc-diag-fonte',
+  'pesquisa-doc-diag-fonte-fnet',
   'pesquisa-doc-diag-fonte-ipe',
   'pesquisa-doc-diag-guardados',
   'pesquisa-doc-diag-nenhum',
@@ -35128,7 +35176,9 @@ export const KEYS: readonly MessageKey[] = [
   'pesquisa-doc-periodo',
   'pesquisa-doc-quieta',
   'pesquisa-doc-quieta-texto',
+  'pesquisa-doc-relatorios',
   'pesquisa-doc-rodape',
+  'pesquisa-doc-rodape-fnet',
   'pesquisa-doc-sem-assunto',
   'pesquisa-doc-sem-coleta',
   'pesquisa-doc-sem-coleta-texto',

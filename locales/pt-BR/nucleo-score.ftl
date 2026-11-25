@@ -641,4 +641,6 @@ nucleo-score-fundo-dado-cotas-extrato = Cotas do plano (extrato)
 nucleo-score-fundo-efpc-sem-cotas = fundo de pensão (EFPC, fiscalizado pela Previc) não é fundo da CVM: a cota do plano só vem do extrato do participante; importe o extrato em PDF no ativo para registrar a cota mês a mês
 nucleo-score-fii-trimestral-sem-item = o informe trimestral até { $data } não traz o dado (campo em branco ou zerado)
 nucleo-score-fii-nota-por-area = ponderada pela área: o informe trimestral não traz a participação de cada imóvel na receita
+nucleo-score-fii-nota-walt-acima-36 = { $pct } da receita vence em mais de 36 meses, a última faixa do informe; conta como 5 anos (premissa). Com 3 anos nessa faixa, o mínimo possível, o prazo médio seria { $minimo } anos.
+nucleo-score-fii-nota-cobertura-vendas = { $pct } do resultado desses trimestres veio de venda de ativos; sem ela, a cobertura seria { $sem }.
 nucleo-score-confianca-dy-estimado = DY estimado pelos informes da CVM (sem os proventos pagos na B3)

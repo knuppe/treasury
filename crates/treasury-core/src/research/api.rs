@@ -43,6 +43,7 @@ pub const READ_ONLY: &[&str] = &[
     "observed",
     "fundamentus",
     "dividends_check",
+    "fii_result",
 ];
 
 /// Ativo cadastrado (`asset_id`) ou papel do universo (`ticker`).
@@ -303,6 +304,11 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
         "documents" => to_value(views::documents(
             ctx.conn(),
             &parse_args::<DocumentsArgs>(args)?,
+            today,
+        )?),
+        "fii_result" => to_value(super::fii_result::view(
+            ctx.conn(),
+            &parse_args::<super::fii_result::FiiResultArgs>(args)?,
             today,
         )?),
         "documents_status" => to_value(views::documents_status(
