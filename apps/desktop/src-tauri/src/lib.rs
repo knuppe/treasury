@@ -15,6 +15,7 @@ mod os_guard;
 mod qr;
 mod sefaz;
 mod session_watch;
+mod translate;
 mod update_sig;
 mod updater;
 
@@ -401,7 +402,9 @@ pub fn run() {
             os_guard::secure_input,
             updater::update_status,
             updater::update_check,
-            updater::update_install
+            updater::update_install,
+            translate::translation_status,
+            translate::translate_text
         ])
         .build(tauri::generate_context!())
         .unwrap_or_else(|e| {

@@ -67,6 +67,10 @@ publish and why: [trust.md](trust.md). The step by step of a version:
    install") and in Settings › Updates, with the release notes. Installing always waits for the
    person to confirm: the app saves and closes the vault (backup on close), replaces the bundle and opens
    again, asking for the unlock.
+7. **Translate the notes.** The notes are written in English. When the interface is in another
+   language, a button under them translates: on the device on macOS 26 or later with the language
+   downloaded (Apple's Translation framework, `translation_status` and `translate_text`), and
+   otherwise in Google Translate in the browser, which only opens on the person's click.
 
 ## Publishing a version
 
@@ -222,6 +226,16 @@ as long as there is a key in common: that is why the YubiKey never leaves the fi
 - **Three modes instead of on/off**: "Notify only" serves whoever does not want a download in
   the background (metered connection, or wanting to read the notes first) without giving up the
   security fixes, which "Off" delays. Installing never happens on its own in any mode.
+- **Translating the notes on the device first, the browser as the fallback**: the webviews
+  (WKWebView, WebKitGTK) have no built-in translator (the `Translator` API exists only in
+  Chrome), so the app shell calls Apple's Translation framework. It only has a Swift API, so
+  `build.rs` compiles `native/translate.swift` with `swiftc` into a static library, with no new
+  crate; Translation and the Swift concurrency runtime are weak links, so the app still opens on
+  macOS 11 to 25. The direct session needs macOS 26, and a pair that is not downloaded would
+  need the system's SwiftUI sheet, so both go to the browser instead. The notes are translated
+  line by line, keeping headings and list markers. Google Translate gets at most about 5,000
+  characters, cut at a paragraph break, and the app says so. The notes are public: nothing
+  about the person or the vault goes along.
 - **Own section in Settings**: updates used to be a card in About and support, where people did
   not look for them.
 

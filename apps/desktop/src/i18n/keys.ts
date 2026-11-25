@@ -993,8 +993,15 @@ export interface Messages {
   'ajustes-atualizacao-procurar': never;
   'ajustes-atualizacao-pronta': { versao: string | number };
   'ajustes-atualizacao-titulo': never;
+  'ajustes-atualizacao-traduzido': never;
+  'ajustes-atualizacao-traduzir': never;
+  'ajustes-atualizacao-traduzir-cortado': never;
+  'ajustes-atualizacao-traduzir-falhou': never;
+  'ajustes-atualizacao-traduzir-google': never;
+  'ajustes-atualizacao-traduzir-google-dica': never;
   'ajustes-atualizacao-ultima': { quando: string | number };
   'ajustes-atualizacao-ver': never;
+  'ajustes-atualizacao-ver-original': never;
   'ajustes-atualizacao-versao': { versao: string | number };
   'ajustes-aviso-backup': never;
   'ajustes-backup-ajustes': never;
@@ -20263,8 +20270,15 @@ export const KEYS: readonly MessageKey[] = [
   'ajustes-atualizacao-procurar',
   'ajustes-atualizacao-pronta',
   'ajustes-atualizacao-titulo',
+  'ajustes-atualizacao-traduzido',
+  'ajustes-atualizacao-traduzir',
+  'ajustes-atualizacao-traduzir-cortado',
+  'ajustes-atualizacao-traduzir-falhou',
+  'ajustes-atualizacao-traduzir-google',
+  'ajustes-atualizacao-traduzir-google-dica',
   'ajustes-atualizacao-ultima',
   'ajustes-atualizacao-ver',
+  'ajustes-atualizacao-ver-original',
   'ajustes-atualizacao-versao',
   'ajustes-aviso-backup',
   'ajustes-backup-ajustes',

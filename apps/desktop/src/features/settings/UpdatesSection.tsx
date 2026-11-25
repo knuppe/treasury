@@ -11,6 +11,7 @@ import { useSaveUpdateSettings, useUpdateSettings } from '@/api/hooks/settings';
 import { Button, InstrumentCard, toast } from '@/design/components';
 import { cx } from '@/design/cx';
 import { listenApp } from '@/features/agent/tauriBridge';
+import { ReleaseNotes } from '@/features/settings/ReleaseNotes';
 import { ConfirmDialog, InlineError } from '@/features/transactions/ui/controls';
 import { t } from '@/i18n';
 import { formatDateTime } from '@/lib/format';
@@ -134,7 +135,7 @@ export function UpdatesSection() {
                 ? t('ajustes-atualizacao-pronta', { versao: ready.version })
                 : t('ajustes-atualizacao-disponivel', { versao: waiting?.version ?? '' })}
             </p>
-            {notes ? <p className="leading-snug whitespace-pre-line">{notes}</p> : null}
+            {notes ? <ReleaseNotes notes={notes} /> : null}
             <div>
               {ready ? (
                 <Button size="sm" variant="primary" onClick={() => setAsk(true)}>
