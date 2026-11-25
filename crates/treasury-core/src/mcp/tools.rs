@@ -2752,6 +2752,27 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         },
     },
     ToolSpec {
+        name: "list_uncovered_sales",
+        title: "Sales without a recorded purchase",
+        description: "Sales larger than the position on their date: an official source (the B3 \
+            investor area, a brokerage note) reported the sale and the purchase is older than \
+            the imported history. Each row has the asset, the account, the date, the recorded \
+            `quantity`, the `missing_quantity` the position did not have, the `price` (decimal \
+            strings) and `missing_value`, the sale value of the missing part in cents of \
+            `currency`. The portfolio takes from the position only what it had: the missing \
+            part stays out of the average cost, of the realized result (`list_sales`) and of \
+            the tax computation (the month comes with `incomplete`), so nothing is made up. A \
+            row leaves the list when the purchase is recorded (`record_trade`, dated before \
+            the sale) or the older history is imported; `accepted` rows are the ones the \
+            person chose to keep without a cost in the Treasury interface. `open` counts the \
+            sales still to explain.",
+        command: "portfolio.uncovered_sales",
+        list_key: Some("rows"),
+        schema: schema::<UncoveredSalesInput>,
+        prepare: prepare::<UncoveredSalesInput>,
+        summarize: |v| tx_args("mcp-resumo-vendas-sem-compra", &[("n", jv(&v["open"]))]),
+    },
+    ToolSpec {
         name: "list_screen_methods",
         title: "Screener methods",
         description: "Ready-made screener methods (Graham defensive, Bazin, Magic Formula, quality and \

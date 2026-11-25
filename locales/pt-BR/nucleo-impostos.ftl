@@ -16,7 +16,7 @@ nucleo-impostos-ir-categoria-fii = FIIs
 nucleo-impostos-ir-categoria-day-trade = Day trade
 nucleo-impostos-ir-nota-isencao = Vendas de ações no mês de { $valor } (até R$ 20 mil): ganho isento; prejuízo continua compensável.
 nucleo-impostos-ir-nota-irrf-estimado = IRRF estimado (0,005% das vendas; 1% do ganho em day trade): confira nas notas de corretagem.
-nucleo-impostos-ir-nota-venda-maior = Venda de { $ativo } em { $data } maior que a posição registrada ({ $quantidade } a mais): o excedente ficou fora da apuração. Falta registrar compras antigas?
+nucleo-impostos-ir-nota-venda-maior = Venda de { $ativo } em { $data } maior que a posição registrada ({ $quantidade } a mais): o valor vendido conta no total do mês, mas o resultado dessa parte fica fora da apuração até a compra ser registrada.
 nucleo-impostos-ir-aviso = Apuração auxiliar calculada com os seus dados; confira no programa da Receita Federal. Não é aconselhamento tributário.
 nucleo-impostos-ir-erro-ano = ano inválido
 

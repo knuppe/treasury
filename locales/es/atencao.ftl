@@ -12,6 +12,11 @@ atencao-caixa-titulo = { $n ->
    *[other] { $n } archivos esperando en la bandeja de entrada
 }
 atencao-caixa-corpo = Archivos que llegaron a la carpeta de entrada y todavía no se importaron.
+atencao-vendas-sem-compra-titulo = { $n ->
+    [one] 1 venta sin compra registrada
+   *[other] { $n } ventas sin compra registrada
+}
+atencao-vendas-sem-compra-corpo = La venta se importó, pero la compra es anterior al historial que tiene Treasury. Queda fuera del precio medio, del resultado y del impuesto hasta que registres la compra o la aceptes sin costo.
 
 
 ## Núcleo: tablas anuales incluidas

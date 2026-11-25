@@ -188,6 +188,10 @@ pub struct TaxMonth {
     /// Criptoativos em corretora no Brasil (ganho de capital, DARF próprio). `None` sem vendas
     /// de cripto no mês.
     pub crypto: Option<CryptoMonth>,
+    /// A sale of the month is larger than the recorded position (`notes` says which): its
+    /// value counts in what was sold, and the result of the part without a purchase is left
+    /// out until the purchase is recorded. The month's tax may be short.
+    pub incomplete: bool,
 }
 
 /// Criptoativos custodiados no Brasil: ganho de capital apurado no mês, isento quando o total

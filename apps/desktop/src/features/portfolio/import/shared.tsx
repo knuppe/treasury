@@ -253,13 +253,19 @@ export const TD_NUM =
   'num border-b border-line/60 px-2 py-1 text-right align-top whitespace-nowrap';
 
 /** Explicação curta embaixo do selo (nota ou erro da linha). */
-export function RowNote({ children, tone }: { children: ReactNode; tone?: 'negative' }) {
+export function RowNote({
+  children,
+  tone,
+}: {
+  children: ReactNode;
+  tone?: 'negative' | 'warning';
+}) {
   if (!children) return null;
   return (
     <span
       className={cx(
         'mt-0.5 block max-w-64 text-[11px] leading-snug first-letter:uppercase',
-        tone === 'negative' ? 'text-negative' : 'text-dim',
+        tone === 'negative' ? 'text-negative' : tone === 'warning' ? 'text-warning' : 'text-dim',
       )}
     >
       {children}

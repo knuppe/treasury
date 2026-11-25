@@ -16,7 +16,7 @@ open the Agent screen to see a bill coming due. No money rule lives in it.
 | Origin (`source`) | Where it comes from | Note |
 |---|---|---|
 | `due` | `reports::upcoming`: expected transactions and card statements to pay within the lead time set in Settings › Notifications, plus expected transactions overdue by up to 30 days | It is the state of now: a paid bill leaves the list without anyone resolving an alert. An overdue, unpaid card statement stays with the revolving-credit alert |
-| `data` | `accounts::freshness` (everyday accounts possibly incomplete) and the file inbox | The same rule as the weekly reminder and the financial health (`everyday_incomplete`) |
+| `data` | `accounts::freshness` (everyday accounts possibly incomplete), the file inbox and the sales without a recorded purchase (`portfolio::uncovered`, [sales-real-return.md](sales-real-return.md)) | The same rule as the weekly reminder and the financial health (`everyday_incomplete`) |
 | `todo` | `ai::suggestions`: first setup, no category, budget exceeded, asset without a quote, B3 import, liquidity outside the emergency fund, proposals to approve | The suggestions already covered by the two lines above are left out |
 | `alert` | New or seen alerts from the last 30 days | The types computed on the spot are left out (`LIVE_ALERT_KINDS`: `due_soon`, `budget_over`, `stale_accounts`), so the same fact does not appear twice |
 | `insight` | Attention insights | The informational ones, the good news and the personal inflation stay in "What Treasury noticed" |

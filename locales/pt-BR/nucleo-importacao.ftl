@@ -184,9 +184,11 @@ nucleo-importacao-b3-aviso-liquidacoes = sem o relatório de negociação, as co
 nucleo-importacao-b3-aviso-sem-conta = sem conta escolhida para { $instituicoes }: as linhas dessas instituições não serão gravadas
 nucleo-importacao-b3-aviso-vendas-maiores =
     { $n ->
-        [one] { $n } venda maior que a posição na data: importe também o histórico anterior (ou a posição inicial) dessas contas
-       *[other] { $n } vendas maiores que a posição na data: importe também o histórico anterior (ou a posição inicial) dessas contas
+        [one] { $n } venda sem compra registrada: ela é importada como a B3 informou e fica em "Vendas sem compra registrada" até você informar a compra, importar o histórico anterior ou aceitar sem custo
+       *[other] { $n } vendas sem compra registrada: elas são importadas como a B3 informou e ficam em "Vendas sem compra registrada" até você informar a compra, importar o histórico anterior ou aceitar sem custo
     }
+# A sale larger than the position: recorded all the same, with this text on the row.
+nucleo-importacao-b3-venda-pendente = Venda de { $quantidade } maior que a posição de { $posicao } nesta conta na data: a compra é anterior ao arquivo. Importa com pendência e fica fora do resultado até a compra ser informada
 # Células e linhas que não deu para ler.
 nucleo-importacao-b3-celula-numero = número inválido: { $valor }
 nucleo-importacao-b3-celula-data-no-numero = esperava um número, veio a data { $data }

@@ -61,6 +61,8 @@ import type { TradeSideTotals } from '../generated/TradeSideTotals';
 import type { TradeSummary } from '../generated/TradeSummary';
 import type { TradeSide } from '../generated/TradeSide';
 import type { TwrMethod } from '../generated/TwrMethod';
+import type { UncoveredSale } from '../generated/UncoveredSale';
+import type { UncoveredSales } from '../generated/UncoveredSales';
 import type { Valuation } from '../generated/Valuation';
 import type { WatchlistItem } from '../generated/WatchlistItem';
 import {
@@ -722,6 +724,8 @@ interface Book {
   lots: Lot[];
   estimated: boolean;
   warnings: string[];
+  /** Sales larger than the position on their date: trade id and the missing quantity. */
+  uncovered: { tradeId: string; missing: number }[];
 }
 
 function minorFactor(ccy: string): number {
@@ -769,6 +773,7 @@ function replay(
     lots: [],
     estimated: false,
     warnings: [],
+    uncovered: [],
   };
   const trades = state.trades
     .filter(
@@ -843,7 +848,10 @@ function replay(
         });
     } else {
       const qty = Math.min(q, b.qty);
-      if (qty < q) b.warnings.push(`venda maior que a posição em ${t.date}`);
+      if (qty < q) {
+        b.warnings.push(`venda maior que a posição em ${t.date}`);
+        b.uncovered.push({ tradeId: t.id, missing: q - qty });
+      }
       if (qty <= 0) continue;
       const proceeds = qty * p - costs;
       if (curve) {
@@ -2380,7 +2388,9 @@ function createTrade(a: Record<string, unknown>, keepId?: string): string {
   const fx = a.fx_rate == null || a.fx_rate === '' ? null : num(a.fx_rate, 'câmbio');
   if (fx != null && fx <= 0) mockFail('invalid', 'o câmbio deve ser positivo');
   const side: TradeSide = a.side === 'sell' ? 'sell' : 'buy';
-  if (side === 'sell') {
+  // `allow_oversell` is what the imports of official reports pass (`create_trade_with` in
+  // the core): the sale is recorded and waits for its purchase.
+  if (side === 'sell' && a.allow_oversell !== true) {
     const held = replay(asset.id, [acc.id], d).qty;
     if (qty > held + 1e-12) {
       mockFail(
@@ -2861,6 +2871,49 @@ function feeCost(a: Record<string, unknown>): FeeCost {
 const comeCotasRules = new Map<string, ComeCotasRegime>();
 onMockReset(() => comeCotasRules.clear());
 
+// Sales without a recorded purchase (`portfolio::uncovered`): the accepted ones.
+const acceptedSales = new Set<string>();
+onMockReset(() => acceptedSales.clear());
+
+function uncoveredSales(a: Record<string, unknown>): UncoveredSales {
+  const only = typeof a.asset_id === 'string' ? a.asset_id : null;
+  const wanted = Array.isArray(a.trade_ids) ? new Set(a.trade_ids as string[]) : null;
+  const ids = [
+    ...new Set(
+      state.trades
+        .filter((t) => t.side === 'sell' && (!only || t.asset_id === only))
+        .map((t) => t.asset_id),
+    ),
+  ];
+  const rows: UncoveredSale[] = [];
+  for (const id of ids) {
+    const asset = getAsset(id);
+    for (const u of replay(id, null, '9999-12-31').uncovered) {
+      const t = state.trades.find((x) => x.id === u.tradeId);
+      if (!t || (wanted && !wanted.has(t.id))) continue;
+      rows.push({
+        trade_id: t.id,
+        date: t.date,
+        asset_id: asset.id,
+        ticker: asset.ticker,
+        name: asset.name,
+        class: asset.class,
+        account_id: t.account_id,
+        account_name: account(t.account_id).name,
+        quantity: t.quantity,
+        missing_quantity: String(Number(u.missing.toFixed(8))),
+        price: t.price,
+        currency: asset.currency,
+        missing_value: Math.round(u.missing * Number(t.price) * minorFactor(asset.currency)),
+        accepted: acceptedSales.has(t.id),
+      });
+    }
+  }
+  rows.sort((x, y) => y.date.localeCompare(x.date) || x.name.localeCompare(y.name));
+  const accepted = rows.filter((r) => r.accepted).length;
+  return { rows, open: rows.length - accepted, accepted };
+}
+
 // Método de custo (o núcleo segue o país da família; no mock, Brasil = preço médio).
 let costMethodChoice: CostMethod | null = null;
 onMockReset(() => {
@@ -3224,6 +3277,21 @@ registerMockHandlers({
   'portfolio.sales': (a) => {
     requireUnlocked();
     return sales(a);
+  },
+
+  'portfolio.uncovered_sales': (a) => {
+    requireUnlocked();
+    return uncoveredSales(a);
+  },
+
+  'portfolio.accept_uncovered_sale': (a) => {
+    requireUnlocked();
+    const id = String(a.trade_id);
+    if (!state.trades.some((t) => t.id === id && t.side === 'sell'))
+      mockFail('not_found', 'Não encontrado: venda.');
+    if (a.accepted === false) acceptedSales.delete(id);
+    else acceptedSales.add(id);
+    return uncoveredSales({});
   },
 
   'portfolio.cost_method': () => {

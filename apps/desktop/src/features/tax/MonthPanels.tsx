@@ -4,6 +4,8 @@
  * prejuízos compensados por grupo, IRRF, valores acumulados abaixo do mínimo, as vendas
  * que entraram e o botão de gerar o DARF.
  */
+import { Link } from 'react-router';
+
 import { useGenerateDarf } from '@/api/hooks/tax';
 import type { MonthStatus } from '@/api/generated/MonthStatus';
 import type { PoolMonth } from '@/api/generated/PoolMonth';
@@ -85,7 +87,16 @@ export function MonthsTable({
         {
           key: 'month',
           header: t('ir-mes'),
-          cell: (m) => <span className="num">{formatMonthShort(m.month)}</span>,
+          cell: (m) => (
+            <span className="flex flex-col">
+              <span className="num">{formatMonthShort(m.month)}</span>
+              {m.incomplete ? (
+                <span className="label-caps text-warning" title={t('ir-incompleto-dica')}>
+                  {t('ir-incompleto')}
+                </span>
+              ) : null}
+            </span>
+          ),
         },
         {
           key: 'stock_sales',
@@ -267,6 +278,17 @@ export function MonthDetail({
       </div>
       <InlineError error={generate.error} />
 
+      {m.incomplete ? (
+        <Notice tone="warning" title={t('ir-incompleto-titulo')}>
+          {t('ir-incompleto-texto')}{' '}
+          <Link
+            className="text-accent underline-offset-2 hover:underline"
+            to="/carteira?aba=vendas"
+          >
+            {t('ir-incompleto-link')}
+          </Link>
+        </Notice>
+      ) : null}
       {m.notes.length > 0 ? (
         <Notice title={t('ir-notas-apuracao')}>
           <ul className="flex list-disc flex-col gap-0.5 pl-4">

@@ -124,6 +124,25 @@ function list(): Attention {
       count: cov.stale.length,
     });
   }
+  // Sales an official source reported and the portfolio has no purchase for.
+  const uncovered = invoke<{ open: number }>('portfolio.uncovered_sales').open;
+  if (uncovered > 0) {
+    items.push({
+      ...item({
+        id: 'data:uncovered_sales',
+        source: 'data',
+        kind: 'uncovered_sales',
+        severity: 'warning',
+        title:
+          uncovered === 1
+            ? '1 venda sem compra registrada'
+            : `${uncovered} vendas sem compra registrada`,
+        body: 'A venda foi importada, mas a compra é anterior ao histórico que o Treasury tem. Ela fica fora do preço médio, do resultado e do imposto até você informar a compra ou aceitar sem custo.',
+      }),
+      route: '/carteira?aba=vendas',
+      count: uncovered,
+    });
+  }
   for (const s of invoke<Suggestion[]>('ai.suggestions', { limit: 20 })) {
     if (!TODO_KINDS.has(s.kind)) continue;
     items.push({

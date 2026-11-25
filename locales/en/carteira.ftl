@@ -1291,3 +1291,31 @@ carteira-razao-ver-ativos = By asset
 carteira-razao-ver-meses = By month
 carteira-razao-vazio = Nothing here.
 carteira-razao-col-conferir = To check
+
+## Sales without a recorded purchase
+
+carteira-sem-compra-titulo = { $n ->
+    [0] Sales accepted without a cost
+    [one] 1 sale without a recorded purchase
+   *[other] { $n } sales without a recorded purchase
+}
+carteira-sem-compra-texto = The sale came from an official source, but the purchase is older than the history Treasury has. It stays out of the average cost, the result and the tax until you decide. If you import the older history, it leaves this list by itself.
+carteira-sem-compra-lista = Sales without a recorded purchase
+carteira-sem-compra-falta = { $falta } of { $total } missing
+carteira-sem-compra-informar = Record the purchase
+carteira-sem-compra-aceitar = Accept without a cost
+carteira-sem-compra-excluir = Delete the sale
+carteira-sem-compra-reabrir = Put back on the list
+carteira-sem-compra-aceita = Sale accepted without a cost
+carteira-sem-compra-reaberta = The sale is back on the list
+carteira-sem-compra-erro = Couldn't save
+carteira-sem-compra-aceitas = { $n ->
+    [one] 1 sale without a recorded purchase was accepted without a cost.
+   *[other] { $n } sales without a recorded purchase were accepted without a cost.
+}
+carteira-sem-compra-ver-aceitas = Show
+carteira-sem-compra-mostrar-aceitas = { $n ->
+    [one] Show 1 sale accepted without a cost
+   *[other] Show { $n } sales accepted without a cost
+}
+carteira-sem-compra-ocultar-aceitas = Hide the accepted ones

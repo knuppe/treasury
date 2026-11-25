@@ -12,8 +12,9 @@
 //!   `reports::upcoming`, na antecedência das notificações, mais os previstos vencidos há até
 //!   30 dias. É o estado de agora: uma conta paga sai da lista sem ninguém resolver alerta;
 //! - **dados** (`data`): as contas do dia a dia sem extrato recente (`accounts::freshness`), os
-//!   arquivos esperando na caixa de entrada e as tabelas anuais embutidas que passaram da
-//!   validade (`datasets`);
+//!   arquivos esperando na caixa de entrada, as tabelas anuais embutidas que passaram da
+//!   validade (`datasets`) and the sales without a recorded purchase
+//!   (`portfolio::uncovered`);
 //! - **tarefas** (`todo`): as sugestões determinísticas (sem categoria, orçamento estourado,
 //!   ativo sem cotação, propostas a aprovar…) e as regras de categoria prontas para criar
 //!   (`rules::learned`);
@@ -65,6 +66,8 @@ pub const ALERT_DAYS: i64 = 30;
 pub const LIVE_ALERT_KINDS: &[&str] = &["due_soon", "budget_over", "stale_accounts"];
 /// Chave do aviso de tabelas embutidas vencidas (`datasets`).
 pub const OUTDATED_TABLES_ID: &str = "data:outdated_tables";
+/// Key of the sales without a recorded purchase ([`crate::portfolio::uncovered`]).
+pub const UNCOVERED_SALES_ID: &str = "data:uncovered_sales";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
@@ -437,6 +440,28 @@ fn data_items(
             target: None,
             alert_id: None,
             count: tables.len() as i64,
+            date: None,
+        });
+    }
+    // Sales an official source reported and the portfolio has no purchase for.
+    let uncovered = crate::portfolio::uncovered::open_count(conn)? as i64;
+    if uncovered > 0 {
+        out.push(AttentionItem {
+            recurrence_id: None,
+            id: UNCOVERED_SALES_ID.into(),
+            source: AttentionSource::Data,
+            kind: "uncovered_sales".into(),
+            severity: AttentionSeverity::Warning,
+            title: t_args(
+                "atencao-vendas-sem-compra-titulo",
+                &args(&[("n", uncovered.into())]),
+            ),
+            body: i18n::t("atencao-vendas-sem-compra-corpo"),
+            action: None,
+            route: Some("/carteira?aba=vendas".into()),
+            target: None,
+            alert_id: None,
+            count: uncovered,
             date: None,
         });
     }

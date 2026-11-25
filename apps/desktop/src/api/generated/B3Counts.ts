@@ -4,4 +4,8 @@ export type B3Counts = { new_assets: number,
 /**
  * Operações, proventos e eventos que serão gravados.
  */
-trades: number, incomes: number, actions: number, duplicates: number, possible_duplicates: number, no_account: number, review: number, errors: number, ignored: number, };
+trades: number, incomes: number, actions: number, duplicates: number, possible_duplicates: number, no_account: number, review: number, 
+/**
+ * Sales recorded with something left to explain (also counted in `trades`).
+ */
+warnings: number, errors: number, ignored: number, };

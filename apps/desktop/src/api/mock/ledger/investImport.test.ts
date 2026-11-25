@@ -5,6 +5,7 @@ import type { B3Preview } from '@/api/generated/B3Preview';
 import type { NoteCommitResult } from '@/api/generated/NoteCommitResult';
 import type { NotePreview } from '@/api/generated/NotePreview';
 import type { Trade } from '@/api/generated/Trade';
+import type { UncoveredSales } from '@/api/generated/UncoveredSales';
 import { mockCall, resetMock } from '@/api/mock';
 import { fixToday } from '@/features/portfolio/testing';
 
@@ -33,7 +34,8 @@ describe('investment import mocks', () => {
     expect(status).toMatchObject({
       'PETR4@2026-03-10': 'possible_duplicate',
       'PETR4@2026-09-03': 'new',
-      'MGLU3@2026-09-22': 'error',
+      // No MGLU3 in this account on the date: imported all the same, with a pending item.
+      'MGLU3@2026-09-22': 'warning',
       'BBAS3@2026-09-24': 'no_account',
       'KLBN11@2026-09-15': 'new',
     });
@@ -48,7 +50,24 @@ describe('investment import mocks', () => {
       token: p.token,
       approve_actions: [{ index: p.actions[0]!.index, factor: '0.1' }],
     })) as B3CommitResult;
+    expect(p.counts.warnings).toBe(1);
+    expect(p.counts.errors).toBe(0);
+    expect(p.trades.find((t) => t.ticker === 'MGLU3')?.warning).toMatch(/maior que a posição/);
     expect(r.trades).toBe(p.counts.trades);
+    // The sale waits for its purchase; the person may accept it without a cost.
+    expect(r.pending_sales).toBe(1);
+    const pending = (await mockCall('portfolio.uncovered_sales', {})) as UncoveredSales;
+    expect(pending).toMatchObject({ open: 1, accepted: 0 });
+    expect(pending.rows[0]).toMatchObject({
+      ticker: 'MGLU3',
+      missing_quantity: '300',
+      missing_value: 273000,
+    });
+    const accepted = (await mockCall('portfolio.accept_uncovered_sale', {
+      trade_id: pending.rows[0]!.trade_id,
+      accepted: true,
+    })) as UncoveredSales;
+    expect(accepted).toMatchObject({ open: 0, accepted: 1 });
     expect(r.actions).toBe(1);
     expect(r.assets_created).toBe(1);
     expect((await trades()).length).toBe(before + r.trades);

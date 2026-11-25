@@ -405,6 +405,8 @@ nucleo-carteira-comparar-sem-juro = el país de referencia no tiene tipo de inte
 nucleo-carteira-comparar-cdi-mais = { $indice } + { $taxa } al año
 
 nucleo-carteira-motivo-metodo-custo = Método de costo de las ventas
+nucleo-carteira-motivo-venda-sem-compra = Venta sin compra registrada
+nucleo-carteira-venda-sem-compra-nao-encontrada = venta
 
 ## Aportes programados
 

@@ -450,6 +450,8 @@ function computeMonths(memberId: string | null, last: string, t: string): TaxMon
       notes,
       // O mock não apura cripto no Brasil (ganho de capital mensal, DARF 4600).
       crypto: null,
+      // The mock's months come from a fixture where every sale has its purchase.
+      incomplete: false,
     });
   }
   return out;
@@ -489,6 +491,7 @@ function taxMonth(memberId: string | null, month: string): TaxMonth {
       realized: [],
       notes: [],
       crypto: null,
+      incomplete: false,
     }
   );
 }

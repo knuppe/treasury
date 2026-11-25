@@ -41,6 +41,7 @@ function month(m: string, over: Partial<TaxMonth> = {}): TaxMonth {
     realized: [],
     notes: [],
     crypto: null,
+    incomplete: false,
     ...over,
   };
 }

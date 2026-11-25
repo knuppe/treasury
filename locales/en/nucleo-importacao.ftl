@@ -182,9 +182,11 @@ nucleo-importacao-b3-aviso-aba-ignorada = sheet "{ $aba }" ignored: lending, opt
 nucleo-importacao-b3-aviso-liquidacoes = without the trading report, purchases and sales came from the settlements in the movements, with an estimated trade date (2 business days before); import the trading report for exact dates
 nucleo-importacao-b3-aviso-sem-conta = no account chosen for { $instituicoes }: the lines of these institutions won't be saved
 nucleo-importacao-b3-aviso-vendas-maiores = { $n ->
-    [one] { $n } sale larger than the position on that date: also import the earlier history (or the starting position) of these accounts
-   *[other] { $n } sales larger than the position on that date: also import the earlier history (or the starting position) of these accounts
+    [one] { $n } sale without a recorded purchase: it is imported as B3 reports it and stays under "Sales without a recorded purchase" until you record the purchase, import the earlier history or accept it without a cost
+   *[other] { $n } sales without a recorded purchase: they are imported as B3 reports them and stay under "Sales without a recorded purchase" until you record the purchase, import the earlier history or accept them without a cost
 }
+# A sale larger than the position: recorded all the same, with this text on the row.
+nucleo-importacao-b3-venda-pendente = Sale of { $quantidade } larger than the position of { $posicao } in this account on that date: the purchase is older than the file. Imported with a pending item and kept out of the results until the purchase is recorded
 # Cells and lines that couldn't be read.
 nucleo-importacao-b3-celula-numero = invalid number: { $valor }
 nucleo-importacao-b3-celula-data-no-numero = expected a number, got the date { $data }

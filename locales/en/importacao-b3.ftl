@@ -28,6 +28,8 @@ b3-status-revisar = Review
 b3-status-revisar-dica = needs approval (e.g. an event without a computable factor)
 b3-status-erro = Error
 b3-status-erro-dica = can't be saved
+b3-status-pendencia = Pending item
+b3-status-pendencia-dica = imported anyway; the purchase is missing
 b3-origem-liquidacao = Settlement (estimated date)
 b3-origem-leilao = Fraction auction
 b3-origem-subscricao = Exercised subscription
@@ -214,6 +216,12 @@ b3-resultado = Imported from B3: { $operacoes ->
    *[other] { $ignoradas } rows were left out.
 }
 b3-linhas-erro = Rows with errors
+b3-pendencias-titulo = { $n ->
+    [one] 1 sale was left without a recorded purchase
+   *[other] { $n } sales were left without a recorded purchase
+}
+b3-pendencias-texto = The import recorded the sales as B3 reports them. They stay out of the result until you record the purchase or accept them without a cost.
+b3-pendencias-link = See them in Portfolio › Sales
 b3-linha-erro = Preview row { $n }: { $mensagem }
 b3-backup-antes = Backup first
 b3-backup-feito = done

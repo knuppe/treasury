@@ -12,6 +12,12 @@
 //! desdobramento calculados pelas quantidades e a conferência com a posição mostram
 //! exatamente o que o commit vai fazer.
 //!
+//! A sale larger than the position on its date (the purchase is older than the file) is
+//! recorded all the same, because the file is the official record: the row comes with the
+//! `warning` status, the portfolio takes only what the position had, and the sale waits in
+//! [`crate::portfolio::uncovered`] for its purchase (or for the person to accept it without
+//! a cost).
+//!
 //! Regras de leitura em [`rules`]; leitura das planilhas em [`sheet`]; montagem do plano
 //! em [`plan`]; simulação e gravação em [`apply`].
 //!
@@ -256,7 +262,11 @@ pub enum B3RowStatus {
     NoAccount,
     /// Precisa de aprovação (ex.: evento sem fator calculável): só é gravada se aprovada.
     Review,
-    /// Não dá para gravar (ex.: venda maior que a posição).
+    /// Recorded with something left to explain: a sale larger than the position on its date
+    /// (the purchase is older than the file). The file is the official record, so the sale
+    /// is written by default and listed afterwards in the sales without a recorded purchase.
+    Warning,
+    /// Não dá para gravar (ex.: operação já gravada, linha sem custo).
     Error,
 }
 
@@ -356,6 +366,8 @@ pub struct B3TradeProposal {
     pub duplicate_of: Option<Id>,
     pub note: Option<String>,
     pub error: Option<String>,
+    /// What a `warning` row is recorded with (sale larger than the position).
+    pub warning: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -522,6 +534,9 @@ pub struct B3Counts {
     pub no_account: u32,
     #[ts(type = "number")]
     pub review: u32,
+    /// Sales recorded with something left to explain (also counted in `trades`).
+    #[ts(type = "number")]
+    pub warnings: u32,
     #[ts(type = "number")]
     pub errors: u32,
     #[ts(type = "number")]
@@ -643,4 +658,7 @@ pub struct B3CommitResult {
     pub backup_id: Option<Id>,
     /// Accounts created by the import.
     pub accounts_created: Vec<Id>,
+    /// Sales of this import the portfolio has no purchase for (`portfolio.uncovered_sales`).
+    #[ts(type = "number")]
+    pub pending_sales: u32,
 }

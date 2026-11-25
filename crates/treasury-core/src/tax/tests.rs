@@ -1066,8 +1066,9 @@ fn crypto_darf_4600_and_custody_choice_per_account() {
     assert_eq!(m["crypto"]["gain"], 1_000_000);
 }
 
-/// Sale bigger than the recorded position (purchase history missing): the excess stays out
-/// of the assessment, but the month warns instead of silently disappearing.
+/// Sale bigger than the recorded position (purchase history missing): the result of the
+/// excess stays out of the assessment, its value counts in what the month sold (the base of
+/// the exemption) and the month says it is incomplete instead of silently looking exempt.
 #[test]
 fn selling_more_than_the_position_is_flagged_in_the_month() {
     let (_d, mut db) = db();
@@ -1100,7 +1101,20 @@ fn selling_more_than_the_position_is_flagged_in_the_month() {
         .execute("UPDATE trade SET quantity = '60' WHERE side = 'buy'", [])
         .unwrap();
     let m = engine::month(db.conn(), None, "2026-04").unwrap();
-    assert_eq!(m.stock_sales, 210_000, "only the 60 with cost count");
+    assert_eq!(
+        m.stock_sales, 350_000,
+        "the whole sale counts in the amount sold"
+    );
+    assert!(m.incomplete);
+    let stocks = m
+        .categories
+        .iter()
+        .find(|c| c.category == TaxCategory::Stocks)
+        .unwrap();
+    assert_eq!(
+        stocks.result, 30_000,
+        "only the 60 with a cost have a result"
+    );
     assert!(
         m.notes
             .iter()
@@ -1110,6 +1124,42 @@ fn selling_more_than_the_position_is_flagged_in_the_month() {
     );
     let mar = engine::month(db.conn(), None, "2026-03").unwrap();
     assert!(mar.notes.iter().all(|n| !n.contains("PETR4")));
+    assert!(!mar.incomplete);
+}
+
+/// A sale with no purchase at all used to leave the month without activity: now its value
+/// is in the month (above the exemption limit, the month is not shown as exempt).
+#[test]
+fn sale_without_any_purchase_counts_in_the_amount_sold() {
+    let (_d, mut db) = db();
+    let a = asset(&mut db, "PETR4", AssetClass::StockBr);
+    // What an import of an official report does: the sale is written without its purchase.
+    let t = TradeInput {
+        asset_id: a.clone(),
+        account_id: "xp".into(),
+        date: "2026-04-06".into(),
+        side: TradeSide::Sell,
+        quantity: "1000".into(),
+        price: "35".into(),
+        fees: None,
+        taxes: None,
+        fx_rate: None,
+        day_trade: None,
+        note_number: None,
+        notes: None,
+        cash_movement: Some(false),
+        external_id: None,
+    };
+    record(db.conn_mut(), &Author::user(), "op", |tx| {
+        records::create_trade_with(tx, &t, true)
+    })
+    .unwrap();
+    let m = engine::month(db.conn(), None, "2026-04").unwrap();
+    assert_eq!(m.stock_sales, 3_500_000);
+    assert!(!m.stock_exempt);
+    assert!(m.incomplete);
+    assert_eq!(m.tax, 0, "no result without the purchase");
+    assert_eq!(m.status, MonthStatus::NoTax);
 }
 
 /// Leftover IRRF in the year: the "dedo-duro" (withholding tip) on regular operations (Lei

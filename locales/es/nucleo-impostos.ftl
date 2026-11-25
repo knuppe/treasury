@@ -18,7 +18,7 @@ nucleo-impostos-ir-categoria-fii = FII
 nucleo-impostos-ir-categoria-day-trade = Day trade
 nucleo-impostos-ir-nota-isencao = Ventas de acciones en el mes de { $valor } (hasta R$ 20.000): ganancia exenta; la pérdida sigue siendo compensable.
 nucleo-impostos-ir-nota-irrf-estimado = IRRF estimado (0,005% de las ventas; 1% de la ganancia en day trade): revisa las notas de corretaje.
-nucleo-impostos-ir-nota-venda-maior = Venta de { $ativo } el { $data } mayor que la posición registrada ({ $quantidade } de más): el excedente quedó fuera del cálculo. ¿Faltan compras antiguas?
+nucleo-impostos-ir-nota-venda-maior = Venta de { $ativo } el { $data } mayor que la posición registrada ({ $quantidade } de más): el valor vendido cuenta en el total del mes, pero el resultado de esa parte queda fuera del cálculo hasta registrar la compra.
 nucleo-impostos-ir-aviso = Cálculo auxiliar hecho con tus datos; revísalo en el programa de la Receita Federal (autoridad tributaria de Brasil). No es asesoramiento tributario.
 nucleo-impostos-ir-erro-ano = año inválido
 

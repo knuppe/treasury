@@ -2420,6 +2420,8 @@ export interface Messages {
   'atencao-vazio': never;
   'atencao-venceu-corpo': { conta: string | number; valor: string | number };
   'atencao-venceu-titulo': { data: string | number; descricao: string | number };
+  'atencao-vendas-sem-compra-corpo': never;
+  'atencao-vendas-sem-compra-titulo': { n: string | number };
   'atencao-ver-alertas': never;
   'atencao-ver-todos': { n: string | number };
   'ativo-aba-conversas': never;
@@ -3126,6 +3128,9 @@ export interface Messages {
   'b3-origem-subscricao': never;
   'b3-ou-codigo': never;
   'b3-pagamento': never;
+  'b3-pendencias-link': never;
+  'b3-pendencias-texto': never;
+  'b3-pendencias-titulo': { n: string | number };
   'b3-periodo': { ate: string | number; de: string | number };
   'b3-periodo-rotulo': never;
   'b3-por-que': never;
@@ -3196,6 +3201,8 @@ export interface Messages {
   'b3-status-erro-dica': never;
   'b3-status-nova': never;
   'b3-status-nova-dica': never;
+  'b3-status-pendencia': never;
+  'b3-status-pendencia-dica': never;
   'b3-status-possivel-duplicada': never;
   'b3-status-possivel-duplicada-dica': never;
   'b3-status-revisar': never;
@@ -4622,6 +4629,21 @@ export interface Messages {
   'carteira-salvar-alvos': never;
   'carteira-secoes': never;
   'carteira-sem-alvo': never;
+  'carteira-sem-compra-aceita': never;
+  'carteira-sem-compra-aceitar': never;
+  'carteira-sem-compra-aceitas': { n: string | number };
+  'carteira-sem-compra-erro': never;
+  'carteira-sem-compra-excluir': never;
+  'carteira-sem-compra-falta': { falta: string | number; total: string | number };
+  'carteira-sem-compra-informar': never;
+  'carteira-sem-compra-lista': never;
+  'carteira-sem-compra-mostrar-aceitas': { n: string | number };
+  'carteira-sem-compra-ocultar-aceitas': never;
+  'carteira-sem-compra-reaberta': never;
+  'carteira-sem-compra-reabrir': never;
+  'carteira-sem-compra-texto': never;
+  'carteira-sem-compra-titulo': { n: string | number };
+  'carteira-sem-compra-ver-aceitas': never;
   'carteira-sem-cotacao': never;
   'carteira-sem-cotacao-dica': never;
   'carteira-sem-eventos': never;
@@ -9975,6 +9997,11 @@ export interface Messages {
   'ir-imposto-pago-exterior': never;
   'ir-imposto-pago-exterior-rotulo': never;
   'ir-impostos-ano': never;
+  'ir-incompleto': never;
+  'ir-incompleto-dica': never;
+  'ir-incompleto-link': never;
+  'ir-incompleto-texto': never;
+  'ir-incompleto-titulo': never;
   'ir-irpfm-bruto': { aliquota: string | number };
   'ir-irpfm-creditos': never;
   'ir-irpfm-devido': never;
@@ -11317,6 +11344,7 @@ export interface Messages {
     vencimento: string | number;
   };
   'mcp-resumo-vendas': { n: string | number; real: string | number; resultado: string | number };
+  'mcp-resumo-vendas-sem-compra': { n: string | number };
   'mcp-resumo-xirr': { taxa: string | number };
   'mcp-servidor-nao-socket': { caminho: string | number };
   'mcp-servidor-porta': { detalhe: string | number; porta: string | number };
@@ -12408,6 +12436,7 @@ export interface Messages {
   'nucleo-carteira-motivo-provento-registrado': never;
   'nucleo-carteira-motivo-proventos-confirmados': { n: string | number };
   'nucleo-carteira-motivo-proventos-removidos': { n: string | number };
+  'nucleo-carteira-motivo-venda-sem-compra': never;
   'nucleo-carteira-motivo-watchlist': never;
   'nucleo-carteira-motivo-watchlist-removido': never;
   'nucleo-carteira-nada-novo': never;
@@ -12526,6 +12555,7 @@ export interface Messages {
     moeda: string | number;
   };
   'nucleo-carteira-risco-nota-sem-cdi': never;
+  'nucleo-carteira-venda-sem-compra-nao-encontrada': never;
   'nucleo-carteira-watchlist-abaixo': { valor: string | number };
   'nucleo-carteira-watchlist-acima': { valor: string | number };
   'nucleo-cofre-cofre': { id: string | number };
@@ -13670,6 +13700,7 @@ export interface Messages {
   'nucleo-importacao-b3-sem-instituicao': never;
   'nucleo-importacao-b3-sem-preco-valor': never;
   'nucleo-importacao-b3-sem-quantidade': never;
+  'nucleo-importacao-b3-venda-pendente': { posicao: string | number; quantidade: string | number };
   'nucleo-importacao-caixa-dia-nao-fecha': {
     data: string | number;
     impresso: string | number;
@@ -21492,6 +21523,8 @@ export const KEYS: readonly MessageKey[] = [
   'atencao-vazio',
   'atencao-venceu-corpo',
   'atencao-venceu-titulo',
+  'atencao-vendas-sem-compra-corpo',
+  'atencao-vendas-sem-compra-titulo',
   'atencao-ver-alertas',
   'atencao-ver-todos',
   'ativo-aba-conversas',
@@ -22185,6 +22218,9 @@ export const KEYS: readonly MessageKey[] = [
   'b3-origem-subscricao',
   'b3-ou-codigo',
   'b3-pagamento',
+  'b3-pendencias-link',
+  'b3-pendencias-texto',
+  'b3-pendencias-titulo',
   'b3-periodo',
   'b3-periodo-rotulo',
   'b3-por-que',
@@ -22240,6 +22276,8 @@ export const KEYS: readonly MessageKey[] = [
   'b3-status-erro-dica',
   'b3-status-nova',
   'b3-status-nova-dica',
+  'b3-status-pendencia',
+  'b3-status-pendencia-dica',
   'b3-status-possivel-duplicada',
   'b3-status-possivel-duplicada-dica',
   'b3-status-revisar',
@@ -23599,6 +23637,21 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-salvar-alvos',
   'carteira-secoes',
   'carteira-sem-alvo',
+  'carteira-sem-compra-aceita',
+  'carteira-sem-compra-aceitar',
+  'carteira-sem-compra-aceitas',
+  'carteira-sem-compra-erro',
+  'carteira-sem-compra-excluir',
+  'carteira-sem-compra-falta',
+  'carteira-sem-compra-informar',
+  'carteira-sem-compra-lista',
+  'carteira-sem-compra-mostrar-aceitas',
+  'carteira-sem-compra-ocultar-aceitas',
+  'carteira-sem-compra-reaberta',
+  'carteira-sem-compra-reabrir',
+  'carteira-sem-compra-texto',
+  'carteira-sem-compra-titulo',
+  'carteira-sem-compra-ver-aceitas',
   'carteira-sem-cotacao',
   'carteira-sem-cotacao-dica',
   'carteira-sem-eventos',
@@ -28711,6 +28764,11 @@ export const KEYS: readonly MessageKey[] = [
   'ir-imposto-pago-exterior',
   'ir-imposto-pago-exterior-rotulo',
   'ir-impostos-ano',
+  'ir-incompleto',
+  'ir-incompleto-dica',
+  'ir-incompleto-link',
+  'ir-incompleto-texto',
+  'ir-incompleto-titulo',
   'ir-irpfm-bruto',
   'ir-irpfm-creditos',
   'ir-irpfm-devido',
@@ -29652,6 +29710,7 @@ export const KEYS: readonly MessageKey[] = [
   'mcp-resumo-transferencias-nenhuma',
   'mcp-resumo-venda-renda-fixa',
   'mcp-resumo-vendas',
+  'mcp-resumo-vendas-sem-compra',
   'mcp-resumo-xirr',
   'mcp-servidor-nao-socket',
   'mcp-servidor-porta',
@@ -30679,6 +30738,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-motivo-provento-registrado',
   'nucleo-carteira-motivo-proventos-confirmados',
   'nucleo-carteira-motivo-proventos-removidos',
+  'nucleo-carteira-motivo-venda-sem-compra',
   'nucleo-carteira-motivo-watchlist',
   'nucleo-carteira-motivo-watchlist-removido',
   'nucleo-carteira-nada-novo',
@@ -30752,6 +30812,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-risco-nota-pouco-historico',
   'nucleo-carteira-risco-nota-retornos',
   'nucleo-carteira-risco-nota-sem-cdi',
+  'nucleo-carteira-venda-sem-compra-nao-encontrada',
   'nucleo-carteira-watchlist-abaixo',
   'nucleo-carteira-watchlist-acima',
   'nucleo-cofre-cofre',
@@ -31800,6 +31861,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-sem-instituicao',
   'nucleo-importacao-b3-sem-preco-valor',
   'nucleo-importacao-b3-sem-quantidade',
+  'nucleo-importacao-b3-venda-pendente',
   'nucleo-importacao-caixa-dia-nao-fecha',
   'nucleo-importacao-caixa-lido-ocr',
   'nucleo-importacao-caixa-total-nao-fecha',

@@ -222,8 +222,11 @@ fn replay_for_tax(
                 // Falta histórico de compras (ou é venda a descoberto): o excesso não tem
                 // custo e fica fora da apuração; o mês avisa.
                 let label = book.asset.ticker.clone().unwrap_or(book.asset.name.clone());
-                agg.oversold
-                    .push((label, day, q - pos.qty.max(Decimal::ZERO)));
+                let extra = q - pos.qty.max(Decimal::ZERO);
+                agg.oversold.push((label, day, extra));
+                // The sale happened all the same: its value counts in what was sold in the
+                // month (the base of the stock exemption). Only the result is unknown.
+                *agg.sales.entry(cat).or_default() += extra * gross_unit;
             }
             let qty = q.min(pos.qty);
             if qty <= Decimal::ZERO {
@@ -668,6 +671,7 @@ pub fn compute_months(
             .get(&month)
             .map(|c| c.oversold.as_slice())
             .unwrap_or(&[]);
+        let incomplete = !a.oversold.is_empty() || !crypto_oversold.is_empty();
         for (asset, day, extra) in a.oversold.iter().chain(crypto_oversold) {
             notes.push(t_args(
                 "nucleo-impostos-ir-nota-venda-maior",
@@ -705,6 +709,7 @@ pub fn compute_months(
             realized: a.realized,
             notes,
             crypto: crypto_month,
+            incomplete,
         });
         cur = add_months(cur, 1);
     }
@@ -741,6 +746,7 @@ pub fn month(conn: &Connection, member_id: Option<&str>, month: &str) -> Result<
             realized: vec![],
             notes: vec![],
             crypto: None,
+            incomplete: false,
         }))
 }
 

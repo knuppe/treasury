@@ -81,6 +81,34 @@ Other points of the ledger:
 - Calculated from the trades already stored; IGP-M comes from the BCB (SGS 189). Nothing new is stored
   in the vault.
 
+## Sales without a recorded purchase
+
+An official source (the B3 Investor Area, a brokerage note) can report a sale whose purchase is
+older than the history in the vault. The sale is recorded as reported and nothing is made up
+for the missing purchase:
+
+- **In the import.** In the B3 preview the row comes with the status `warning` ("pending item")
+  instead of an error, ticked by default. The person can still leave it out, or give the opening
+  position on the Opening tab, which covers the sale right away. `b3.commit` returns
+  `pending_sales`, the sales it wrote that the portfolio has no purchase for.
+- **In the numbers.** The portfolio takes from the position only what it had. The part without a
+  purchase stays out of the average cost, of this ledger and of the realized result. In the
+  monthly IR its value counts in what the month sold (the base of the stock exemption) and the
+  month is marked `incomplete`, because its result is unknown.
+- **Afterwards.** `portfolio.uncovered_sales` (`portfolio/uncovered.rs`, MCP
+  `list_uncovered_sales`) lists those sales straight from the replay of each asset, all accounts
+  together. They show on the Sales tab, on the asset page (Trades tab) and in "To solve"
+  (`data:uncovered_sales`). For each one the person records the purchase (the trade form opens
+  with the account, the missing quantity and the day before the sale), accepts it without a cost
+  or deletes the sale. Importing the older history takes the sale off the list by itself.
+- **Accepted without a cost.** The sale stops asking and stays out of the results. The accepted
+  trade ids live in the `portfolio.uncovered_sales_accepted` setting, inside the vault; there is
+  no migration.
+
+Why not an automatic opening purchase: at zero cost the whole sale would become a gain and
+inflate the tax; at the sale price the result would be zero and the gap would be hidden; and
+both would double the position if the older history were imported later.
+
 ## Limitations
 
 - There is no per-row IR estimate: the IR stays on the Taxes screen.

@@ -1296,6 +1296,20 @@ pub struct SalesInput {
     pub rows: Option<bool>,
 }
 
+/// Sales larger than the position on their date (the purchase is missing).
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct UncoveredSalesInput {
+    /// Only this asset (see `list_assets`).
+    pub asset_id: Option<String>,
+}
+
+impl ToolInput for UncoveredSalesInput {
+    fn to_api_args(&self) -> Result<Value, String> {
+        to_object(self)
+    }
+}
+
 impl ToolInput for SalesInput {
     fn to_api_args(&self) -> Result<Value, String> {
         check_date("from", &self.from)?;

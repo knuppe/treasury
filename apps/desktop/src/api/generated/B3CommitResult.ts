@@ -17,4 +17,8 @@ backup_id: string | null,
 /**
  * Accounts created by the import.
  */
-accounts_created: Array<string>, };
+accounts_created: Array<string>, 
+/**
+ * Sales of this import the portfolio has no purchase for (`portfolio.uncovered_sales`).
+ */
+pending_sales: number, };

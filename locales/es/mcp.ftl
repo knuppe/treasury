@@ -319,6 +319,10 @@ mcp-resumo-n-notas = { $n ->
         [one] { $n } nota.
        *[other] { $n } notas.
     }
+mcp-resumo-vendas-sem-compra = { $n ->
+    [one] 1 venta sin compra registrada.
+   *[other] { $n } ventas sin compra registrada.
+}
 mcp-resumo-n-come-cotas = { $n } come-cotas.
 mcp-resumo-n-feedbacks = { $n ->
         [one] { $n } comentario.

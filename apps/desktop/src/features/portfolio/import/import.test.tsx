@@ -51,10 +51,14 @@ describe('B3 Área do Investidor import', () => {
     // Preview: operations with statuses and filters.
     const table = await within(dialog).findByRole('table', { name: 'Operações da importação' });
     expect(within(table).getByText('Possível duplicada')).toBeTruthy();
-    expect(within(table).getByText(/venda de 300 maior que a posição/)).toBeTruthy();
+    // A sale without its purchase is imported by default, flagged as a pending item.
+    expect(within(table).getByText(/Venda de 300 maior que a posição/)).toBeTruthy();
     const filters = within(dialog).getByRole('group', { name: 'Filtrar operações por situação' });
-    await user.click(within(filters).getByRole('button', { name: /Com erro 1/ }));
+    await user.click(within(filters).getByRole('button', { name: /Com pendência 1/ }));
     expect(within(table).getAllByRole('row')).toHaveLength(2);
+    const pendingSale = within(table).getByRole('checkbox', { name: /Importar operação/ });
+    expect((pendingSale as HTMLInputElement).checked).toBe(true);
+    expect(pendingSale.hasAttribute('disabled')).toBe(false);
     await user.click(within(filters).getByRole('button', { name: /Todas/ }));
 
     const possible = within(table).getByRole('checkbox', { name: 'Importar operação 1' });
@@ -85,10 +89,13 @@ describe('B3 Área do Investidor import', () => {
 
     const commit = within(dialog).getByRole('button', { name: /^Importar \d+ lançamento/ });
     await user.click(commit);
-    expect(await within(dialog).findByText(/Importados da B3: 5 operação\(ões\)/)).toBeTruthy();
+    expect(await within(dialog).findByText(/Importados da B3: 6 operação\(ões\)/)).toBeTruthy();
     expect(within(dialog).getByText(/1 evento\(s\); 1 ativo\(s\) cadastrado/)).toBeTruthy();
+    // The result says what was left to explain and where to solve it.
+    expect(within(dialog).getByText('1 venda ficou sem compra registrada')).toBeTruthy();
+    expect(within(dialog).getByRole('link', { name: 'Ver em Carteira › Vendas' })).toBeTruthy();
     const after = await trades();
-    expect(after.length).toBe(before + 5);
+    expect(after.length).toBe(before + 6);
     expect(after.some((t) => t.ticker === 'KLBN11')).toBe(true);
     expect(after.some((t) => t.date === '2026-09-03' && t.ticker === 'PETR4')).toBe(false);
 

@@ -46,4 +46,10 @@ due_date: string, revenue_code: string, status: MonthStatus, darf_id: string | n
  * Criptoativos em corretora no Brasil (ganho de capital, DARF próprio). `None` sem vendas
  * de cripto no mês.
  */
-crypto: CryptoMonth | null, };
+crypto: CryptoMonth | null, 
+/**
+ * A sale of the month is larger than the recorded position (`notes` says which): its
+ * value counts in what was sold, and the result of the part without a purchase is left
+ * out until the purchase is recorded. The month's tax may be short.
+ */
+incomplete: boolean, };

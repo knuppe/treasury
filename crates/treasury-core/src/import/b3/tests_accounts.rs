@@ -405,7 +405,9 @@ fn opening_positions_come_from_the_evidence_and_fix_the_sales() {
                  Debito;10/06/2026;Transferência - Liquidação;VALE3 - VALE S.A.;XP INVESTIMENTOS CCTVM S/A;111;60,00;6.660,00\n",
     );
     let p = env.preview(json!({"files": [file("mov.csv", &m)]}));
-    assert_eq!(rows(&p, "trades")[0]["status"], "error");
+    // Without the opening position the sale is still imported, with a pending item.
+    assert_eq!(rows(&p, "trades")[0]["status"], "warning");
+    assert_eq!(p["counts"]["warnings"], 1);
     let o = &rows(&p, "openings")[0];
     assert_eq!(o["asset_key"], "VALE3");
     assert_eq!(o["quantity"], "111");
@@ -419,6 +421,167 @@ fn opening_positions_come_from_the_evidence_and_fix_the_sales() {
     assert!(trades.iter().any(|t| t["origin"] == "opening"));
     assert_eq!(rows(&p, "openings")[0]["chosen"], true);
     assert_eq!(p["counts"]["errors"], 0);
+    assert_eq!(p["counts"]["warnings"], 0);
+}
+
+// ---------------------------------------------------------------------------
+// Sales whose purchase is older than the file
+
+/// The sale is the official record: it is imported by default with a pending item, stays
+/// out of the result until the purchase is known, and the person decides afterwards.
+#[test]
+fn sale_without_history_is_imported_and_waits_for_the_purchase() {
+    let env = Env::new();
+    let acc = env.account("XP Investimentos", "brokerage");
+    let m = mov(
+        "Debito;10/06/2026;Transferência - Liquidação;VALE3 - VALE S.A.;XP INVESTIMENTOS CCTVM S/A;100;60,00;6.000,00\n\
+         Debito;10/07/2026;Transferência - Liquidação;PETR4 - PETROBRAS;XP INVESTIMENTOS CCTVM S/A;50;40,00;2.000,00\n",
+    );
+    let p = env.preview(json!({"files": [file("mov.csv", &m)]}));
+    let trades = rows(&p, "trades");
+    assert!(
+        trades.iter().all(|t| t["status"] == "warning"),
+        "{trades:#?}"
+    );
+    assert!(
+        trades[0]["warning"]
+            .as_str()
+            .unwrap()
+            .contains("maior que a posição de 0")
+    );
+    assert_eq!(p["counts"]["trades"], 2);
+    assert_eq!(p["counts"]["warnings"], 2);
+    assert_eq!(p["counts"]["errors"], 0);
+
+    // Default: both are written. The person may still leave a row out (`skip`).
+    let r = env
+        .api
+        .call("b3.commit", json!({"token": p["token"]}))
+        .unwrap();
+    assert_eq!(r["trades"], 2);
+    assert_eq!(r["pending_sales"], 2);
+    assert_eq!(r["errors"], json!([]));
+
+    let pending = env
+        .api
+        .call("portfolio.uncovered_sales", json!({}))
+        .unwrap();
+    assert_eq!(pending["open"], 2);
+    let rows_ = rows(&pending, "rows");
+    // Most recent first.
+    assert_eq!(rows_[0]["ticker"], "PETR4");
+    assert_eq!(rows_[0]["missing_quantity"], "50");
+    assert_eq!(rows_[0]["missing_value"], 200_000);
+    assert_eq!(rows_[1]["ticker"], "VALE3");
+    assert_eq!(rows_[1]["account_id"], acc.as_str());
+    assert_eq!(rows_[1]["accepted"], false);
+
+    // Nothing was made up: no position, no realized result, and "To solve" asks.
+    let pf = env
+        .api
+        .call("portfolio.summary", json!({"include_closed": true}))
+        .unwrap();
+    assert_eq!(pf["realized"], 0, "{pf:#}");
+    assert_eq!(pf["cost"], 0, "{pf:#}");
+    let sales = env.api.call("portfolio.sales", json!({})).unwrap();
+    assert_eq!(rows(&sales, "rows").len(), 0);
+    let attention = env.api.call("attention.list", Value::Null).unwrap();
+    let item = rows(&attention, "items")
+        .iter()
+        .find(|i| i["kind"] == "uncovered_sales")
+        .unwrap_or_else(|| panic!("{attention:#}"));
+    assert_eq!(item["count"], 2);
+    assert_eq!(item["route"], "/carteira?aba=vendas");
+
+    // 1) The purchase is recorded: the sale leaves the list by itself and gets its result.
+    let vale = rows_[1]["asset_id"].as_str().unwrap().to_string();
+    env.api
+        .call(
+            "portfolio.create_trade",
+            json!({"asset_id": vale, "account_id": acc, "date": "2024-02-01", "side": "buy",
+                   "quantity": "100", "price": "50", "cash_movement": false}),
+        )
+        .unwrap();
+    let pending = env
+        .api
+        .call("portfolio.uncovered_sales", json!({}))
+        .unwrap();
+    assert_eq!(pending["open"], 1);
+    let sales = env.api.call("portfolio.sales", json!({})).unwrap();
+    assert_eq!(rows(&sales, "rows").len(), 1);
+    assert_eq!(rows(&sales, "rows")[0]["result"], 100_000);
+
+    // 2) The other one is accepted without a cost: it stops asking and stays out of the
+    // result.
+    let petr = rows(&pending, "rows")[0]["trade_id"].clone();
+    let after = env
+        .api
+        .call(
+            "portfolio.accept_uncovered_sale",
+            json!({"trade_id": petr, "accepted": true}),
+        )
+        .unwrap();
+    assert_eq!(after["open"], 0);
+    assert_eq!(after["accepted"], 1);
+    assert_eq!(rows(&after, "rows")[0]["accepted"], true);
+    let attention = env.api.call("attention.list", Value::Null).unwrap();
+    assert!(
+        rows(&attention, "items")
+            .iter()
+            .all(|i| i["kind"] != "uncovered_sales")
+    );
+    assert_eq!(
+        rows(&env.api.call("portfolio.sales", json!({})).unwrap(), "rows").len(),
+        1
+    );
+
+    // It can be put back, and only a sale can be accepted.
+    let back = env
+        .api
+        .call(
+            "portfolio.accept_uncovered_sale",
+            json!({"trade_id": petr, "accepted": false}),
+        )
+        .unwrap();
+    assert_eq!(back["open"], 1);
+    assert!(
+        env.api
+            .call(
+                "portfolio.accept_uncovered_sale",
+                json!({"trade_id": "nope", "accepted": true}),
+            )
+            .is_err()
+    );
+
+    // 3) Or the sale is deleted: nothing left to explain.
+    env.api
+        .call("portfolio.delete_trade", json!({"id": petr}))
+        .unwrap();
+    let pending = env
+        .api
+        .call("portfolio.uncovered_sales", json!({}))
+        .unwrap();
+    assert_eq!(pending["open"], 0);
+    assert_eq!(rows(&pending, "rows").len(), 0);
+}
+
+/// The person still decides: a sale left out of the commit is not written.
+#[test]
+fn sale_without_history_can_be_left_out() {
+    let env = Env::new();
+    env.account("XP Investimentos", "brokerage");
+    let m = mov(
+        "Debito;10/06/2026;Transferência - Liquidação;VALE3 - VALE S.A.;XP INVESTIMENTOS CCTVM S/A;100;60,00;6.000,00\n",
+    );
+    let p = env.preview(json!({"files": [file("mov.csv", &m)]}));
+    let index = rows(&p, "trades")[0]["index"].clone();
+    let r = env
+        .api
+        .call("b3.commit", json!({"token": p["token"], "skip": [index]}))
+        .unwrap();
+    assert_eq!(r["trades"], 0);
+    assert_eq!(r["pending_sales"], 0);
+    assert_eq!(env.count("SELECT count(*) FROM trade"), 0);
 }
 
 // ---------------------------------------------------------------------------

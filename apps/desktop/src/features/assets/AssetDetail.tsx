@@ -93,6 +93,7 @@ import { AssetFormDialog } from './AssetFormDialog';
 import { WatchDialog } from './Watchlist';
 import { AssetStatement } from './AssetStatement';
 import { TradeSummaryCards } from './TradeSummaryCards';
+import { UncoveredSalesCard } from '../portfolio/UncoveredSales';
 
 type Range = '6m' | '1a' | '2a' | 'max';
 
@@ -635,6 +636,7 @@ export function AssetDetail({
         </TabsContent>
         <TabsContent value="operacoes">
           <div className="flex flex-col gap-5">
+            <UncoveredSalesCard assetId={asset.id} />
             <TradeSummaryCards asset={asset} position={p} />
             <TradesTable assetId={asset.id} compact />
           </div>

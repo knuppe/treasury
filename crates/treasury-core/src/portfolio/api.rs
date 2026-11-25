@@ -34,6 +34,7 @@ pub const READ_ONLY: &[&str] = &[
     "quick_income_preview",
     "statement",
     "sales",
+    "uncovered_sales",
     "cost_method",
     "plans",
     "plans_pending",
@@ -184,6 +185,21 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
             ctx.conn(),
             &parse_args::<super::sales::SalesArgs>(args)?,
         )?),
+        // Sales larger than the position on their date (the purchase is missing).
+        "uncovered_sales" => to_value(super::uncovered::list(
+            ctx.conn(),
+            &parse_args::<super::uncovered::UncoveredSalesArgs>(args)?,
+        )?),
+        "accept_uncovered_sale" => {
+            let a: super::uncovered::UncoveredSaleAcceptArgs = parse_args(args)?;
+            ctx.write(&t("nucleo-carteira-motivo-venda-sem-compra"), |tx| {
+                super::uncovered::accept(tx, &a)
+            })?;
+            to_value(super::uncovered::list(
+                ctx.conn(),
+                &super::uncovered::UncoveredSalesArgs::default(),
+            )?)
+        }
         "bridge" => to_value(super::bridge::bridge(ctx.conn(), &parse_args(args)?)?),
         "performance" => to_value(engine::performance(
             ctx.conn(),

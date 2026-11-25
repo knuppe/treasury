@@ -41,6 +41,7 @@ const SYNONYMS: &[(&str, &[&str])] = &[
     ("acoes", &["asset", "stock"]),
     ("ativo", &["asset"]),
     ("ativos", &["asset"]),
+    ("registrar", &["record"]),
     ("compra", &["trade", "buy", "purchase"]),
     ("venda", &["trade", "sell", "sale", "sales"]),
     ("dividendo", &["dividend", "income"]),

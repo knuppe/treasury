@@ -12,4 +12,8 @@ index: number, source: B3Source, origin: B3TradeOrigin, date: string, asset_key:
 /**
  * quantidade × preço, em centavos.
  */
-gross: number, market: string | null, external_id: string | null, status: B3RowStatus, duplicate_of: string | null, note: string | null, error: string | null, };
+gross: number, market: string | null, external_id: string | null, status: B3RowStatus, duplicate_of: string | null, note: string | null, error: string | null, 
+/**
+ * What a `warning` row is recorded with (sale larger than the position).
+ */
+warning: string | null, };

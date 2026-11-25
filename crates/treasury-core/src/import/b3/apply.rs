@@ -56,8 +56,14 @@ pub(crate) struct ItemOutcome {
     pub auction_sale: Option<(Decimal, Decimal)>,
     /// Leilão de fração gravado como provento (não havia fração na posição).
     pub auction_income: bool,
-    /// Venda recusada por ser maior que a posição na data (falta histórico anterior).
+    /// Sale larger than the account's position on the date (the history before the file is
+    /// missing): recorded all the same, with `warning`, and left to explain afterwards
+    /// ([`crate::portfolio::uncovered`]).
     pub oversold: bool,
+    /// What the row is recorded with (it does not stop the row).
+    pub warning: Option<String>,
+    /// Trade the row wrote.
+    pub trade_id: Option<Id>,
     /// Income whose tax was computed on apply (gross, tax, net, note).
     pub income: Option<(i64, i64, i64, Option<String>)>,
 }
@@ -125,8 +131,11 @@ pub(crate) fn run(tx: &Transaction<'_>, plan: &Plan, opts: &ApplyOpts) -> Result
             Ok(written) => o.written = written,
             Err(crate::error::Error::Db(e)) => return Err(e.into()),
             Err(e) => {
-                o.oversold = r.oversold(it);
-                o.error = Some(r.hint(it, e.message(), o.oversold));
+                // A row that failed wrote nothing: what it noted on the way does not hold.
+                o.oversold = false;
+                o.warning = None;
+                o.trade_id = None;
+                o.error = Some(e.message());
             }
         }
         if o.written {
@@ -148,28 +157,29 @@ impl Runner<'_, '_> {
         self.out.items.entry(index).or_default()
     }
 
-    /// Venda maior que a posição da conta na data (a que a carteira recusa).
-    fn oversold(&self, it: &Item) -> bool {
-        let Op::Trade {
-            side: TradeSide::Sell,
-            qty,
-            ..
-        } = &it.op
-        else {
-            return false;
-        };
-        let (Some(account), Some(Some(asset))) = (&it.account, self.out.asset_ids.get(it.asset))
-        else {
-            return false;
-        };
-        engine::quantity_held(self.tx, asset, Some(account), &fmt_date(it.date))
-            .is_ok_and(|held| *qty > held)
-    }
-
-    /// Dica para vendas que falham depois de uma transferência de custódia ignorada.
-    fn hint(&self, it: &Item, msg: String, oversold: bool) -> String {
-        match self.plan.transfers.get(&it.asset) {
-            Some(transfers) if oversold => {
+    /// A sale larger than the account's position on the date: the purchase is older than the
+    /// file (or the shares came by a custody transfer the import ignores). The sale is an
+    /// official record, so it is written anyway; this is the text that goes with it.
+    fn oversold(
+        &self,
+        it: &Item,
+        asset_id: &str,
+        account: &str,
+        qty: Decimal,
+    ) -> Result<Option<String>> {
+        let held = engine::quantity_held(self.tx, asset_id, Some(account), &fmt_date(it.date))?;
+        if qty <= held + tolerance() {
+            return Ok(None);
+        }
+        let msg = t_args(
+            "nucleo-importacao-b3-venda-pendente",
+            &args(&[
+                ("quantidade", records::fmt_qty(qty).into()),
+                ("posicao", records::fmt_qty(held.max(Decimal::ZERO)).into()),
+            ]),
+        );
+        Ok(Some(match self.plan.transfers.get(&it.asset) {
+            Some(transfers) => {
                 let (d, inst) = &transfers[0];
                 t_args(
                     "nucleo-importacao-b3-dica-custodia-venda",
@@ -180,8 +190,8 @@ impl Runner<'_, '_> {
                     ]),
                 )
             }
-            _ => msg,
-        }
+            None => msg,
+        }))
     }
 
     fn ensure_asset(&mut self, a: usize) -> Result<Id> {
@@ -282,7 +292,11 @@ impl Runner<'_, '_> {
                     None => *price,
                 };
                 let asset_id = self.ensure_asset(it.asset)?;
-                self.trade(
+                let warning = match side {
+                    TradeSide::Sell => self.oversold(it, &asset_id, &account, *qty)?,
+                    TradeSide::Buy => None,
+                };
+                let id = self.trade(
                     &asset_id,
                     &account,
                     it.date,
@@ -293,6 +307,10 @@ impl Runner<'_, '_> {
                     &it.external_id,
                     it.settled,
                 )?;
+                let o = self.outcome(it.index);
+                o.oversold = warning.is_some();
+                o.warning = warning;
+                o.trade_id = Some(id);
                 Ok(true)
             }
             Op::Income {
@@ -400,7 +418,9 @@ impl Runner<'_, '_> {
             TradeSide::Sell => gross,
         };
         let existing_cash = self.matching_cash(account, amount, date, settled.unwrap_or(date))?;
-        let id = records::create_trade(
+        // The file is the official record: a sale larger than the position is written too
+        // (the caller notes it on the row).
+        let id = records::create_trade_with(
             self.tx,
             &TradeInput {
                 asset_id: asset_id.to_string(),
@@ -421,6 +441,7 @@ impl Runner<'_, '_> {
                 cash_movement: Some(self.opts.cash && existing_cash.is_none()),
                 external_id: ext.clone(),
             },
+            true,
         )?;
         if let Some(txn) = existing_cash {
             self.tx.execute(

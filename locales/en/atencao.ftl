@@ -12,6 +12,11 @@ atencao-caixa-titulo = { $n ->
    *[other] { $n } files waiting in the inbox
 }
 atencao-caixa-corpo = Files that arrived in the inbox folder and have not been imported yet.
+atencao-vendas-sem-compra-titulo = { $n ->
+    [one] 1 sale without a recorded purchase
+   *[other] { $n } sales without a recorded purchase
+}
+atencao-vendas-sem-compra-corpo = The sale was imported, but the purchase is older than the history Treasury has. It stays out of the average cost, the result and the tax until you record the purchase or accept it without a cost.
 
 
 ## Core: embedded yearly tables

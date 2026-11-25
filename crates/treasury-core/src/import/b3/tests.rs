@@ -459,7 +459,7 @@ fn position_only_compares_with_existing_portfolio() {
 }
 
 #[test]
-fn sale_after_ignored_custody_transfer_explains_the_error() {
+fn sale_after_ignored_custody_transfer_is_recorded_with_the_hint() {
     let mut env = TestEnv::new();
     brokerage(&mut env, "XP Investimentos");
     brokerage(&mut env, "Nu Invest");
@@ -475,16 +475,20 @@ fn sale_after_ignored_custody_transfer_explains_the_error() {
         .iter()
         .find(|t| t.side == crate::portfolio::TradeSide::Sell)
         .unwrap();
-    assert_eq!(sale.status, B3RowStatus::Error);
-    let e = sale.error.as_deref().unwrap();
-    assert!(e.contains("maior que a posição"), "{e}");
-    assert!(e.contains("transferência de custódia"), "{e}");
+    // The sale is the official record: it is written by default, with what is left to explain.
+    assert_eq!(sale.status, B3RowStatus::Warning);
+    assert!(sale.error.is_none());
+    let w = sale.warning.as_deref().unwrap();
+    assert!(w.contains("maior que a posição"), "{w}");
+    assert!(w.contains("transferência de custódia"), "{w}");
     assert!(
         p.warnings
             .iter()
-            .any(|w| w.contains("que a posição na data"))
+            .any(|w| w.contains("venda sem compra registrada"))
     );
-    assert_eq!(p.counts.errors, 1);
+    assert_eq!(p.counts.errors, 0);
+    assert_eq!(p.counts.warnings, 1);
+    assert_eq!(p.counts.trades, 2);
 
     // With both institutions pointing to the same account, the sale goes through.
     let xp_id = p.institutions[0].account_id.clone();

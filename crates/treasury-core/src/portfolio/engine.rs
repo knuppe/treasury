@@ -105,6 +105,10 @@ pub struct State {
     lots: Vec<Lot>,
     pub estimated: bool,
     pub warnings: Vec<String>,
+    /// Sales larger than the position on their date (trade id, quantity the position did not
+    /// have): the purchases are missing from the book. The position takes only what it had
+    /// and the rest stays out of the cost and of the realized result.
+    pub(crate) uncovered: Vec<(String, Decimal)>,
 }
 
 impl State {
@@ -569,6 +573,7 @@ pub(crate) fn replay_observed(
                         "nucleo-carteira-aviso-venda-maior",
                         &i18n::args(&[("data", fmt_date(t.date).into())]),
                     ));
+                    st.uncovered.push((t.id.clone(), t.qty - qty));
                 }
                 if qty.is_zero() {
                     continue;

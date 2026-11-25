@@ -8,6 +8,7 @@
  */
 import { supportEvent } from '@/api/hooks/support';
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router';
 
 import type { AssetClass } from '@/api/generated/AssetClass';
 import type { B3CommitResult } from '@/api/generated/B3CommitResult';
@@ -42,6 +43,7 @@ import { formatBytes } from '@/features/transactions/ui/hooks';
 import { t, t as tr } from '@/i18n';
 
 import { DecimalInput } from '../components/DecimalInput';
+import { Notice } from '../components/States';
 import { accountLabel, B3AccountsStep, type B3Choice } from './B3AccountsStep';
 import { formatDecimal, formatQuantity, formatUnitPrice } from '../decimal';
 import { ACTION_KIND_LABEL, CLASS_LABEL, CLASS_ORDER, INCOME_KIND_LABEL } from '../labels';
@@ -108,10 +110,13 @@ function StatusCell({
   status,
   note,
   error,
+  warning,
 }: {
   status: B3RowStatus;
   note?: string | null;
   error?: string | null;
+  /** What a row is imported with (a sale larger than the position): it does not block. */
+  warning?: string | null;
 }) {
   const s = B3_STATUS[status];
   return (
@@ -119,7 +124,13 @@ function StatusCell({
       <StatusChip tone={s.tone} title={s.hint}>
         {s.label}
       </StatusChip>
-      {error ? <RowNote tone="negative">{error}</RowNote> : <RowNote>{note ?? s.hint}</RowNote>}
+      {error ? (
+        <RowNote tone="negative">{error}</RowNote>
+      ) : warning ? (
+        <RowNote tone="warning">{warning}</RowNote>
+      ) : (
+        <RowNote>{note ?? s.hint}</RowNote>
+      )}
     </>
   );
 }
@@ -288,6 +299,8 @@ export function B3ImportDialog({
   const willWrite = (index: number, status: B3RowStatus) =>
     !skip.has(index) &&
     (status === 'new' ||
+      // A sale without its purchase is an official record: imported unless left out.
+      status === 'warning' ||
       (status === 'possible_duplicate' && includePossible) ||
       (status === 'review' && approved(index)));
   const toggleSkip = (index: number, on: boolean) =>
@@ -364,7 +377,10 @@ export function B3ImportDialog({
   const writeBox = (index: number, status: B3RowStatus, label: string) => {
     const possible = status === 'possible_duplicate';
     const enabled =
-      status === 'new' || (possible && includePossible) || (status === 'review' && approved(index));
+      status === 'new' ||
+      status === 'warning' ||
+      (possible && includePossible) ||
+      (status === 'review' && approved(index));
     return (
       <Checkbox
         hideLabel
@@ -750,7 +766,14 @@ export function B3ImportDialog({
                     key: 'status',
                     header: t('b3-situacao'),
                     sortValue: (t) => statusRank(t.status),
-                    cell: (t) => <StatusCell status={t.status} note={t.note} error={t.error} />,
+                    cell: (t) => (
+                      <StatusCell
+                        status={t.status}
+                        note={t.note}
+                        error={t.error}
+                        warning={t.warning}
+                      />
+                    ),
                   },
                   {
                     key: 'date',
@@ -1301,6 +1324,18 @@ export function B3ImportDialog({
               ignoradas: result.skipped,
             })}
           </p>
+          {result.pending_sales > 0 ? (
+            <Notice tone="warning" title={t('b3-pendencias-titulo', { n: result.pending_sales })}>
+              {t('b3-pendencias-texto')}{' '}
+              <Link
+                className="text-accent underline-offset-2 hover:underline"
+                to="/carteira?aba=vendas"
+                onClick={() => onOpenChange(false)}
+              >
+                {t('b3-pendencias-link')}
+              </Link>
+            </Notice>
+          ) : null}
           {result.errors.length ? (
             <ul
               className="flex flex-col gap-1 text-[12.5px] text-negative"

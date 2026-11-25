@@ -1268,3 +1268,31 @@ carteira-razao-ver-ativos = Por ativo
 carteira-razao-ver-meses = Por mês
 carteira-razao-vazio = Nada aqui.
 carteira-razao-col-conferir = Para conferir
+
+## Vendas sem compra registrada
+
+carteira-sem-compra-titulo = { $n ->
+    [0] Vendas aceitas sem custo
+    [one] 1 venda sem compra registrada
+   *[other] { $n } vendas sem compra registrada
+}
+carteira-sem-compra-texto = A venda veio de uma fonte oficial, mas a compra é anterior ao histórico que o Treasury tem. Ela fica fora do preço médio, do resultado e do imposto até você decidir. Se você importar o histórico antigo, ela sai daqui sozinha.
+carteira-sem-compra-lista = Vendas sem compra registrada
+carteira-sem-compra-falta = faltam { $falta } de { $total }
+carteira-sem-compra-informar = Informar a compra
+carteira-sem-compra-aceitar = Aceitar sem custo
+carteira-sem-compra-excluir = Excluir a venda
+carteira-sem-compra-reabrir = Voltar para a lista
+carteira-sem-compra-aceita = Venda aceita sem custo
+carteira-sem-compra-reaberta = A venda voltou para a lista
+carteira-sem-compra-erro = Não foi possível salvar
+carteira-sem-compra-aceitas = { $n ->
+    [one] 1 venda sem compra registrada foi aceita sem custo.
+   *[other] { $n } vendas sem compra registrada foram aceitas sem custo.
+}
+carteira-sem-compra-ver-aceitas = Ver
+carteira-sem-compra-mostrar-aceitas = { $n ->
+    [one] Mostrar 1 venda aceita sem custo
+   *[other] Mostrar { $n } vendas aceitas sem custo
+}
+carteira-sem-compra-ocultar-aceitas = Ocultar as aceitas

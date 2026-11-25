@@ -28,6 +28,8 @@ b3-status-revisar = Revisar
 b3-status-revisar-dica = necesita aprobación (ej.: evento sin factor calculable)
 b3-status-erro = Con error
 b3-status-erro-dica = no se puede guardar
+b3-status-pendencia = Con pendiente
+b3-status-pendencia-dica = se importa igualmente; falta la compra
 b3-origem-liquidacao = Liquidación (fecha estimada)
 b3-origem-leilao = Subasta de fracciones
 b3-origem-subscricao = Suscripción ejercida
@@ -217,6 +219,12 @@ b3-resultado = Importados desde la B3: { $operacoes ->
    *[other] { $ignoradas } filas quedaron fuera.
 }
 b3-linhas-erro = Filas con error
+b3-pendencias-titulo = { $n ->
+    [one] 1 venta quedó sin compra registrada
+   *[other] { $n } ventas quedaron sin compra registrada
+}
+b3-pendencias-texto = La importación guardó las ventas como las informa B3. Quedan fuera del resultado hasta que registres la compra o las aceptes sin costo.
+b3-pendencias-link = Ver en Cartera › Ventas
 b3-linha-erro = Fila { $n } de la vista previa: { $mensagem }
 b3-backup-antes = Copia de seguridad antes
 b3-backup-feito = hecha

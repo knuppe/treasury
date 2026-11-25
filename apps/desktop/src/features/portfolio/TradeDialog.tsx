@@ -60,6 +60,11 @@ export interface TradeDialogProps {
   side?: TradeSide;
   /** Editar esta operação (ativo e conta não mudam numa edição). */
   trade?: Trade | null;
+  /**
+   * A new trade that starts filled in (the purchase missing behind a sale): account, date
+   * and quantity. It has no cash entry unless the person turns it on.
+   */
+  preset?: { accountId: string; date: string; quantity: string };
 }
 
 interface FormState {
@@ -102,6 +107,28 @@ function initialState(props: TradeDialogProps): FormState {
       cashMovement: t.txn_id != null,
       byTotal: false,
       total: t.gross,
+      whole: false,
+    };
+  }
+  const preset = props.preset;
+  if (preset) {
+    return {
+      assetId: props.assetId,
+      accountId: preset.accountId,
+      side: props.side ?? 'buy',
+      date: preset.date,
+      quantity: preset.quantity,
+      price: null,
+      fees: 0,
+      taxes: 0,
+      fxRate: null,
+      dayTrade: false,
+      noteNumber: '',
+      notes: '',
+      // An old purchase: the money left the account long before what the vault has.
+      cashMovement: false,
+      byTotal: false,
+      total: null,
       whole: false,
     };
   }

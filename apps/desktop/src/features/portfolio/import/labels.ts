@@ -56,11 +56,13 @@ export const B3_STATUS: Record<B3RowStatus, StatusDef> = {
   ),
   no_account: status('b3-status-sem-conta', 'dim', 'b3-status-sem-conta-dica'),
   review: status('b3-status-revisar', 'accent', 'b3-status-revisar-dica'),
+  warning: status('b3-status-pendencia', 'warning', 'b3-status-pendencia-dica'),
   error: status('b3-status-erro', 'negative', 'b3-status-erro-dica'),
 };
 
 export const B3_STATUS_ORDER: readonly B3RowStatus[] = [
   'new',
+  'warning',
   'review',
   'possible_duplicate',
   'duplicate',

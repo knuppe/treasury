@@ -59,6 +59,9 @@ import type { PendingIncome } from '@/api/generated/PendingIncome';
 import type { PendingIncomeArgs } from '@/api/generated/PendingIncomeArgs';
 import type { SalesArgs } from '@/api/generated/SalesArgs';
 import type { SalesReport } from '@/api/generated/SalesReport';
+import type { UncoveredSaleAcceptArgs } from '@/api/generated/UncoveredSaleAcceptArgs';
+import type { UncoveredSales } from '@/api/generated/UncoveredSales';
+import type { UncoveredSalesArgs } from '@/api/generated/UncoveredSalesArgs';
 import type { Performance } from '@/api/generated/Performance';
 import type { PerformanceArgs } from '@/api/generated/PerformanceArgs';
 import type { PerformanceBridge } from '@/api/generated/PerformanceBridge';
@@ -179,6 +182,29 @@ export function invalidatePerformance(client: QueryClient): Promise<void> {
 /** Livro de vendas: resultado nominal e real de cada venda (docs/sales-real-return.md). */
 export function useSales(args: SalesArgs = {}) {
   return useQuery({ ...query<SalesReport>('sales', args), placeholderData: keepPreviousData });
+}
+
+/**
+ * Sales larger than the position on their date: the purchase is older than the imported
+ * history. They leave the list when the purchase is recorded or the person accepts them.
+ */
+export function useUncoveredSales(args: UncoveredSalesArgs = {}) {
+  return useQuery(query<UncoveredSales>('uncovered_sales', args));
+}
+
+/** Accepts a sale without a cost (or puts it back on the list). */
+export function useAcceptUncoveredSale() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (args: UncoveredSaleAcceptArgs) =>
+      call<UncoveredSales>('portfolio.accept_uncovered_sale', args),
+    onSuccess: () =>
+      Promise.all([
+        invalidatePortfolio(client),
+        // "To solve" counts the sales still to explain.
+        client.invalidateQueries({ queryKey: ['attention'] }),
+      ]),
+  });
 }
 
 /** Método de custo das vendas de renda variável (o do país da família ou o de Ajustes). */

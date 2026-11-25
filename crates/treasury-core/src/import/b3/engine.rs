@@ -186,20 +186,11 @@ pub fn preview(ctx: &mut Ctx<'_>, args: &B3PreviewArgs) -> Result<B3Preview> {
 
     let token = new_id();
     let mut warnings = plan.warnings.clone();
-    let failed_sales = plan
-        .items
-        .iter()
-        .filter(|it| {
-            outcome
-                .items
-                .get(&it.index)
-                .is_some_and(|o| o.error.is_some() && o.oversold)
-        })
-        .count();
-    if failed_sales > 0 {
+    let pending_sales = outcome.items.values().filter(|o| o.oversold).count();
+    if pending_sales > 0 {
         warnings.push(t_args(
             "nucleo-importacao-b3-aviso-vendas-maiores",
-            &crate::i18n::args(&[("n", failed_sales.into())]),
+            &crate::i18n::args(&[("n", pending_sales.into())]),
         ));
     }
     let mut preview = assemble(&plan, &outcome, token.clone(), files, warnings);
@@ -391,6 +382,8 @@ fn assemble(
             B3RowStatus::Error
         } else if o.review.is_some() {
             B3RowStatus::Review
+        } else if o.oversold {
+            B3RowStatus::Warning
         } else {
             it.status
         };
@@ -422,6 +415,7 @@ fn assemble(
                 duplicate_of: it.duplicate_of.clone(),
                 note: it.note.clone(),
                 error: o.error.clone(),
+                warning: o.warning.clone(),
             }),
             Op::Auction { value, movement } => match o.auction_sale {
                 Some((q, p)) => trades.push(B3TradeProposal {
@@ -443,6 +437,7 @@ fn assemble(
                     duplicate_of: it.duplicate_of.clone(),
                     note: Some(t("nucleo-importacao-b3-nota-leilao-venda")),
                     error: o.error.clone(),
+                    warning: None,
                 }),
                 None => incomes.push(B3IncomeProposal {
                     index: it.index,
@@ -582,6 +577,11 @@ fn assemble(
             B3RowStatus::PossibleDuplicate => counts.possible_duplicates += 1,
             B3RowStatus::NoAccount => counts.no_account += 1,
             B3RowStatus::Review => counts.review += 1,
+            // Written like a new row, and counted apart as something to explain.
+            B3RowStatus::Warning => {
+                counts.trades += 1;
+                counts.warnings += 1;
+            }
             B3RowStatus::Error => counts.errors += 1,
         }
     }
@@ -737,6 +737,26 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &B3CommitArgs) -> Result<B3CommitResult> 
         .collect();
     errors.sort_by_key(|e| e.index);
     let written = out.items.values().filter(|o| o.written).count() as u32;
+    // What the portfolio itself says of the sales just written (all accounts together): a
+    // sale another account's purchases cover is not pending.
+    let oversold: Vec<crate::ids::Id> = out
+        .items
+        .values()
+        .filter(|o| o.written && o.oversold)
+        .filter_map(|o| o.trade_id.clone())
+        .collect();
+    let pending_sales = if oversold.is_empty() {
+        0
+    } else {
+        crate::portfolio::uncovered::list(
+            ctx.conn(),
+            &crate::portfolio::uncovered::UncoveredSalesArgs {
+                asset_id: None,
+                trade_ids: Some(oversold),
+            },
+        )?
+        .open
+    };
     Ok(B3CommitResult {
         change_set_id: rec.change_set_id,
         assets_created: out.assets_created,
@@ -747,5 +767,6 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &B3CommitArgs) -> Result<B3CommitResult> 
         errors,
         backup_id,
         accounts_created,
+        pending_sales,
     })
 }

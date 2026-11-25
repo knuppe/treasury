@@ -122,11 +122,15 @@ fn preview_in_an_empty_vault() {
     assert_eq!(p["counts"]["no_account"], 0);
 
     // Trades: 4 settlements, 1 "COMPRA / VENDA", 2 Tesouro purchases, 7 RDB investments and
-    // 6 redemptions; 7 fail for lack of earlier history.
+    // 6 redemptions; 7 are sales whose purchase is older than the file: imported all the
+    // same, with a pending item.
     let trades = rows(&p, "trades");
     assert_eq!(trades.len(), 20, "{trades:#?}");
     assert_eq!(by_status(&p, "trades", "new"), 13);
-    assert_eq!(by_status(&p, "trades", "error"), 7);
+    assert_eq!(by_status(&p, "trades", "warning"), 7);
+    assert_eq!(by_status(&p, "trades", "error"), 0);
+    assert_eq!(p["counts"]["trades"], 20);
+    assert_eq!(p["counts"]["warnings"], 7);
     let settlements: Vec<&Value> = trades
         .iter()
         .filter(|t| t["origin"] == "settlement")
@@ -303,6 +307,11 @@ fn without_accounts_the_import_creates_them_and_remembers() {
         .unwrap();
     let r = api.call("b3.commit", json!({"token": p["token"]})).unwrap();
     assert_eq!(r["accounts_created"].as_array().unwrap().len(), 3);
+    // The 7 sales without a purchase in the file were written and wait for their purchase.
+    assert_eq!(r["trades"], 20);
+    assert_eq!(r["pending_sales"], 7);
+    let pending = api.call("portfolio.uncovered_sales", json!({})).unwrap();
+    assert_eq!(pending["open"], 7, "{pending:#}");
     let p2 = api.call("b3.preview", json!({"files": files()})).unwrap();
     assert!(
         rows(&p2, "institutions")
@@ -311,9 +320,7 @@ fn without_accounts_the_import_creates_them_and_remembers() {
     );
     for list in ["trades", "incomes", "actions"] {
         assert!(
-            rows(&p2, list)
-                .iter()
-                .all(|x| x["status"] == "duplicate" || x["status"] == "error"),
+            rows(&p2, list).iter().all(|x| x["status"] == "duplicate"),
             "{list}: {:#?}",
             p2[list]
         );

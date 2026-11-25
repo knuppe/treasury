@@ -39,6 +39,7 @@ import type { IncomeKind } from '../generated/IncomeKind';
 import type { PortfolioSummary } from '../generated/PortfolioSummary';
 import type { Trade } from '../generated/Trade';
 import type { TradeSide } from '../generated/TradeSide';
+import type { UncoveredSales } from '../generated/UncoveredSales';
 import { mockFail, onMockReset, registerMockHandlers } from '../mockRegistry';
 import { guarded } from './ledger/boot';
 import { today } from './ledger/dates';
@@ -632,7 +633,8 @@ function preview(args: Record<string, unknown>): B3Preview {
       let duplicateOf: string | null = null;
       let note: string | null =
         origin === 'settlement' ? 'data estimada: 2 dias úteis antes da liquidação' : null;
-      let error: string | null = null;
+      const error: string | null = null;
+      let warning: string | null = null;
       const same = existingTrades.find(
         (x) =>
           x.asset_id === assetId &&
@@ -655,11 +657,12 @@ function preview(args: Record<string, unknown>): B3Preview {
       } else if (t.side === 'sell') {
         const held = simulated(t.ticker, account, t.date);
         if (t.quantity > held + 1e-9) {
-          status = 'error';
-          error = `venda de ${t.quantity} maior que a posição de ${held} nesta conta na data`;
+          // The file is the official record: the sale is imported and waits for its purchase.
+          status = 'warning';
+          warning = `Venda de ${t.quantity} maior que a posição de ${Math.max(held, 0)} nesta conta na data: a compra é anterior ao arquivo. Importa com pendência e fica fora do resultado até a compra ser informada`;
         }
       }
-      if (status === 'new' && account)
+      if ((status === 'new' || status === 'warning') && account)
         pending.push({
           assetKey: t.ticker,
           account,
@@ -685,6 +688,7 @@ function preview(args: Record<string, unknown>): B3Preview {
         duplicate_of: duplicateOf,
         note,
         error,
+        warning,
       });
     }
   }
@@ -880,13 +884,14 @@ function preview(args: Record<string, unknown>): B3Preview {
   const count = (s: B3RowStatus) => rows.filter((r) => r.status === s).length;
   const counts: B3Counts = {
     new_assets: assets.filter((a) => a.create).length,
-    trades: trades.filter((t) => t.status === 'new').length,
+    trades: trades.filter((t) => t.status === 'new' || t.status === 'warning').length,
     incomes: incomes.filter((t) => t.status === 'new').length,
     actions: actions.filter((t) => t.status === 'new').length,
     duplicates: count('duplicate'),
     possible_duplicates: count('possible_duplicate'),
     no_account: count('no_account'),
     review: count('review'),
+    warnings: count('warning'),
     errors: count('error'),
     ignored: ignored.length,
   };
@@ -1027,10 +1032,12 @@ function commit(args: Record<string, unknown>): B3CommitResult {
   const writable = (status: B3RowStatus, index: number) =>
     !skip.has(index) &&
     (status === 'new' ||
+      status === 'warning' ||
       (status === 'possible_duplicate' && includePossible) ||
       (status === 'review' && approvals.has(index)));
 
   const errors: B3CommitError[] = [];
+  const oversold: string[] = [];
   const counts = { assets: 0, trades: 0, incomes: 0, actions: 0 };
   let written = 0;
   const files = s.filenames.join(', ');
@@ -1040,6 +1047,7 @@ function commit(args: Record<string, unknown>): B3CommitResult {
     counts.assets = counts.trades = counts.incomes = counts.actions = 0;
     written = 0;
     errors.length = 0;
+    oversold.length = 0;
     const ids = new Map(s.assetIds);
     created.length = 0;
     accountIds.clear();
@@ -1117,7 +1125,9 @@ function commit(args: Record<string, unknown>): B3CommitResult {
               taxes: 0,
               cash_movement: cash,
               notes: `Importado da B3 · ${t.external_id ?? ''}`,
+              allow_oversell: true,
             });
+            if (t.status === 'warning') oversold.push(rec.id);
             log.trades.push(rec.id);
             counts.trades += 1;
           },
@@ -1168,6 +1178,9 @@ function commit(args: Record<string, unknown>): B3CommitResult {
     errors: errors.sort((a, b) => a.index - b.index),
     backup_id: null,
     accounts_created: created,
+    pending_sales: oversold.length
+      ? invoke<UncoveredSales>('portfolio.uncovered_sales', { trade_ids: oversold }).open
+      : 0,
   };
 }
 

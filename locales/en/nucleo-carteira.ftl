@@ -400,6 +400,8 @@ nucleo-carteira-comparar-sem-juro = the reference country has no reference rate 
 nucleo-carteira-comparar-cdi-mais = { $indice } + { $taxa } a year
 
 nucleo-carteira-motivo-metodo-custo = Cost method for sales
+nucleo-carteira-motivo-venda-sem-compra = Sale without a recorded purchase
+nucleo-carteira-venda-sem-compra-nao-encontrada = sale
 
 ## Aportes programados
 

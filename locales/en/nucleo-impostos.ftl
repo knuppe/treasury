@@ -18,7 +18,7 @@ nucleo-impostos-ir-categoria-fii = FIIs
 nucleo-impostos-ir-categoria-day-trade = Day trade
 nucleo-impostos-ir-nota-isencao = Stock sales in the month of { $valor } (up to R$ 20,000): exempt gain; a loss can still be offset.
 nucleo-impostos-ir-nota-irrf-estimado = Estimated IRRF (0.005% of sales; 1% of the day-trade gain): check your brokerage notes.
-nucleo-impostos-ir-nota-venda-maior = Sale of { $ativo } on { $data } is larger than the recorded position ({ $quantidade } more): the excess was left out of the calculation. Are older purchases missing?
+nucleo-impostos-ir-nota-venda-maior = Sale of { $ativo } on { $data } is larger than the recorded position ({ $quantidade } more): the amount sold counts in the month's total, but the result of that part stays out of the calculation until the purchase is recorded.
 nucleo-impostos-ir-aviso = A helper calculation made with your data; check it in the Receita Federal (Brazilian tax authority) program. This is not tax advice.
 nucleo-impostos-ir-erro-ano = invalid year
 

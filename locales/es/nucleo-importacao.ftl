@@ -182,9 +182,11 @@ nucleo-importacao-b3-aviso-aba-ignorada = pestaña "{ $aba }" ignorada: préstam
 nucleo-importacao-b3-aviso-liquidacoes = sin el informe de negociación, las compras y ventas vinieron de las liquidaciones de los movimientos, con la fecha de la operación estimada (2 días hábiles antes); importa la negociación para tener las fechas exactas
 nucleo-importacao-b3-aviso-sem-conta = sin cuenta elegida para { $instituicoes }: las líneas de esas instituciones no se guardarán
 nucleo-importacao-b3-aviso-vendas-maiores = { $n ->
-    [one] { $n } venta mayor que la posición en la fecha: importa también el historial anterior (o la posición inicial) de esas cuentas
-   *[other] { $n } ventas mayores que la posición en la fecha: importa también el historial anterior (o la posición inicial) de esas cuentas
+    [one] { $n } venta sin compra registrada: se importa como la informa B3 y queda en "Ventas sin compra registrada" hasta que registres la compra, importes el historial anterior o la aceptes sin costo
+   *[other] { $n } ventas sin compra registrada: se importan como las informa B3 y quedan en "Ventas sin compra registrada" hasta que registres la compra, importes el historial anterior o las aceptes sin costo
 }
+# A sale larger than the position: recorded all the same, with this text on the row.
+nucleo-importacao-b3-venda-pendente = Venta de { $quantidade } mayor que la posición de { $posicao } en esta cuenta en la fecha: la compra es anterior al archivo. Se importa con un pendiente y queda fuera del resultado hasta registrar la compra
 # Celdas y líneas que no se pudieron leer.
 nucleo-importacao-b3-celula-numero = número no válido: { $valor }
 nucleo-importacao-b3-celula-data-no-numero = se esperaba un número, vino la fecha { $data }

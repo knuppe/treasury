@@ -318,6 +318,10 @@ mcp-resumo-n-notas = { $n ->
         [one] { $n } note.
        *[other] { $n } notes.
     }
+mcp-resumo-vendas-sem-compra = { $n ->
+    [one] 1 sale without a recorded purchase.
+   *[other] { $n } sales without a recorded purchase.
+}
 mcp-resumo-n-come-cotas = { $n ->
         [one] { $n } come-cotas event.
        *[other] { $n } come-cotas events.

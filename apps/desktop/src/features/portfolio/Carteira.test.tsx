@@ -66,6 +66,50 @@ describe('08 · Portfolio with the mock', () => {
     await waitFor(() => expect(within(grid).queryByText('PETR4')).toBeNull());
   });
 
+  it('Sales: a sale without a recorded purchase waits for the person to decide', async () => {
+    const user = userEvent.setup();
+    openCarteira();
+    await screen.findByRole('tab', { name: 'Vendas' });
+    // What the import of an official report leaves: a sale larger than the position.
+    await mockCall('portfolio.create_trade', {
+      asset_id: 'ast-mglu3',
+      account_id: 'acc-xp',
+      date: '2026-09-22',
+      side: 'sell',
+      quantity: '300',
+      price: '9.1',
+      cash_movement: false,
+      allow_oversell: true,
+    });
+    await user.click(screen.getByRole('tab', { name: 'Vendas' }));
+    const list = await screen.findByRole('list', { name: 'Vendas sem compra registrada' });
+    expect(screen.getByText('1 venda sem compra registrada')).toBeTruthy();
+    expect(within(list).getByText(/MGLU3/)).toBeTruthy();
+    expect(within(list).getByText(/faltam 300 de 300/)).toBeTruthy();
+    expect(within(list).getByRole('button', { name: 'Excluir a venda' })).toBeTruthy();
+
+    // Recording the purchase opens the trade form filled in: quantity and the day before.
+    await user.click(within(list).getByRole('button', { name: 'Informar a compra' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Registrar operação' });
+    expect(within(dialog).getByLabelText<HTMLInputElement>('Quantidade').value).toBe('300');
+    expect(within(dialog).getByDisplayValue('21/09/2026')).toBeTruthy();
+    await user.keyboard('{Escape}');
+
+    // Accepting without a cost: it stops asking and stays out of the results.
+    await user.click(within(list).getByRole('button', { name: 'Aceitar sem custo' }));
+    expect(
+      await screen.findByText('1 venda sem compra registrada foi aceita sem custo.'),
+    ).toBeTruthy();
+    expect(await mockCall('portfolio.uncovered_sales', {})).toMatchObject({
+      open: 0,
+      accepted: 1,
+    });
+    // It can be brought back.
+    await user.click(screen.getByRole('button', { name: 'Ver' }));
+    await user.click(await screen.findByRole('button', { name: 'Voltar para a lista' }));
+    expect(await screen.findByText('1 venda sem compra registrada')).toBeTruthy();
+  });
+
   it('Sales: each sale with the nominal result and the real one by the chosen deflator', async () => {
     const user = userEvent.setup();
     openCarteira('?aba=vendas');

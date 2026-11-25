@@ -36,6 +36,7 @@ import { formatDate, formatMoney, formatMonthShort } from '@/lib/format';
 import { ActionDialog } from './ActionDialog';
 import { useDeleteRecords } from './RecordsPanels';
 import { TradeDialog } from './TradeDialog';
+import { UncoveredSalesCard } from './UncoveredSales';
 import { DeflatorSelect } from './components/DeflatorSelect';
 import { PeriodSelect, periodRange, usePeriod } from './components/PeriodSelect';
 import { Pct } from './components/Pct';
@@ -444,6 +445,7 @@ export function SalesPanel() {
   return (
     <div className="flex flex-col gap-4">
       {controls}
+      <UncoveredSalesCard />
       {tot.count === 0 ? (
         <EmptyState
           kicker={t('carteira-aba-vendas')}
