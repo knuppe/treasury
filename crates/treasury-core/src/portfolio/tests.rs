@@ -3061,6 +3061,8 @@ fn trade_summary_totals_both_sides_and_counts_events() {
                     amount: None,
                     new_asset_id: None,
                     notes: None,
+                    account_id: None,
+                    quantity: None,
                 },
             )
         })
