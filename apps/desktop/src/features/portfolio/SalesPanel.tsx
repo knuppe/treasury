@@ -405,17 +405,19 @@ export function SalesPanel() {
         {
           key: 'nominal',
           name: t('carteira-vendas-nominal'),
-          color: 'accent',
+          color: '@accent',
           values: r.by_month.map((g) => g.totals.result),
         },
         {
           key: 'real',
           name: t('carteira-vendas-real', { indice: index }),
-          color: 'warning',
+          color: '@warning',
           values: r.by_month.map((g) => g.totals.real_result ?? 0),
         },
       ],
       currency: r.currency,
+      // Nominal and real are two readings of the same result: no total, no shares.
+      total: false,
     };
   }, [r, index]);
 

@@ -12,7 +12,11 @@ export interface GroupedBarsProps {
 
 /** Barras agrupadas (categorias × titulares). */
 export function GroupedBars({ input, ariaLabel, onBarClick }: GroupedBarsProps) {
-  const option = useCallback((t: ChartTheme) => groupedBarsOption(t, input), [input]);
+  const option = useCallback(
+    (t: ChartTheme) =>
+      groupedBarsOption(t, { ...input, clickable: input.clickable ?? Boolean(onBarClick) }),
+    [input, onBarClick],
+  );
   return (
     <EChart
       option={option}

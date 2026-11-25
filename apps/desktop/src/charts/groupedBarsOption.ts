@@ -21,6 +21,13 @@ export interface GroupedBarsInput {
   /** Séries (titulares) com um valor por linha. */
   groups: readonly { key: string; name: string; color: ColorRef; values: readonly number[] }[];
   currency: string;
+  /**
+   * Show the row total in the tooltip, and each bar's share of it (default: yes). Off when the
+   * bars are two readings of the same amount (nominal × real), which do not add up.
+   */
+  total?: boolean;
+  /** The bars open the entries (the tooltip says so). */
+  clickable?: boolean;
 }
 
 export function groupedHeight(input: GroupedBarsInput): number {
@@ -44,19 +51,23 @@ export function groupedBarsOption(t: ChartTheme, input: GroupedBarsInput): EChar
       axisPointer: { type: 'shadow', shadowStyle: { color: t.line, opacity: 0.35 } },
       formatter: (params: { dataIndex: number }[]) => {
         const i = rev(params[0]?.dataIndex ?? 0);
+        const withTotal = input.total ?? true;
         const total = input.groups.reduce((s, g) => s + (g.values[i] ?? 0), 0);
+        const share = (v: number) => (withTotal && total > 0 ? ` · ${pct(v / total, t, 0)}` : '');
         return tooltipHtml(
           t,
           input.rows[i]?.label ?? '',
           [
-            { label: 'Total', value: tooltipMoney(total, t, input.currency), strong: true },
+            ...(withTotal
+              ? [{ label: 'Total', value: tooltipMoney(total, t, input.currency), strong: true }]
+              : []),
             ...input.groups.map((g) => ({
               label: g.name,
-              value: `${tooltipMoney(g.values[i] ?? 0, t, input.currency)}${total > 0 ? ` · ${pct((g.values[i] ?? 0) / total, t, 0)}` : ''}`,
+              value: `${tooltipMoney(g.values[i] ?? 0, t, input.currency)}${share(g.values[i] ?? 0)}`,
               color: resolveColor(t, g.color),
             })),
           ],
-          tr('graficos-clique-barra'),
+          (input.clickable ?? true) ? tr('graficos-clique-barra') : undefined,
         );
       },
     },

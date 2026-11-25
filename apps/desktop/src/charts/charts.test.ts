@@ -367,6 +367,26 @@ describe('grouped bars', () => {
     expect((o.yAxis as { data: string[] }).data).toEqual(['Y', 'X']);
     expect(series(o).data).toEqual([20, 10]);
   });
+
+  it('two readings of the same amount: no total in the tooltip, theme colors resolved', () => {
+    const o = groupedBarsOption(theme(), {
+      rows: [{ key: '2026-02', label: 'fev/26' }],
+      groups: [
+        { key: 'nominal', name: 'Nominal', color: '@accent', values: [1000] },
+        { key: 'real', name: 'Real', color: '@warning', values: [900] },
+      ],
+      currency: 'BRL',
+      total: false,
+      clickable: false,
+    }) as AnyRec;
+    // A token name without "@" is not a CSS color: the bars vanished on hover.
+    expect(series(o, 0).color).toMatch(/^#|^rgb/);
+    const tip = (o.tooltip as { formatter: (p: { dataIndex: number }[]) => string }).formatter([
+      { dataIndex: 0 },
+    ]);
+    expect(tip).not.toContain('Total');
+    expect(tip).not.toContain('%');
+  });
 });
 
 describe('stacked area', () => {
