@@ -113,6 +113,45 @@ impl McpChild {
     }
 }
 
+/// A 2026-07-28 client opens with `server/discover` and sends `_meta` on every request, with no
+/// `initialize`: the binary answers it the same way (here, with no vault to open).
+#[test]
+fn modern_client_without_initialize_is_served() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut mcp = McpChild::spawn(&dir.path().join("home"));
+    let meta = json!({
+        "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+        "io.modelcontextprotocol/clientCapabilities": {},
+        "io.modelcontextprotocol/clientInfo": {"name": "teste-e2e", "version": "1.0"}
+    });
+    mcp.send(
+        json!({"jsonrpc": "2.0", "id": 1, "method": "server/discover",
+                    "params": {"_meta": meta}}),
+    );
+    let d = mcp.response(1);
+    let versions = d["result"]["supportedVersions"].as_array().unwrap();
+    assert!(versions.contains(&json!("2026-07-28")), "{d}");
+    assert!(versions.contains(&json!("2025-06-18")), "{d}");
+    assert_eq!(
+        d["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]["name"],
+        "treasury"
+    );
+    mcp.send(json!({"jsonrpc": "2.0", "id": 2, "method": "tools/list",
+                    "params": {"_meta": meta}}));
+    assert!(mcp.response(2)["result"]["tools"].as_array().unwrap().len() >= 27);
+    mcp.send(json!({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
+                    "params": {"name": "list_accounts", "arguments": {}, "_meta": meta}}));
+    let r = mcp.response(3)["result"].clone();
+    assert_eq!(r["isError"], true);
+    assert!(
+        r["content"][0]["text"]
+            .as_str()
+            .unwrap()
+            .contains("Nenhum cofre")
+    );
+    mcp.finish();
+}
+
 #[test]
 fn without_app_or_keychain_tools_explain_how_to_unlock() {
     let dir = tempfile::tempdir().unwrap();
@@ -194,6 +233,24 @@ fn proxies_to_the_app_socket() {
         "{audit}"
     );
     assert_eq!(entries.len(), 2);
+
+    // A 2026-07-28 client through the same proxy: no `initialize`, its name from `_meta`.
+    let mut modern = McpChild::spawn_with_key(&home, Some(&key));
+    let meta = json!({
+        "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+        "io.modelcontextprotocol/clientCapabilities": {},
+        "io.modelcontextprotocol/clientInfo": {"name": "teste-novo", "version": "1.0"}
+    });
+    modern.send(json!({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+        "params": {"name": "get_change_history", "arguments": {"limit": 3}, "_meta": meta}}));
+    let r = modern.response(1)["result"].clone();
+    assert_eq!(r["isError"], false, "{r}");
+    modern.finish();
+    let audit = api.call("mcp.audit_list", json!({})).unwrap();
+    assert_eq!(
+        audit[0]["client"],
+        "teste-novo via treasury mcp · chave Cliente de teste"
+    );
     rt.block_on(socket.shutdown());
 }
 

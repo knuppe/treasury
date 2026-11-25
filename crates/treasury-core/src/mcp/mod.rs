@@ -61,7 +61,10 @@ mod tests_devfeedback;
 mod tests_keys;
 #[cfg(test)]
 mod tests_memory;
+#[cfg(test)]
+mod tests_modern;
 
+use std::borrow::Cow;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Instant;
@@ -69,9 +72,9 @@ use std::time::Instant;
 use rmcp::model::{
     CallToolRequestParams, CallToolResponse, CallToolResult, ContentBlock, GetPromptRequestParams,
     GetPromptResponse, Implementation, ListPromptsResult, ListResourceTemplatesResult,
-    ListResourcesResult, ListToolsResult, PaginatedRequestParams, ReadResourceRequestParams,
-    ReadResourceResponse, ReadResourceResult, ResourceContents, ServerCapabilities, ServerConfig,
-    Tool,
+    ListResourcesResult, ListToolsResult, PaginatedRequestParams, ProtocolVersion,
+    ReadResourceRequestParams, ReadResourceResponse, ReadResourceResult, ResourceContents,
+    ServerCapabilities, ServerConfig, Tool,
 };
 use rmcp::service::RequestContext;
 use rmcp::transport::IntoTransport;
@@ -91,6 +94,18 @@ pub use socket::{SocketServer, connect_socket, start_socket_server};
 
 /// Nome do servidor anunciado aos clientes (e chave em `mcpServers`).
 pub const SERVER_NAME: &str = "treasury";
+
+/// Newest MCP protocol revision this server is tested against (docs/ai-agent.md,
+/// "MCP protocol versions"). Clients pick the era: `initialize` (2025-11-25 and earlier) keeps
+/// the session-based lifecycle, while per-request `_meta` (2026-07-28) is served statelessly.
+/// Raising it is a deliberate change: `tests_modern` fails when the SDK knows a newer revision.
+pub const MAX_PROTOCOL_VERSION: ProtocolVersion = ProtocolVersion::V_2026_07_28;
+
+/// Every protocol revision the server accepts, oldest first: the SDK's known versions up to
+/// [`MAX_PROTOCOL_VERSION`], never one the SDK adds later on its own.
+pub fn supported_protocol_versions() -> &'static [ProtocolVersion] {
+    ProtocolVersion::known_up_to(&MAX_PROTOCOL_VERSION)
+}
 
 /// Instruções do servidor (campo `instructions` do `initialize`), em inglês para todo idioma
 /// (o modelo do cliente responde no idioma do usuário); o exemplo de dinheiro sai na moeda base
@@ -802,9 +817,16 @@ impl ServerHandler for TreasuryMcp {
         .with_server_info(
             Implementation::new(SERVER_NAME, crate::config::app_version())
                 .with_title("Treasury")
-                .with_description("Family finances: read-only queries to the local vault."),
+                .with_description(
+                    "Family finances from a local, encrypted vault; writes, when enabled, \
+                     become proposals the user approves.",
+                ),
         )
         .with_instructions(instructions(self.vault_base_currency().as_deref()))
+    }
+
+    fn supported_protocol_versions(&self) -> Cow<'static, [ProtocolVersion]> {
+        Cow::Borrowed(supported_protocol_versions())
     }
 
     async fn list_tools(

@@ -17,7 +17,7 @@ calculations. Code conventions and development commands are in
 | Migrations | `refinery` (supports `rusqlite`) | Schema versioning; migrations are embedded in the binary and preceded by an automatic backup. |
 | UI state | TanStack Query + Zustand | Cache of core calls and simple local state. |
 | AI | Own HTTP client in Rust per provider (`ai/`), local CLIs as a child process | The agent is a client of the app's MCP server; there is no parallel tool layer. |
-| MCP | `rmcp` crate (official Rust SDK) | A single MCP server in the core: the internal agent uses it in process, external clients use the `treasury mcp` subcommand (stdio) of the same binary. See [ai-agent.md](ai-agent.md). |
+| MCP | `rmcp` crate (official Rust SDK) | A single MCP server in the core: the internal agent uses it in process, external clients use the `treasury mcp` subcommand (stdio) of the same binary. Protocol revisions 2024-11-05 to 2026-07-28, chosen by the client. See [ai-agent.md](ai-agent.md#mcp-protocol-versions). |
 | Tests | `cargo test`, Vitest, Playwright (E2E in the WebView) | |
 | CI/Release | GitHub Actions (`ci.yml` on macOS, Ubuntu and Windows; `release.yml` for the Linux and Windows packages) | macOS is built and signed on the maintainer's Mac, because signing the update needs the YubiKey ([distribution.md](distribution.md)). |
 

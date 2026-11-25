@@ -36,6 +36,18 @@ Treasury's AI agent acts as the **family's financial manager**: it analyzes, rec
 - **With a local CLI** as the engine, the agent loop is the CLI's own: the app runs it as a child process, it connects to `treasury mcp`, and the app shows the conversation as a stream.
 - **Outside the app**, the same binary runs as `treasury mcp` over stdio. It connects to the open app through an authenticated local socket (a Unix socket with `0600` permission and a per-session token), so that writes go through the same approval queue and the vault does not have to be opened twice. If the app is closed, it only works with keychain unlock and in read-only mode.
 
+### MCP protocol versions
+
+The server accepts every MCP revision from `2024-11-05` to `2026-07-28` (`MAX_PROTOCOL_VERSION` in `mcp/mod.rs`), over stdio, the app socket and the local HTTP server. The client picks the era by how it opens the conversation; nothing needs to be turned on in the app.
+
+- **Up to 2025-11-25 (with a handshake):** the client sends `initialize` and the server agrees on the newest revision both know. Over HTTP the conversation keeps an `Mcp-Session-Id`. An `initialize` that asks for `2026-07-28` gets `2025-11-25`, the newest revision that still has a handshake.
+- **2026-07-28 (stateless):** there is no `initialize`. Every request carries `io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities` and `io.modelcontextprotocol/clientInfo` in `_meta`, and the client usually starts with `server/discover` to read the supported versions, capabilities and instructions. Over HTTP each POST also sends `MCP-Protocol-Version`, `Mcp-Method` and, for `tools/call`, `Mcp-Name`. A missing header or one that does not match the body gets HTTP 400 with error `-32020`. No session is created and `GET /mcp` answers 405.
+- **Unknown revision:** error `-32022` with the supported list in `data.supported`, so the client can retry with one of them.
+- **Same guarantees in both eras:** access is computed on every request, so key scopes, the API key on each HTTP request (a revoked key fails on the next one), the loopback and browser rules, `developer_tools` for the `*_dev_feedback` tools, writes as proposals (diff, approval, undo) and the audit log behave the same. The client name in the audit and in proposals comes from `initialize` or, in 2026-07-28, from `clientInfo` in `_meta`.
+- **Caching:** `tools/list`, `prompts/list` and `resources/list` answer with `ttlMs: 0` and `cacheScope: "private"`, because they depend on the key, the settings and developer mode.
+- **Not used:** `subscriptions/listen` (the server sends no MCP notifications; data changes go out on `GET /events`), server-to-client requests (sampling, elicitation, roots) and the tasks extension.
+- **New revisions:** a newer revision known to the SDK is not served until `MAX_PROTOCOL_VERSION` is raised on purpose; `mcp/tests_modern.rs` fails when that happens, as a reminder to read the changelog first.
+
 ## MCP tools
 
 The full catalog, with the descriptions that clients receive, comes from `crates/treasury-core/src/mcp/tools.rs` (and the `tools_*.rs` files next to it); `find_tools` finds a tool by intent. The lists below group the main ones by area.
