@@ -311,3 +311,4 @@ nucleo-geral-erro-backup-nao-e-backup = Esse arquivo não parece um backup do Tr
 
 nucleo-geral-tarefa-nao-encontrada = tarefa não encontrada (pode já ter terminado)
 nucleo-geral-tarefa-nao-cancelavel = essa tarefa não pode ser cancelada
+nucleo-geral-tarefa-cofre-bloqueado = interrompida porque o cofre foi bloqueado; continua de onde parou depois que você desbloquear

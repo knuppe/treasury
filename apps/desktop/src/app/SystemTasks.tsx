@@ -144,7 +144,13 @@ export function SystemTaskRow({ task, since }: { task: TaskInfo; since: (iso: st
               {count ? <span className="num text-[11px] text-dim">{count}</span> : null}
             </>
           ) : task.error ? (
-            <span className="line-clamp-2 text-[12px] text-negative" title={task.error}>
+            <span
+              className={cx(
+                'line-clamp-2 text-[12px]',
+                task.status === 'failed' ? 'text-negative' : 'text-dim',
+              )}
+              title={task.error}
+            >
               {task.error}
             </span>
           ) : null}

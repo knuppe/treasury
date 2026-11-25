@@ -308,3 +308,4 @@ nucleo-geral-erro-backup-nao-e-backup = This file doesn't look like a Treasury b
 
 nucleo-geral-tarefa-nao-encontrada = task not found (it may have already finished)
 nucleo-geral-tarefa-nao-cancelavel = this task cannot be cancelled
+nucleo-geral-tarefa-cofre-bloqueado = stopped because the vault was locked; it picks up where it left off after you unlock

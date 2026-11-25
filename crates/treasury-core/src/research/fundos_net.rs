@@ -555,9 +555,11 @@ pub(crate) fn sync(r: &mut Runner<'_>, _today: NaiveDate) -> Result<Outcome> {
             out.stopped = true;
             break;
         }
-        crate::tasks::check()?;
+        r.check()?;
         crate::tasks::detail(format!("Fundos.NET {}", t.ticker));
-        let docs = match list_all(r, &t.cnpj, &mut out.requests) {
+        let docs = list_all(r, &t.cnpj, &mut out.requests);
+        crate::tasks::advance();
+        let docs = match docs {
             Ok(d) => d,
             Err(e) => {
                 consecutive += 1;
@@ -587,26 +589,36 @@ pub(crate) fn sync(r: &mut Runner<'_>, _today: NaiveDate) -> Result<Outcome> {
             Ok(ok.into_iter().collect())
         })?;
         let mut fund_error = false;
-        for d in docs
+        let pending: Vec<&DocRef> = docs
             .iter()
             .filter(|d| d.ref_date.is_none_or(|x| x >= t.since))
-        {
+            .filter(|d| {
+                force
+                    || !(fetched.contains(&d.id)
+                        || log
+                            .get(&format!("doc:{}", d.id))
+                            .is_some_and(|(_, st)| st == "ok" || st == "empty"))
+            })
+            .collect();
+        // The first collection of a fund held for years is a hundred notices or more, one
+        // every 1.5 s: the count moves with each one and the detail says how far it is.
+        for (i, d) in pending.iter().enumerate() {
             let key = format!("doc:{}", d.id);
-            let done = fetched.contains(&d.id)
-                || log
-                    .get(&key)
-                    .is_some_and(|(_, st)| st == "ok" || st == "empty");
-            if done && !force {
-                continue;
-            }
             if consecutive >= MAX_CONSECUTIVE_ERRORS {
                 out.stopped = true;
                 break;
             }
-            crate::tasks::check()?;
+            r.check()?;
+            crate::tasks::detail(format!(
+                "Fundos.NET {} ({}/{})",
+                t.ticker,
+                i + 1,
+                pending.len()
+            ));
             out.requests += 1;
             let res = get(r, &document_url(d.id))
                 .and_then(|b| b.map(|b| parse_notice(&b, &t.ticker)).transpose());
+            crate::tasks::advance();
             let stamp = now_utc();
             match res {
                 Ok(rows) => {
@@ -1017,11 +1029,23 @@ mod sync_tests {
     struct Fixture {
         files: HashMap<String, Vec<u8>>,
         calls: Mutex<Vec<String>>,
+        /// Locks this vault when the request number `n` (1-based) is made, as the auto-lock
+        /// does while a long collection is still downloading.
+        lock_at: Option<(usize, Arc<Api>)>,
     }
 
     impl Fetcher for Fixture {
         fn get(&self, url: &str, _cond: Option<&FileMeta>, _ua: &str) -> FetchResult {
-            self.calls.lock().unwrap().push(url.to_string());
+            let n = {
+                let mut calls = self.calls.lock().unwrap();
+                calls.push(url.to_string());
+                calls.len()
+            };
+            if let Some((at, api)) = &self.lock_at
+                && *at == n
+            {
+                api.call("vault.lock", json!({})).unwrap();
+            }
             match self.files.get(url) {
                 None => Ok(Fetched::NotFound),
                 Some(b) => Ok(Fetched::Body {
@@ -1032,14 +1056,16 @@ mod sync_tests {
         }
     }
 
-    #[test]
-    fn collects_each_notice_once_for_the_funds_held() {
+    const PASSWORD: &str = "senha-mestra-forte";
+
+    /// A vault with one fund bought in June 2025 and another never traded.
+    fn vault_with_a_fund() -> (tempfile::TempDir, Arc<Api>) {
         let dir = tempfile::tempdir().unwrap();
         let paths = TreasuryPaths::with_root(dir.path().join(".treasury")).unwrap();
         let api = Arc::new(Api::new_unlocked_process(paths).unwrap());
         api.call(
             "vault.create",
-            json!({"password": "senha-mestra-forte", "household_name": "Família Teste"}),
+            json!({"password": PASSWORD, "household_name": "Família Teste"}),
         )
         .unwrap();
         let fund = api
@@ -1072,20 +1098,88 @@ mod sync_tests {
             Ok(())
         })
         .unwrap();
-        let mut f = Fixture::default();
-        f.files
-            .insert(list_url("11222333000144", 0), LIST.as_bytes().to_vec());
-        f.files
-            .insert(document_url(900003), NOTICE_NEW.as_bytes().to_vec());
-        f.files.insert(
+        (dir, api)
+    }
+
+    fn site_files() -> HashMap<String, Vec<u8>> {
+        let mut files = HashMap::new();
+        files.insert(list_url("11222333000144", 0), LIST.as_bytes().to_vec());
+        files.insert(document_url(900003), NOTICE_NEW.as_bytes().to_vec());
+        files.insert(
             document_url(900002),
             NOTICE_AMORTIZATION.as_bytes().to_vec(),
         );
-        // 100001 (2021) is older than the first purchase: not downloaded.
-        let args = SyncArgs {
+        files
+    }
+
+    fn only_fundos_net() -> SyncArgs {
+        SyncArgs {
             force: None,
             sources: Some(vec![SyncSource::FundosNet]),
+        }
+    }
+
+    #[test]
+    fn a_vault_locked_mid_collection_stops_and_resumes_after_unlock() {
+        let (_dir, api) = vault_with_a_fund();
+        let today = crate::time::parse_date("2025-12-01").unwrap();
+        // List, first notice, then the vault locks while the second one downloads.
+        let f = Fixture {
+            files: site_files(),
+            lock_at: Some((3, api.clone())),
+            ..Default::default()
         };
+        use crate::tasks::{self, TaskKind, TaskOrigin, TaskStatus};
+        let mut id = None;
+        let res = tasks::run(TaskKind::MarketSync, TaskOrigin::Auto, true, || {
+            id = tasks::current_id();
+            run_with(&api, &only_fundos_net(), &f, today)
+        });
+        assert!(matches!(res, Err(crate::error::Error::Locked)), "{res:?}");
+        assert_eq!(f.calls.lock().unwrap().len(), 3);
+        // The task is interrupted, not failed, and its count moved with each request.
+        let task = tasks::list()
+            .into_iter()
+            .find(|t| Some(&t.id) == id.as_ref())
+            .unwrap();
+        assert_eq!(task.status, TaskStatus::Cancelled);
+        assert!(task.error.is_some());
+        assert_eq!(task.done, 3);
+        api.call("vault.unlock", json!({"password": PASSWORD}))
+            .unwrap();
+        let stored = |api: &Api| {
+            api.with_session(|s, _| {
+                let n: i64 = s.db.conn().query_row(
+                    "SELECT count(DISTINCT document_id) FROM research_fund_notice",
+                    [],
+                    |x| x.get(0),
+                )?;
+                Ok(n)
+            })
+            .unwrap()
+        };
+        // What came before the lock was kept.
+        assert_eq!(stored(&api), 1);
+        // The next run lists again and downloads only the notice that was not stored.
+        let f2 = Fixture {
+            files: site_files(),
+            ..Default::default()
+        };
+        run_with(&api, &only_fundos_net(), &f2, today).unwrap();
+        let calls = f2.calls.lock().unwrap().clone();
+        assert_eq!(calls.len(), 2, "{calls:#?}");
+        assert_eq!(stored(&api), 2);
+    }
+
+    #[test]
+    fn collects_each_notice_once_for_the_funds_held() {
+        let (_dir, api) = vault_with_a_fund();
+        let f = Fixture {
+            files: site_files(),
+            ..Default::default()
+        };
+        // 100001 (2021) is older than the first purchase: not downloaded.
+        let args = only_fundos_net();
         let today = crate::time::parse_date("2025-12-01").unwrap();
         run_with(&api, &args, &f, today).unwrap();
         let calls = f.calls.lock().unwrap().clone();

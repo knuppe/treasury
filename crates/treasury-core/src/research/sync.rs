@@ -386,7 +386,7 @@ impl Runner<'_> {
         } = req;
         // Tarefa em segundo plano: o arquivo atual e quantos já foram; cancelada, para aqui (o
         // que já veio fica gravado, cada arquivo na sua transação).
-        crate::tasks::check()?;
+        self.check()?;
         crate::tasks::detail(label.clone());
         crate::tasks::advance();
         let cond = if self.plan.force
@@ -461,6 +461,16 @@ impl Runner<'_> {
 
     pub(crate) fn with<T>(&self, f: impl FnOnce(&mut Connection) -> Result<T>) -> Result<T> {
         self.api.with_session(|s, _| f(s.db.conn_mut()))
+    }
+
+    /// Boundary between two requests: stops when the task was cancelled or the vault was
+    /// locked meanwhile (auto-lock), before downloading something that could not be stored.
+    pub(crate) fn check(&self) -> Result<()> {
+        crate::tasks::check()?;
+        if !self.api.is_unlocked() {
+            return Err(Error::Locked);
+        }
+        Ok(())
     }
 }
 

@@ -257,21 +257,27 @@ impl Task {
     }
 
     /// Termina com o resultado: erro vira falha (cancelamento, cancelada).
+    ///
+    /// The vault locking mid-run (auto-lock while the collection was still going) is not a
+    /// failure: the task ends as interrupted, with the reason, and the routine is not snoozed,
+    /// so it carries on from where it stopped after the next unlock.
     pub fn finish<T>(mut self, res: &Result<T>) {
         let status = match res {
             Ok(_) if self.is_cancelled() => TaskStatus::Cancelled,
             Ok(_) => TaskStatus::Done,
-            Err(Error::Cancelled) => TaskStatus::Cancelled,
+            Err(Error::Cancelled | Error::Locked) => TaskStatus::Cancelled,
             Err(_) => TaskStatus::Failed,
         };
         let error = match res {
             Err(e) if status == TaskStatus::Failed => Some(e.message()),
+            Err(Error::Locked) => Some(crate::i18n::t("nucleo-geral-tarefa-cofre-bloqueado")),
             _ => None,
         };
-        self.end(status, error);
+        let snooze = !matches!(res, Err(Error::Locked));
+        self.end(status, error, snooze);
     }
 
-    fn end(&mut self, status: TaskStatus, error: Option<String>) {
+    fn end(&mut self, status: TaskStatus, error: Option<String>, snooze: bool) {
         if self.ended {
             return;
         }
@@ -289,7 +295,7 @@ impl Task {
             .finished
             .lock()
             .unwrap_or_else(|p| p.into_inner()) = Some(Instant::now());
-        if status == TaskStatus::Cancelled && info.origin == TaskOrigin::Auto {
+        if snooze && status == TaskStatus::Cancelled && info.origin == TaskOrigin::Auto {
             registry()
                 .cancelled_at
                 .insert(key(info.kind), Instant::now());
@@ -313,7 +319,7 @@ impl Drop for Task {
         } else {
             TaskStatus::Done
         };
-        self.end(status, None);
+        self.end(status, None, true);
     }
 }
 
@@ -432,6 +438,12 @@ pub fn run<T>(
     res
 }
 
+/// Id of this thread's current task (tests elsewhere in the crate).
+#[cfg(test)]
+pub(crate) fn current_id() -> Option<String> {
+    CURRENT.with(|c| c.borrow().as_ref().map(|e| lock(e).id.clone()))
+}
+
 /// Etapa da tarefa corrente desta thread (sem tarefa, nada).
 pub fn stage(s: TaskStage) {
     with_current(|t| t.stage(s));
@@ -533,6 +545,21 @@ mod tests {
         assert_eq!(find(&id).status, TaskStatus::Cancelled);
         assert!(snoozed(TaskKind::ResearchSync));
         assert!(cancel("nao-existe").is_err());
+    }
+
+    #[test]
+    fn a_vault_lock_interrupts_without_failing_or_snoozing() {
+        let mut id = String::new();
+        let res: Result<()> = run(TaskKind::MailSync, TaskOrigin::Auto, true, || {
+            CURRENT.with(|c| id = lock(c.borrow().as_ref().unwrap()).id.clone());
+            Err(Error::Locked)
+        });
+        assert!(matches!(res, Err(Error::Locked)));
+        let t = find(&id);
+        assert_eq!(t.status, TaskStatus::Cancelled);
+        assert!(t.error.is_some());
+        // The routine resumes after the next unlock instead of waiting an hour.
+        assert!(!snoozed(TaskKind::MailSync));
     }
 
     #[test]

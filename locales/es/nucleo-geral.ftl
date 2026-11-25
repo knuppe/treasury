@@ -309,3 +309,4 @@ nucleo-geral-erro-backup-nao-e-backup = Ese archivo no parece una copia de segur
 
 nucleo-geral-tarefa-nao-encontrada = tarea no encontrada (puede que ya haya terminado)
 nucleo-geral-tarefa-nao-cancelavel = esta tarea no se puede cancelar
+nucleo-geral-tarefa-cofre-bloqueado = interrumpida porque la bóveda se bloqueó; sigue donde se quedó cuando la desbloquees
