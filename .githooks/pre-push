@@ -1,4 +1,9 @@
 #!/bin/sh
-# Before every push, the CI checks that fail in seconds (scripts/pre-push-check.sh). Before a
-# release push, run `scripts/pre-push-check.sh --full` by hand (docs/development.md).
-exec "$(git rev-parse --show-toplevel)/scripts/pre-push-check.sh"
+# Before every push, the CI checks that fail in seconds (scripts/pre-push-check.sh). A push that
+# carries a version tag (v*) runs the full checks instead, the ones a release needs
+# (docs/development.md, "Before a push").
+full=""
+while read -r local_ref _ _ _; do
+  case "$local_ref" in refs/tags/v*) full="--full" ;; esac
+done
+exec "$(git rev-parse --show-toplevel)/scripts/pre-push-check.sh" $full

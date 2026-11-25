@@ -161,20 +161,20 @@ fn page_unlock(_ptr: *mut u8, _len: usize) {}
 /// relatório de falha com memória. No build de desenvolvimento não faz nada, para o
 /// depurador continuar funcionando.
 pub fn harden_process() {
-    if cfg!(debug_assertions) {
-        return;
-    }
+    // Off Unix there is nothing to do yet (an early `return` would be needless there).
     #[cfg(unix)]
-    // SAFETY: chamadas de sistema sem ponteiros guardados; falhar só deixa o processo como
-    // estava.
-    unsafe {
-        let none = libc::rlimit {
-            rlim_cur: 0,
-            rlim_max: 0,
-        };
-        libc::setrlimit(libc::RLIMIT_CORE, &none);
-        #[cfg(target_os = "linux")]
-        libc::prctl(libc::PR_SET_DUMPABLE, 0, 0, 0, 0);
+    if !cfg!(debug_assertions) {
+        // SAFETY: chamadas de sistema sem ponteiros guardados; falhar só deixa o processo como
+        // estava.
+        unsafe {
+            let none = libc::rlimit {
+                rlim_cur: 0,
+                rlim_max: 0,
+            };
+            libc::setrlimit(libc::RLIMIT_CORE, &none);
+            #[cfg(target_os = "linux")]
+            libc::prctl(libc::PR_SET_DUMPABLE, 0, 0, 0, 0);
+        }
     }
 }
 

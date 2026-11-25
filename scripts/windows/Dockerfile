@@ -10,3 +10,5 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install
 ENV RUSTUP_HOME=/opt/rustup CARGO_HOME=/opt/cargo PATH=/opt/cargo/bin:$PATH
 RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.99.0 \
     && rustup target add x86_64-pc-windows-gnu
+# clippy and rustfmt for scripts/cross-clippy.sh (rust-toolchain.toml asks for them).
+RUN rustup component add clippy rustfmt

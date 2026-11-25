@@ -247,9 +247,15 @@ before the push and the release cycle stays short:
 - **Every push** (the `.githooks/pre-push` hook, about 15 seconds): the whole CI `audit` job
   (approved dependencies, `cargo deny`, `npm audit` of the production dependencies,
   `THIRD_PARTY_LICENSES.md` up to date), `cargo fmt --check`, prettier, lint and types.
-- **Before pushing a release**, by hand: `scripts/pre-push-check.sh --full`, which adds clippy,
-  the workspace tests and the interface tests in UTC (the CI machines run in UTC), the generated
-  TS types, the build and the end-to-end scenarios.
+- **Before pushing a release**: `scripts/pre-push-check.sh --full`, which adds clippy, the
+  workspace tests and the interface tests in UTC (the CI machines run in UTC), the generated TS
+  types, the build and the end-to-end scenarios. The hook runs it by itself when the push carries
+  a version tag (`v*`).
+- **Clippy on Linux and Windows** (`scripts/cross-clippy.sh`, part of `--full`): the same clippy
+  in the Docker images of `scripts/linux` and `scripts/windows`, so code under
+  `cfg(target_os = ...)` that only warns on another system fails here and not in CI. It needs
+  Docker Desktop running (`SKIP_CROSS_CLIPPY=1` skips it); the first run takes about 10 minutes
+  per system, later ones one to three.
 
 The hooks folder of each clone is local: a `.git/hooks/pre-push` that calls `.githooks/pre-push`
 turns the hook on. It needs `cargo-deny` (`cargo install cargo-deny --locked`). A dependency bump

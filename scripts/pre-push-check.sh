@@ -5,9 +5,10 @@
 #   scripts/pre-push-check.sh --full   # everything the CI runs: before pushing a release
 #
 # Quick: the whole `audit` job (approved dependencies, cargo deny, npm audit, third-party
-# licenses), cargo fmt, prettier, lint and types. Full adds clippy, the workspace tests in UTC
-# (the CI machines run in UTC), the generated TS types, the interface tests, the build and the
-# end-to-end scenarios.
+# licenses), cargo fmt, prettier, lint and types. Full adds clippy (on macOS, and on Linux and
+# Windows through Docker: scripts/cross-clippy.sh; SKIP_CROSS_CLIPPY=1 skips it), the workspace
+# tests in UTC (the CI machines run in UTC), the generated TS types, the interface tests, the
+# build and the end-to-end scenarios.
 set -euo pipefail
 root="$(git rev-parse --show-toplevel)"
 cd "$root"
@@ -38,6 +39,11 @@ step "prettier, lint and types"
 if [ "$full" = 1 ]; then
   step "clippy"
   cargo clippy --workspace --all-targets -- -D warnings
+  # Code under cfg(target_os = ...) only warns on the other systems: CI's Linux clippy is the
+  # first to see it unless it runs here too.
+  if [ "${SKIP_CROSS_CLIPPY:-0}" != 1 ]; then
+    scripts/cross-clippy.sh
+  fi
   step "workspace tests (UTC)"
   TZ=UTC cargo test --workspace -q
   step "generated TS types"
@@ -45,6 +51,9 @@ if [ "$full" = 1 ]; then
   step "interface tests (UTC) and build"
   (cd apps/desktop && TZ=UTC npx vitest run && npx vite build)
   step "end-to-end (Chromium)"
+  # Without Playwright's own Chromium, the installed Chrome (playwright.config.ts).
+  chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  if [ -z "${PW_CHROMIUM:-}" ] && [ -x "$chrome" ]; then export PW_CHROMIUM="$chrome"; fi
   (cd apps/desktop && npm run e2e -- --trace off)
 fi
 printf '\nAll checks passed.\n' >&2
