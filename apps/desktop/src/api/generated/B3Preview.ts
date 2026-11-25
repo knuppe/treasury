@@ -6,6 +6,7 @@ import type { B3FileSummary } from "./B3FileSummary";
 import type { B3IgnoredRow } from "./B3IgnoredRow";
 import type { B3IncomeProposal } from "./B3IncomeProposal";
 import type { B3Institution } from "./B3Institution";
+import type { B3OpeningProposal } from "./B3OpeningProposal";
 import type { B3PositionCheck } from "./B3PositionCheck";
 import type { B3TradeProposal } from "./B3TradeProposal";
 
@@ -21,4 +22,8 @@ uses_settlements: boolean, institutions: Array<B3Institution>, assets: Array<B3A
 /**
  * Presente quando um relatório de posição veio junto.
  */
-position_check: B3PositionCheck | null, counts: B3Counts, warnings: Array<string>, };
+position_check: B3PositionCheck | null, 
+/**
+ * Opening positions the file suggests (history before the file is missing).
+ */
+openings: Array<B3OpeningProposal>, counts: B3Counts, warnings: Array<string>, };

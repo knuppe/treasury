@@ -50,6 +50,7 @@ nucleo-carteira-erro-ajuste-importada = this trade came from the brokerage with 
 nucleo-carteira-erro-desdobramento = a split needs a factor greater than 1 (e.g. 2 for 1→2)
 nucleo-carteira-erro-grupamento = a reverse split needs a factor between 0 and 1 (e.g. 0.1 for 10→1)
 nucleo-carteira-erro-bonificacao = a stock bonus needs the factor (new shares per share, e.g. 0.1 = 10%)
+nucleo-carteira-erro-bonificacao-quantidade = only a bonus can be credited by quantity, in one account and without a factor
 nucleo-carteira-erro-devolucao = a capital return needs the total amount
 nucleo-carteira-erro-ativo-resultante = enter the resulting asset
 nucleo-carteira-erro-bruto = the dividend's gross amount must be positive

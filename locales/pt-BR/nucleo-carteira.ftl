@@ -48,6 +48,7 @@ nucleo-carteira-erro-ajuste-importada = esta operação veio da corretora com id
 nucleo-carteira-erro-desdobramento = desdobramento precisa de fator maior que 1 (ex.: 2 para 1→2)
 nucleo-carteira-erro-grupamento = grupamento precisa de fator entre 0 e 1 (ex.: 0,1 para 10→1)
 nucleo-carteira-erro-bonificacao = bonificação precisa do fator (ações novas por ação, ex.: 0,1 = 10%)
+nucleo-carteira-erro-bonificacao-quantidade = só a bonificação pode ser creditada por quantidade, numa conta e sem fator
 nucleo-carteira-erro-devolucao = devolução de capital precisa do valor total
 nucleo-carteira-erro-ativo-resultante = informe o ativo resultante
 nucleo-carteira-erro-bruto = o valor bruto do provento deve ser positivo

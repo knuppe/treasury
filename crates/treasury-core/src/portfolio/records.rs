@@ -484,6 +484,8 @@ fn row_to_action(r: &Row<'_>) -> rusqlite::Result<CorporateAction> {
         new_asset_id: r.get("new_asset_id")?,
         notes: r.get("notes")?,
         source: r.get("source")?,
+        account_id: r.get("account_id")?,
+        quantity: r.get("quantity")?,
     })
 }
 
@@ -504,6 +506,32 @@ pub fn create_action(tx: &Transaction<'_>, a: &CorporateActionInput) -> Result<I
         .as_deref()
         .map(|f| dec(f, "nucleo-carteira-campo-fator"))
         .transpose()?;
+    let quantity = a
+        .quantity
+        .as_deref()
+        .map(|q| dec(q, "nucleo-carteira-campo-quantidade"))
+        .transpose()?;
+    if quantity.is_some() || a.account_id.is_some() {
+        // Only a bonus can be credited by quantity, and then in one account.
+        let ok = a.kind == CorporateActionKind::Bonus
+            && factor.is_none()
+            && quantity.is_some_and(|q| q > Decimal::ZERO)
+            && a.account_id.is_some();
+        if !ok {
+            return Err(Error::invalid(t(
+                "nucleo-carteira-erro-bonificacao-quantidade",
+            )));
+        }
+        let account = a.account_id.as_deref().unwrap_or_default();
+        let found: bool = tx.query_row(
+            "SELECT EXISTS (SELECT 1 FROM account WHERE id = ?1)",
+            [account],
+            |r| r.get(0),
+        )?;
+        if !found {
+            return Err(Error::not_found(crate::accounts::account_ref(account)));
+        }
+    }
     match a.kind {
         CorporateActionKind::Split if factor.is_none_or(|f| f <= Decimal::ONE) => {
             return Err(Error::invalid(t("nucleo-carteira-erro-desdobramento")));
@@ -513,7 +541,9 @@ pub fn create_action(tx: &Transaction<'_>, a: &CorporateActionInput) -> Result<I
         {
             return Err(Error::invalid(t("nucleo-carteira-erro-grupamento")));
         }
-        CorporateActionKind::Bonus if factor.is_none_or(|f| f <= Decimal::ZERO) => {
+        CorporateActionKind::Bonus
+            if quantity.is_none() && factor.is_none_or(|f| f <= Decimal::ZERO) =>
+        {
             return Err(Error::invalid(t("nucleo-carteira-erro-bonificacao")));
         }
         CorporateActionKind::CapitalReturn if a.amount.is_none_or(|v| v <= 0) => {
@@ -529,8 +559,8 @@ pub fn create_action(tx: &Transaction<'_>, a: &CorporateActionInput) -> Result<I
     let id = new_id();
     let now = now_utc();
     tx.execute(
-        "INSERT INTO corporate_action (id, asset_id, date, kind, factor, unit_cost, amount, new_asset_id, notes, source, created_at, updated_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 'manual', ?10, ?10)",
+        "INSERT INTO corporate_action (id, asset_id, date, kind, factor, unit_cost, amount, new_asset_id, notes, source, created_at, updated_at, account_id, quantity)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 'manual', ?10, ?10, ?11, ?12)",
         params![
             id,
             a.asset_id,
@@ -541,7 +571,9 @@ pub fn create_action(tx: &Transaction<'_>, a: &CorporateActionInput) -> Result<I
             a.amount,
             a.new_asset_id,
             a.notes,
-            now
+            now,
+            a.account_id,
+            quantity.map(|q| q.normalize().to_string()),
         ],
     )?;
     Ok(id)

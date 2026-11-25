@@ -239,6 +239,7 @@ nucleo-importacao-b3-classe-acao = ação (padrão)
 nucleo-importacao-b3-classe-ja-cadastrado = já cadastrado
 nucleo-importacao-b3-renda-fixa-sem-taxa = a B3 não informa a taxa contratada: sem os termos completos o ativo é criado como "Outros" (avaliado pelo custo); informe-os no commit ou edite o ativo depois
 nucleo-importacao-b3-sem-instituicao = (sem instituição)
+nucleo-importacao-b3-conta-investimentos = { $nome } Investimentos
 nucleo-importacao-b3-credito = Crédito
 nucleo-importacao-b3-debito = Débito
 # De onde veio a operação (vai na nota "Importado da B3 (…)").
@@ -247,6 +248,12 @@ nucleo-importacao-b3-origem-negociacao-mercado = negociação, { $mercado }
 nucleo-importacao-b3-origem-liquidacao = liquidação de { $data }
 nucleo-importacao-b3-origem-movimentacao = movimentação, { $movimentacao }
 nucleo-importacao-b3-origem-leilao = venda da fração no leilão de fração
+nucleo-importacao-b3-abertura-provento = quantidade no provento de { $data }: { $quantidade }
+nucleo-importacao-b3-abertura-retrato = retrato da custódia em { $data }: { $quantidade }
+nucleo-importacao-b3-abertura-posicao = posição da B3 em { $data }: { $quantidade }, sem movimentação antes
+nucleo-importacao-b3-abertura-vendas = o arquivo vende mais do que compra: falta o histórico anterior
+nucleo-importacao-b3-origem-abertura = posição de abertura
+nucleo-importacao-b3-nota-abertura = posição de abertura na véspera do arquivo, pela evidência da própria movimentação
 nucleo-importacao-b3-nota-importado = Importado da B3 ({ $origem }).
 nucleo-importacao-b3-ativo-cadastrado = Cadastrado pela importação da B3.
 nucleo-importacao-b3-ativo-renda-fixa = Renda fixa sem a taxa contratada (a B3 não informa): edite o ativo e informe os termos para avaliar pela curva.
@@ -255,11 +262,14 @@ nucleo-importacao-b3-fracionario = fracionário: { $codigo } → { $ticker }
 nucleo-importacao-b3-data-estimada = data do negócio estimada: 2 dias úteis antes da liquidação ({ $data })
 nucleo-importacao-b3-nota-repasse = repasse de provento (sem a linha principal no arquivo)
 nucleo-importacao-b3-nota-jcp = JCP líquido da B3: bruto = líquido ÷ 0,85
+nucleo-importacao-b3-nota-juros-aliquota = valor bruto da B3; IR retido pela tabela regressiva, prazo médio de { $dias } dias
+nucleo-importacao-b3-nota-juros-aliquota-presumida = valor bruto da B3; sem a compra do título, o IR foi presumido em 15% (mais de 720 dias): confira
 nucleo-importacao-b3-nota-repetida = repetida em outro arquivo desta importação ({ $origem })
 nucleo-importacao-b3-arquivo-linha = { $arquivo }, linha { $linha }
 nucleo-importacao-b3-nota-ja-importada = já importada (mesmo identificador)
 nucleo-importacao-b3-nota-ja-liquidacao = já importada pela movimentação (liquidação)
 nucleo-importacao-b3-nota-ja-negociacao = já importada pelo relatório de negociação
+nucleo-importacao-b3-nota-ja-nota-corretagem = já gravada pela nota de corretagem (data real e preço com taxas)
 nucleo-importacao-b3-nota-operacao-manual = parecida com uma operação lançada à mão (mesma data, ativo e quantidade)
 nucleo-importacao-b3-nota-provento-manual = parecido com um provento lançado à mão (mesma data e valor)
 nucleo-importacao-b3-nota-provento-oficial = já lançado pelo aviso oficial (mesmo pagamento)
@@ -273,7 +283,17 @@ nucleo-importacao-b3-erro-leilao-gravado = leilão de fração já gravado
 nucleo-importacao-b3-dica-custodia-venda = { $erro } (houve transferência de custódia deste ativo em { $data } ({ $instituicao }); aponte as duas instituições para a mesma conta)
 # Eventos corporativos: o fator calculado pelas quantidades.
 nucleo-importacao-b3-erro-fator = informe o fator do evento para aprová-lo
+nucleo-importacao-b3-erro-conta-nome = dê um nome à conta nova
+nucleo-importacao-b3-ignorada-retrato = retrato da custódia: repete a quantidade que você já tem
+nucleo-importacao-b3-origem-atualizacao = atualização da custódia
+nucleo-importacao-b3-origem-subscricao = subscrição exercida
+nucleo-importacao-b3-nota-atualizacao-confirmar = a B3 creditou { $quantidade } sem subscrição no arquivo nem posição conhecida: confirme a entrada e informe o custo
+nucleo-importacao-b3-nota-subscricao = cotas da subscrição exercida, ao preço do recibo
+nucleo-importacao-b3-nota-subscricao-sem-custo = cotas da subscrição exercida: a B3 não informou o preço, informe o custo
+nucleo-importacao-b3-erro-custo = informe o custo unitário para aprovar esta linha
 nucleo-importacao-b3-fator-sem-posicao = sem posição antes do evento nas contas escolhidas: importe o histórico anterior ou informe o fator
+nucleo-importacao-b3-nota-bonificacao-compra = parece a mesma entrada lançada como compra em { $data }: apague a compra e grave a bonificação, para o preço médio usar o custo atribuído
+nucleo-importacao-b3-bonificacao-quantidade = sem posição antes do evento: as ações bonificadas entram pela quantidade creditada na conta
 nucleo-importacao-b3-fator-sem-quantidade = a movimentação não traz a quantidade: informe o fator
 nucleo-importacao-b3-fator-calculado = fator calculado pelas quantidades; confira com o anúncio da empresa
 nucleo-importacao-b3-fator-inexato = fator calculado não é exato: confira e aprove
@@ -286,6 +306,8 @@ nucleo-importacao-b3-posicao-a-mais = o app tem mais do que a B3: falta alguma v
 nucleo-importacao-b3-posicao-a-menos = o app tem menos do que a B3: falta alguma compra, bonificação ou histórico anterior
 nucleo-importacao-b3-posicao-sem-conta = instituição sem conta escolhida
 nucleo-importacao-b3-posicao-nao-listada = o app tem posição que a B3 não lista nesta instituição: falta alguma venda ou transferência
+nucleo-importacao-b3-posicao-indisponivel = { $quantidade } indisponível na B3 ({ $motivo })
+nucleo-importacao-b3-posicao-vencida = venceu em { $data } e não está mais na B3: registre o resgate do vencimento
 
 ## Notas de corretagem (SINACOR)
 

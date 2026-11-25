@@ -18,7 +18,7 @@ import type { B3Source } from '@/api/generated/B3Source';
 import { useAssets } from '@/api/hooks/assets';
 import { useUndo } from '@/api/hooks/changes';
 import { detectB3, previewB3, useCommitB3 } from '@/api/hooks/b3';
-import { useInvestmentAccounts } from '@/api/hooks/portfolio';
+import { useCustodyAccounts } from '@/api/hooks/portfolio';
 import {
   Button,
   Dialog,
@@ -42,6 +42,7 @@ import { formatBytes } from '@/features/transactions/ui/hooks';
 import { t, t as tr } from '@/i18n';
 
 import { DecimalInput } from '../components/DecimalInput';
+import { accountLabel, B3AccountsStep, type B3Choice } from './B3AccountsStep';
 import { formatDecimal, formatQuantity, formatUnitPrice } from '../decimal';
 import { ACTION_KIND_LABEL, CLASS_LABEL, CLASS_ORDER, INCOME_KIND_LABEL } from '../labels';
 import {
@@ -67,7 +68,7 @@ import {
 } from './shared';
 
 type Step = 'files' | 'accounts' | 'preview' | 'done';
-type TabId = 'assets' | 'trades' | 'incomes' | 'actions' | 'ignored' | 'position';
+type TabId = 'assets' | 'trades' | 'incomes' | 'actions' | 'ignored' | 'position' | 'openings';
 
 const steps = (): { id: Step; label: string }[] => [
   { id: 'files', label: t('b3-etapa-arquivos') },
@@ -76,7 +77,14 @@ const steps = (): { id: Step; label: string }[] => [
   { id: 'done', label: t('b3-etapa-resultado') },
 ];
 
-const NONE = '__none__';
+/** An opening position ticked on the openings tab, with its cost. */
+interface OpeningPick {
+  on: boolean;
+  cost: string | null;
+}
+
+const openingKey = (o: { asset_key: string; account_id: string }) =>
+  `${o.asset_key}|${o.account_id}`;
 
 interface Approval {
   approved: boolean;
@@ -131,14 +139,15 @@ export function B3ImportDialog({
   /** Depois de gravar com sucesso, com os nomes dos arquivos gravados. */
   onImported?: (filenames: string[]) => void;
 }) {
-  const accountsQ = useInvestmentAccounts();
+  const accountsQ = useCustodyAccounts();
   const accounts = useMemo(() => accountsQ.data ?? [], [accountsQ.data]);
   const commit = useCommitB3();
   const undo = useUndo();
 
   const [step, setStep] = useState<Step>('files');
   const [files, setFiles] = useState<{ file: PickedFile; detect: B3DetectResult }[]>([]);
-  const [choices, setChoices] = useState<Map<string, string | null>>(new Map());
+  const [choices, setChoices] = useState<Map<string, B3Choice>>(new Map());
+  const [openings, setOpenings] = useState<Map<string, OpeningPick>>(new Map());
   const [preview, setPreview] = useState<B3Preview | null>(null);
   const [tab, setTab] = useState<TabId>('trades');
   const [filter, setFilter] = useState<B3RowStatus | 'all'>('all');
@@ -160,6 +169,7 @@ export function B3ImportDialog({
     setStep('files');
     setFiles([]);
     setChoices(new Map());
+    setOpenings(new Map());
     setPreview(null);
     setTab('trades');
     setFilter('all');
@@ -212,16 +222,37 @@ export function B3ImportDialog({
   const toAccounts = () =>
     void run(async () => {
       const p = await previewB3({ files: fileArgs() });
-      setChoices(new Map(p.institutions.map((i) => [i.name, i.account_id])));
+      setChoices(
+        new Map(p.institutions.map((i) => [i.name, { accountId: i.account_id, newAccount: null }])),
+      );
+      setOpenings(new Map());
       setPreview(p);
       setStep('accounts');
     });
 
-  const makePreview = () =>
+  const makePreview = (keepTab = false) =>
     void run(async () => {
+      const picked = (preview?.openings ?? []).filter((o) => openings.get(openingKey(o))?.on);
       const p = await previewB3({
         files: fileArgs(),
-        accounts: [...choices].map(([institution, account_id]) => ({ institution, account_id })),
+        accounts: [...choices].map(([institution, c]) => ({
+          institution,
+          account_id: c.newAccount ? null : c.accountId,
+          ...(c.newAccount ? { new_account: c.newAccount } : {}),
+        })),
+        ...(picked.length
+          ? {
+              openings: picked.map((o) => {
+                const cost = openings.get(openingKey(o))?.cost;
+                return {
+                  asset_key: o.asset_key,
+                  account_id: o.account_id,
+                  quantity: o.quantity,
+                  ...(cost ? { unit_cost: cost } : {}),
+                };
+              }),
+            }
+          : {}),
       });
       setPreview(p);
       setSkip(new Set());
@@ -230,6 +261,10 @@ export function B3ImportDialog({
       setLinks(new Map());
       setIncludePossible(false);
       setFilter('all');
+      if (keepTab) {
+        setStep('preview');
+        return;
+      }
       setTab(
         p.trades.length
           ? 'trades'
@@ -244,9 +279,11 @@ export function B3ImportDialog({
       setStep('preview');
     });
 
+  const isTrade = (index: number) => Boolean(preview?.trades.some((t) => t.index === index));
+  // A trade in review lacks the cost; an event in review, the factor.
   const approved = (index: number) => {
     const a = approvals.get(index);
-    return Boolean(a?.approved && a.factor);
+    return Boolean(a?.approved && (isTrade(index) ? a.unitCost : a.factor));
   };
   const willWrite = (index: number, status: B3RowStatus) =>
     !skip.has(index) &&
@@ -280,10 +317,12 @@ export function B3ImportDialog({
         skip: [...skip],
         include_possible_duplicates: includePossible,
         approve_actions: [...approvals]
-          .filter(([, a]) => a.approved && a.factor)
+          .filter(([index, a]) =>
+            isTrade(index) ? a.approved && a.unitCost : (a.approved && a.factor) || a.unitCost,
+          )
           .map(([index, a]) => ({
             index,
-            factor: a.factor!,
+            ...(a.factor && !isTrade(index) ? { factor: a.factor } : {}),
             ...(a.unitCost ? { unit_cost: a.unitCost } : {}),
           })),
         assets: [...new Set([...classes.keys(), ...links.keys()])].map((key) => {
@@ -303,15 +342,8 @@ export function B3ImportDialog({
       });
     });
 
-  const accountOptions = useMemo(
-    () => [
-      { value: NONE, label: t('b3-nao-importar') },
-      ...accounts.map((a) => ({ value: a.id, label: a.name, hint: a.currency })),
-    ],
-    [accounts],
-  );
   const accountName = (id: string | null) =>
-    accounts.find((a) => a.id === id)?.name ?? (id ? id : t('b3-sem-conta'));
+    accountLabel(id, accounts, preview?.institutions ?? []);
 
   const rowsOf = <R extends { status: B3RowStatus }>(rows: readonly R[]) =>
     rows.filter((r) => filter === 'all' || r.status === filter);
@@ -364,7 +396,7 @@ export function B3ImportDialog({
         <Button variant="ghost" onClick={() => setStep('files')}>
           {t('comum-voltar')}
         </Button>
-        <Button variant="primary" loading={busy} onClick={makePreview}>
+        <Button variant="primary" loading={busy} onClick={() => makePreview()}>
           {t('b3-gerar-previa')}
         </Button>
       </>
@@ -500,55 +532,12 @@ export function B3ImportDialog({
       ) : null}
 
       {step === 'accounts' && p ? (
-        <div className="flex flex-col gap-3">
-          <p className="text-[13px] text-dim">{t('b3-contas-texto')}</p>
-          <PreviewTable
-            label={t('b3-instituicoes')}
-            prefsId="Instituições"
-            rows={p.institutions}
-            getRowId={(i) => i.name}
-            columns={[
-              {
-                key: 'name',
-                header: t('b3-instituicao'),
-                hideable: false,
-                cell: (i) => {
-                  const value = choices.get(i.name) ?? null;
-                  return (
-                    <>
-                      <span className="text-fg">{i.name}</span>
-                      {i.suggested_account_id && value === i.suggested_account_id ? (
-                        <RowNote>{t('b3-conta-sugerida')}</RowNote>
-                      ) : !i.suggested_account_id ? (
-                        <RowNote>{t('b3-sem-conta-parecida')}</RowNote>
-                      ) : null}
-                    </>
-                  );
-                },
-              },
-              { key: 'rows', header: t('b3-linhas'), numeric: true, cell: (i) => i.rows },
-              {
-                key: 'account',
-                header: t('b3-conta'),
-                className: cx(TD, 'min-w-60'),
-                sortValue: (i) => {
-                  const id = choices.get(i.name) ?? null;
-                  return id ? accountName(id) : null;
-                },
-                cell: (i) => (
-                  <Select
-                    aria-label={t('b3-conta-para', { instituicao: i.name })}
-                    value={choices.get(i.name) ?? NONE}
-                    onValueChange={(v) =>
-                      v && setChoices((m) => new Map(m).set(i.name, v === NONE ? null : v))
-                    }
-                    options={accountOptions}
-                  />
-                ),
-              },
-            ]}
-          />
-        </div>
+        <B3AccountsStep
+          institutions={p.institutions}
+          accounts={accounts}
+          choices={choices}
+          onChange={(name, c) => setChoices((m) => new Map(m).set(name, c))}
+        />
       ) : null}
 
       {step === 'preview' && p ? (
@@ -565,7 +554,10 @@ export function B3ImportDialog({
               {
                 label: t('b3-contas'),
                 value: p.institutions
-                  .map((i) => `${i.name.split(' ')[0]} → ${accountName(i.account_id)}`)
+                  .map(
+                    (i) =>
+                      `${i.name.split(' ')[0]} → ${i.account_name ?? accountName(i.account_id)}`,
+                  )
                   .join(' · '),
               },
             ]}
@@ -611,6 +603,11 @@ export function B3ImportDialog({
               <TabsTrigger value="ignored">
                 {t('b3-aba-ignoradas')} <span className="num">{p.ignored.length}</span>
               </TabsTrigger>
+              {p.openings.length ? (
+                <TabsTrigger value="openings">
+                  {t('b3-aba-abertura')} <span className="num">{p.openings.length}</span>
+                </TabsTrigger>
+              ) : null}
               {p.position_check ? (
                 <TabsTrigger value="position">
                   {t('b3-aba-posicao')} <span className="num">{p.position_check.divergent}</span>
@@ -736,7 +733,18 @@ export function B3ImportDialog({
                     hideable: false,
                     sortable: false,
                     cell: (t) =>
-                      writeBox(t.index, t.status, tr('b3-importar-operacao', { n: t.index + 1 })),
+                      t.status === 'review' ? (
+                        <Checkbox
+                          label={tr('b3-aprovar')}
+                          checked={Boolean(approvals.get(t.index)?.approved)}
+                          onChange={(on) => {
+                            setApproval(t.index, { approved: on });
+                            if (on) toggleSkip(t.index, true);
+                          }}
+                        />
+                      ) : (
+                        writeBox(t.index, t.status, tr('b3-importar-operacao', { n: t.index + 1 }))
+                      ),
                   },
                   {
                     key: 'status',
@@ -786,7 +794,20 @@ export function B3ImportDialog({
                     header: t('b3-preco'),
                     numeric: true,
                     sortValue: (t) => decimal(t.price),
-                    cell: (t) => <Private>{formatUnitPrice(t.price, 'BRL')}</Private>,
+                    cell: (t) =>
+                      t.status === 'review' ? (
+                        <DecimalInput
+                          aria-label={tr('b3-custo-operacao', { n: t.index + 1 })}
+                          placeholder={tr('b3-custo')}
+                          value={approvals.get(t.index)?.unitCost ?? null}
+                          onValueChange={(unitCost) => setApproval(t.index, { unitCost })}
+                          invalid={Boolean(
+                            approvals.get(t.index)?.approved && !approvals.get(t.index)?.unitCost,
+                          )}
+                        />
+                      ) : (
+                        <Private>{formatUnitPrice(t.price, 'BRL')}</Private>
+                      ),
                   },
                   {
                     key: 'gross',
@@ -1015,7 +1036,8 @@ export function B3ImportDialog({
                     sortValue: (a) => decimal(approvals.get(a.index)?.unitCost ?? a.unit_cost),
                     cell: (a) => {
                       const ap = approvals.get(a.index);
-                      return a.status === 'review' && a.kind === 'bonus' ? (
+                      return a.kind === 'bonus' &&
+                        (a.status === 'review' || (a.status === 'new' && !a.unit_cost)) ? (
                         <DecimalInput
                           aria-label={t('b3-custo-acao-evento', { n: a.index + 1 })}
                           value={ap?.unitCost ?? a.unit_cost}
@@ -1071,6 +1093,109 @@ export function B3ImportDialog({
                 ]}
               />
             </TabsContent>
+
+            {p.openings.length ? (
+              <TabsContent value="openings" className="flex flex-col gap-2">
+                <p className="text-[12.5px] text-dim">{t('b3-abertura-texto')}</p>
+                <PreviewTable
+                  label={t('b3-abertura-tabela')}
+                  prefsId="Posições de abertura"
+                  rows={p.openings}
+                  getRowId={openingKey}
+                  columns={[
+                    {
+                      key: 'include',
+                      header: t('b3-importar'),
+                      hideable: false,
+                      sortable: false,
+                      cell: (o) => {
+                        const pick = openings.get(openingKey(o));
+                        return (
+                          <Checkbox
+                            hideLabel
+                            label={t('b3-abertura-incluir', { ativo: o.ticker ?? o.name })}
+                            checked={pick?.on ?? o.chosen}
+                            onChange={(on) =>
+                              setOpenings((m) =>
+                                new Map(m).set(openingKey(o), { on, cost: pick?.cost ?? null }),
+                              )
+                            }
+                          />
+                        );
+                      },
+                    },
+                    {
+                      key: 'asset',
+                      header: t('b3-ativo'),
+                      sortValue: (o) => o.ticker ?? o.name,
+                      cell: (o) => (
+                        <>
+                          <span className="font-medium text-fg">{o.ticker ?? o.name}</span>
+                          {o.ticker ? (
+                            <span className="block text-[11px] text-dim">{o.name}</span>
+                          ) : null}
+                        </>
+                      ),
+                    },
+                    {
+                      key: 'date',
+                      header: t('b3-data'),
+                      className: cx(TD, 'num whitespace-nowrap'),
+                      cell: (o) => formatDate(o.date),
+                    },
+                    {
+                      key: 'quantity',
+                      header: t('b3-qtd'),
+                      numeric: true,
+                      sortValue: (o) => decimal(o.quantity),
+                      cell: (o) => <Private>{formatQuantity(o.quantity)}</Private>,
+                    },
+                    {
+                      key: 'cost',
+                      header: t('b3-abertura-custo'),
+                      className: cx(TD, 'min-w-28'),
+                      sortable: false,
+                      cell: (o) => {
+                        const pick = openings.get(openingKey(o));
+                        return (
+                          <DecimalInput
+                            aria-label={t('b3-abertura-custo-de', { ativo: o.ticker ?? o.name })}
+                            value={pick?.cost ?? null}
+                            onValueChange={(cost) =>
+                              setOpenings((m) =>
+                                new Map(m).set(openingKey(o), { on: pick?.on ?? true, cost }),
+                              )
+                            }
+                          />
+                        );
+                      },
+                    },
+                    {
+                      key: 'account',
+                      header: t('b3-conta'),
+                      className: cx(TD, 'text-dim'),
+                      cell: (o) => accountName(o.account_id),
+                    },
+                    {
+                      key: 'evidence',
+                      header: t('b3-abertura-evidencia'),
+                      className: cx(TD, 'text-dim first-letter:uppercase'),
+                      cell: (o) => o.evidence,
+                    },
+                  ]}
+                />
+                <div>
+                  <Button
+                    variant="secondary"
+                    loading={busy}
+                    disabled={![...openings.values()].some((o) => o.on)}
+                    onClick={() => makePreview(true)}
+                  >
+                    {t('b3-abertura-aplicar')}
+                  </Button>
+                </div>
+              </TabsContent>
+            ) : null}
 
             {p.position_check ? (
               <TabsContent value="position" className="flex flex-col gap-2">

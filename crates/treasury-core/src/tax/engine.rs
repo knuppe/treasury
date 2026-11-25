@@ -119,8 +119,10 @@ fn replay_for_tax(
                 (K::Split | K::ReverseSplit, Some(f)) => {
                     pos.apply(&PositionEvent::Split { factor: f })?;
                 }
-                (K::Bonus, Some(f)) => {
-                    let qty = pos.qty * f;
+                (K::Bonus, f) if a.quantity.is_some() || f.is_some() => {
+                    let qty = a
+                        .quantity
+                        .unwrap_or_else(|| pos.qty * f.unwrap_or_default());
                     pos.apply(&PositionEvent::Bonus {
                         qty,
                         unit_cost: a.unit_cost.unwrap_or(Decimal::ZERO),

@@ -29,7 +29,11 @@ pub mod sheet;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
+mod tests_accounts;
+#[cfg(test)]
 mod tests_api;
+#[cfg(test)]
+mod tests_fixtures;
 
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
@@ -108,10 +112,73 @@ pub struct B3DetectResult {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export)]
 pub struct B3AccountChoice {
-    /// Nome da instituição como veio no arquivo (comparado sem maiúsculas e acentos).
+    /// Nome da instituição como veio no arquivo (comparado sem maiúsculas e acentos). Any of
+    /// the names of a grouped custodian works.
     pub institution: String,
     /// `null` = não importar as linhas desta instituição.
     pub account_id: Option<Id>,
+    /// Create this account in the import itself (same change set: undoing the import removes
+    /// it too). `account_id` is ignored.
+    #[ts(optional)]
+    pub new_account: Option<B3NewAccount>,
+}
+
+/// An account to create for a custodian of the file.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct B3NewAccount {
+    pub name: String,
+    pub kind: crate::accounts::AccountKind,
+    /// Linked to the institution with this name, created when missing.
+    pub institution_name: String,
+    pub institution_kind: crate::household::InstitutionKind,
+    /// Default: the day before the first date of the file.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub opening_date: Option<String>,
+}
+
+/// Why the account of a custodian was picked.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+#[ts(export)]
+pub enum B3MatchReason {
+    /// Chosen in this preview.
+    Chosen,
+    /// Saved from an earlier import.
+    Saved,
+    /// The account's institution is this custodian (same CNPJ or a known alias).
+    SameInstitution,
+    /// Similar name.
+    SimilarName,
+    /// Created by this import.
+    Created,
+}
+
+/// What the import does in one custodian's account.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct B3InstitutionSummary {
+    #[ts(type = "number")]
+    pub trades: u32,
+    #[ts(type = "number")]
+    pub incomes: u32,
+    #[ts(type = "number")]
+    pub actions: u32,
+    pub period_from: Option<String>,
+    pub period_to: Option<String>,
+    pub assets: Vec<B3InstitutionAsset>,
+}
+
+/// Position of an asset in the account before the file and after the import.
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct B3InstitutionAsset {
+    pub asset_key: String,
+    pub ticker: Option<String>,
+    pub name: String,
+    pub before: String,
+    pub after: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -125,6 +192,43 @@ pub struct B3PreviewArgs {
     /// Data da posição para a conferência (padrão: data no nome do arquivo de posição, ou hoje).
     #[ts(optional)]
     pub position_date: Option<String>,
+    /// Opening positions to record the day before the file starts (from `openings` of an
+    /// earlier preview), so sales and the position check see the history before the file.
+    #[ts(optional)]
+    pub openings: Option<Vec<B3OpeningChoice>>,
+}
+
+/// An opening position the user accepted.
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct B3OpeningChoice {
+    pub asset_key: String,
+    pub account_id: Id,
+    pub quantity: String,
+    /// Average cost per unit. Without it the row stays in review until approved with a cost.
+    #[ts(optional)]
+    pub unit_cost: Option<String>,
+}
+
+/// Opening position suggested from the evidence in the file: the quantity in the earliest
+/// income row or custody snapshot, the sales larger than the purchases in the file, or the
+/// position report, minus what the file itself moves before that.
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct B3OpeningProposal {
+    pub asset_key: String,
+    pub ticker: Option<String>,
+    pub name: String,
+    pub institution: String,
+    pub account_id: Id,
+    /// The day before the first date of the file.
+    pub date: String,
+    pub quantity: String,
+    /// What the quantity comes from.
+    pub evidence: String,
+    pub source: Option<B3Source>,
+    /// Already in this preview (`B3PreviewArgs.openings`).
+    pub chosen: bool,
 }
 
 /// De onde veio a linha (para a interface apontar o arquivo, a aba e a linha).
@@ -169,6 +273,18 @@ pub struct B3Institution {
     /// Linhas do arquivo desta instituição.
     #[ts(type = "number")]
     pub rows: u32,
+    pub match_reason: Option<B3MatchReason>,
+    /// Names of the file grouped here (a renamed broker appears under two).
+    pub aliases: Vec<String>,
+    /// B3 account numbers from the position report.
+    pub b3_accounts: Vec<String>,
+    /// The account came from a mapping saved by an earlier import.
+    pub mapped: bool,
+    /// Without a suggestion: the account the import offers to create.
+    pub proposed_new_account: Option<B3NewAccount>,
+    /// The account is created by this import.
+    pub new_account: Option<B3NewAccount>,
+    pub summary: B3InstitutionSummary,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -204,6 +320,15 @@ pub enum B3TradeOrigin {
     Movement,
     /// Venda da fração no leilão de frações.
     FractionAuction,
+    /// Shares credited by an "Atualização" after an exercised subscription (or a
+    /// conversion): a buy at the subscription price.
+    Subscription,
+    /// Shares credited by an "Atualização" without a subscription in the file nor a known
+    /// position: needs confirmation and the cost.
+    CustodyUpdate,
+    /// Opening position proposed from the evidence in the file (quantities in the income
+    /// rows and in the custody snapshots), the day before the file starts.
+    Opening,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -304,6 +429,8 @@ pub enum B3IgnoreRule {
     SettlementDuplicate,
     SubscriptionRight,
     BalanceUpdate,
+    /// "Atualização" that only repeats the quantity already held.
+    CustodySnapshot,
     ManualEvent,
     ForwardedIncome,
     IncomeReversal,
@@ -358,6 +485,9 @@ pub struct B3PositionLine {
     pub status: B3PositionStatus,
     pub source: Option<B3Source>,
     pub note: Option<String>,
+    /// Blocked quantity the B3 lists (collateral, judicial block) and why.
+    pub unavailable_quantity: Option<String>,
+    pub unavailable_reason: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -425,6 +555,8 @@ pub struct B3Preview {
     pub ignored: Vec<B3IgnoredRow>,
     /// Presente quando um relatório de posição veio junto.
     pub position_check: Option<B3PositionCheck>,
+    /// Opening positions the file suggests (history before the file is missing).
+    pub openings: Vec<B3OpeningProposal>,
     pub counts: B3Counts,
     pub warnings: Vec<String>,
 }
@@ -477,6 +609,9 @@ pub struct B3CommitArgs {
     /// não informa o caixa (nem as taxas) da corretora.
     #[ts(optional)]
     pub cash_movement: Option<bool>,
+    /// Remember custodian → account for the next imports. Default: yes.
+    #[ts(optional)]
+    pub save_mapping: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -506,4 +641,6 @@ pub struct B3CommitResult {
     pub errors: Vec<B3CommitError>,
     /// Backup feito antes de uma importação grande.
     pub backup_id: Option<Id>,
+    /// Accounts created by the import.
+    pub accounts_created: Vec<Id>,
 }

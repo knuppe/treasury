@@ -23,6 +23,8 @@ import type { B3File } from '../generated/B3File';
 import type { B3IgnoredRow } from '../generated/B3IgnoredRow';
 import type { B3IncomeProposal } from '../generated/B3IncomeProposal';
 import type { B3Institution } from '../generated/B3Institution';
+import type { B3MatchReason } from '../generated/B3MatchReason';
+import type { B3NewAccount } from '../generated/B3NewAccount';
 import type { B3PositionLine } from '../generated/B3PositionLine';
 import type { B3Preview } from '../generated/B3Preview';
 import type { B3ReportKind } from '../generated/B3ReportKind';
@@ -41,8 +43,8 @@ import { mockFail, onMockReset, registerMockHandlers } from '../mockRegistry';
 import { guarded } from './ledger/boot';
 import { today } from './ledger/dates';
 import {
-  brokerageAccounts,
   cents,
+  custodyAccounts,
   fold,
   heldQuantity,
   invoke,
@@ -394,16 +396,77 @@ function detect(file: B3File): B3DetectResult {
 
 // ── Prévia ───────────────────────────────────────────────────────
 
-/** Conta sugerida pelo nome: a única corretora cujo nome (ou banco) aparece na instituição. */
-function suggestAccount(institution: string): string | null {
-  const inst = fold(institution);
-  const hits = brokerageAccounts().filter((a) => {
-    const words = [a.name, a.institution_name ?? '']
-      .map((s) => fold(s).split(/\s+/)[0] ?? '')
-      .filter((w) => w.length >= 2 && w !== 'banco');
-    return words.some((w) => new RegExp(`\\b${w}\\b`).test(inst));
-  });
-  return hits.length === 1 ? hits[0]!.id : null;
+const INSTITUTION_STOPWORDS = new Set(
+  's a sa ltda cctvm ctvm dtvm cvm corretora de do da dos das e valores mobiliarios titulos cambio investimentos investimento invest banco securities financeira distribuidora cooperativa credito unibanco pagamentos ip scfi'.split(
+    ' ',
+  ),
+);
+
+const tokensOf = (name: string) =>
+  fold(name)
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w && !INSTITUTION_STOPWORDS.has(w));
+
+/** Renamed brokers: the names of one custodian (same group as in the core). */
+const groupOf = (name: string) =>
+  /^nu invest|^easynvest/.test(fold(name)) ? 'known:nu-invest' : `name:${tokensOf(name).join(' ')}`;
+
+/** Custodian → account saved by earlier imports (mock: kept in memory). */
+let savedMapping = new Map<string, string>();
+onMockReset(() => {
+  savedMapping = new Map();
+});
+
+/** Conta sugerida: mapping saved before, else a word of the institution in the account's name (prefix counts). */
+function suggestAccount(
+  institution: string,
+  listed = true,
+): { id: string; reason: B3MatchReason } | null {
+  // Listed assets go only to a brokerage account (as in the core).
+  const accounts = custodyAccounts().filter(
+    (a) => !listed || a.kind === 'brokerage' || a.kind === 'foreign',
+  );
+  const saved = savedMapping.get(groupOf(institution));
+  if (saved && accounts.some((a) => a.id === saved)) return { id: saved, reason: 'saved' };
+  const tokens = tokensOf(institution);
+  const scored = accounts
+    .map((a) => {
+      const words = fold(`${a.name} ${a.institution_name ?? ''}`).split(/[^a-z0-9]+/);
+      const score = tokens.reduce(
+        (n, t) =>
+          n +
+          (words.includes(t) ? 10 : t.length >= 2 && words.some((w) => w.startsWith(t)) ? 6 : 0),
+        0,
+      );
+      return { a, score: score * 2 + (a.kind === 'brokerage' ? 1 : 0) };
+    })
+    .filter((x) => x.score > 1)
+    .sort((x, y) => y.score - x.score);
+  if (!scored.length || (scored[1] && scored[1].score === scored[0]!.score)) return null;
+  return { id: scored[0]!.a.id, reason: 'similar_name' };
+}
+
+/** The account offered when nothing matches. */
+function proposedAccount(name: string, from: string | null): B3NewAccount {
+  const f = fold(name);
+  const broker = /corretora|ctvm|dtvm|invest/.test(f);
+  const tail = name.split(' - ').pop()?.trim() ?? '';
+  const raw =
+    groupOf(name) === 'known:nu-invest'
+      ? 'Nu Invest'
+      : !tail.includes(' ') && tail !== name
+        ? tail
+        : (name.split(/[^\p{L}\p{N}]+/u).find((w) => w && !INSTITUTION_STOPWORDS.has(fold(w))) ??
+          name);
+  const short =
+    raw === 'Nu Invest' ? raw : raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+  return {
+    name: broker ? short : `${short} Investimentos`,
+    kind: broker ? 'brokerage' : 'other',
+    institution_name: short,
+    institution_kind: broker ? 'broker' : 'bank',
+    opening_date: from ?? undefined,
+  };
 }
 
 function findAsset(ticker: string): Asset | null {
@@ -431,6 +494,8 @@ interface Stored {
   preview: B3Preview;
   /** Id do ativo existente por chave (para o commit). */
   assetIds: Map<string, string | null>;
+  /** Accounts to create on commit, by the placeholder id the preview used. */
+  newAccounts: { placeholder: string; spec: B3NewAccount }[];
 }
 
 let stored: Stored[] = [];
@@ -458,15 +523,32 @@ function preview(args: Record<string, unknown>): B3Preview {
   const hasTrades = all.has('trades');
   const hasMoves = all.has('movements');
   const hasPosition = all.has('position');
-  const accountsList = brokerageAccounts();
-  const accountName = (id: string | null) => accountsList.find((a) => a.id === id)?.name ?? null;
+  const accountsList = custodyAccounts();
+  const newAccounts: { placeholder: string; spec: B3NewAccount }[] = [];
+  const accountName = (id: string | null) =>
+    accountsList.find((a) => a.id === id)?.name ??
+    newAccounts.find((n) => n.placeholder === id)?.spec.name ??
+    null;
+  const [periodFrom] = periodOf([...all]);
 
   // Instituições e contas.
   const instNames = institutionsOf([...all]);
   const institutions: B3Institution[] = instNames.map((name) => {
     const choice = choices.find((c) => fold(c.institution) === fold(name));
-    const suggested = suggestAccount(name);
-    const accountId = choice ? choice.account_id : suggested;
+    const suggestion = suggestAccount(name);
+    const suggested = suggestion?.id ?? null;
+    let accountId = choice ? choice.account_id : suggested;
+    if (choice?.new_account) {
+      accountId = `new:${newAccounts.length + 1}`;
+      newAccounts.push({ placeholder: accountId, spec: choice.new_account });
+    }
+    const reason: B3MatchReason | null = choice?.new_account
+      ? 'created'
+      : choice
+        ? choice.account_id
+          ? 'chosen'
+          : null
+        : (suggestion?.reason ?? null);
     const rows =
       (hasTrades || hasMoves ? TRADE_ROWS.filter((t) => t.institution === name).length : 0) +
       (hasMoves ? INCOME_ROWS.filter((i) => i.institution === name).length : 0) +
@@ -478,6 +560,20 @@ function preview(args: Record<string, unknown>): B3Preview {
       suggested_account_id: suggested,
       from_suggestion: !choice && suggested != null,
       rows,
+      match_reason: reason,
+      aliases: [name],
+      b3_accounts: [],
+      mapped: reason === 'saved',
+      proposed_new_account: !accountId && !suggested ? proposedAccount(name, periodFrom) : null,
+      new_account: choice?.new_account ?? null,
+      summary: {
+        trades: 0,
+        incomes: 0,
+        actions: 0,
+        period_from: null,
+        period_to: null,
+        assets: [],
+      },
     };
   });
   const accountOf = (inst: string) => institutions.find((i) => i.name === inst)?.account_id ?? null;
@@ -767,6 +863,8 @@ function preview(args: Record<string, unknown>): B3Preview {
         status: 'no_account',
         source: src(fileFor('position'), SHEET_POSITION, 9),
         note: 'instituição sem conta escolhida',
+        unavailable_quantity: null,
+        unavailable_reason: null,
       });
     lines.sort((a, b) => a.asset_key.localeCompare(b.asset_key));
     position_check = {
@@ -820,12 +918,43 @@ function preview(args: Record<string, unknown>): B3Preview {
     actions,
     ignored,
     position_check,
+    openings: [],
     counts,
     warnings,
   };
+  // What each custodian's account receives.
+  for (const inst of institutions) {
+    if (!inst.account_id) continue;
+    const mine = <T extends { account_id: string | null; status: B3RowStatus }>(xs: T[]) =>
+      xs.filter((x) => x.account_id === inst.account_id && x.status === 'new');
+    const ts = mine(trades);
+    const is = mine(incomes);
+    const dates = [...ts.map((t) => t.date), ...is.map((i) => i.pay_date)].sort();
+    const qty = new Map<string, number>();
+    for (const t of ts)
+      qty.set(
+        t.asset_key,
+        (qty.get(t.asset_key) ?? 0) + (t.side === 'buy' ? 1 : -1) * Number(t.quantity),
+      );
+    for (const i of is) if (!qty.has(i.asset_key)) qty.set(i.asset_key, 0);
+    inst.summary = {
+      trades: ts.length,
+      incomes: is.length,
+      actions: 0,
+      period_from: dates[0] ?? null,
+      period_to: dates[dates.length - 1] ?? null,
+      assets: [...qty].map(([key, q]) => ({
+        asset_key: key,
+        ticker: key,
+        name: assets.find((a) => a.key === key)?.name ?? key,
+        before: '0',
+        after: String(q),
+      })),
+    };
+  }
   stored = [
     ...stored.slice(-3),
-    { token, filenames: files.map((f) => f.filename), preview: out, assetIds },
+    { token, filenames: files.map((f) => f.filename), preview: out, assetIds, newAccounts },
   ];
   return out;
 }
@@ -861,6 +990,8 @@ function positionLine(
         : diff < 0
           ? 'a B3 tem mais do que o app: falta lançar operações'
           : 'o app tem mais do que a B3',
+    unavailable_quantity: null,
+    unavailable_reason: null,
   };
 }
 
@@ -903,11 +1034,30 @@ function commit(args: Record<string, unknown>): B3CommitResult {
   const counts = { assets: 0, trades: 0, incomes: 0, actions: 0 };
   let written = 0;
   const files = s.filenames.join(', ');
+  const created: string[] = [];
+  const accountIds = new Map<string, string>();
   const { changeSetId } = recordImport(`Importação B3: ${files}`, `B3: ${files}`, (log) => {
     counts.assets = counts.trades = counts.incomes = counts.actions = 0;
     written = 0;
     errors.length = 0;
     const ids = new Map(s.assetIds);
+    created.length = 0;
+    accountIds.clear();
+    for (const n of s.newAccounts) {
+      const acc = invoke<{ id: string }>('accounts.create', {
+        name: n.spec.name,
+        kind: n.spec.kind,
+        institution_name: n.spec.institution_name,
+        opening_date: n.spec.opening_date ?? undefined,
+      });
+      log.accounts.push(acc.id);
+      created.push(acc.id);
+      accountIds.set(n.placeholder, acc.id);
+    }
+    const accountFor = (id: string | null) => (id ? (accountIds.get(id) ?? id) : id);
+    if (args.save_mapping !== false)
+      for (const inst of p.institutions)
+        if (inst.account_id) savedMapping.set(groupOf(inst.name), accountFor(inst.account_id)!);
     const assetFor = (key: string): string => {
       const o = overrides.get(key);
       if (o?.asset_id) return o.asset_id;
@@ -958,7 +1108,7 @@ function commit(args: Record<string, unknown>): B3CommitResult {
           run: () => {
             const rec = invoke<Trade>('portfolio.create_trade', {
               asset_id: assetFor(t.asset_key),
-              account_id: t.account_id,
+              account_id: accountFor(t.account_id),
               date: t.date,
               side: t.side,
               quantity: t.quantity,
@@ -981,7 +1131,7 @@ function commit(args: Record<string, unknown>): B3CommitResult {
           run: () => {
             const rec = invoke<IncomeEvent>('portfolio.create_income', {
               asset_id: assetFor(i.asset_key),
-              account_id: i.account_id,
+              account_id: accountFor(i.account_id),
               kind: i.kind,
               pay_date: i.pay_date,
               quantity: i.quantity,
@@ -1017,6 +1167,7 @@ function commit(args: Record<string, unknown>): B3CommitResult {
     skipped: total - written,
     errors: errors.sort((a, b) => a.index - b.index),
     backup_id: null,
+    accounts_created: created,
   };
 }
 

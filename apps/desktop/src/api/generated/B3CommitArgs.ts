@@ -15,4 +15,8 @@ include_possible_duplicates?: boolean, approve_actions?: Array<B3ActionApproval>
  * Lançar compras, vendas e proventos no caixa da corretora. Padrão: não, porque a B3
  * não informa o caixa (nem as taxas) da corretora.
  */
-cash_movement?: boolean, };
+cash_movement?: boolean, 
+/**
+ * Remember custodian → account for the next imports. Default: yes.
+ */
+save_mapping?: boolean, };

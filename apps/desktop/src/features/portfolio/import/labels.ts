@@ -73,6 +73,9 @@ export const B3_ORIGIN_LABEL: Record<B3TradeOrigin, string> = labels({
   settlement: 'b3-origem-liquidacao',
   movement: 'b3-relatorio-movimentacao',
   fraction_auction: 'b3-origem-leilao',
+  subscription: 'b3-origem-subscricao',
+  custody_update: 'b3-origem-atualizacao',
+  opening: 'b3-origem-abertura',
 });
 
 export const B3_RULE_LABEL: Record<B3IgnoreRule, string> = labels({
@@ -85,6 +88,7 @@ export const B3_RULE_LABEL: Record<B3IgnoreRule, string> = labels({
   settlement_duplicate: 'b3-regra-liquidacao',
   subscription_right: 'b3-regra-subscricao',
   balance_update: 'b3-regra-saldo',
+  custody_snapshot: 'b3-regra-retrato',
   manual_event: 'b3-regra-manual',
   forwarded_income: 'b3-regra-repassado',
   income_reversal: 'b3-regra-estorno',

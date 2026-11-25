@@ -21,7 +21,7 @@ b3-importar-n =
     }
 b3-relatorios-dica = Negociação, movimentação e posição, em Excel (.xlsx) ou CSV. Envie os do mesmo período juntos: a posição confere o resultado. Os ficheiros ficam só na memória da aplicação até importar.
 b3-lendo = A ler os relatórios…
-b3-contas-texto = Escolha a corretora de cada instituição do ficheiro. A sugestão vem do nome; as linhas de instituições marcadas como “Não importar” ficam de fora.
+b3-contas-texto = Escolha a conta de cada instituição do ficheiro. A sugestão vem de uma importação anterior, da instituição registada na conta ou do nome; se não houver conta, crie uma aqui mesmo. As instituições marcadas como “Não importar” ficam de fora.
 b3-incluir-possiveis-dica = Mesma data, ativo e quantidade (ou valor) de um movimento feito à mão.
 b3-lancar-caixa = Registar no saldo da corretora
 b3-lancar-caixa-dica = Desligado (predefinição): a B3 não informa o saldo nem as comissões da corretora; importe o extrato da conta à parte. Ligado: compras, vendas e rendimentos movimentam o saldo.

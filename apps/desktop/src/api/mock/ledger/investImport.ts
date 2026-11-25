@@ -28,6 +28,21 @@ export function brokerageAccounts(): AccountView[] {
   );
 }
 
+/** Accounts that can hold assets (the same list as the core's B3 import and the dialog). */
+export function custodyAccounts(): AccountView[] {
+  const kinds: AccountView['kind'][] = [
+    'brokerage',
+    'foreign',
+    'checking',
+    'savings',
+    'retirement',
+    'other',
+  ];
+  return invoke<AccountView[]>('accounts.list').filter(
+    (a) => !a.archived && kinds.includes(a.kind),
+  );
+}
+
 /** Quantidade na conta na data, pelo motor da carteira do mock. */
 export function heldQuantity(assetId: string, accountId: string, asOf: string): number {
   try {
@@ -50,6 +65,8 @@ export interface WriteLog {
   trades: string[];
   incomes: string[];
   actions: string[];
+  /** Accounts created by the import (B3: "create a new account" on the accounts step). */
+  accounts: string[];
   /** Operações que ganharam custos: os campos de antes. */
   updates: { id: string; before: Record<string, unknown> }[];
 }
@@ -59,6 +76,7 @@ export const emptyLog = (): WriteLog => ({
   trades: [],
   incomes: [],
   actions: [],
+  accounts: [],
   updates: [],
 });
 
@@ -69,6 +87,7 @@ function undoLog(log: WriteLog): void {
   for (const u of [...log.updates].reverse())
     invoke('portfolio.update_trade', { id: u.id, ...u.before });
   for (const id of [...log.assets].reverse()) invoke('assets.delete', { id });
+  for (const id of [...log.accounts].reverse()) invoke('accounts.delete', { id });
 }
 
 function summaryOf(log: WriteLog): Record<string, Record<string, number>> {
@@ -77,6 +96,7 @@ function summaryOf(log: WriteLog): Record<string, Record<string, number>> {
   if (log.trades.length) insert.trade = log.trades.length;
   if (log.incomes.length) insert.income_event = log.incomes.length;
   if (log.actions.length) insert.corporate_action = log.actions.length;
+  if (log.accounts.length) insert.account = log.accounts.length;
   return {
     ...(Object.keys(insert).length ? { insert } : {}),
     ...(log.updates.length ? { update: { trade: log.updates.length } } : {}),
@@ -88,6 +108,7 @@ const isEmpty = (log: WriteLog) =>
     log.trades.length +
     log.incomes.length +
     log.actions.length +
+    log.accounts.length +
     log.updates.length ===
   0;
 

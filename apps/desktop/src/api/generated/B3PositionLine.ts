@@ -10,4 +10,8 @@ computed_quantity: string | null,
 /**
  * calculada − B3.
  */
-difference: string | null, close_price: string | null, b3_value: number | null, status: B3PositionStatus, source: B3Source | null, note: string | null, };
+difference: string | null, close_price: string | null, b3_value: number | null, status: B3PositionStatus, source: B3Source | null, note: string | null, 
+/**
+ * Blocked quantity the B3 lists (collateral, judicial block) and why.
+ */
+unavailable_quantity: string | null, unavailable_reason: string | null, };

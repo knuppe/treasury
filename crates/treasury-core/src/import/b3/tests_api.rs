@@ -224,9 +224,7 @@ fn full_flow_preview_commit_summary_undo() {
     assert_eq!(dup["status"], "possible_duplicate");
     assert_eq!(dup["duplicate_of"], manual.as_str());
     // Treasury comes from settlement even with the trade report.
-    let tesouro = find(&p, "trades", |t| {
-        t["asset_key"] == "produto:tesouro selic 2029"
-    });
+    let tesouro = find(&p, "trades", |t| t["asset_key"] == "tesouro:selic:2029");
     assert_eq!(tesouro["origin"], "movement");
     assert_eq!(tesouro["quantity"], "0.5");
     assert_eq!(tesouro["price"], "14000");
@@ -322,7 +320,7 @@ fn full_flow_preview_commit_summary_undo() {
     assert_eq!(asset("KLBN11")["class"], "stock_br");
     assert_eq!(asset("KLBN11")["needs_review"], false);
     assert_eq!(asset("MXRF11")["class"], "fii");
-    assert_eq!(asset("produto:tesouro selic 2029")["class"], "treasury_br");
+    assert_eq!(asset("tesouro:selic:2029")["class"], "treasury_br");
     assert_eq!(asset("HGLG11")["create"], false);
     assert!(rows(&p, "assets").iter().all(|a| a["key"] != "VALE3"));
     assert_eq!(p["counts"]["new_assets"], 7);
@@ -336,7 +334,7 @@ fn full_flow_preview_commit_summary_undo() {
         "KLBN11",
         "IVVB11",
         "HGLG11",
-        "produto:tesouro selic 2029",
+        "tesouro:selic:2029",
     ] {
         position(check, key, "match");
     }

@@ -575,6 +575,8 @@ function seed(): State {
     new_asset_id: null,
     notes: 'Desdobramento 1:2 aprovado em AGE',
     source: 'yahoo',
+    account_id: null,
+    quantity: null,
   });
   s.targets = [
     ['stock_br', '22'],
@@ -2488,6 +2490,8 @@ function createAction(a: Record<string, unknown>): CorporateAction {
     new_asset_id: typeof a.new_asset_id === 'string' ? a.new_asset_id : null,
     notes: typeof a.notes === 'string' && a.notes ? a.notes : null,
     source: 'manual',
+    account_id: null,
+    quantity: null,
   };
   state.actions.push(rec);
   return rec;

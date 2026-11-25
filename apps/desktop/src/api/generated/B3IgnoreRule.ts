@@ -3,4 +3,4 @@
 /**
  * Por que uma linha não vira lançamento. Cada regra está explicada em [`rules`].
  */
-export type B3IgnoreRule = "option" | "forward" | "future" | "unsupported_market" | "lending" | "custody_transfer" | "settlement_duplicate" | "subscription_right" | "balance_update" | "manual_event" | "forwarded_income" | "income_reversal" | "no_value" | "fraction" | "unknown_movement" | "invalid";
+export type B3IgnoreRule = "option" | "forward" | "future" | "unsupported_market" | "lending" | "custody_transfer" | "settlement_duplicate" | "subscription_right" | "balance_update" | "custody_snapshot" | "manual_event" | "forwarded_income" | "income_reversal" | "no_value" | "fraction" | "unknown_movement" | "invalid";

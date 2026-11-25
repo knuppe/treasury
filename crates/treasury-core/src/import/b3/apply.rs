@@ -10,7 +10,7 @@
 use std::collections::{HashMap, HashSet};
 
 use chrono::{Duration, NaiveDate};
-use rusqlite::{Transaction, params};
+use rusqlite::{OptionalExtension, Transaction, params};
 use rust_decimal::Decimal;
 use rust_decimal::prelude::*;
 
@@ -58,6 +58,8 @@ pub(crate) struct ItemOutcome {
     pub auction_income: bool,
     /// Venda recusada por ser maior que a posição na data (falta histórico anterior).
     pub oversold: bool,
+    /// Income whose tax was computed on apply (gross, tax, net, note).
+    pub income: Option<(i64, i64, i64, Option<String>)>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -221,7 +223,7 @@ impl Runner<'_, '_> {
             market: None,
             currency: None,
             country: None,
-            isin: None,
+            isin: p.isin.clone(),
             cnpj: None,
             treasury_code: treasury.then(|| name.clone()),
             sector: None,
@@ -239,13 +241,16 @@ impl Runner<'_, '_> {
         Ok(id)
     }
 
-    fn external_taken(&self, table: &str, account: &str, ext: &Option<String>) -> Result<bool> {
-        let Some(e) = ext else { return Ok(false) };
+    fn external_taken(&self, table: &str, account: &str, it: &Item) -> Result<bool> {
+        let Some(e) = &it.external_id else {
+            return Ok(false);
+        };
+        let legacy = it.legacy_external_id.as_ref().unwrap_or(e);
         Ok(self.tx.query_row(
             &format!(
-                "SELECT EXISTS (SELECT 1 FROM {table} WHERE account_id = ?1 AND external_id = ?2)"
+                "SELECT EXISTS (SELECT 1 FROM {table} WHERE account_id = ?1 AND external_id IN (?2, ?3))"
             ),
-            params![account, e],
+            params![account, e, legacy],
             |r| r.get(0),
         )?)
     }
@@ -257,14 +262,25 @@ impl Runner<'_, '_> {
                 qty,
                 price,
                 label,
+                needs_cost,
                 ..
             } => {
                 let account = it.account.clone().expect("linha com conta");
-                if self.external_taken("trade", &account, &it.external_id)? {
+                if self.external_taken("trade", &account, it)? {
                     return Err(crate::error::Error::conflict(t(
                         "nucleo-importacao-b3-erro-operacao-gravada",
                     )));
                 }
+                // A row without a price in the file takes the cost given on approval.
+                let price = match self.opts.approvals.get(&it.index).and_then(|a| a.unit_cost) {
+                    Some(c) => c,
+                    None if *needs_cost => {
+                        return Err(crate::error::Error::invalid(t(
+                            "nucleo-importacao-b3-erro-custo",
+                        )));
+                    }
+                    None => *price,
+                };
                 let asset_id = self.ensure_asset(it.asset)?;
                 self.trade(
                     &asset_id,
@@ -272,9 +288,10 @@ impl Runner<'_, '_> {
                     it.date,
                     *side,
                     *qty,
-                    *price,
+                    price,
                     label,
                     &it.external_id,
+                    it.settled,
                 )?;
                 Ok(true)
             }
@@ -283,15 +300,23 @@ impl Runner<'_, '_> {
                 qty,
                 gross,
                 tax,
+                regressive,
                 ..
             } => {
                 let account = it.account.clone().expect("linha com conta");
-                if self.external_taken("income_event", &account, &it.external_id)? {
+                if self.external_taken("income_event", &account, it)? {
                     return Err(crate::error::Error::conflict(t(
                         "nucleo-importacao-b3-erro-provento-gravado",
                     )));
                 }
                 let asset_id = self.ensure_asset(it.asset)?;
+                let mut tax = *tax;
+                if *regressive {
+                    let (t_, note) = regressive_tax(self.tx, &asset_id, &account, it.date, *gross)?;
+                    tax = t_;
+                    self.outcome(it.index).income = Some((*gross, tax, *gross - tax, note));
+                }
+                let tax = &tax;
                 self.income(
                     &asset_id,
                     &account,
@@ -306,8 +331,8 @@ impl Runner<'_, '_> {
             }
             Op::Auction { value, .. } => {
                 let account = it.account.clone().expect("linha com conta");
-                if self.external_taken("trade", &account, &it.external_id)?
-                    || self.external_taken("income_event", &account, &it.external_id)?
+                if self.external_taken("trade", &account, it)?
+                    || self.external_taken("income_event", &account, it)?
                 {
                     return Err(crate::error::Error::conflict(t(
                         "nucleo-importacao-b3-erro-leilao-gravado",
@@ -328,6 +353,7 @@ impl Runner<'_, '_> {
                         price,
                         &t("nucleo-importacao-b3-origem-leilao"),
                         &it.external_id,
+                        None,
                     )?;
                     self.outcome(it.index).auction_sale = Some((frac, price));
                 } else {
@@ -366,8 +392,15 @@ impl Runner<'_, '_> {
         price: Decimal,
         label: &str,
         ext: &Option<String>,
+        settled: Option<NaiveDate>,
     ) -> Result<Id> {
-        records::create_trade(
+        let gross = records::to_minor(qty * price, "BRL");
+        let amount = match side {
+            TradeSide::Buy => -gross,
+            TradeSide::Sell => gross,
+        };
+        let existing_cash = self.matching_cash(account, amount, date, settled.unwrap_or(date))?;
+        let id = records::create_trade(
             self.tx,
             &TradeInput {
                 asset_id: asset_id.to_string(),
@@ -385,10 +418,51 @@ impl Runner<'_, '_> {
                     "nucleo-importacao-b3-nota-importado",
                     &args(&[("origem", label.to_string().into())]),
                 )),
-                cash_movement: Some(self.opts.cash),
+                cash_movement: Some(self.opts.cash && existing_cash.is_none()),
                 external_id: ext.clone(),
             },
-        )
+        )?;
+        if let Some(txn) = existing_cash {
+            self.tx.execute(
+                "UPDATE trade SET txn_id = ?2 WHERE id = ?1",
+                params![id, txn],
+            )?;
+        }
+        Ok(id)
+    }
+
+    /// With `cash_movement`, a cash entry already in the account (an OFX/CSV statement
+    /// imported before) with the same amount (±1 cent) and a date up to 3 days around: the
+    /// trade or income links to it instead of creating another.
+    fn matching_cash(
+        &self,
+        account: &str,
+        amount: i64,
+        from: NaiveDate,
+        to: NaiveDate,
+    ) -> Result<Option<Id>> {
+        if !self.opts.cash || amount == 0 {
+            return Ok(None);
+        }
+        let (from, to) = (from.min(to), from.max(to));
+        Ok(self
+            .tx
+            .query_row(
+                "SELECT x.id FROM txn x WHERE x.account_id = ?1 AND abs(x.amount - ?2) <= 1
+                   AND x.date BETWEEN ?3 AND ?4 AND x.currency = 'BRL'
+                   AND NOT EXISTS (SELECT 1 FROM trade t WHERE t.txn_id = x.id)
+                   AND NOT EXISTS (SELECT 1 FROM income_event i WHERE i.txn_id = x.id)
+                 ORDER BY abs(julianday(x.date) - julianday(?5)), abs(x.amount - ?2) LIMIT 1",
+                params![
+                    account,
+                    amount,
+                    fmt_date(from - Duration::days(3)),
+                    fmt_date(to + Duration::days(3)),
+                    fmt_date(to),
+                ],
+                |r| r.get(0),
+            )
+            .optional()?)
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -403,6 +477,7 @@ impl Runner<'_, '_> {
         tax: i64,
         ext: &Option<String>,
     ) -> Result<Id> {
+        let existing_cash = self.matching_cash(account, gross - tax, date, date)?;
         let id = records::create_income(
             self.tx,
             &IncomeInput {
@@ -416,12 +491,12 @@ impl Runner<'_, '_> {
                 tax_withheld: Some(tax),
                 fx_rate: None,
                 status: Some(IncomeStatus::Received),
-                cash_movement: Some(self.opts.cash),
+                cash_movement: Some(self.opts.cash && existing_cash.is_none()),
             },
         )?;
         self.tx.execute(
-            "UPDATE income_event SET source = 'b3', external_id = ?2 WHERE id = ?1",
-            params![id, ext],
+            "UPDATE income_event SET source = 'b3', external_id = ?2, txn_id = coalesce(?3, txn_id) WHERE id = ?1",
+            params![id, ext, existing_cash],
         )?;
         Ok(id)
     }
@@ -442,6 +517,49 @@ impl Runner<'_, '_> {
         o.file_qty = Some(derived.file_qty);
         o.factor = derived.factor;
         o.factor_note = derived.note.clone();
+        // Bonus without a position before the event (the history starts later): credit the
+        // shares by quantity in each account instead of asking for a factor.
+        if kind == CorporateActionKind::Bonus
+            && derived.held.is_none_or(|h| h.is_zero())
+            && !derived.file_qty.is_zero()
+            && approval.as_ref().and_then(|a| a.factor).is_none()
+        {
+            o.factor_note = Some(t("nucleo-importacao-b3-bonificacao-quantidade"));
+            let unit_cost = approval.and_then(|a| a.unit_cost).or(unit_cost);
+            let mut per: Vec<(Id, Decimal)> = vec![];
+            for l in legs.iter().filter(|l| l.credit) {
+                let Some(acc) = &l.account else { continue };
+                match per.iter_mut().find(|(a, _)| a == acc) {
+                    Some(e) => e.1 += l.qty,
+                    None => per.push((acc.clone(), l.qty)),
+                }
+            }
+            for (acc, qty) in per.into_iter().filter(|(_, q)| !q.is_zero()) {
+                let id = records::create_action(
+                    self.tx,
+                    &CorporateActionInput {
+                        asset_id: asset_id.clone(),
+                        date: fmt_date(it.date),
+                        kind,
+                        factor: None,
+                        unit_cost: unit_cost.map(|u| u.normalize().to_string()),
+                        amount: None,
+                        new_asset_id: None,
+                        account_id: Some(acc),
+                        quantity: Some(qty.normalize().to_string()),
+                        notes: Some(t_args(
+                            "nucleo-importacao-b3-nota-importado",
+                            &args(&[("origem", movement.to_string().into())]),
+                        )),
+                    },
+                )?;
+                self.tx.execute(
+                    "UPDATE corporate_action SET source = 'b3' WHERE id = ?1",
+                    [&id],
+                )?;
+            }
+            return Ok(true);
+        }
         let factor = match (approval.as_ref().and_then(|a| a.factor), derived.factor) {
             (Some(f), _) => f,
             (None, Some(f)) if derived.exact || approval.is_some() => f,
@@ -471,6 +589,8 @@ impl Runner<'_, '_> {
                 unit_cost: unit_cost.map(|u| u.normalize().to_string()),
                 amount: None,
                 new_asset_id: None,
+                account_id: None,
+                quantity: None,
                 notes: Some(t_args(
                     "nucleo-importacao-b3-nota-importado",
                     &args(&[("origem", movement.to_string().into())]),
@@ -483,6 +603,70 @@ impl Runner<'_, '_> {
         )?;
         Ok(true)
     }
+}
+
+/// Income tax withheld on Tesouro/fixed income interest: the regressive table (22.5% up to
+/// 180 days, 20% up to 360, 17.5% up to 720, 15% above) by the quantity-weighted age of the
+/// lots held on the payment date (first in, first out). Without a known purchase the rate is
+/// presumed at 15%, the rate after two years, with a note.
+pub(crate) fn regressive_tax(
+    tx: &Transaction<'_>,
+    asset_id: &str,
+    account: &str,
+    on: NaiveDate,
+    gross: i64,
+) -> Result<(i64, Option<String>)> {
+    let mut stmt = tx.prepare_cached(
+        "SELECT date, side, quantity FROM trade WHERE asset_id = ?1 AND account_id = ?2 AND date <= ?3
+         ORDER BY date, CASE side WHEN 'buy' THEN 0 ELSE 1 END, created_at",
+    )?;
+    let rows: Vec<(String, String, String)> = stmt
+        .query_map(params![asset_id, account, fmt_date(on)], |r| {
+            Ok((r.get(0)?, r.get(1)?, r.get(2)?))
+        })?
+        .collect::<rusqlite::Result<_>>()?;
+    let mut lots: std::collections::VecDeque<(NaiveDate, Decimal)> = Default::default();
+    for (d, side, q) in rows {
+        let (Ok(d), Ok(mut q)) = (crate::time::parse_date(&d), q.parse::<Decimal>()) else {
+            continue;
+        };
+        if side == "buy" {
+            lots.push_back((d, q));
+            continue;
+        }
+        while q > Decimal::ZERO {
+            let Some(front) = lots.front_mut() else { break };
+            let take = front.1.min(q);
+            front.1 -= take;
+            q -= take;
+            if front.1.is_zero() {
+                lots.pop_front();
+            }
+        }
+    }
+    let held: Decimal = lots.iter().map(|l| l.1).sum();
+    let (rate, note) = if held.is_zero() {
+        (
+            crate::finance::fixed_income::ir_rate(i64::MAX),
+            Some(t("nucleo-importacao-b3-nota-juros-aliquota-presumida")),
+        )
+    } else {
+        let days: Decimal = lots
+            .iter()
+            .map(|(d, q)| *q * Decimal::from((on - *d).num_days()))
+            .sum::<Decimal>()
+            / held;
+        let days = days.round().to_i64().unwrap_or(0);
+        (
+            crate::finance::fixed_income::ir_rate(days),
+            Some(t_args(
+                "nucleo-importacao-b3-nota-juros-aliquota",
+                &args(&[("dias", days.into())]),
+            )),
+        )
+    };
+    let tax = records::to_minor(from_minor(gross, "BRL") * rate, "BRL");
+    Ok((tax, note))
 }
 
 struct Derived {
@@ -675,6 +859,8 @@ pub(crate) fn position_check(
         close: Option<Decimal>,
         value: Option<i64>,
         first: usize,
+        unavailable: Option<Decimal>,
+        reason: Option<String>,
     }
     let mut groups: Vec<Group> = vec![];
     for (i, p) in plan.positions.iter().enumerate() {
@@ -690,6 +876,13 @@ pub(crate) fn position_check(
                     (Some(a), Some(b)) => Some(a + b),
                     (a, b) => a.or(b),
                 };
+                g.unavailable = match (g.unavailable, p.rec.unavailable) {
+                    (Some(a), Some(b)) => Some(a + b),
+                    (a, b) => a.or(b),
+                };
+                if g.reason.is_none() {
+                    g.reason = p.rec.reason.clone();
+                }
             }
             None => groups.push(Group {
                 asset: p.asset,
@@ -699,6 +892,8 @@ pub(crate) fn position_check(
                 close: p.rec.close,
                 value,
                 first: i,
+                unavailable: p.rec.unavailable,
+                reason: p.rec.reason.clone(),
             }),
         }
     }
@@ -712,6 +907,8 @@ pub(crate) fn position_check(
         close,
         value,
         first,
+        unavailable,
+        reason,
         ..
     } in groups
     {
@@ -736,6 +933,8 @@ pub(crate) fn position_check(
             status: B3PositionStatus::NoAccount,
             source: Some(rec.src.clone()),
             note: None,
+            unavailable_quantity: unavailable.map(|q| q.normalize().to_string()),
+            unavailable_reason: reason.clone(),
         };
         if let Some(acc) = &account {
             let computed = match &asset_id {
@@ -765,6 +964,22 @@ pub(crate) fn position_check(
             }
         } else {
             line.note = Some(t("nucleo-importacao-b3-posicao-sem-conta"));
+        }
+        if let Some(q) = unavailable {
+            let blocked = t_args(
+                "nucleo-importacao-b3-posicao-indisponivel",
+                &args(&[
+                    ("quantidade", q.normalize().to_string().into()),
+                    (
+                        "motivo",
+                        reason.clone().unwrap_or_else(|| "-".into()).into(),
+                    ),
+                ]),
+            );
+            line.note = Some(match line.note.take() {
+                Some(n) => format!("{n}; {blocked}"),
+                None => blocked,
+            });
         }
         lines.push(line);
     }
@@ -800,10 +1015,22 @@ pub(crate) fn position_check(
                 .asset_ids
                 .iter()
                 .position(|x| x.as_deref() == Some(id.as_str()));
-            let note = with_hint(
-                t("nucleo-importacao-b3-posicao-nao-listada"),
-                transfer_hint(plan, plan_asset),
-            );
+            let matured = asset
+                .fixed_income
+                .as_ref()
+                .and_then(|t| t.maturity_date.as_deref())
+                .and_then(|m| crate::time::parse_date(m).ok())
+                .filter(|m| *m <= date);
+            let note = match matured {
+                Some(m) => t_args(
+                    "nucleo-importacao-b3-posicao-vencida",
+                    &args(&[("data", i18n::date(i18n::current(), m).into())]),
+                ),
+                None => with_hint(
+                    t("nucleo-importacao-b3-posicao-nao-listada"),
+                    transfer_hint(plan, plan_asset),
+                ),
+            };
             lines.push(B3PositionLine {
                 asset_key: super::rules::asset_key(asset.ticker.as_deref(), &asset.name),
                 ticker: asset.ticker.clone(),
@@ -820,6 +1047,8 @@ pub(crate) fn position_check(
                 status: B3PositionStatus::MissingInB3,
                 source: None,
                 note: Some(note),
+                unavailable_quantity: None,
+                unavailable_reason: None,
             });
         }
     }

@@ -100,6 +100,48 @@ describe('B3 Área do Investidor import', () => {
   });
 });
 
+describe('B3 import: accounts step', () => {
+  it('creates a new account from the pre-filled form and shows a checking account by name', async () => {
+    const user = userEvent.setup();
+    renderApp('unlocked', {}, '#/carteira?aba=operacoes');
+    await user.click(await screen.findByRole('button', { name: 'Importar da B3' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Importar da B3' });
+    const accountsBefore = ((await mockCall('accounts.list', {})) as unknown[]).length;
+    await user.upload(within(dialog).getByLabelText('Relatórios da Área do Investidor'), [
+      new File(['x'], 'negociacao-2026-10.xlsx'),
+      new File(['x'], 'movimentacao-2026-10.xlsx'),
+    ]);
+    await within(dialog).findByRole('list', { name: 'Relatórios escolhidos' });
+    await user.click(within(dialog).getByRole('button', { name: 'Continuar' }));
+
+    // Nu Invest has no account: "Create a new account" opens the form, pre-filled.
+    const nu = await within(dialog).findByRole('combobox', { name: /Conta para NU INVEST/ });
+    await user.click(nu);
+    await user.click(await screen.findByRole('option', { name: 'Criar nova conta…' }));
+    const form = within(dialog).getByRole('group', { name: /Conta nova para NU INVEST/ });
+    expect(within(form).getByLabelText('Nome da conta')).toHaveProperty('value', 'Nu Invest');
+    expect(within(form).getByLabelText('Instituição')).toHaveProperty('value', 'Nu Invest');
+    expect(within(form).getByRole('combobox', { name: 'Tipo' }).textContent).toContain('Corretora');
+
+    // A checking account chosen for Inter shows its name, never the id.
+    const inter = within(dialog).getByRole('combobox', { name: /Conta para INTER/ });
+    await user.click(inter);
+    await user.click(await screen.findByRole('option', { name: /Nubank Conta/ }));
+    expect(inter.textContent).toContain('Nubank Conta');
+    expect(inter.textContent).not.toMatch(/acc-/);
+
+    await user.click(within(dialog).getByRole('button', { name: 'Gerar prévia' }));
+    await within(dialog).findByRole('table', { name: 'Operações da importação' });
+    expect(within(dialog).getByText(/NU → Nu Invest/)).toBeTruthy();
+    expect(within(dialog).getByText(/INTER → Nubank Conta/)).toBeTruthy();
+    await user.click(within(dialog).getByRole('button', { name: /^Importar \d+ lançamento/ }));
+    expect(await within(dialog).findByText(/Importados da B3/)).toBeTruthy();
+    const accounts = (await mockCall('accounts.list', {})) as { name: string }[];
+    expect(accounts.length).toBe(accountsBefore + 1);
+    expect(accounts.some((a) => a.name === 'Nu Invest')).toBe(true);
+  });
+});
+
 describe('B3 import: already registered asset', () => {
   it('links the proposed asset to an already registered one instead of creating another', async () => {
     const user = userEvent.setup();

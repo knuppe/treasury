@@ -210,6 +210,8 @@ describe('price chart', () => {
     new_asset_id: null,
     notes: null,
     source: 'yahoo',
+    account_id: null,
+    quantity: null,
   };
 
   it('marks buys and sells on the trading day (or the next one with a quote)', () => {

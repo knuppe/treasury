@@ -73,8 +73,143 @@ pub fn split_product(product: &str) -> (Option<String>, String) {
 pub fn asset_key(ticker: Option<&str>, name: &str) -> String {
     match ticker {
         Some(t) => t.to_string(),
-        None => format!("produto:{}", fold(name)),
+        None => match treasury_key(name) {
+            Some(k) => k,
+            None => format!("produto:{}", fold(name)),
+        },
     }
+}
+
+/// What a report row says about its asset.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ProductId {
+    pub ticker: Option<String>,
+    /// Name from the file (for a contract, the "<TYPE> <ISSUER> <CODE>" built from it).
+    pub name: String,
+    /// The file has a name besides the code.
+    pub has_name: bool,
+    pub key: String,
+    /// Fixed income contract code.
+    pub contract: Option<String>,
+    pub issuer: Option<String>,
+}
+
+/// Ticker, name and key of a row. `code` is the position report's code column
+/// (`Código de Negociação` for listed assets, `Código` of the contract for fixed income).
+pub fn identify(product: &str, code: Option<&str>) -> ProductId {
+    let (pt, name) = split_product(product);
+    let ticker = code.and_then(normalize_ticker).or(pt);
+    if ticker.is_none()
+        && let Some(c) = contract_code(product, code)
+    {
+        let issuer = contract_issuer(product, &c);
+        return ProductId {
+            ticker: None,
+            name: contract_name(product, &c, issuer.as_deref()),
+            has_name: true,
+            key: contract_key(&c),
+            contract: Some(c),
+            issuer,
+        };
+    }
+    let has_name = ticker.as_deref() != Some(name.as_str());
+    ProductId {
+        key: asset_key(ticker.as_deref(), &name),
+        ticker,
+        name,
+        has_name,
+        contract: None,
+        issuer: None,
+    }
+}
+
+static CONTRACT: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+    regex::Regex::new(r"\b(CDB|RDB|LCI|LCA|LC|CRI|CRA|DEB)[A-Z0-9]{6,}\b").expect("regex")
+});
+
+/// Contract code of a fixed income product, unique per investment ("RDB31497YWB" in
+/// "RDB - RDB31497YWB - COOPERATIVA …"). The position report keeps it in the `Código`
+/// column (`code`) and puts only the type and issuer in `Produto`.
+pub fn contract_code(product: &str, code: Option<&str>) -> Option<String> {
+    let up = product.to_uppercase();
+    if let Some(m) = CONTRACT.find(&up) {
+        return Some(m.as_str().to_string());
+    }
+    let c: String = code?
+        .chars()
+        .filter(|c| !c.is_whitespace())
+        .collect::<String>()
+        .to_uppercase();
+    (c.len() >= 6
+        && c.chars().all(|ch| ch.is_ascii_alphanumeric())
+        && normalize_ticker(&c).is_none()
+        && fixed_income_kind(product).is_some())
+    .then_some(c)
+}
+
+/// Key of a fixed income contract.
+pub fn contract_key(code: &str) -> String {
+    format!("rf:{code}")
+}
+
+/// Issuer written after the contract code in the movements report
+/// ("CDB - CDBU24FGBLH - NU FINANCEIRA S.A." → "NU FINANCEIRA S.A.") or after the type
+/// in the position report ("RDB - COOPERATIVA …" → "COOPERATIVA …").
+pub fn contract_issuer(product: &str, code: &str) -> Option<String> {
+    let parts: Vec<&str> = product.split(" - ").map(str::trim).collect();
+    let kind_or_code = |p: &str| {
+        p.eq_ignore_ascii_case(code) || FIXED_INCOME_PREFIXES.iter().any(|(k, _)| fold(p) == *k)
+    };
+    let rest: Vec<&str> = parts.into_iter().filter(|p| !kind_or_code(p)).collect();
+    (!rest.is_empty()).then(|| rest.join(" - "))
+}
+
+/// Display name of a contract: "<TYPE> <ISSUER> <CODE>".
+pub fn contract_name(product: &str, code: &str, issuer: Option<&str>) -> String {
+    let kind = fold(product).split(' ').next().unwrap_or("").to_uppercase();
+    let kind = if kind.is_empty() || kind.eq_ignore_ascii_case(code) {
+        code.chars()
+            .take_while(|c| c.is_ascii_alphabetic())
+            .collect::<String>()
+    } else {
+        kind
+    };
+    match issuer.map(str::trim).filter(|s| !s.is_empty()) {
+        Some(i) => format!("{kind} {i} {code}"),
+        None => format!("{kind} {code}"),
+    }
+}
+
+/// Stable key of a Tesouro Direto bond, from its type and maturity year. The name changes
+/// between the movements and position reports and between brokers ("Tesouro IPCA+ com Juros
+/// Semestrais 2035", "TESOURO IPCA+ C/ JUROS SEMESTRAIS 2035", "NTN-B 2035"…).
+pub fn treasury_key(name: &str) -> Option<String> {
+    if !is_treasury_name(name) {
+        return None;
+    }
+    let raw = crate::import::text::fold_keep_punct(name);
+    let f = format!(" {} ", fold(name));
+    let year = f
+        .split(' ')
+        .rev()
+        .find(|w| w.len() == 4 && w.starts_with("20") && w.chars().all(|c| c.is_ascii_digit()))?;
+    let semi = f.contains("juros semestrais") || f.contains(" c juros") || f.contains("cupom");
+    let kind = if raw.contains("renda+") || f.contains(" renda mais ") {
+        "renda+"
+    } else if f.contains("educa") {
+        "educa+"
+    } else if f.contains("ipca") {
+        if semi { "ipca-js" } else { "ipca" }
+    } else if f.contains("selic") {
+        "selic"
+    } else if f.contains("igp") {
+        if semi { "igpm-js" } else { "igpm" }
+    } else if f.contains("prefixado") || f.contains(" pre ") {
+        if semi { "pre-js" } else { "pre" }
+    } else {
+        return None;
+    };
+    Some(format!("tesouro:{kind}:{year}"))
 }
 
 // ---------------------------------------------------------------------------
@@ -316,6 +451,10 @@ pub enum MoveRule {
     /// "Leilão de Fração": venda da fração que sobrou na posição, pelo valor recebido. Se não
     /// há fração na posição, vira provento "outros".
     FractionAuction,
+    /// "Atualização": either a periodic snapshot of the custody (credits the quantity already
+    /// held, without a price: ignored) or the real arrival of new shares after an exercised
+    /// subscription or a conversion. Decided by the context in `plan`.
+    Update,
     Ignore(B3IgnoreRule),
 }
 
@@ -329,7 +468,8 @@ pub enum MoveRule {
 ///   não mudam a posição.
 /// - **Direito de subscrição / cessão de direitos / recibo / solicitação**: o direito não é
 ///   posição até ser exercido; a subscrição exercida deve ser lançada como compra.
-/// - **Atualização**: atualização de valor/saldo de renda fixa e Tesouro, sem quantidade.
+/// - **Atualização** ([`MoveRule::Update`]): a snapshot of the custody is ignored; the
+///   arrival of subscribed shares becomes a buy (see `plan`).
 /// - **Incorporação, cisão, subscrição, conversão, restituição de capital**: exigem o ativo
 ///   resultante, a proporção ou o custo, que o relatório não traz; registre em Eventos.
 pub fn move_rule(movement: &str) -> MoveRule {
@@ -349,9 +489,13 @@ pub fn move_rule(movement: &str) -> MoveRule {
     };
     let b = base.as_str();
     match b {
-        "transferencia liquidacao" | "compra venda" | "compra" | "venda" | "compra e venda" => {
-            MoveRule::Settlement
-        }
+        "transferencia liquidacao"
+        | "compra venda"
+        | "compra"
+        | "venda"
+        | "compra e venda"
+        | "aplicacao"
+        | "aplicacao inicial" => MoveRule::Settlement,
         "transferencia" | "transferencia custodia" | "transferencia de custodia" => {
             MoveRule::Ignore(B3IgnoreRule::CustodyTransfer)
         }
@@ -373,7 +517,7 @@ pub fn move_rule(movement: &str) -> MoveRule {
         }
         "fracao em ativos" | "fracao" => MoveRule::Fraction,
         "leilao de fracao" | "leilao de fracoes" => MoveRule::FractionAuction,
-        "atualizacao" | "atualizacao de saldo" => MoveRule::Ignore(B3IgnoreRule::BalanceUpdate),
+        "atualizacao" | "atualizacao de saldo" => MoveRule::Update,
         _ if b.starts_with("emprestimo") => MoveRule::Ignore(B3IgnoreRule::Lending),
         _ if b.starts_with("direito")
             || b.starts_with("direitos")
@@ -411,6 +555,7 @@ impl B3IgnoreRule {
             B3IgnoreRule::SettlementDuplicate => "nucleo-importacao-b3-ignorada-liquidacao",
             B3IgnoreRule::SubscriptionRight => "nucleo-importacao-b3-ignorada-subscricao",
             B3IgnoreRule::BalanceUpdate => "nucleo-importacao-b3-ignorada-atualizacao",
+            B3IgnoreRule::CustodySnapshot => "nucleo-importacao-b3-ignorada-retrato",
             B3IgnoreRule::ManualEvent => "nucleo-importacao-b3-ignorada-evento-manual",
             B3IgnoreRule::ForwardedIncome => "nucleo-importacao-b3-ignorada-repasse",
             B3IgnoreRule::IncomeReversal => "nucleo-importacao-b3-ignorada-estorno",
@@ -420,6 +565,22 @@ impl B3IgnoreRule {
             B3IgnoreRule::Invalid => "nucleo-importacao-b3-ignorada-invalida",
         })
     }
+}
+
+/// Root of a B3 code ("ABCD" in ABCD11, ABCD12, ABCD13): the subscription right (12),
+/// the receipt (13/15) and the shares (11/3/4) share it.
+pub fn ticker_root(ticker: &str) -> Option<&str> {
+    normalize_ticker(ticker)?;
+    ticker.get(..4)
+}
+
+/// The row is evidence that a subscription was exercised: a receipt or a request, or a
+/// right that was not marked as "not exercised".
+pub fn exercised_subscription(movement: &str) -> bool {
+    let f = fold(movement);
+    f.starts_with("recibo de subscricao")
+        || f.starts_with("solicitacao de subscricao")
+        || (f.starts_with("direito") && !f.contains("nao exercido"))
 }
 
 // ---------------------------------------------------------------------------
@@ -465,6 +626,14 @@ const INSTITUTION_STOPWORDS: &[&str] = &[
     "bmf",
     "mercadorias",
     "futuros",
+    "cooperativa",
+    "cooperativo",
+    "credito",
+    "unibanco",
+    "pagamentos",
+    "ip",
+    "scfi",
+    "multiplo",
 ];
 
 /// Palavras que identificam a instituição, na ordem (sem o que vem depois de "grupo":
@@ -484,18 +653,121 @@ pub fn institution_tokens(name: &str) -> Vec<String> {
     out
 }
 
-/// Pontua uma conta (nome da conta + nome da instituição cadastrada) para a instituição da
-/// B3: a primeira palavra significativa precisa aparecer; as demais desempatam.
+/// Score of an account (account name + registered institution name) for a custodian of
+/// the B3: each identifying word of the custodian found as a whole word counts 10; found as
+/// the start of a word ("nu" in "NuInvest", "nu invest") counts 6. Zero when none matches.
 pub fn institution_score(tokens: &[String], account_text: &str) -> u32 {
-    let words: Vec<String> = fold(account_text).split(' ').map(String::from).collect();
-    let Some(first) = tokens.first() else {
-        return 0;
-    };
-    if !words.iter().any(|w| w == first) {
-        return 0;
+    let words: Vec<String> = fold(account_text)
+        .split(' ')
+        .filter(|w| !w.is_empty())
+        .map(String::from)
+        .collect();
+    let joined: String = words.concat();
+    let mut seen: Vec<&String> = vec![];
+    let mut score = 0;
+    for t in tokens {
+        if seen.contains(&t) {
+            continue;
+        }
+        seen.push(t);
+        if words.iter().any(|w| w == t) {
+            score += 10;
+        } else if t.len() >= 2
+            && (words.iter().any(|w| w.starts_with(t.as_str())) || joined.starts_with(t.as_str()))
+        {
+            score += 6;
+        }
     }
-    10 + tokens[1..]
+    score
+}
+
+/// A custodian known under more than one name (renamed brokers).
+pub struct Custodian {
+    pub key: &'static str,
+    /// Name for a new account.
+    pub display: &'static str,
+    /// CNPJ, digits only.
+    pub cnpj: Option<&'static str>,
+    pub broker: bool,
+    /// Starts of the folded names it appears under.
+    pub names: &'static [&'static str],
+}
+
+/// Custodians whose name changed over time. The B3 reports do not bring the custodian's
+/// CNPJ (the CNPJ columns are the company's or the fund's), so the names are matched.
+pub const KNOWN_CUSTODIANS: &[Custodian] = &[Custodian {
+    key: "nu-invest",
+    display: "Nu Invest",
+    // Former Easynvest - Título Corretora de Valores.
+    cnpj: Some("62169875000179"),
+    broker: true,
+    names: &["nu investimentos", "nu invest", "easynvest"],
+}];
+
+pub fn known_custodian(name: &str) -> Option<&'static Custodian> {
+    let f = fold(name);
+    KNOWN_CUSTODIANS
         .iter()
-        .filter(|t| words.iter().any(|w| w == *t))
-        .count() as u32
+        .find(|c| c.names.iter().any(|n| f.starts_with(n)))
+}
+
+/// Key that groups the names of the same custodian: the known custodian's key, or its
+/// identifying words.
+pub fn custodian_group(name: &str) -> String {
+    match known_custodian(name) {
+        Some(c) => format!("known:{}", c.key),
+        None => {
+            let tokens = institution_tokens(name);
+            if tokens.is_empty() {
+                format!("name:{}", fold(name))
+            } else {
+                format!("name:{}", tokens.join(" "))
+            }
+        }
+    }
+}
+
+/// The name looks like a broker's ("corretora", "CTVM", "DTVM", "invest").
+pub fn looks_like_broker(name: &str) -> bool {
+    let f = format!(" {} ", fold(name));
+    [
+        " corretora ",
+        " ctvm ",
+        " cctvm ",
+        " dtvm ",
+        " invest ",
+        " investimentos ",
+        " securities ",
+    ]
+    .iter()
+    .any(|w| f.contains(w))
+}
+
+/// Short name of a custodian for a new account: the known name, the acronym after " - "
+/// ("COOPERATIVA … - VIACREDI" → "Viacredi") or the first identifying word, capitalized.
+pub fn custodian_short_name(name: &str) -> String {
+    if let Some(c) = known_custodian(name) {
+        return c.display.to_string();
+    }
+    let cap = |w: &str| {
+        let lower = w.to_lowercase();
+        let mut c = lower.chars();
+        match c.next() {
+            Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+            None => String::new(),
+        }
+    };
+    if let Some((_, tail)) = name.rsplit_once(" - ") {
+        let tail = tail.trim();
+        if !tail.is_empty()
+            && !tail.contains(' ')
+            && !INSTITUTION_STOPWORDS.contains(&fold(tail).as_str())
+        {
+            return cap(tail);
+        }
+    }
+    let first = name
+        .split(|c: char| !c.is_alphanumeric())
+        .find(|w| !w.is_empty() && !INSTITUTION_STOPWORDS.contains(&fold(w).as_str()));
+    first.map(cap).unwrap_or_else(|| name.trim().to_string())
 }

@@ -13,4 +13,8 @@ skipped: number, errors: Array<B3CommitError>,
 /**
  * Backup feito antes de uma importação grande.
  */
-backup_id: string | null, };
+backup_id: string | null, 
+/**
+ * Accounts created by the import.
+ */
+accounts_created: Array<string>, };

@@ -203,6 +203,9 @@ pub struct CorporateAction {
     pub new_asset_id: Option<Id>,
     pub notes: Option<String>,
     pub source: String,
+    /// Bonus credited by quantity in one account (no position before the event).
+    pub account_id: Option<Id>,
+    pub quantity: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -221,6 +224,12 @@ pub struct CorporateActionInput {
     pub new_asset_id: Option<Id>,
     #[ts(optional)]
     pub notes: Option<String>,
+    /// Bonus by quantity: the shares credited in this account, instead of a factor (when
+    /// there was no position before the event).
+    #[ts(optional)]
+    pub account_id: Option<Id>,
+    #[ts(optional)]
+    pub quantity: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS)]

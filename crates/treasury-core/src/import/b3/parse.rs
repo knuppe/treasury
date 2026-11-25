@@ -43,6 +43,16 @@ enum Field {
     Indexer,
     Maturity,
     Issuer,
+    /// Fixed income: the other price/value pairs (the B3 fills only one of MTM, CURVA and
+    /// FECHAMENTO, usually CURVA).
+    CloseMtm,
+    CloseEnd,
+    UpdatedMtm,
+    UpdatedEnd,
+    Isin,
+    IssueDate,
+    Unavailable,
+    Reason,
 }
 
 /// Apelidos de cada coluna, já dobrados, em ordem de preferência. `*` no fim = prefixo.
@@ -106,17 +116,27 @@ fn aliases(kind: B3ReportKind, f: Field) -> &'static [&'static str] {
         (Position, Close) => &[
             "preco de fechamento",
             "preco fechamento",
+            "preco atualizado curva",
             "preco atualizado*",
         ],
         (Position, Updated) => &[
             "valor atualizado",
+            "valor atualizado curva",
             "valor atualizado*",
             "valor liquido",
             "valor bruto",
         ],
+        (Position, CloseMtm) => &["preco atualizado mtm"],
+        (Position, CloseEnd) => &["preco atualizado fechamento"],
+        (Position, UpdatedMtm) => &["valor atualizado mtm"],
+        (Position, UpdatedEnd) => &["valor atualizado fechamento"],
         (Position, Indexer) => &["indexador"],
         (Position, Maturity) => &["vencimento", "data de vencimento"],
         (Position, Issuer) => &["emissor"],
+        (Position, Isin) => &["codigo isin", "isin", "codigo isin*"],
+        (Position, IssueDate) => &["data de emissao", "emissao"],
+        (Position, Unavailable) => &["quantidade indisponivel"],
+        (Position, Reason) => &["motivo"],
         _ => &[],
     }
 }
@@ -161,6 +181,14 @@ const FIELDS: &[(B3ReportKind, &[Field])] = &[
             Field::Indexer,
             Field::Maturity,
             Field::Issuer,
+            Field::CloseMtm,
+            Field::CloseEnd,
+            Field::UpdatedMtm,
+            Field::UpdatedEnd,
+            Field::Isin,
+            Field::IssueDate,
+            Field::Unavailable,
+            Field::Reason,
         ],
     ),
 ];
@@ -314,6 +342,13 @@ pub struct PosRec {
     pub indexer: Option<String>,
     pub maturity: Option<NaiveDate>,
     pub issuer: Option<String>,
+    pub isin: Option<String>,
+    pub issue_date: Option<NaiveDate>,
+    /// Account number at the B3 (`Conta`).
+    pub b3_account: Option<String>,
+    /// Blocked quantity (collateral, judicial block) and why, when the B3 lists one.
+    pub unavailable: Option<Decimal>,
+    pub reason: Option<String>,
 }
 
 /// Linha que parecia dado mas não pôde ser lida.
@@ -634,6 +669,16 @@ fn read_position(
     else {
         return Err(t("nucleo-importacao-b3-sem-quantidade"));
     };
+    // The first of the fixed income price/value pairs that is filled (CURVA, MTM, FECHAMENTO).
+    let first_number = |fields: &[Field], what: &str| -> Result<Option<Decimal>, String> {
+        for f in fields {
+            if let Some(n) = number(get(row, h, *f), dc, what)? {
+                return Ok(Some(n));
+            }
+        }
+        Ok(None)
+    };
+    let opt_text = |f: Field| Some(text_of(row, h, f)).filter(|s| !s.is_empty() && s != "-");
     Ok(Some(PosRec {
         src: src.clone(),
         sheet_class,
@@ -641,18 +686,29 @@ fn read_position(
         institution: text_of(row, h, Field::Institution),
         code,
         qty: qty.abs(),
-        close: number(
-            get(row, h, Field::Close),
-            dc,
+        close: first_number(
+            &[Field::Close, Field::CloseMtm, Field::CloseEnd],
             "nucleo-importacao-b3-campo-preco-fechamento",
         )?,
-        value: number(
-            get(row, h, Field::Updated),
-            dc,
+        value: first_number(
+            &[Field::Updated, Field::UpdatedMtm, Field::UpdatedEnd],
             "nucleo-importacao-b3-campo-valor-atualizado",
         )?,
-        indexer: Some(text_of(row, h, Field::Indexer)).filter(|s| !s.is_empty()),
+        indexer: opt_text(Field::Indexer),
         maturity: get(row, h, Field::Maturity).date().ok().flatten(),
-        issuer: Some(text_of(row, h, Field::Issuer)).filter(|s| !s.is_empty()),
+        issuer: opt_text(Field::Issuer),
+        isin: opt_text(Field::Isin).map(|s| s.to_uppercase()),
+        b3_account: opt_text(Field::Account),
+        issue_date: get(row, h, Field::IssueDate).date().ok().flatten(),
+        unavailable: number(
+            get(row, h, Field::Unavailable),
+            dc,
+            "nucleo-importacao-b3-campo-quantidade",
+        )
+        .ok()
+        .flatten()
+        .filter(|q| !q.is_zero())
+        .map(|q| q.abs()),
+        reason: opt_text(Field::Reason),
     }))
 }

@@ -51,6 +51,7 @@ nucleo-carteira-erro-ajuste-importada = esta operación vino de la corredora con
 nucleo-carteira-erro-desdobramento = un desdoblamiento necesita un factor mayor que 1 (p. ej.: 2 para 1→2)
 nucleo-carteira-erro-grupamento = una agrupación necesita un factor entre 0 y 1 (p. ej.: 0,1 para 10→1)
 nucleo-carteira-erro-bonificacao = una bonificación necesita el factor (acciones nuevas por acción, p. ej.: 0,1 = 10%)
+nucleo-carteira-erro-bonificacao-quantidade = solo la bonificación puede acreditarse por cantidad, en una cuenta y sin factor
 nucleo-carteira-erro-devolucao = una devolución de capital necesita el monto total
 nucleo-carteira-erro-ativo-resultante = indica el activo resultante
 nucleo-carteira-erro-bruto = el monto bruto del dividendo debe ser positivo

@@ -54,6 +54,8 @@ pub(crate) struct ActionRow {
     pub(crate) moved_out: bool,
     /// Evento sintético: come-cotas, cotas resgatadas para o IR (o custo total fica).
     pub(crate) come_cotas: Option<Decimal>,
+    /// Bonus credited by quantity (in an account the book covers) instead of a factor.
+    pub(crate) quantity: Option<Decimal>,
 }
 
 #[derive(Debug, Clone)]
@@ -189,6 +191,7 @@ fn load_trades(
 fn load_actions(
     conn: &Connection,
     asset_id: &str,
+    accounts: Option<&[String]>,
     before: Option<NaiveDate>,
 ) -> Result<Vec<ActionRow>> {
     let mut out = vec![];
@@ -196,6 +199,12 @@ fn load_actions(
     for a in super::records::list_actions(conn, Some(asset_id))? {
         let date = parse_date(&a.date)?;
         if before.is_some_and(|b| date >= b) {
+            continue;
+        }
+        // An event of one account (bonus by quantity) counts only in books that cover it.
+        if let (Some(acc), Some(list)) = (&a.account_id, accounts)
+            && !list.iter().any(|x| x == acc)
+        {
             continue;
         }
         let moved_out = matches!(
@@ -210,6 +219,7 @@ fn load_actions(
             amount: a.amount.map(|v| from_minor(v, &base)),
             moved_out,
             come_cotas: None,
+            quantity: parse_opt(a.quantity, "nucleo-carteira-campo-quantidade")?,
         });
     }
     Ok(out)
@@ -310,6 +320,7 @@ fn come_cotas_actions(
             amount: None,
             moved_out: false,
             come_cotas: Some(shares),
+            quantity: None,
         })
         .collect())
 }
@@ -329,7 +340,7 @@ fn load_book_depth(
     }
     let asset = crate::assets::get(conn, asset_id)?;
     let trades = load_trades(conn, asset_id, accounts, None)?;
-    let mut actions = load_actions(conn, asset_id, None)?;
+    let mut actions = load_actions(conn, asset_id, accounts, None)?;
     actions.extend(come_cotas_actions(conn, &asset, &trades)?);
     actions.sort_by_key(|a| a.date);
     let incomes = load_incomes(conn, asset_id, accounts)?;
@@ -658,8 +669,7 @@ fn apply_action(st: &mut State, a: &ActionRow, curve: bool) -> Result<()> {
             }
         }
         CorporateActionKind::Bonus => {
-            if let Some(f) = a.factor {
-                let qty = st.native.qty * f;
+            if let Some(qty) = a.quantity.or_else(|| a.factor.map(|f| st.native.qty * f)) {
                 let unit = a.unit_cost.unwrap_or(Decimal::ZERO);
                 st.native.apply(&PositionEvent::Bonus {
                     qty,
@@ -1068,6 +1078,7 @@ pub(crate) fn traded_assets(
 ) -> Result<Vec<(String, String)>> {
     let mut stmt = conn.prepare(
         "SELECT DISTINCT asset_id, account_id FROM trade
+         UNION SELECT DISTINCT asset_id, account_id FROM corporate_action WHERE account_id IS NOT NULL
          UNION SELECT DISTINCT ca.new_asset_id, t.account_id FROM corporate_action ca JOIN trade t ON t.asset_id = ca.asset_id
            WHERE ca.new_asset_id IS NOT NULL AND ca.kind IN ('ticker_change', 'merger')",
     )?;

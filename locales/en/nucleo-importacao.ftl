@@ -237,6 +237,7 @@ nucleo-importacao-b3-classe-acao = stock (default)
 nucleo-importacao-b3-classe-ja-cadastrado = already registered
 nucleo-importacao-b3-renda-fixa-sem-taxa = B3 doesn't report the contracted rate: without the full terms the asset is created as "Other" (valued at cost); enter them on commit or edit the asset later
 nucleo-importacao-b3-sem-instituicao = (no institution)
+nucleo-importacao-b3-conta-investimentos = { $nome } Investments
 nucleo-importacao-b3-credito = Credit
 nucleo-importacao-b3-debito = Debit
 # Where the operation came from (goes in the note "Imported from B3 (…)").
@@ -245,6 +246,12 @@ nucleo-importacao-b3-origem-negociacao-mercado = trading, { $mercado }
 nucleo-importacao-b3-origem-liquidacao = settlement on { $data }
 nucleo-importacao-b3-origem-movimentacao = movements, { $movimentacao }
 nucleo-importacao-b3-origem-leilao = sale of the fraction in the fraction auction
+nucleo-importacao-b3-abertura-provento = quantity in the income of { $data }: { $quantidade }
+nucleo-importacao-b3-abertura-retrato = custody snapshot on { $data }: { $quantidade }
+nucleo-importacao-b3-abertura-posicao = B3 position on { $data }: { $quantidade }, with no movement before
+nucleo-importacao-b3-abertura-vendas = the file sells more than it buys: the earlier history is missing
+nucleo-importacao-b3-origem-abertura = opening position
+nucleo-importacao-b3-nota-abertura = opening position the day before the file, from the evidence in the movements
 nucleo-importacao-b3-nota-importado = Imported from B3 ({ $origem }).
 nucleo-importacao-b3-ativo-cadastrado = Registered by the B3 import.
 nucleo-importacao-b3-ativo-renda-fixa = Fixed income without the contracted rate (B3 doesn't report it): edit the asset and enter the terms to value it by the curve.
@@ -253,11 +260,14 @@ nucleo-importacao-b3-fracionario = fractional: { $codigo } → { $ticker }
 nucleo-importacao-b3-data-estimada = estimated trade date: 2 business days before the settlement ({ $data })
 nucleo-importacao-b3-nota-repasse = income pass-through (without the main line in the file)
 nucleo-importacao-b3-nota-jcp = B3 net JCP: gross = net ÷ 0.85
+nucleo-importacao-b3-nota-juros-aliquota = gross amount from the B3; tax withheld by the regressive table, average holding of { $dias } days
+nucleo-importacao-b3-nota-juros-aliquota-presumida = gross amount from the B3; without the bond's purchase, the tax was presumed at 15% (over 720 days): check it
 nucleo-importacao-b3-nota-repetida = repeated in another file of this import ({ $origem })
 nucleo-importacao-b3-arquivo-linha = { $arquivo }, line { $linha }
 nucleo-importacao-b3-nota-ja-importada = already imported (same identifier)
 nucleo-importacao-b3-nota-ja-liquidacao = already imported from the movements (settlement)
 nucleo-importacao-b3-nota-ja-negociacao = already imported from the trading report
+nucleo-importacao-b3-nota-ja-nota-corretagem = already recorded from the brokerage note (real date and price with fees)
 nucleo-importacao-b3-nota-operacao-manual = similar to an operation entered by hand (same date, asset and quantity)
 nucleo-importacao-b3-nota-provento-manual = similar to an income payment entered by hand (same date and amount)
 nucleo-importacao-b3-nota-provento-oficial = already recorded from the official notice (same payment)
@@ -271,7 +281,17 @@ nucleo-importacao-b3-erro-leilao-gravado = fraction auction already saved
 nucleo-importacao-b3-dica-custodia-venda = { $erro } (there was a custody transfer of this asset on { $data } ({ $instituicao }); point both institutions to the same account)
 # Corporate actions: the factor calculated from the quantities.
 nucleo-importacao-b3-erro-fator = enter the event's factor to approve it
+nucleo-importacao-b3-erro-conta-nome = give the new account a name
+nucleo-importacao-b3-ignorada-retrato = custody snapshot: repeats the quantity you already hold
+nucleo-importacao-b3-origem-atualizacao = custody update
+nucleo-importacao-b3-origem-subscricao = exercised subscription
+nucleo-importacao-b3-nota-atualizacao-confirmar = the B3 credited { $quantidade } with no subscription in the file nor a known position: confirm it and enter the cost
+nucleo-importacao-b3-nota-subscricao = shares from the exercised subscription, at the receipt's price
+nucleo-importacao-b3-nota-subscricao-sem-custo = shares from the exercised subscription: the B3 did not report the price, enter the cost
+nucleo-importacao-b3-erro-custo = enter the unit cost to approve this row
 nucleo-importacao-b3-fator-sem-posicao = no position before the event in the chosen accounts: import the earlier history or enter the factor
+nucleo-importacao-b3-nota-bonificacao-compra = looks like the same shares recorded as a buy on { $data }: delete the buy and record the bonus, so the average cost uses the attributed cost
+nucleo-importacao-b3-bonificacao-quantidade = no position before the event: the bonus shares come in by the quantity credited in the account
 nucleo-importacao-b3-fator-sem-quantidade = the movement doesn't include the quantity: enter the factor
 nucleo-importacao-b3-fator-calculado = factor calculated from the quantities; check it against the company's announcement
 nucleo-importacao-b3-fator-inexato = the calculated factor isn't exact: check and approve
@@ -284,6 +304,8 @@ nucleo-importacao-b3-posicao-a-mais = the app has more than B3: a sale or transf
 nucleo-importacao-b3-posicao-a-menos = the app has less than B3: a purchase, bonus or earlier history is missing
 nucleo-importacao-b3-posicao-sem-conta = institution without a chosen account
 nucleo-importacao-b3-posicao-nao-listada = the app has a position that B3 doesn't list at this institution: a sale or transfer is missing
+nucleo-importacao-b3-posicao-indisponivel = { $quantidade } unavailable at the B3 ({ $motivo })
+nucleo-importacao-b3-posicao-vencida = matured on { $data } and is no longer at the B3: record the maturity redemption
 
 ## Brokerage notes (SINACOR)
 

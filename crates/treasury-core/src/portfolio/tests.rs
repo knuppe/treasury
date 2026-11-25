@@ -157,6 +157,8 @@ fn stock_position_average_cost_split_sale_income_and_cash() {
                 unit_cost: None,
                 amount: None,
                 new_asset_id: None,
+                account_id: None,
+                quantity: None,
                 notes: None,
             },
         )
@@ -385,6 +387,8 @@ fn ticker_change_moves_position() {
                 unit_cost: None,
                 amount: None,
                 new_asset_id: Some(new.clone()),
+                account_id: None,
+                quantity: None,
                 notes: None,
             },
         )
@@ -763,6 +767,8 @@ fn ticker_change_does_not_double_count_sales_before_the_change() {
                 unit_cost: None,
                 amount: None,
                 new_asset_id: Some(new.clone()),
+                account_id: None,
+                quantity: None,
                 notes: None,
             },
         )

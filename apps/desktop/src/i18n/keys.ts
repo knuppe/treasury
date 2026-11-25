@@ -2950,6 +2950,7 @@ export interface Messages {
   'ativos-watch-titulo': { nome: string | number };
   'ativos-watch-vazia': never;
   'ativos-watch-vazia-descricao': never;
+  'b3-aba-abertura': never;
   'b3-aba-ativos': never;
   'b3-aba-eventos': never;
   'b3-aba-ignorada': never;
@@ -2959,6 +2960,13 @@ export interface Messages {
   'b3-aba-proventos': never;
   'b3-aba-resumo': { aba: string | number; n: string | number; tipo: string | number };
   'b3-abas': never;
+  'b3-abertura-aplicar': never;
+  'b3-abertura-custo': never;
+  'b3-abertura-custo-de': { ativo: string | number };
+  'b3-abertura-evidencia': never;
+  'b3-abertura-incluir': { ativo: string | number };
+  'b3-abertura-tabela': never;
+  'b3-abertura-texto': never;
   'b3-abrir-senha': never;
   'b3-agrupar': never;
   'b3-agrupar-dica': never;
@@ -2991,19 +2999,24 @@ export interface Messages {
   'b3-concluir': never;
   'b3-conferir': never;
   'b3-conta': never;
+  'b3-conta-b3': { contas: string | number };
   'b3-conta-corretora': never;
   'b3-conta-corretora-dica': never;
+  'b3-conta-desconhecida': never;
   'b3-conta-para': { instituicao: string | number };
   'b3-conta-sugerida': never;
   'b3-contas': never;
   'b3-contas-texto': never;
   'b3-corrigido': never;
   'b3-corrigir-ativo': never;
+  'b3-criar-conta': never;
+  'b3-custo': never;
   'b3-custo-acao': never;
   'b3-custo-acao-evento': { n: string | number };
   'b3-custo-corretagem': never;
   'b3-custo-emolumentos': never;
   'b3-custo-liquidacao': never;
+  'b3-custo-operacao': { n: string | number };
   'b3-custo-outras': never;
   'b3-custo-registro': never;
   'b3-custo-total': never;
@@ -3062,6 +3075,11 @@ export interface Messages {
   'b3-liquido-diferente': never;
   'b3-liquido-nota': never;
   'b3-motivo': never;
+  'b3-motivo-criada': never;
+  'b3-motivo-escolhida': never;
+  'b3-motivo-mesma-instituicao': never;
+  'b3-motivo-nome': never;
+  'b3-motivo-salva': never;
   'b3-nada-gravado': never;
   'b3-nao-identificados': never;
   'b3-nao-identificados-texto': never;
@@ -3092,11 +3110,20 @@ export interface Messages {
     novas: string | number;
   };
   'b3-notas-titulo': never;
+  'b3-nova-conta-abertura': never;
+  'b3-nova-conta-instituicao': never;
+  'b3-nova-conta-nome': never;
+  'b3-nova-conta-para': { instituicao: string | number };
+  'b3-nova-conta-tipo': never;
+  'b3-nova-conta-tipo-dica': never;
   'b3-operacoes-tabela': never;
   'b3-origem': never;
+  'b3-origem-abertura': never;
+  'b3-origem-atualizacao': never;
   'b3-origem-leilao': never;
   'b3-origem-linha': { aba: string | number; linha: string | number };
   'b3-origem-liquidacao': never;
+  'b3-origem-subscricao': never;
   'b3-ou-codigo': never;
   'b3-pagamento': never;
   'b3-periodo': { ate: string | number; de: string | number };
@@ -3129,6 +3156,7 @@ export interface Messages {
   'b3-regra-mercado': never;
   'b3-regra-opcao': never;
   'b3-regra-repassado': never;
+  'b3-regra-retrato': never;
   'b3-regra-saldo': never;
   'b3-regra-sem-valor': never;
   'b3-regra-subscricao': never;
@@ -3147,6 +3175,14 @@ export interface Messages {
     operacoes: string | number;
     proventos: string | number;
   };
+  'b3-resumo-ativos': never;
+  'b3-resumo-conta': {
+    eventos: string | number;
+    linhas: string | number;
+    operacoes: string | number;
+    proventos: string | number;
+  };
+  'b3-resumo-linhas': { linhas: string | number };
   'b3-secoes': never;
   'b3-sem-conta': never;
   'b3-sem-conta-parecida': never;
@@ -3166,6 +3202,7 @@ export interface Messages {
   'b3-status-revisar-dica': never;
   'b3-status-sem-conta': never;
   'b3-status-sem-conta-dica': never;
+  'b3-tambem-como': { nomes: string | number };
   'b3-taxas': never;
   'b3-tipo': never;
   'b3-tirar': { arquivo: string | number };
@@ -12222,6 +12259,7 @@ export interface Messages {
   'nucleo-carteira-erro-alvos-soma-classe': { classe: string | number };
   'nucleo-carteira-erro-ativo-resultante': never;
   'nucleo-carteira-erro-bonificacao': never;
+  'nucleo-carteira-erro-bonificacao-quantidade': never;
   'nucleo-carteira-erro-bruto': never;
   'nucleo-carteira-erro-cadeia-ticker': never;
   'nucleo-carteira-erro-cambio': never;
@@ -13444,6 +13482,10 @@ export interface Messages {
   'nucleo-importacao-aviso-outra-conta': { conta: string | number; n: string | number };
   'nucleo-importacao-aviso-sinais-invertidos': never;
   'nucleo-importacao-aviso-varios-extratos': { conta: string | number; n: string | number };
+  'nucleo-importacao-b3-abertura-posicao': { data: string | number; quantidade: string | number };
+  'nucleo-importacao-b3-abertura-provento': { data: string | number; quantidade: string | number };
+  'nucleo-importacao-b3-abertura-retrato': { data: string | number; quantidade: string | number };
+  'nucleo-importacao-b3-abertura-vendas': never;
   'nucleo-importacao-b3-arquivo-linha': { arquivo: string | number; linha: string | number };
   'nucleo-importacao-b3-ativo-cadastrado': never;
   'nucleo-importacao-b3-ativo-renda-fixa': never;
@@ -13452,6 +13494,7 @@ export interface Messages {
   'nucleo-importacao-b3-aviso-sem-conta': { instituicoes: string | number };
   'nucleo-importacao-b3-aviso-sem-relatorio': { arquivo: string | number };
   'nucleo-importacao-b3-aviso-vendas-maiores': { n: string | number };
+  'nucleo-importacao-b3-bonificacao-quantidade': never;
   'nucleo-importacao-b3-campo-preco': never;
   'nucleo-importacao-b3-campo-preco-fechamento': never;
   'nucleo-importacao-b3-campo-preco-unitario': never;
@@ -13472,6 +13515,7 @@ export interface Messages {
   'nucleo-importacao-b3-classe-sem-codigo': never;
   'nucleo-importacao-b3-classe-tesouro': never;
   'nucleo-importacao-b3-codigo-desconhecido': { codigo: string | number };
+  'nucleo-importacao-b3-conta-investimentos': { nome: string | number };
   'nucleo-importacao-b3-credito': never;
   'nucleo-importacao-b3-data-estimada': { data: string | number };
   'nucleo-importacao-b3-debito': never;
@@ -13489,6 +13533,8 @@ export interface Messages {
   'nucleo-importacao-b3-erro-abrir': { arquivo: string | number; erro: string | number };
   'nucleo-importacao-b3-erro-ativo-fora': { ativo: string | number };
   'nucleo-importacao-b3-erro-campo': { campo: string | number; erro: string | number };
+  'nucleo-importacao-b3-erro-conta-nome': never;
+  'nucleo-importacao-b3-erro-custo': never;
   'nucleo-importacao-b3-erro-fator': never;
   'nucleo-importacao-b3-erro-leilao-gravado': never;
   'nucleo-importacao-b3-erro-maximo-arquivos': { max: string | number };
@@ -13521,6 +13567,7 @@ export interface Messages {
   'nucleo-importacao-b3-ignorada-mercado': never;
   'nucleo-importacao-b3-ignorada-opcao': never;
   'nucleo-importacao-b3-ignorada-repasse': never;
+  'nucleo-importacao-b3-ignorada-retrato': never;
   'nucleo-importacao-b3-ignorada-sem-valor': never;
   'nucleo-importacao-b3-ignorada-subscricao': never;
   'nucleo-importacao-b3-ignorada-termo': never;
@@ -13532,13 +13579,19 @@ export interface Messages {
   'nucleo-importacao-b3-linha-sem-preco': never;
   'nucleo-importacao-b3-linha-sem-produto': never;
   'nucleo-importacao-b3-linha-tipo-desconhecido': { valor: string | number };
+  'nucleo-importacao-b3-nota-abertura': never;
+  'nucleo-importacao-b3-nota-atualizacao-confirmar': { quantidade: string | number };
+  'nucleo-importacao-b3-nota-bonificacao-compra': { data: string | number };
   'nucleo-importacao-b3-nota-bonificacao-sem-custo': never;
   'nucleo-importacao-b3-nota-evento-cadastrado': { data: string | number };
   'nucleo-importacao-b3-nota-importado': { origem: string | number };
   'nucleo-importacao-b3-nota-ja-importada': never;
   'nucleo-importacao-b3-nota-ja-liquidacao': never;
   'nucleo-importacao-b3-nota-ja-negociacao': never;
+  'nucleo-importacao-b3-nota-ja-nota-corretagem': never;
   'nucleo-importacao-b3-nota-jcp': never;
+  'nucleo-importacao-b3-nota-juros-aliquota': { dias: string | number };
+  'nucleo-importacao-b3-nota-juros-aliquota-presumida': never;
   'nucleo-importacao-b3-nota-leilao-provento': never;
   'nucleo-importacao-b3-nota-leilao-venda': never;
   'nucleo-importacao-b3-nota-operacao-manual': never;
@@ -13546,16 +13599,26 @@ export interface Messages {
   'nucleo-importacao-b3-nota-provento-oficial': never;
   'nucleo-importacao-b3-nota-repasse': never;
   'nucleo-importacao-b3-nota-repetida': { origem: string | number };
+  'nucleo-importacao-b3-nota-subscricao': never;
+  'nucleo-importacao-b3-nota-subscricao-sem-custo': never;
+  'nucleo-importacao-b3-origem-abertura': never;
+  'nucleo-importacao-b3-origem-atualizacao': never;
   'nucleo-importacao-b3-origem-leilao': never;
   'nucleo-importacao-b3-origem-liquidacao': { data: string | number };
   'nucleo-importacao-b3-origem-movimentacao': { movimentacao: string | number };
   'nucleo-importacao-b3-origem-negociacao': never;
   'nucleo-importacao-b3-origem-negociacao-mercado': { mercado: string | number };
+  'nucleo-importacao-b3-origem-subscricao': never;
   'nucleo-importacao-b3-posicao-a-mais': never;
   'nucleo-importacao-b3-posicao-a-menos': never;
+  'nucleo-importacao-b3-posicao-indisponivel': {
+    motivo: string | number;
+    quantidade: string | number;
+  };
   'nucleo-importacao-b3-posicao-nao-listada': never;
   'nucleo-importacao-b3-posicao-sem-conta': never;
   'nucleo-importacao-b3-posicao-sem-operacao': never;
+  'nucleo-importacao-b3-posicao-vencida': { data: string | number };
   'nucleo-importacao-b3-ref-previa': never;
   'nucleo-importacao-b3-renda-fixa-sem-taxa': never;
   'nucleo-importacao-b3-sem-instituicao': never;
@@ -21883,6 +21946,7 @@ export const KEYS: readonly MessageKey[] = [
   'ativos-watch-titulo',
   'ativos-watch-vazia',
   'ativos-watch-vazia-descricao',
+  'b3-aba-abertura',
   'b3-aba-ativos',
   'b3-aba-eventos',
   'b3-aba-ignorada',
@@ -21892,6 +21956,13 @@ export const KEYS: readonly MessageKey[] = [
   'b3-aba-proventos',
   'b3-aba-resumo',
   'b3-abas',
+  'b3-abertura-aplicar',
+  'b3-abertura-custo',
+  'b3-abertura-custo-de',
+  'b3-abertura-evidencia',
+  'b3-abertura-incluir',
+  'b3-abertura-tabela',
+  'b3-abertura-texto',
   'b3-abrir-senha',
   'b3-agrupar',
   'b3-agrupar-dica',
@@ -21924,19 +21995,24 @@ export const KEYS: readonly MessageKey[] = [
   'b3-concluir',
   'b3-conferir',
   'b3-conta',
+  'b3-conta-b3',
   'b3-conta-corretora',
   'b3-conta-corretora-dica',
+  'b3-conta-desconhecida',
   'b3-conta-para',
   'b3-conta-sugerida',
   'b3-contas',
   'b3-contas-texto',
   'b3-corrigido',
   'b3-corrigir-ativo',
+  'b3-criar-conta',
+  'b3-custo',
   'b3-custo-acao',
   'b3-custo-acao-evento',
   'b3-custo-corretagem',
   'b3-custo-emolumentos',
   'b3-custo-liquidacao',
+  'b3-custo-operacao',
   'b3-custo-outras',
   'b3-custo-registro',
   'b3-custo-total',
@@ -21995,6 +22071,11 @@ export const KEYS: readonly MessageKey[] = [
   'b3-liquido-diferente',
   'b3-liquido-nota',
   'b3-motivo',
+  'b3-motivo-criada',
+  'b3-motivo-escolhida',
+  'b3-motivo-mesma-instituicao',
+  'b3-motivo-nome',
+  'b3-motivo-salva',
   'b3-nada-gravado',
   'b3-nao-identificados',
   'b3-nao-identificados-texto',
@@ -22020,11 +22101,20 @@ export const KEYS: readonly MessageKey[] = [
   'b3-notas-pdf-dica',
   'b3-notas-resultado',
   'b3-notas-titulo',
+  'b3-nova-conta-abertura',
+  'b3-nova-conta-instituicao',
+  'b3-nova-conta-nome',
+  'b3-nova-conta-para',
+  'b3-nova-conta-tipo',
+  'b3-nova-conta-tipo-dica',
   'b3-operacoes-tabela',
   'b3-origem',
+  'b3-origem-abertura',
+  'b3-origem-atualizacao',
   'b3-origem-leilao',
   'b3-origem-linha',
   'b3-origem-liquidacao',
+  'b3-origem-subscricao',
   'b3-ou-codigo',
   'b3-pagamento',
   'b3-periodo',
@@ -22053,6 +22143,7 @@ export const KEYS: readonly MessageKey[] = [
   'b3-regra-mercado',
   'b3-regra-opcao',
   'b3-regra-repassado',
+  'b3-regra-retrato',
   'b3-regra-saldo',
   'b3-regra-sem-valor',
   'b3-regra-subscricao',
@@ -22065,6 +22156,9 @@ export const KEYS: readonly MessageKey[] = [
   'b3-relatorios-dica',
   'b3-relatorios-escolhidos',
   'b3-resultado',
+  'b3-resumo-ativos',
+  'b3-resumo-conta',
+  'b3-resumo-linhas',
   'b3-secoes',
   'b3-sem-conta',
   'b3-sem-conta-parecida',
@@ -22084,6 +22178,7 @@ export const KEYS: readonly MessageKey[] = [
   'b3-status-revisar-dica',
   'b3-status-sem-conta',
   'b3-status-sem-conta-dica',
+  'b3-tambem-como',
   'b3-taxas',
   'b3-tipo',
   'b3-tirar',
@@ -30383,6 +30478,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-erro-alvos-soma-classe',
   'nucleo-carteira-erro-ativo-resultante',
   'nucleo-carteira-erro-bonificacao',
+  'nucleo-carteira-erro-bonificacao-quantidade',
   'nucleo-carteira-erro-bruto',
   'nucleo-carteira-erro-cadeia-ticker',
   'nucleo-carteira-erro-cambio',
@@ -31463,6 +31559,10 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-aviso-outra-conta',
   'nucleo-importacao-aviso-sinais-invertidos',
   'nucleo-importacao-aviso-varios-extratos',
+  'nucleo-importacao-b3-abertura-posicao',
+  'nucleo-importacao-b3-abertura-provento',
+  'nucleo-importacao-b3-abertura-retrato',
+  'nucleo-importacao-b3-abertura-vendas',
   'nucleo-importacao-b3-arquivo-linha',
   'nucleo-importacao-b3-ativo-cadastrado',
   'nucleo-importacao-b3-ativo-renda-fixa',
@@ -31471,6 +31571,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-aviso-sem-conta',
   'nucleo-importacao-b3-aviso-sem-relatorio',
   'nucleo-importacao-b3-aviso-vendas-maiores',
+  'nucleo-importacao-b3-bonificacao-quantidade',
   'nucleo-importacao-b3-campo-preco',
   'nucleo-importacao-b3-campo-preco-fechamento',
   'nucleo-importacao-b3-campo-preco-unitario',
@@ -31491,6 +31592,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-classe-sem-codigo',
   'nucleo-importacao-b3-classe-tesouro',
   'nucleo-importacao-b3-codigo-desconhecido',
+  'nucleo-importacao-b3-conta-investimentos',
   'nucleo-importacao-b3-credito',
   'nucleo-importacao-b3-data-estimada',
   'nucleo-importacao-b3-debito',
@@ -31500,6 +31602,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-erro-abrir',
   'nucleo-importacao-b3-erro-ativo-fora',
   'nucleo-importacao-b3-erro-campo',
+  'nucleo-importacao-b3-erro-conta-nome',
+  'nucleo-importacao-b3-erro-custo',
   'nucleo-importacao-b3-erro-fator',
   'nucleo-importacao-b3-erro-leilao-gravado',
   'nucleo-importacao-b3-erro-maximo-arquivos',
@@ -31532,6 +31636,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-ignorada-mercado',
   'nucleo-importacao-b3-ignorada-opcao',
   'nucleo-importacao-b3-ignorada-repasse',
+  'nucleo-importacao-b3-ignorada-retrato',
   'nucleo-importacao-b3-ignorada-sem-valor',
   'nucleo-importacao-b3-ignorada-subscricao',
   'nucleo-importacao-b3-ignorada-termo',
@@ -31543,13 +31648,19 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-linha-sem-preco',
   'nucleo-importacao-b3-linha-sem-produto',
   'nucleo-importacao-b3-linha-tipo-desconhecido',
+  'nucleo-importacao-b3-nota-abertura',
+  'nucleo-importacao-b3-nota-atualizacao-confirmar',
+  'nucleo-importacao-b3-nota-bonificacao-compra',
   'nucleo-importacao-b3-nota-bonificacao-sem-custo',
   'nucleo-importacao-b3-nota-evento-cadastrado',
   'nucleo-importacao-b3-nota-importado',
   'nucleo-importacao-b3-nota-ja-importada',
   'nucleo-importacao-b3-nota-ja-liquidacao',
   'nucleo-importacao-b3-nota-ja-negociacao',
+  'nucleo-importacao-b3-nota-ja-nota-corretagem',
   'nucleo-importacao-b3-nota-jcp',
+  'nucleo-importacao-b3-nota-juros-aliquota',
+  'nucleo-importacao-b3-nota-juros-aliquota-presumida',
   'nucleo-importacao-b3-nota-leilao-provento',
   'nucleo-importacao-b3-nota-leilao-venda',
   'nucleo-importacao-b3-nota-operacao-manual',
@@ -31557,16 +31668,23 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-b3-nota-provento-oficial',
   'nucleo-importacao-b3-nota-repasse',
   'nucleo-importacao-b3-nota-repetida',
+  'nucleo-importacao-b3-nota-subscricao',
+  'nucleo-importacao-b3-nota-subscricao-sem-custo',
+  'nucleo-importacao-b3-origem-abertura',
+  'nucleo-importacao-b3-origem-atualizacao',
   'nucleo-importacao-b3-origem-leilao',
   'nucleo-importacao-b3-origem-liquidacao',
   'nucleo-importacao-b3-origem-movimentacao',
   'nucleo-importacao-b3-origem-negociacao',
   'nucleo-importacao-b3-origem-negociacao-mercado',
+  'nucleo-importacao-b3-origem-subscricao',
   'nucleo-importacao-b3-posicao-a-mais',
   'nucleo-importacao-b3-posicao-a-menos',
+  'nucleo-importacao-b3-posicao-indisponivel',
   'nucleo-importacao-b3-posicao-nao-listada',
   'nucleo-importacao-b3-posicao-sem-conta',
   'nucleo-importacao-b3-posicao-sem-operacao',
+  'nucleo-importacao-b3-posicao-vencida',
   'nucleo-importacao-b3-ref-previa',
   'nucleo-importacao-b3-renda-fixa-sem-taxa',
   'nucleo-importacao-b3-sem-instituicao',

@@ -43,6 +43,7 @@ fn preview_of(env: &mut TestEnv, files: Vec<B3File>) -> B3Preview {
             files,
             accounts: None,
             position_date: None,
+            openings: None,
         },
     )
     .unwrap()
@@ -209,7 +210,8 @@ fn movement_and_market_rules() {
         m("Cessão de Direitos"),
         MoveRule::Ignore(R::SubscriptionRight)
     );
-    assert_eq!(m("Atualização"), MoveRule::Ignore(R::BalanceUpdate));
+    assert_eq!(m("Atualização"), MoveRule::Update);
+    assert_eq!(m("APLICAÇÃO"), MoveRule::Settlement);
     assert_eq!(m("Resgate"), MoveRule::Redemption);
     assert_eq!(m("Vencimento"), MoveRule::Redemption);
     assert_eq!(m("Incorporação"), MoveRule::Ignore(R::ManualEvent));
@@ -370,6 +372,7 @@ fn bad_rows_and_unknown_files() {
             files: vec![f("x.csv", "a;b;c\n1;2;3\n")],
             accounts: None,
             position_date: None,
+            openings: None,
         },
     )
     .unwrap_err();
@@ -423,6 +426,7 @@ fn position_only_compares_with_existing_portfolio() {
             }],
             accounts: None,
             position_date: Some("2024-05-02".into()),
+            openings: None,
         },
     )
     .unwrap();
@@ -491,8 +495,10 @@ fn sale_after_ignored_custody_transfer_explains_the_error() {
             accounts: Some(vec![B3AccountChoice {
                 institution: "NU INVEST CORRETORA DE VALORES S.A.".into(),
                 account_id: xp_id,
+                new_account: None,
             }]),
             position_date: None,
+            openings: None,
         },
     )
     .unwrap();
@@ -534,6 +540,7 @@ fn reverse_split_and_fixed_income() {
             approve_actions: None,
             assets: None,
             cash_movement: None,
+            save_mapping: None,
         },
     )
     .unwrap();
@@ -595,6 +602,7 @@ fn fixed_income_override_creates_terms() {
                 }),
             }]),
             cash_movement: None,
+            save_mapping: None,
         },
     )
     .unwrap();

@@ -24,6 +24,7 @@ use crate::import::engine::{decode_base64, sha256_hex};
 use crate::portfolio::records::{dec, to_minor};
 use crate::portfolio::{IncomeKind, TradeSide};
 use crate::time::{fmt_date, parse_date, today_local};
+use rusqlite::OptionalExtension;
 
 /// Prévias guardadas por sessão (cada uma guarda o plano inteiro).
 const MAX_PREVIEWS: usize = 4;
@@ -144,23 +145,43 @@ pub fn preview(ctx: &mut Ctx<'_>, args: &B3PreviewArgs) -> Result<B3Preview> {
         Some(d) => parse_date(d)?,
         None => position_date.unwrap_or_else(today_local),
     };
-    let plan = plan::build(
-        ctx.conn(),
-        &parsed,
-        args.accounts.as_deref().unwrap_or_default(),
-    )?;
+    let first_date = dates(&parsed).into_iter().min();
 
-    // Simulação: as mesmas funções do commit, numa transação que é desfeita.
-    let (outcome, check) = {
+    // Simulação: as mesmas funções do commit, numa transação que é desfeita. The accounts
+    // the user asked to create exist only inside it (placeholders, created again on commit).
+    let (plan, outcome, check) = {
         let tx = ctx.db.conn_mut().transaction()?;
+        let mut choices = args.accounts.clone().unwrap_or_default();
+        let mut new_accounts = vec![];
+        for c in &mut choices {
+            if let Some(n) = &c.new_account {
+                let id = create_account(&tx, n, first_date)?;
+                c.account_id = Some(id.clone());
+                new_accounts.push((id, n.clone()));
+            }
+        }
+        let mut plan = plan::build(
+            &tx,
+            &parsed,
+            &choices,
+            args.openings.as_deref().unwrap_or_default(),
+            position_date,
+        )?;
+        plan.new_accounts = new_accounts;
+        let before = summary_before(&tx, &plan)?;
         let outcome = apply::run(&tx, &plan, &ApplyOpts::default())?;
         let check = if plan.positions.is_empty() {
             None
         } else {
             Some(apply::position_check(&tx, &plan, &outcome, position_date)?)
         };
+        let end = plan
+            .period
+            .1
+            .map_or(position_date, |d| d.max(position_date));
+        summarize_accounts(&tx, &mut plan, &outcome, &before, end)?;
         tx.rollback()?;
-        (outcome, check)
+        (plan, outcome, check)
     };
 
     let token = new_id();
@@ -196,6 +217,153 @@ pub fn preview(ctx: &mut Ctx<'_>, args: &B3PreviewArgs) -> Result<B3Preview> {
         store.previews.drain(..excess);
     }
     Ok(preview)
+}
+
+/// Creates an account for a custodian (in the preview's simulation or in the commit).
+fn create_account(
+    tx: &rusqlite::Transaction<'_>,
+    n: &super::B3NewAccount,
+    first_date: Option<NaiveDate>,
+) -> Result<crate::ids::Id> {
+    let name = n.name.trim();
+    if name.is_empty() {
+        return Err(Error::invalid(t("nucleo-importacao-b3-erro-conta-nome")));
+    }
+    let institution = n.institution_name.trim();
+    let inst_id = if institution.is_empty() {
+        None
+    } else {
+        let found: Option<String> = tx
+            .query_row(
+                "SELECT id FROM institution WHERE lower(name) = lower(?1) ORDER BY created_at LIMIT 1",
+                [institution],
+                |r| r.get(0),
+            )
+            .optional()?;
+        Some(match found {
+            Some(id) => id,
+            None => {
+                crate::household::create_institution(
+                    tx,
+                    &crate::household::InstitutionInput {
+                        name: institution.to_string(),
+                        kind: Some(n.institution_kind),
+                        code: None,
+                        website: None,
+                    },
+                )?
+                .id
+            }
+        })
+    };
+    // The opening position, when there is one, is the day before the file.
+    let opening = match &n.opening_date {
+        Some(d) => Some(parse_date(d)?),
+        None => first_date.map(|d| d - chrono::Duration::days(1)),
+    };
+    let today = today_local();
+    let input: crate::accounts::AccountInput = serde_json::from_value(serde_json::json!({
+        "name": name,
+        "kind": n.kind,
+        "institution_id": inst_id,
+        "opening_date": opening.map(fmt_date),
+    }))
+    .map_err(|e| Error::invalid(e.to_string()))?;
+    crate::accounts::create(tx, &input, today)
+}
+
+/// Quantity of each (account, asset) of the plan before the import, for the summary.
+fn summary_before(
+    tx: &rusqlite::Transaction<'_>,
+    plan: &Plan,
+) -> Result<HashMap<(crate::ids::Id, usize), Decimal>> {
+    let mut out = HashMap::new();
+    for it in &plan.items {
+        let Some(acc) = &it.account else { continue };
+        if out.contains_key(&(acc.clone(), it.asset)) {
+            continue;
+        }
+        let q = match &plan.assets[it.asset].existing {
+            Some(id) => crate::portfolio::engine::quantity_held(
+                tx,
+                id,
+                Some(acc),
+                &fmt_date(it.date - chrono::Duration::days(1)),
+            )
+            .unwrap_or_default(),
+            None => Decimal::ZERO,
+        };
+        out.insert((acc.clone(), it.asset), q);
+    }
+    Ok(out)
+}
+
+/// What the import does in each custodian's account: rows written, period and the
+/// position of each asset before → after.
+fn summarize_accounts(
+    tx: &rusqlite::Transaction<'_>,
+    plan: &mut Plan,
+    out: &Outcome,
+    before: &HashMap<(crate::ids::Id, usize), Decimal>,
+    end: NaiveDate,
+) -> Result<()> {
+    for inst in &mut plan.institutions {
+        let Some(acc) = inst.account_id.clone() else {
+            continue;
+        };
+        let mut s = super::B3InstitutionSummary::default();
+        let mut assets: Vec<usize> = vec![];
+        let mut dates: Vec<NaiveDate> = vec![];
+        for it in &plan.items {
+            let in_account = it.account.as_ref() == Some(&acc)
+                || matches!(&it.op, Op::Action { legs, .. } if legs.iter().any(|l| l.account.as_ref() == Some(&acc)));
+            if !in_account {
+                continue;
+            }
+            let written = out.items.get(&it.index).is_some_and(|o| o.written);
+            if !written {
+                continue;
+            }
+            match &it.op {
+                Op::Trade { .. } => s.trades += 1,
+                Op::Income { .. } => s.incomes += 1,
+                Op::Action { .. } => s.actions += 1,
+                Op::Auction { .. } => {
+                    if out.items.get(&it.index).is_some_and(|o| o.auction_income) {
+                        s.incomes += 1
+                    } else {
+                        s.trades += 1
+                    }
+                }
+            }
+            dates.push(it.date);
+            if !assets.contains(&it.asset) {
+                assets.push(it.asset);
+            }
+        }
+        s.period_from = dates.iter().min().map(|d| fmt_date(*d));
+        s.period_to = dates.iter().max().map(|d| fmt_date(*d));
+        for a in assets {
+            let p = &plan.assets[a];
+            let after = match out.asset_ids.get(a).cloned().flatten() {
+                Some(id) => {
+                    crate::portfolio::engine::quantity_held(tx, &id, Some(&acc), &fmt_date(end))
+                        .unwrap_or_default()
+                }
+                None => Decimal::ZERO,
+            };
+            let b = before.get(&(acc.clone(), a)).copied().unwrap_or_default();
+            s.assets.push(super::B3InstitutionAsset {
+                asset_key: p.key.clone(),
+                ticker: p.ticker.clone(),
+                name: p.name.clone(),
+                before: b.normalize().to_string(),
+                after: after.normalize().to_string(),
+            });
+        }
+        inst.summary = s;
+    }
+    Ok(())
 }
 
 fn join_notes(a: Option<&String>, b: Option<&String>) -> Option<String> {
@@ -307,26 +475,33 @@ fn assemble(
                 tax,
                 net,
                 movement,
-            } => incomes.push(B3IncomeProposal {
-                index: it.index,
-                source: it.src.clone(),
-                pay_date: fmt_date(it.date),
-                asset_key: a.key.clone(),
-                ticker: a.ticker.clone(),
-                institution: it.institution.clone(),
-                account_id: it.account.clone(),
-                kind: *kind,
-                movement: movement.clone(),
-                quantity: qty.map(|q| q.normalize().to_string()),
-                gross: *gross,
-                tax_withheld: *tax,
-                net: *net,
-                external_id: it.external_id.clone(),
-                status,
-                duplicate_of: it.duplicate_of.clone(),
-                note: it.note.clone(),
-                error: o.error.clone(),
-            }),
+                ..
+            } => {
+                let (gross, tax, net, tax_note) = match &o.income {
+                    Some((g, t, n, note)) => (g, t, n, note.as_ref()),
+                    None => (gross, tax, net, None),
+                };
+                incomes.push(B3IncomeProposal {
+                    index: it.index,
+                    source: it.src.clone(),
+                    pay_date: fmt_date(it.date),
+                    asset_key: a.key.clone(),
+                    ticker: a.ticker.clone(),
+                    institution: it.institution.clone(),
+                    account_id: it.account.clone(),
+                    kind: *kind,
+                    movement: movement.clone(),
+                    quantity: qty.map(|q| q.normalize().to_string()),
+                    gross: *gross,
+                    tax_withheld: *tax,
+                    net: *net,
+                    external_id: it.external_id.clone(),
+                    status,
+                    duplicate_of: it.duplicate_of.clone(),
+                    note: join_notes(it.note.as_ref(), tax_note),
+                    error: o.error.clone(),
+                })
+            }
             Op::Action {
                 kind,
                 unit_cost,
@@ -424,6 +599,7 @@ fn assemble(
         actions,
         ignored: plan.ignored.clone(),
         position_check: None,
+        openings: plan.openings.clone(),
         counts,
         warnings,
     }
@@ -444,7 +620,15 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &B3CommitArgs) -> Result<B3CommitResult> 
     let mut approvals = HashMap::new();
     for a in args.approve_actions.iter().flatten() {
         match by_index.get(&a.index) {
-            Some(it) if matches!(it.op, Op::Action { .. }) => {}
+            Some(it)
+                if matches!(
+                    it.op,
+                    Op::Action { .. }
+                        | Op::Trade {
+                            needs_cost: true,
+                            ..
+                        }
+                ) => {}
             _ => {
                 return Err(Error::invalid(t_args(
                     "nucleo-importacao-b3-erro-nao-evento",
@@ -508,12 +692,39 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &B3CommitArgs) -> Result<B3CommitResult> 
         "nucleo-importacao-b3-historico",
         &crate::i18n::args(&[("arquivos", files.clone().into())]),
     );
-    let rec = ctx.write_as(&author, &reason, |tx| apply::run(tx, plan, &opts))?;
+    let save_mapping = args.save_mapping.unwrap_or(true);
+    let first_date = plan.period.0;
+    let rec = ctx.write_as(&author, &reason, |tx| {
+        // The accounts asked in the preview, created now in the same change set.
+        let mut plan = plan.clone();
+        let mut created = vec![];
+        for (placeholder, n) in plan.new_accounts.clone() {
+            let id = create_account(tx, &n, first_date)?;
+            plan.remap_account(&placeholder, &id);
+            created.push(id);
+        }
+        if save_mapping {
+            let now = crate::time::now_utc();
+            for inst in &plan.institutions {
+                let Some(acc) = &inst.account_id else { continue };
+                for key in plan::mapping_keys(inst) {
+                    tx.execute(
+                        "INSERT INTO import_institution_map (source, key, account_id, updated_at) VALUES ('b3', ?1, ?2, ?3)
+                         ON CONFLICT (source, key) DO UPDATE SET account_id = excluded.account_id, updated_at = excluded.updated_at
+                           WHERE import_institution_map.account_id <> excluded.account_id",
+                        rusqlite::params![key, acc, now],
+                    )?;
+                }
+            }
+        }
+        let out = apply::run(tx, &plan, &opts)?;
+        Ok((out, created))
+    })?;
     ctx.scratch
         .get_mut::<B3Scratch>(SCRATCH_KEY)
         .previews
         .retain(|p| p.token != args.token);
-    let out = rec.value;
+    let (out, accounts_created) = rec.value;
     let mut errors: Vec<B3CommitError> = out
         .items
         .iter()
@@ -535,5 +746,6 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &B3CommitArgs) -> Result<B3CommitResult> 
         skipped: plan.items.len() as u32 - written,
         errors,
         backup_id,
+        accounts_created,
     })
 }
