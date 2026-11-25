@@ -8,3 +8,8 @@
 # versão  arquivo  sha256
 # 1.0.0
 1 V1__esquema.sql 6a4af06c60cf4b2d7da2028afbe2256469af331624ee792b9a1a7356bf689f7b
+# 1.2.0
+2 V2__loan_upfront_costs.sql 88b23688fd320202390c6aec803cd4ce3ecdea7d562644d8389a87ea0a7f5c97
+3 V3__fund_income_notices.sql 9153f4cc7839a0eb289f868c2d297969687c5db12e7d7ef248d7931cda29c834
+4 V4__b3_institution_map.sql 650e4c845fdf869c92b37ff5cb14147e8ff7cbfd18fc3c68ba09b9efb2537ac8
+5 V5__account_closing.sql 5585329f7d8c27acdc682deb2539491131e9bb55d25919365645f55f25e1cb71
