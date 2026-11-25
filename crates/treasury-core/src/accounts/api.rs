@@ -24,6 +24,7 @@ pub const READ_ONLY: &[&str] = &[
     "sync_hints",
     "capital_share",
     "staleness_limits",
+    "close_preview",
 ];
 
 #[derive(Deserialize)]
@@ -72,6 +73,31 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
             );
             ctx.write(&reason, |tx| super::delete(tx, &a.id))?;
             Ok(Value::Null)
+        }
+        "close_preview" => to_value(super::closing::preview(
+            ctx.conn(),
+            &parse_args::<super::closing::AccountCloseArgs>(args)?,
+            today,
+        )?),
+        "close" => {
+            let a: super::closing::AccountCloseArgs = parse_args(args)?;
+            let reason = with_name(
+                "nucleo-contas-historico-encerrada",
+                &super::account_name(ctx.conn(), &a.id)?,
+            );
+            to_value(
+                ctx.write(&reason, |tx| super::closing::close(tx, &a, today))?
+                    .value,
+            )
+        }
+        "reopen" => {
+            let a: IdArg = parse_args(args)?;
+            let reason = with_name(
+                "nucleo-contas-historico-reaberta",
+                &super::account_name(ctx.conn(), &a.id)?,
+            );
+            ctx.write(&reason, |tx| super::closing::reopen(tx, &a.id, false))?;
+            to_value(super::get(ctx.conn(), &a.id, today)?)
         }
         "match_ofx" => to_value(super::match_ofx(ctx.conn(), &parse_args(args)?, today)?),
         "balance_history" => to_value(super::balance_history(

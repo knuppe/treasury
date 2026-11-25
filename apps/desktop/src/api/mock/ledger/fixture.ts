@@ -189,6 +189,7 @@ export function toAccount(a: FixtureAccount, openingDate: string, sortOrder: num
     opening_date: openingDate,
     include_in_net_worth: a.include_in_net_worth,
     archived: false,
+    closed_on: null,
     color: null,
     notes: null,
     sort_order: sortOrder,

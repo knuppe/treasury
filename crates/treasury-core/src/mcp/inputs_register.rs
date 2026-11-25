@@ -333,6 +333,8 @@ pub enum ClearableAccountField {
     Overdraft,
     Branch,
     AccountNumber,
+    /// Reopens a closed account.
+    ClosedOn,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
@@ -355,6 +357,12 @@ pub struct UpdateAccountInput {
     pub include_in_net_worth: Option<bool>,
     /// Archive (hidden from lists, history kept).
     pub archived: Option<bool>,
+    /// Close the account on this date `YYYY-MM-DD` (closed at the bank): only when the balance
+    /// on the date is zero, with no position, no card installment to come and nothing
+    /// recorded after it. Pauses its recurrences and removes its planned transactions; reopen
+    /// with `clear: ["closed_on"]`.
+    #[schemars(pattern(DATE_PATTERN))]
+    pub closed_on: Option<String>,
     /// New notes.
     pub notes: Option<String>,
     /// New card details (replaces all of them).
@@ -373,6 +381,7 @@ impl ToolInput for UpdateAccountInput {
     fn to_api_args(&self) -> Result<Value, String> {
         check_non_empty("id", &self.id)?;
         check_date("opening_date", &self.opening_date)?;
+        check_date("closed_on", &self.closed_on)?;
         if let Some(n) = &self.name {
             check_non_empty("name", n)?;
         }
@@ -381,6 +390,9 @@ impl ToolInput for UpdateAccountInput {
         }
         let mut input = self.clone();
         let clear = input.clear.take().unwrap_or_default();
+        if input.closed_on.is_some() && clear.contains(&ClearableAccountField::ClosedOn) {
+            return Err("closed_on: close or reopen, not both".into());
+        }
         let mut v = to_object(&input)?;
         if let Some(c) = &self.card {
             v["card"] = c.to_value();
@@ -393,6 +405,7 @@ impl ToolInput for UpdateAccountInput {
                 ClearableAccountField::Overdraft => "overdraft",
                 ClearableAccountField::Branch => "branch",
                 ClearableAccountField::AccountNumber => "account_number",
+                ClearableAccountField::ClosedOn => "closed_on",
             })
             .collect();
         with_clears(v, &keys)
@@ -1669,6 +1682,7 @@ mod tests {
             opening_date: None,
             include_in_net_worth: None,
             archived: None,
+            closed_on: None,
             notes: None,
             card: Some(card),
             overdraft: None,

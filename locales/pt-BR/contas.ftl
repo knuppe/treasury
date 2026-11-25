@@ -59,6 +59,52 @@ contas-conta-reativada = Conta reativada
 contas-conta-arquivada = Conta arquivada
 contas-erro-alterar = Não foi possível alterar a conta
 
+## Encerrar a conta (conta encerrada no banco ou na corretora)
+
+contas-encerrar = Encerrar conta
+contas-menu-encerrar = Encerrar conta…
+contas-reabrir = Reabrir conta
+contas-conta-encerrada = Conta encerrada
+contas-conta-reaberta = Conta reaberta
+contas-encerrada-em = encerrada em { $data }
+contas-encerrada-em-nome = { $nome }, encerrada em { $data }
+contas-encerrada-descricao = Encerrada em { $data }. Fica fora das listas e dos avisos e não aceita lançamentos depois dessa data; o histórico continua nos relatórios.
+contas-encerrar-titulo = Encerrar { $nome }
+contas-encerrar-descricao = Para a conta que você encerrou no banco ou na corretora. Ela sai das listas e para de gerar avisos; o histórico continua nos relatórios. Dá para reabrir depois.
+contas-encerrar-data = Data do encerramento
+contas-encerrar-data-dica = O dia em que o banco encerrou a conta, ou o do último lançamento.
+contas-encerrar-saldo = Saldo em { $data }
+contas-encerrar-bloqueios = Antes de encerrar
+contas-encerrar-bloqueio-futuro = A data não pode ser depois de hoje.
+contas-encerrar-bloqueio-abertura = A data é antes da abertura da conta ({ $data }).
+contas-encerrar-bloqueio-encerrada = A conta já foi encerrada em { $data }.
+contas-encerrar-bloqueio-saldo = Ainda há { $valor } na conta nessa data. Transfira o saldo para outra conta ou lance um ajuste.
+contas-encerrar-bloqueio-depois = { $n ->
+        [one] Há { $n } lançamento depois da data (o último em { $data }).
+       *[other] Há { $n } lançamentos depois da data (o último em { $data }).
+    }
+contas-encerrar-bloqueio-posicoes = A conta ainda tem { $ativos }. Registre a venda ou a transferência para outra corretora.
+contas-encerrar-bloqueio-parcelas = { $n ->
+        [one] O cartão ainda tem { $n } parcela a vencer.
+       *[other] O cartão ainda tem { $n } parcelas a vencer.
+    }
+contas-encerrar-transferir = Transferir o saldo
+contas-encerrar-ajuste = Lançar ajuste
+contas-encerrar-efeitos = O que acontece ao encerrar
+contas-encerrar-pronto = A conta está zerada na data e pode ser encerrada.
+contas-encerrar-sem-avisos = Sai das listas e dos avisos; lançamentos depois da data ficam bloqueados.
+contas-encerrar-recorrencias = { $n ->
+        [one] { $n } recorrência será pausada: { $nomes }.
+       *[other] { $n } recorrências serão pausadas: { $nomes }.
+    }
+contas-encerrar-previstos = { $n ->
+        [one] { $n } lançamento previsto será apagado.
+       *[other] { $n } lançamentos previstos serão apagados.
+    }
+contas-encerrar-emprestimos = Empréstimos que debitam desta conta: { $nomes }. Troque a conta de débito em Dívidas.
+contas-encerrar-cartoes = Cartões pagos por esta conta: { $nomes }. Troque a conta que paga a fatura no cadastro do cartão.
+contas-encerrar-confirmar = Encerrar conta
+
 ## Comandos (as palavras de busca vão separadas por vírgula)
 
 contas-cmd-nova-busca = banco,cartão,corretora

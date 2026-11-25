@@ -1585,6 +1585,8 @@ pub fn by_member(conn: &Connection, from: &str, to: &str, basis: Basis) -> Resul
 ///   já aparece).
 /// - Faturas não pagas: valor = compras − estornos (inclusive parcelas previstas) − pagamentos
 ///   já ligados à fatura.
+/// - Archived accounts bring no planned item, and a closed card no statement (an archived
+///   card that still owes keeps its statement).
 pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<UpcomingItem>> {
     let to = from + chrono::Duration::days(days.min(3660) as i64);
     let (from_s, to_s) = (fmt_date(from), fmt_date(to));
@@ -1596,6 +1598,7 @@ pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<Upc
              FROM txn t JOIN account a ON a.id = t.account_id
              LEFT JOIN category c ON c.id = t.category_id
              WHERE t.status = 'planned' AND t.date BETWEEN ?1 AND ?2 AND t.statement_id IS NULL
+               AND a.archived = 0
                AND t.kind <> 'card_payment'
                AND NOT (t.kind IN ('transfer', 'investment') AND t.amount > 0)
              ORDER BY t.date, t.id",
@@ -1630,7 +1633,7 @@ pub fn upcoming(conn: &Connection, from: NaiveDate, days: u32) -> Result<Vec<Upc
                               WHERE t.statement_id = cs.id AND t.kind = 'card_payment'
                                 AND t.status IN ('cleared', 'reconciled')), 0)
              FROM card_statement cs JOIN account a ON a.id = cs.account_id
-             WHERE cs.due_date BETWEEN ?1 AND ?2 AND cs.status <> 'paid'
+             WHERE cs.due_date BETWEEN ?1 AND ?2 AND cs.status <> 'paid' AND a.closed_on IS NULL
              ORDER BY cs.due_date, a.name",
         )?;
         let mut rows = stmt.query([&from_s, &to_s])?;

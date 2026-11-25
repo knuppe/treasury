@@ -84,6 +84,8 @@ export interface AccountRow {
   opening_date: string;
   include_in_net_worth: boolean;
   archived: boolean;
+  /** Closing date of an account closed at the bank (also archived). */
+  closed_on?: string | null;
   color: string | null;
   notes: string | null;
   sort_order: number;

@@ -2,6 +2,7 @@
 
 pub mod api;
 pub mod capital;
+pub mod closing;
 pub mod freshness;
 pub mod overdraft;
 pub mod sync;
@@ -127,6 +128,10 @@ pub struct Account {
     pub opening_date: String,
     pub include_in_net_worth: bool,
     pub archived: bool,
+    /// Closing date (`YYYY-MM-DD`) of an account closed at the bank; a closed account is also
+    /// archived (accounts/closing.rs).
+    #[serde(default)]
+    pub closed_on: Option<String>,
     pub color: Option<String>,
     pub notes: Option<String>,
     #[ts(type = "number")]
@@ -286,6 +291,11 @@ pub struct AccountPatch {
     pub include_in_net_worth: Option<bool>,
     #[ts(optional)]
     pub archived: Option<bool>,
+    /// A date closes the account on it (same checks as `accounts.close`); `null` reopens it.
+    /// `archived: false` on a closed account also reopens it.
+    #[serde(default, deserialize_with = "crate::patch::double")]
+    #[ts(optional)]
+    pub closed_on: Option<Option<String>>,
     #[serde(default, deserialize_with = "crate::patch::double")]
     #[ts(optional)]
     pub color: Option<Option<String>>,
@@ -419,7 +429,7 @@ const ACCOUNT_SQL: &str = "SELECT a.id, a.name, a.kind, a.currency, a.institutio
        a.opening_date, a.include_in_net_worth, a.archived, a.color, a.notes, a.sort_order,
        c.account_id, c.credit_limit, c.closing_day, c.due_day, c.payment_account_id, c.network, c.last4,
        COALESCE(x.bal, 0), COALESCE(x.proj, 0), COALESCE(x.rec, 0), x.last_date, COALESCE(x.committed, 0),
-       ra.plan, ra.coverage
+       ra.plan, ra.coverage, a.closed_on
   FROM account a
   LEFT JOIN institution i ON i.id = a.institution_id
   LEFT JOIN credit_card c ON c.account_id = a.id
@@ -472,6 +482,7 @@ fn row_to_account(r: &rusqlite::Row<'_>) -> rusqlite::Result<(Account, Sums)> {
             opening_date: r.get(7)?,
             include_in_net_worth: r.get(8)?,
             archived: r.get(9)?,
+            closed_on: r.get(27)?,
             color: r.get(10)?,
             notes: r.get(11)?,
             sort_order: r.get(12)?,
@@ -1044,6 +1055,24 @@ pub fn update(tx: &Transaction<'_>, patch: &AccountPatch, today: NaiveDate) -> R
             now_utc()
         ],
     )?;
+    match (&patch.closed_on, &cur.closed_on) {
+        (Some(Some(d)), _) => {
+            closing::close(
+                tx,
+                &closing::AccountCloseArgs {
+                    id: cur.id.clone(),
+                    date: Some(d.clone()),
+                },
+                today,
+            )?;
+        }
+        (Some(None), Some(_)) => {
+            closing::reopen(tx, &cur.id, patch.archived.unwrap_or(false))?;
+        }
+        // Unarchiving a closed account reopens it.
+        (None, Some(_)) if patch.archived == Some(false) => closing::reopen(tx, &cur.id, false)?,
+        _ => {}
+    }
     if let Some(m) = &patch.member_ids {
         let members = validate_members(tx, m)?;
         replace_members(tx, &cur.id, &members)?;
@@ -1165,6 +1194,8 @@ pub fn reconcile_reason(conn: &Connection, args: &ReconcileArgs) -> Result<Strin
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_closing;
 
 /// O que um OFX diz da conta (`BANKID`, `BRANCHID`, `ACCTID`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]

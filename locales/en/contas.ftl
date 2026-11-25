@@ -60,6 +60,52 @@ contas-conta-reativada = Account reactivated
 contas-conta-arquivada = Account archived
 contas-erro-alterar = Could not change the account
 
+## Closing the account (closed at the bank or the broker)
+
+contas-encerrar = Close account
+contas-menu-encerrar = Close account…
+contas-reabrir = Reopen account
+contas-conta-encerrada = Account closed
+contas-conta-reaberta = Account reopened
+contas-encerrada-em = closed on { $data }
+contas-encerrada-em-nome = { $nome }, closed on { $data }
+contas-encerrada-descricao = Closed on { $data }. It stays out of lists and alerts and takes no transaction after that date; its history stays in the reports.
+contas-encerrar-titulo = Close { $nome }
+contas-encerrar-descricao = For an account you closed at the bank or the broker. It leaves the lists and stops raising alerts; its history stays in the reports. You can reopen it later.
+contas-encerrar-data = Closing date
+contas-encerrar-data-dica = The day the bank closed the account, or the day of the last transaction.
+contas-encerrar-saldo = Balance on { $data }
+contas-encerrar-bloqueios = Before closing
+contas-encerrar-bloqueio-futuro = The date cannot be after today.
+contas-encerrar-bloqueio-abertura = The date is before the account was opened ({ $data }).
+contas-encerrar-bloqueio-encerrada = The account was already closed on { $data }.
+contas-encerrar-bloqueio-saldo = There is still { $valor } in the account on that date. Transfer the balance to another account or record an adjustment.
+contas-encerrar-bloqueio-depois = { $n ->
+        [one] There is { $n } transaction after the date (the last one on { $data }).
+       *[other] There are { $n } transactions after the date (the last one on { $data }).
+    }
+contas-encerrar-bloqueio-posicoes = The account still holds { $ativos }. Record the sale or the transfer to another broker.
+contas-encerrar-bloqueio-parcelas = { $n ->
+        [one] The card still has { $n } installment to come.
+       *[other] The card still has { $n } installments to come.
+    }
+contas-encerrar-transferir = Transfer the balance
+contas-encerrar-ajuste = Record an adjustment
+contas-encerrar-efeitos = What closing does
+contas-encerrar-pronto = The account is empty on that date and can be closed.
+contas-encerrar-sem-avisos = It leaves the lists and alerts; transactions after the date are blocked.
+contas-encerrar-recorrencias = { $n ->
+        [one] { $n } recurring item will be paused: { $nomes }.
+       *[other] { $n } recurring items will be paused: { $nomes }.
+    }
+contas-encerrar-previstos = { $n ->
+        [one] { $n } planned transaction will be deleted.
+       *[other] { $n } planned transactions will be deleted.
+    }
+contas-encerrar-emprestimos = Loans debited from this account: { $nomes }. Change the debit account in Debts.
+contas-encerrar-cartoes = Cards paid from this account: { $nomes }. Change the paying account in the card's details.
+contas-encerrar-confirmar = Close account
+
 ## Commands (search words are comma-separated)
 
 contas-cmd-nova-busca = bank,card,brokerage

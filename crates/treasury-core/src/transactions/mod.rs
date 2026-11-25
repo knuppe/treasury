@@ -771,6 +771,7 @@ pub fn reinherit_one(tx: &Transaction<'_>, txn_id: &str) -> Result<()> {
 /// contas de cartão, associa a fatura pela data da compra quando `statement_id` vier vazio.
 pub fn insert(tx: &Transaction<'_>, t: &NewTxn) -> Result<Id> {
     crate::time::parse_record_date(&t.date)?;
+    crate::accounts::closing::check_open_on(tx, &t.account_id, &t.date)?;
     let id = new_id();
     let now = now_utc();
     let statement_id = match &t.statement_id {

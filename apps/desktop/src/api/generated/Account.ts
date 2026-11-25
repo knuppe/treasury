@@ -7,7 +7,12 @@ export type Account = { id: string, name: string, kind: AccountKind, currency: s
 /**
  * Titulares.
  */
-member_ids: Array<string>, opening_balance: number, opening_date: string, include_in_net_worth: boolean, archived: boolean, color: string | null, notes: string | null, sort_order: number, card: CardDetails | null, 
+member_ids: Array<string>, opening_balance: number, opening_date: string, include_in_net_worth: boolean, archived: boolean, 
+/**
+ * Closing date (`YYYY-MM-DD`) of an account closed at the bank; a closed account is also
+ * archived (accounts/closing.rs).
+ */
+closed_on: string | null, color: string | null, notes: string | null, sort_order: number, card: CardDetails | null, 
 /**
  * Cheque especial (limite de crédito) da conta corrente.
  */

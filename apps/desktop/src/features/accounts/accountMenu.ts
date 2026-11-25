@@ -16,6 +16,10 @@ export interface AccountMenuHandlers {
   importStatement: () => void;
   edit: () => void;
   toggleArchived: () => void;
+  /** Opens the closing dialog (account closed at the bank). */
+  close: () => void;
+  /** Reopens a closed account. */
+  reopen: () => void;
 }
 
 export function accountMenuItems(a: AccountView, h: AccountMenuHandlers): ContextMenuEntry[] {
@@ -57,10 +61,13 @@ export function accountMenuItems(a: AccountView, h: AccountMenuHandlers): Contex
     },
     { separator: true },
     { label: t('contas-menu-editar'), icon: 'sliders', onSelect: h.edit },
-    {
-      label: a.archived ? t('contas-reativar') : t('contas-arquivar'),
-      icon: a.archived ? 'restore' : 'minus',
-      onSelect: h.toggleArchived,
-    },
+    a.closed_on
+      ? { label: t('contas-reabrir'), icon: 'restore', onSelect: h.reopen }
+      : {
+          label: a.archived ? t('contas-reativar') : t('contas-arquivar'),
+          icon: a.archived ? 'restore' : 'minus',
+          onSelect: h.toggleArchived,
+        },
+    !a.closed_on && { label: t('contas-menu-encerrar'), icon: 'minus', onSelect: h.close },
   ];
 }

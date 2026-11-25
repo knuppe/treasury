@@ -12,6 +12,7 @@ import type { CardDetails } from '@/api/generated/CardDetails';
 import type { ReconcileResult } from '@/api/generated/ReconcileResult';
 
 import { registerMockHandlers } from '../mockRegistry';
+import { closeAccount, reopenAccount } from './accountClosing';
 import { guarded } from './ledger/boot';
 import { addDays, brDate, diffDays, nowUtc, parseYmd, today } from './ledger/dates';
 import {
@@ -214,12 +215,18 @@ function updateAccount(args: Record<string, unknown>): void {
   if (has(args, 'include_in_net_worth'))
     changes.include_in_net_worth = Boolean(optBool(args, 'include_in_net_worth'));
   if (has(args, 'archived')) changes.archived = Boolean(optBool(args, 'archived'));
+  // Unarchiving a closed account reopens it.
+  if (changes.archived === false && cur.closed_on) changes.closed_on = null;
   if (has(args, 'color')) changes.color = cleanOpt(args.color);
   if (has(args, 'notes')) changes.notes = cleanOpt(args.notes);
   if (has(args, 'sort_order')) changes.sort_order = num(args, 'sort_order');
   const next = { ...cur, ...changes };
   if (JSON.stringify(next) !== JSON.stringify(cur))
     patch('account', id, { ...changes, updated_at: nowUtc() });
+  if (has(args, 'closed_on')) {
+    if (typeof args.closed_on === 'string') closeAccount({ id, date: args.closed_on });
+    else if (account(id).closed_on) reopenAccount(id, Boolean(optBool(args, 'archived')));
+  }
   if (has(args, 'member_ids')) {
     replaceMembers(id, validateMembers(args.member_ids));
     reinheritMembers(id);

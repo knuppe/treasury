@@ -131,6 +131,9 @@ fn write_row(tx: &Transaction<'_>, before: &TxnRow, after: &TxnRow) -> Result<bo
     if before == after {
         return Ok(false);
     }
+    if before.account_id != after.account_id || before.date != after.date {
+        crate::accounts::closing::check_open_on(tx, &after.account_id, &after.date)?;
+    }
     tx.execute(
         "UPDATE txn SET account_id = ?2, date = ?3, amount = ?4, currency = ?5, kind = ?6, status = ?7,
                 description = ?8, payee = ?9, notes = ?10, category_id = ?11, member_id = ?12,

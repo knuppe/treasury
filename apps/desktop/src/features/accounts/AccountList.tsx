@@ -54,7 +54,11 @@ export function AccountList({
         >
           {a.name}
           {a.archived ? (
-            <span className="ml-2 text-[11.5px] font-normal text-dim">{t('contas-arquivada')}</span>
+            <span className="ml-2 text-[11.5px] font-normal text-dim">
+              {a.closed_on
+                ? t('contas-encerrada-em', { data: formatDate(a.closed_on) })
+                : t('contas-arquivada')}
+            </span>
           ) : null}
         </button>
       ),

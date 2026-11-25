@@ -32,6 +32,25 @@ nucleo-contas-erro-apagar-parcelamentos =
         [one] a conta { $nome } tem { $n } parcelamento; apague-o antes
        *[other] a conta { $nome } tem { $n } parcelamentos; apague-os antes
     }
+# Encerramento da conta (accounts/closing.rs).
+nucleo-contas-historico-encerrada = Conta encerrada: { $nome }
+nucleo-contas-historico-reaberta = Conta reaberta: { $nome }
+nucleo-contas-erro-encerrada = A conta { $nome } foi encerrada em { $data }. Para lançar depois dessa data, reabra a conta.
+nucleo-contas-encerrar-erro-futuro = A data de encerramento não pode ser depois de hoje.
+nucleo-contas-encerrar-erro-antes-abertura = A data de encerramento é antes da abertura da conta ({ $data }).
+nucleo-contas-encerrar-erro-ja-encerrada = A conta já foi encerrada em { $data }.
+nucleo-contas-encerrar-erro-saldo = A conta ainda tem saldo de { $valor } na data. Transfira o saldo ou lance o ajuste antes de encerrar.
+nucleo-contas-encerrar-erro-depois =
+    { $n ->
+        [one] Há { $n } lançamento depois da data (o último em { $data }). Escolha uma data a partir dele.
+       *[other] Há { $n } lançamentos depois da data (o último em { $data }). Escolha uma data a partir dele.
+    }
+nucleo-contas-encerrar-erro-posicoes = A conta ainda tem posição em { $ativos }. Registre a venda ou a transferência de custódia antes.
+nucleo-contas-encerrar-erro-parcelas =
+    { $n ->
+        [one] O cartão ainda tem { $n } parcela a vencer.
+       *[other] O cartão ainda tem { $n } parcelas a vencer.
+    }
 # Por que o OFX não achou a conta sozinho.
 nucleo-contas-ofx-sem-numero = o OFX não traz o número da conta
 nucleo-contas-ofx-sem-cartao = nenhum cartão com esse final; preencha o final do cartão no cadastro

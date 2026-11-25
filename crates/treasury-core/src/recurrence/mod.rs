@@ -700,6 +700,12 @@ fn materialize_one(
     if let Some(e) = end {
         until = until.min(e);
     }
+    // Nothing after the closing date of either account (a recurrence reactivated by hand).
+    for acc in std::iter::once(&r.account_id).chain(r.to_account_id.as_ref()) {
+        if let Some(c) = crate::accounts::closing::closed_on(tx, acc)? {
+            until = until.min(parse_date(&c)?);
+        }
+    }
     let from = match &r.generated_until {
         Some(g) => parse_date(g)? + Duration::days(1),
         // Primeira geração: nada no passado (já deve ter sido lançado ou importado).

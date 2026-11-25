@@ -1,4 +1,7 @@
 /** Hooks de `accounts.*` e `fx.*`: contas, saldos, histórico, conciliação e câmbio. */
+import type { AccountCloseArgs } from '../generated/AccountCloseArgs';
+import type { AccountClosePreview } from '../generated/AccountClosePreview';
+import type { AccountCloseResult } from '../generated/AccountCloseResult';
 import type { AccountInput } from '../generated/AccountInput';
 import type { AccountPatch } from '../generated/AccountPatch';
 import type { AccountView } from '../generated/AccountView';
@@ -34,6 +37,25 @@ export const useCreateAccount = () =>
 
 export const useUpdateAccount = () =>
   useCoreMutation<AccountPatch, AccountView>('accounts.update', { affects: ['accounts'] });
+
+/** What closing the account on the date does and what stops it (accounts/closing.rs). */
+export const useClosePreview = (args: AccountCloseArgs | null) =>
+  useCore<AccountClosePreview>('accounts', 'close_preview', args, { enabled: Boolean(args) });
+
+/**
+ * Closes the account: pauses its recurrences, removes its planned items and archives it.
+ * `onSuccess` runs even if the dialog remounts while the account leaves the list.
+ */
+export const useCloseAccount = (
+  onSuccess?: (result: AccountCloseResult, args: AccountCloseArgs) => void,
+) =>
+  useCoreMutation<AccountCloseArgs, AccountCloseResult>('accounts.close', {
+    affects: ['ledger'],
+    onSuccess,
+  });
+
+export const useReopenAccount = () =>
+  useCoreMutation<{ id: string }, AccountView>('accounts.reopen', { affects: ['ledger'] });
 
 export const useDeleteAccount = () =>
   useCoreMutation<{ id: string }, null>('accounts.delete', { affects: ['accounts'] });

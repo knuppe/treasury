@@ -179,6 +179,7 @@ export const AccountViewShape = shape<AccountView>('AccountView', {
   opening_date: 'string',
   include_in_net_worth: 'boolean',
   archived: 'boolean',
+  closed_on: 'string|null',
   color: 'string|null',
   notes: 'string|null',
   sort_order: 'number',

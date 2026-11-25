@@ -279,9 +279,11 @@ export function AccountForm({
                       onSuccess: () => {
                         toast({
                           tone: 'success',
-                          title: account.archived
-                            ? t('contas-conta-reativada')
-                            : t('contas-conta-arquivada'),
+                          title: account.closed_on
+                            ? t('contas-conta-reaberta')
+                            : account.archived
+                              ? t('contas-conta-reativada')
+                              : t('contas-conta-arquivada'),
                           description: account.name,
                         });
                         onOpenChange(false);
@@ -291,7 +293,11 @@ export function AccountForm({
                   )
                 }
               >
-                {account.archived ? t('contas-reativar') : t('contas-arquivar')}
+                {account.closed_on
+                  ? t('contas-reabrir')
+                  : account.archived
+                    ? t('contas-reativar')
+                    : t('contas-arquivar')}
               </Button>
               <Button variant="danger" onClick={() => setConfirmDelete(true)}>
                 {t('comum-apagar')}

@@ -144,7 +144,13 @@ export function AccountCard({
             />
           }
           changeKey={account.balance}
-          hint={account.archived ? t('contas-arquivada') : undefined}
+          hint={
+            account.closed_on
+              ? t('contas-encerrada-em', { data: formatDate(account.closed_on) })
+              : account.archived
+                ? t('contas-arquivada')
+                : undefined
+          }
         />
       </button>
       <FreshnessBadge account={account} />

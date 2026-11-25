@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router';
 
 import type { AccountKind } from '@/api/generated/AccountKind';
 import type { AccountView } from '@/api/generated/AccountView';
-import { useAccounts, useUpdateAccount } from '@/api/hooks/accounts';
+import { useAccount, useAccounts, useReopenAccount, useUpdateAccount } from '@/api/hooks/accounts';
 import { useMembers } from '@/api/hooks/household';
 import { screenMeta } from '@/app/screens';
 import { Button, EmptyState, Icon, Measure, Money, ScreenHeader, toast } from '@/design/components';
@@ -13,6 +13,7 @@ import { accountMenuItems } from '@/features/accounts/accountMenu';
 import { AccountDetail } from '@/features/accounts/AccountDetail';
 import { AccountForm } from '@/features/accounts/AccountForm';
 import { AccountList } from '@/features/accounts/AccountList';
+import { CloseAccountDialog } from '@/features/accounts/CloseAccountDialog';
 import { money, usePageContext } from '@/features/companion/pageContext';
 import { useImportHub } from '@/features/import/importHub';
 import { TxnDialog, type TxnDialogMode } from '@/features/transactions/TxnDialog';
@@ -21,6 +22,7 @@ import { errorText } from '@/features/transactions/ui/errors';
 import { useKeyShortcut } from '@/features/transactions/ui/hooks';
 import { ACCOUNT_KIND } from '@/features/transactions/ui/labels';
 import { t } from '@/i18n';
+import { formatDate } from '@/lib/format';
 import { txnLink } from '@/lib/txnLink';
 import { useBaseCurrency } from '@/state/currency';
 
@@ -72,8 +74,24 @@ export default function Contas() {
   const [txnFor, setTxnFor] = useState<{ accountId: string; mode: TxnDialogMode } | null>(null);
   const navigate = useNavigate();
   const updateAccount = useUpdateAccount();
+  const reopenAccount = useReopenAccount();
+  const [closing, setClosing] = useState<AccountView | null>(null);
+  const reopen = (a: AccountView) =>
+    reopenAccount.mutate(
+      { id: a.id },
+      {
+        onSuccess: () =>
+          toast({ tone: 'success', title: t('contas-conta-reaberta'), description: a.name }),
+        onError: (e) =>
+          toast({ tone: 'error', title: t('contas-erro-alterar'), description: errorText(e) }),
+      },
+    );
   const selectedId = params.get('conta');
-  const selected = accounts.find((a) => a.id === selectedId) ?? null;
+  const listed = accounts.find((a) => a.id === selectedId) ?? null;
+  // An archived or closed account is not in the list without the switch: its page still opens
+  // (and stays open when the account is archived or closed from it).
+  const one = useAccount(selectedId);
+  const selected = listed ?? (one.data?.id === selectedId ? one.data : null) ?? null;
   const sum = useMemo(() => totals(accounts), [accounts]);
   const base = useBaseCurrency();
 
@@ -134,6 +152,8 @@ export default function Contas() {
       viewTxns: () => void navigate(txnLink({ account_ids: [a.id] })),
       importStatement: () => useImportHub.getState().setOpen(true),
       edit: () => setForm({ account: a, kind: a.kind }),
+      close: () => setClosing(a),
+      reopen: () => reopen(a),
       toggleArchived: () =>
         updateAccount.mutate(
           { id: a.id, archived: !a.archived },
@@ -169,6 +189,20 @@ export default function Contas() {
         initialAccountId={txnFor?.accountId}
         initialMode={txnFor?.mode}
       />
+      <CloseAccountDialog
+        account={closing}
+        open={Boolean(closing)}
+        onOpenChange={(o) => !o && setClosing(null)}
+        // The closing dialog gives way to the transfer or the adjustment; it opens again after.
+        onTransfer={() => {
+          if (closing) setTxnFor({ accountId: closing.id, mode: 'transfer' });
+          setClosing(null);
+        }}
+        onAdjust={() => {
+          if (closing) setTxnFor({ accountId: closing.id, mode: 'adjustment' });
+          setClosing(null);
+        }}
+      />
     </>
   );
 
@@ -190,7 +224,24 @@ export default function Contas() {
           meta={[ACCOUNT_KIND[selected.kind], selected.institution_name]
             .filter(Boolean)
             .join(' · ')}
-          description={selected.archived ? t('contas-arquivada') : undefined}
+          description={
+            selected.closed_on
+              ? t('contas-encerrada-descricao', { data: formatDate(selected.closed_on) })
+              : selected.archived
+                ? t('contas-arquivada')
+                : undefined
+          }
+          actions={
+            selected.closed_on ? (
+              <Button loading={reopenAccount.isPending} onClick={() => reopen(selected)}>
+                {t('contas-reabrir')}
+              </Button>
+            ) : (
+              <Button variant="ghost" onClick={() => setClosing(selected)}>
+                {t('contas-encerrar')}
+              </Button>
+            )
+          }
         />
         <AccountDetail
           key={selected.id}

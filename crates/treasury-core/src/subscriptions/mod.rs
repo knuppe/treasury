@@ -224,6 +224,8 @@ pub fn detect(conn: &Connection, today: NaiveDate) -> Result<SubscriptionReport>
          LEFT JOIN category p ON p.id = c.parent_id
          WHERE t.kind = 'expense' AND t.status <> 'planned' AND t.amount < 0
            AND t.date >= ?1 AND t.date <= ?2
+           -- A closed account charges nothing any more: its series would only show as late.
+           AND a.closed_on IS NULL
            AND t.installment_plan_id IS NULL AND t.transfer_id IS NULL
            -- Parcelas de contratos e do IPTU não são assinatura.
            AND NOT EXISTS (SELECT 1 FROM loan_installment li WHERE li.txn_id = t.id)

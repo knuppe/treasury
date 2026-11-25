@@ -36,7 +36,7 @@ fn card_details(closing: u32, due: u32) -> CardDetails {
     }
 }
 
-fn empty_patch(id: &str) -> AccountPatch {
+pub(super) fn empty_patch(id: &str) -> AccountPatch {
     AccountPatch {
         id: id.into(),
         name: None,
@@ -46,6 +46,7 @@ fn empty_patch(id: &str) -> AccountPatch {
         opening_date: None,
         include_in_net_worth: None,
         archived: None,
+        closed_on: None,
         color: None,
         notes: None,
         sort_order: None,

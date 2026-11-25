@@ -30,6 +30,23 @@ nucleo-contas-erro-apagar-parcelamentos = { $n ->
     [one] the account { $nome } has { $n } installment plan; delete it first
    *[other] the account { $nome } has { $n } installment plans; delete them first
 }
+# Closing the account (accounts/closing.rs).
+nucleo-contas-historico-encerrada = Account closed: { $nome }
+nucleo-contas-historico-reaberta = Account reopened: { $nome }
+nucleo-contas-erro-encerrada = The account { $nome } was closed on { $data }. To record anything after that date, reopen the account.
+nucleo-contas-encerrar-erro-futuro = The closing date cannot be after today.
+nucleo-contas-encerrar-erro-antes-abertura = The closing date is before the account was opened ({ $data }).
+nucleo-contas-encerrar-erro-ja-encerrada = The account was already closed on { $data }.
+nucleo-contas-encerrar-erro-saldo = The account still has a balance of { $valor } on that date. Transfer the balance or record the adjustment before closing.
+nucleo-contas-encerrar-erro-depois = { $n ->
+    [one] There is { $n } transaction after that date (the last one on { $data }). Pick a date on or after it.
+   *[other] There are { $n } transactions after that date (the last one on { $data }). Pick a date on or after it.
+}
+nucleo-contas-encerrar-erro-posicoes = The account still holds { $ativos }. Record the sale or the custody transfer first.
+nucleo-contas-encerrar-erro-parcelas = { $n ->
+    [one] The card still has { $n } installment to come.
+   *[other] The card still has { $n } installments to come.
+}
 # Why the OFX didn't find the account on its own.
 nucleo-contas-ofx-sem-numero = the OFX doesn't include the account number
 nucleo-contas-ofx-sem-cartao = no card ends in those digits; fill in the card's last digits in its settings

@@ -280,6 +280,7 @@ export function accountView(a: AccountRow, todayIso = today()): AccountView {
     opening_date: a.opening_date,
     include_in_net_worth: a.include_in_net_worth,
     archived: a.archived,
+    closed_on: a.closed_on ?? null,
     color: a.color,
     notes: a.notes,
     sort_order: a.sort_order,

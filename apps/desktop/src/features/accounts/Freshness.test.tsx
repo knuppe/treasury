@@ -18,6 +18,7 @@ function account(patch: Partial<AccountView>): AccountView {
     opening_date: '2026-01-01',
     include_in_net_worth: true,
     archived: false,
+    closed_on: null,
     color: null,
     notes: null,
     sort_order: 0,

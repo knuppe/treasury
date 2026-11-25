@@ -431,6 +431,8 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             `balance_status` (`fresh`, `aging`, `possibly_incomplete`; by account type limits, or \
             `missed_month` when a monthly account had no transaction last month). A negative \
             balance on a `possibly_incomplete` account may be missing transactions, not overdraft. \
+            A closed account (`closed_on`, closed at the bank) is archived: it shows only with \
+            `include_archived` and takes no transaction after that date. \
             Amounts in cents in the account's currency.",
         command: "accounts.list",
         list_key: Some("accounts"),
@@ -3333,8 +3335,10 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         name: "update_account",
         title: "Propose account change",
         description: "Proposes changing an account or the card details (name, institution, \
-            holders, opening balance, archive). Changing the opening balance or archiving changes \
-            the history. Sensitive write: the user approves one by one.",
+            holders, opening balance, archive, closing). Changing the opening balance or archiving \
+            changes the history. `closed_on` closes an account the family closed at the bank (it \
+            must be empty on the date); `clear: [\"closed_on\"]` reopens it. Sensitive write: \
+            the user approves one by one.",
         command: "accounts.update",
         list_key: None,
         schema: schema::<UpdateAccountInput>,

@@ -2,7 +2,12 @@
 import type { CardDetails } from "./CardDetails";
 import type { OverdraftTerms } from "./OverdraftTerms";
 
-export type AccountPatch = { id: string, name?: string, institution_id?: string | null, member_ids?: Array<string>, opening_balance?: number, opening_date?: string, include_in_net_worth?: boolean, archived?: boolean, color?: string | null, notes?: string | null, sort_order?: number, card?: CardDetails, 
+export type AccountPatch = { id: string, name?: string, institution_id?: string | null, member_ids?: Array<string>, opening_balance?: number, opening_date?: string, include_in_net_worth?: boolean, archived?: boolean, 
+/**
+ * A date closes the account on it (same checks as `accounts.close`); `null` reopens it.
+ * `archived: false` on a closed account also reopens it.
+ */
+closed_on?: string | null, color?: string | null, notes?: string | null, sort_order?: number, card?: CardDetails, 
 /**
  * Cheque especial: `null` remove o limite.
  */

@@ -5842,7 +5842,9 @@ export interface Messages {
   'contas-conta-arquivada': never;
   'contas-conta-atualizada': never;
   'contas-conta-criada': never;
+  'contas-conta-encerrada': never;
   'contas-conta-pagadora': never;
+  'contas-conta-reaberta': never;
   'contas-conta-reativada': never;
   'contas-convertidas-moeda': { moeda: string | number };
   'contas-cotas-12-meses': never;
@@ -5900,6 +5902,33 @@ export interface Messages {
   'contas-editar-nome': { nome: string | number };
   'contas-em-contas': never;
   'contas-em-moeda': { moeda: string | number };
+  'contas-encerrada-descricao': { data: string | number };
+  'contas-encerrada-em': { data: string | number };
+  'contas-encerrada-em-nome': { data: string | number; nome: string | number };
+  'contas-encerrar': never;
+  'contas-encerrar-ajuste': never;
+  'contas-encerrar-bloqueio-abertura': { data: string | number };
+  'contas-encerrar-bloqueio-depois': { data: string | number; n: string | number };
+  'contas-encerrar-bloqueio-encerrada': { data: string | number };
+  'contas-encerrar-bloqueio-futuro': never;
+  'contas-encerrar-bloqueio-parcelas': { n: string | number };
+  'contas-encerrar-bloqueio-posicoes': { ativos: string | number };
+  'contas-encerrar-bloqueio-saldo': { valor: string | number };
+  'contas-encerrar-bloqueios': never;
+  'contas-encerrar-cartoes': { nomes: string | number };
+  'contas-encerrar-confirmar': never;
+  'contas-encerrar-data': never;
+  'contas-encerrar-data-dica': never;
+  'contas-encerrar-descricao': never;
+  'contas-encerrar-efeitos': never;
+  'contas-encerrar-emprestimos': { nomes: string | number };
+  'contas-encerrar-previstos': { n: string | number };
+  'contas-encerrar-pronto': never;
+  'contas-encerrar-recorrencias': { n: string | number; nomes: string | number };
+  'contas-encerrar-saldo': { data: string | number };
+  'contas-encerrar-sem-avisos': never;
+  'contas-encerrar-titulo': { nome: string | number };
+  'contas-encerrar-transferir': never;
   'contas-entra-patrimonio': never;
   'contas-entra-patrimonio-dica': never;
   'contas-erro-alterar': never;
@@ -5983,6 +6012,7 @@ export interface Messages {
   'contas-menu-compra-parcelada': never;
   'contas-menu-conciliar': never;
   'contas-menu-editar': never;
+  'contas-menu-encerrar': never;
   'contas-menu-importar': never;
   'contas-menu-nova-compra': never;
   'contas-menu-novo-lancamento': never;
@@ -6117,6 +6147,7 @@ export interface Messages {
   'contas-previsto': never;
   'contas-previsto-ate-fim-mes': never;
   'contas-previsto-fim-mes': never;
+  'contas-reabrir': never;
   'contas-reativar': never;
   'contas-recompensa-aba': never;
   'contas-recompensa-cashback': never;
@@ -12570,11 +12601,19 @@ export interface Messages {
   'nucleo-contas-cotas-erro-ative': never;
   'nucleo-contas-cotas-erro-saldo-negativo': never;
   'nucleo-contas-cotas-erro-tipo-conta': never;
+  'nucleo-contas-encerrar-erro-antes-abertura': { data: string | number };
+  'nucleo-contas-encerrar-erro-depois': { data: string | number; n: string | number };
+  'nucleo-contas-encerrar-erro-futuro': never;
+  'nucleo-contas-encerrar-erro-ja-encerrada': { data: string | number };
+  'nucleo-contas-encerrar-erro-parcelas': { n: string | number };
+  'nucleo-contas-encerrar-erro-posicoes': { ativos: string | number };
+  'nucleo-contas-encerrar-erro-saldo': { valor: string | number };
   'nucleo-contas-erro-agencia': never;
   'nucleo-contas-erro-apagar-lancamentos': { n: string | number; nome: string | number };
   'nucleo-contas-erro-apagar-parcelamentos': { n: string | number; nome: string | number };
   'nucleo-contas-erro-apagar-recorrencias': { n: string | number; nome: string | number };
   'nucleo-contas-erro-cheque-especial-tipo': never;
+  'nucleo-contas-erro-encerrada': { data: string | number; nome: string | number };
   'nucleo-contas-erro-historico-longo': { max: string | number };
   'nucleo-contas-erro-limites-atualizacao': never;
   'nucleo-contas-erro-numero-conta': never;
@@ -12612,6 +12651,7 @@ export interface Messages {
   'nucleo-contas-historico-cotas-saldo': never;
   'nucleo-contas-historico-cotas-saldo-removido': never;
   'nucleo-contas-historico-criada': { nome: string | number };
+  'nucleo-contas-historico-encerrada': { nome: string | number };
   'nucleo-contas-historico-fatura-alterada': never;
   'nucleo-contas-historico-limite': never;
   'nucleo-contas-historico-limites-atualizacao': never;
@@ -12624,6 +12664,7 @@ export interface Messages {
   'nucleo-contas-historico-plastico-alterado': { plastico: string | number };
   'nucleo-contas-historico-plastico-apagado': { plastico: string | number };
   'nucleo-contas-historico-plastico-criado': { cartao: string | number };
+  'nucleo-contas-historico-reaberta': { nome: string | number };
   'nucleo-contas-historico-recompensa': never;
   'nucleo-contas-historico-recompensa-fim': never;
   'nucleo-contas-historico-sincronia': { data: string | number; nome: string | number };
@@ -24751,7 +24792,9 @@ export const KEYS: readonly MessageKey[] = [
   'contas-conta-arquivada',
   'contas-conta-atualizada',
   'contas-conta-criada',
+  'contas-conta-encerrada',
   'contas-conta-pagadora',
+  'contas-conta-reaberta',
   'contas-conta-reativada',
   'contas-convertidas-moeda',
   'contas-cotas-12-meses',
@@ -24809,6 +24852,33 @@ export const KEYS: readonly MessageKey[] = [
   'contas-editar-nome',
   'contas-em-contas',
   'contas-em-moeda',
+  'contas-encerrada-descricao',
+  'contas-encerrada-em',
+  'contas-encerrada-em-nome',
+  'contas-encerrar',
+  'contas-encerrar-ajuste',
+  'contas-encerrar-bloqueio-abertura',
+  'contas-encerrar-bloqueio-depois',
+  'contas-encerrar-bloqueio-encerrada',
+  'contas-encerrar-bloqueio-futuro',
+  'contas-encerrar-bloqueio-parcelas',
+  'contas-encerrar-bloqueio-posicoes',
+  'contas-encerrar-bloqueio-saldo',
+  'contas-encerrar-bloqueios',
+  'contas-encerrar-cartoes',
+  'contas-encerrar-confirmar',
+  'contas-encerrar-data',
+  'contas-encerrar-data-dica',
+  'contas-encerrar-descricao',
+  'contas-encerrar-efeitos',
+  'contas-encerrar-emprestimos',
+  'contas-encerrar-previstos',
+  'contas-encerrar-pronto',
+  'contas-encerrar-recorrencias',
+  'contas-encerrar-saldo',
+  'contas-encerrar-sem-avisos',
+  'contas-encerrar-titulo',
+  'contas-encerrar-transferir',
   'contas-entra-patrimonio',
   'contas-entra-patrimonio-dica',
   'contas-erro-alterar',
@@ -24888,6 +24958,7 @@ export const KEYS: readonly MessageKey[] = [
   'contas-menu-compra-parcelada',
   'contas-menu-conciliar',
   'contas-menu-editar',
+  'contas-menu-encerrar',
   'contas-menu-importar',
   'contas-menu-nova-compra',
   'contas-menu-novo-lancamento',
@@ -25016,6 +25087,7 @@ export const KEYS: readonly MessageKey[] = [
   'contas-previsto',
   'contas-previsto-ate-fim-mes',
   'contas-previsto-fim-mes',
+  'contas-reabrir',
   'contas-reativar',
   'contas-recompensa-aba',
   'contas-recompensa-cashback',
@@ -30751,11 +30823,19 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-contas-cotas-erro-ative',
   'nucleo-contas-cotas-erro-saldo-negativo',
   'nucleo-contas-cotas-erro-tipo-conta',
+  'nucleo-contas-encerrar-erro-antes-abertura',
+  'nucleo-contas-encerrar-erro-depois',
+  'nucleo-contas-encerrar-erro-futuro',
+  'nucleo-contas-encerrar-erro-ja-encerrada',
+  'nucleo-contas-encerrar-erro-parcelas',
+  'nucleo-contas-encerrar-erro-posicoes',
+  'nucleo-contas-encerrar-erro-saldo',
   'nucleo-contas-erro-agencia',
   'nucleo-contas-erro-apagar-lancamentos',
   'nucleo-contas-erro-apagar-parcelamentos',
   'nucleo-contas-erro-apagar-recorrencias',
   'nucleo-contas-erro-cheque-especial-tipo',
+  'nucleo-contas-erro-encerrada',
   'nucleo-contas-erro-historico-longo',
   'nucleo-contas-erro-limites-atualizacao',
   'nucleo-contas-erro-numero-conta',
@@ -30786,6 +30866,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-contas-historico-cotas-saldo',
   'nucleo-contas-historico-cotas-saldo-removido',
   'nucleo-contas-historico-criada',
+  'nucleo-contas-historico-encerrada',
   'nucleo-contas-historico-fatura-alterada',
   'nucleo-contas-historico-limite',
   'nucleo-contas-historico-limites-atualizacao',
@@ -30795,6 +30876,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-contas-historico-plastico-alterado',
   'nucleo-contas-historico-plastico-apagado',
   'nucleo-contas-historico-plastico-criado',
+  'nucleo-contas-historico-reaberta',
   'nucleo-contas-historico-recompensa',
   'nucleo-contas-historico-recompensa-fim',
   'nucleo-contas-historico-sincronia',

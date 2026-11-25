@@ -31,6 +31,23 @@ nucleo-contas-erro-apagar-parcelamentos = { $n ->
     [one] la cuenta { $nome } tiene { $n } plan de cuotas; elimínalo antes
    *[other] la cuenta { $nome } tiene { $n } planes de cuotas; elimínalos antes
 }
+# Cierre de la cuenta (accounts/closing.rs).
+nucleo-contas-historico-encerrada = Cuenta cerrada: { $nome }
+nucleo-contas-historico-reaberta = Cuenta reabierta: { $nome }
+nucleo-contas-erro-encerrada = La cuenta { $nome } se cerró el { $data }. Para registrar algo después de esa fecha, reabre la cuenta.
+nucleo-contas-encerrar-erro-futuro = La fecha de cierre no puede ser posterior a hoy.
+nucleo-contas-encerrar-erro-antes-abertura = La fecha de cierre es anterior a la apertura de la cuenta ({ $data }).
+nucleo-contas-encerrar-erro-ja-encerrada = La cuenta ya se cerró el { $data }.
+nucleo-contas-encerrar-erro-saldo = La cuenta todavía tiene un saldo de { $valor } en esa fecha. Transfiere el saldo o registra el ajuste antes de cerrarla.
+nucleo-contas-encerrar-erro-depois = { $n ->
+    [one] Hay { $n } movimiento después de esa fecha (el último el { $data }). Elige una fecha a partir de él.
+   *[other] Hay { $n } movimientos después de esa fecha (el último el { $data }). Elige una fecha a partir de él.
+}
+nucleo-contas-encerrar-erro-posicoes = La cuenta todavía tiene posición en { $ativos }. Registra la venta o el traspaso de custodia antes.
+nucleo-contas-encerrar-erro-parcelas = { $n ->
+    [one] La tarjeta todavía tiene { $n } cuota por vencer.
+   *[other] La tarjeta todavía tiene { $n } cuotas por vencer.
+}
 # Por qué el OFX no encontró la cuenta solo.
 nucleo-contas-ofx-sem-numero = el OFX no trae el número de cuenta
 nucleo-contas-ofx-sem-cartao = ninguna tarjeta termina en esos dígitos; completa los últimos dígitos de la tarjeta en su ficha

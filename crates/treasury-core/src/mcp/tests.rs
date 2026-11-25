@@ -2592,6 +2592,9 @@ fn every_read_shown_by_the_interface_has_a_tool() {
             "get_card_future_commitments",
         ),
         ("cards.loyalty_entries", "list_loyalty_programs"),
+        // The closing checks run when `update_account` proposes `closed_on` (the error says
+        // what stops it).
+        ("accounts.close_preview", "update_account"),
         ("categories.tree", "list_categories"),
         ("categories.usage", "list_categories"),
         ("changes.get", "get_change_history"),

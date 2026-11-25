@@ -91,6 +91,7 @@ A few more rules:
 | [members.md](members.md) | Finances per family member |
 | [income.md](income.md) | Income, payslips and income forecast |
 | [account-freshness.md](account-freshness.md) | Accounts up to date and possibly incomplete balance |
+| [account-closing.md](account-closing.md) | Closing an account: date, checks and alerts |
 | [design/cartoes.md](design/cards.md) | Cards: additional cards, limit, costs, cashback, points |
 | [design/parcelas-detectadas.md](design/detected-installments.md) | Installments detected from the description |
 | [design/loan-cet.md](design/loan-cet.md) | Total effective cost (CET, APR, TAEG) of loans: study and plan |

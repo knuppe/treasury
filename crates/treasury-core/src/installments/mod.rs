@@ -219,6 +219,8 @@ fn candidates(conn: &Connection, today: NaiveDate) -> Result<Vec<Row>> {
           WHERE t.date >= ?1 AND t.date <= ?2 AND t.amount < 0 AND t.status <> 'planned'
             AND t.installment_plan_id IS NULL AND t.transfer_id IS NULL
             AND t.kind IN ('expense', 'adjustment')
+            -- A closed card has no installment to come.
+            AND a.closed_on IS NULL
             AND NOT EXISTS (SELECT 1 FROM loan_installment li WHERE li.txn_id = t.id)
             AND NOT EXISTS (SELECT 1 FROM loan l WHERE l.category_id IS NOT NULL
                               AND l.category_id = t.category_id)

@@ -167,3 +167,31 @@ contas-sem-lancamentos = Ainda não há movimentos nesta conta.
 contas-ver-todos-lancamentos = Ver todos em Movimentos
 contas-ajuste-explicacao = Indique o saldo que a conta tinha numa data (o do banco ou do extrato). O Treasury regista a diferença como ajuste: entra no saldo e no histórico da conta, mas fica fora de receitas, despesas e orçamento. Os movimentos até à data ficam conciliados.
 contas-ajuste-previa = Pré-visualização do ajuste
+
+## Encerrar a conta (conta encerrada no banco ou na corretora)
+
+contas-encerrar = Encerrar conta
+contas-menu-encerrar = Encerrar conta…
+contas-reabrir = Reabrir conta
+contas-conta-encerrada = Conta encerrada
+contas-conta-reaberta = Conta reaberta
+contas-encerrada-descricao = Encerrada em { $data }. Fica fora das listas e dos avisos e não aceita movimentos depois dessa data; o histórico continua nos relatórios.
+contas-encerrar-descricao = Para a conta que encerrou no banco ou na corretora. Sai das listas e deixa de gerar avisos; o histórico continua nos relatórios. Pode reabri-la mais tarde.
+contas-encerrar-data-dica = O dia em que o banco encerrou a conta, ou o do último movimento.
+contas-encerrar-bloqueio-saldo = Ainda há { $valor } na conta nessa data. Transfira o saldo para outra conta ou registe um ajuste.
+contas-encerrar-bloqueio-depois = { $n ->
+        [one] Há { $n } movimento depois da data (o último em { $data }).
+       *[other] Há { $n } movimentos depois da data (o último em { $data }).
+    }
+contas-encerrar-bloqueio-posicoes = A conta ainda tem { $ativos }. Registe a venda ou a transferência para outra corretora.
+contas-encerrar-bloqueio-parcelas = { $n ->
+        [one] O cartão ainda tem { $n } prestação por vencer.
+       *[other] O cartão ainda tem { $n } prestações por vencer.
+    }
+contas-encerrar-ajuste = Registar ajuste
+contas-encerrar-sem-avisos = Sai das listas e dos avisos; os movimentos depois da data ficam bloqueados.
+contas-encerrar-previstos = { $n ->
+        [one] { $n } movimento previsto será eliminado.
+       *[other] { $n } movimentos previstos serão eliminados.
+    }
+contas-encerrar-cartoes = Cartões pagos por esta conta: { $nomes }. Altere a conta que paga o extrato nos dados do cartão.

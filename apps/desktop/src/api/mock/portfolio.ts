@@ -155,6 +155,7 @@ function fallbackAccounts(): AccountView[] {
     opening_date: '2024-01-01',
     include_in_net_worth: true,
     archived: false,
+    closed_on: null,
     color: null,
     notes: null,
     sort_order: i,
