@@ -10,6 +10,7 @@
 
 use treasury_core::ApiError;
 
+#[cfg(target_os = "macos")]
 const SOURCE: &str = "en";
 /// The interface languages other than English.
 const TARGETS: &[&str] = &["pt-BR", "pt-PT", "es"];

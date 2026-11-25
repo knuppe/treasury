@@ -146,7 +146,14 @@ pub fn rate(released: i64, release: NaiveDate, flows: &[(NaiveDate, i64)]) -> Op
 /// Whole months counted back from `to` while they stay on or after `from`, and the days left
 /// at the start (Appendix J, (b)(5)(ii)).
 fn months_and_days(from: NaiveDate, to: NaiveDate) -> (u32, i64) {
-    let mut t = 0u32;
+    use chrono::Datelike;
+    // Start from the calendar difference and adjust by one at most, instead of stepping back
+    // one month at a time (quadratic over a 30-year schedule).
+    let ym = |d: NaiveDate| d.year() * 12 + d.month() as i32;
+    let mut t = (ym(to) - ym(from)).max(0) as u32;
+    while t > 0 && add_months(to, -(t as i32)) < from {
+        t -= 1;
+    }
     while add_months(to, -(t as i32 + 1)) >= from {
         t += 1;
     }

@@ -36,8 +36,13 @@ export function cetRate(
   return xirr([{ date: release, amount: -released }, ...flows]);
 }
 
+/** Whole months counted back from `to` while still on or after `from`, and the odd days left. */
 function monthsAndDays(from: string, to: string): [number, number] {
-  let t = 0;
+  // Start from the calendar difference and adjust by one at most, instead of stepping back one
+  // month at a time from `to` (quadratic over a 30-year schedule).
+  const ym = (d: string) => Number(d.slice(0, 4)) * 12 + Number(d.slice(5, 7));
+  let t = Math.max(0, ym(to) - ym(from));
+  while (t > 0 && addMonths(to, -t) < from) t -= 1;
   while (addMonths(to, -(t + 1)) >= from) t += 1;
   return [t, diffDays(addMonths(to, -t), from)];
 }
