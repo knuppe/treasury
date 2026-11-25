@@ -369,12 +369,13 @@ ativos-come-cotas-descontos =
        *[other] { $n } descontos, IR total { $total }
     }
 ativos-extrato-montando = Montando o extrato
-ativos-extrato-confira = Confira os desdobramentos
+ativos-extrato-confira = Confira estas linhas
 ativos-extrato-aviso = { $n ->
     [1] { $aviso } ({ $n } linha marcada).
    *[other] { $aviso } ({ $n } linhas marcadas).
 }
 ativos-extrato-ajuda = Na ordem do cálculo: eventos corporativos de uma data valem antes das operações do mesmo dia. A quantidade e o preço médio são os de depois de cada linha.
+ativos-extrato-qtd-registrada = (operação de { $qtd })
 ativos-extrato-tabela = Extrato do ativo
 ativos-extrato-vazio = Sem operações nem eventos.
 ativos-extrato-lancamento = Lançamento

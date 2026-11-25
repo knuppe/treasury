@@ -381,6 +381,7 @@ carteira-calculando-alocacao = Calculating allocation
 
 carteira-compra = Buy
 carteira-venda = Sell
+carteira-ajuste-de-posicao = Position adjustment
 carteira-compras = Purchases
 carteira-vendas = Sales
 carteira-compra-de = Purchase of { $qtd } { $ativo } on { $data }
@@ -1242,6 +1243,17 @@ carteira-razao-estado-valor = Different amount
 carteira-razao-estado-ir = Different tax
 carteira-razao-estado-repetido = Repeated
 carteira-razao-estado-sem-fonte = No source
+carteira-razao-estado-sem-credito = No credit in the account
+carteira-razao-sem-credito = { $n ->
+    [one] 1 distribution received without the credit in the account
+   *[other] { $n } distributions received without the credit in the account
+}
+carteira-razao-sem-credito-texto = The distribution is recorded, but the money did not reach the brokerage balance here in the app. Check your brokerage statement: if the credit is there, record it. If the statement you import already brings that credit, there is nothing to do.
+carteira-razao-lancar-credito = Record the credit
+carteira-razao-credito-lancado = { $n ->
+    [one] Credit of 1 distribution recorded in the account
+   *[other] Credit of { $n } distributions recorded in the account
+}
 carteira-razao-tabela = Income, one per payment
 carteira-razao-ativos-tabela = Income by asset since the purchase
 carteira-razao-col-data-com = Record date

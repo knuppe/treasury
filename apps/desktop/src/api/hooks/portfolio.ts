@@ -435,6 +435,11 @@ export const useIncomeRebuild = () =>
   useWrite<IncomeRebuildArgs, IncomeRebuildReport>('portfolio.income_rebuild');
 export const useIncomeAuto = () =>
   useWrite<{ enabled: boolean }, { auto: boolean }>('portfolio.income_auto');
+/** Records the credit of distributions recorded as received without a cash entry. */
+export const useIncomeCash = () =>
+  useWrite<{ ids: string[] }, { created: number; change_set_id: string | null }>(
+    'portfolio.income_cash',
+  );
 
 /** Apagar em lote: um conjunto de alterações só (um "Desfazer" restaura todos). */
 export const useDeleteTrades = () =>

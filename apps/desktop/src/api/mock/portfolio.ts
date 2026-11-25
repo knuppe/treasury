@@ -2994,6 +2994,7 @@ function ledgerEntries(a: Record<string, unknown>): IncomeLedgerEntry[] {
       note: null,
       net_base: i.status === 'received' ? fxBase(i.currency, i.pay_date, i.net) : 0,
       upcoming_base: 0,
+      cash_pending: false,
     });
   }
   const pending = pendingIncome({
@@ -3028,6 +3029,7 @@ function ledgerEntries(a: Record<string, unknown>): IncomeLedgerEntry[] {
       note: null,
       net_base: fxBase(p.currency, p.pay_date, p.net),
       upcoming_base: 0,
+      cash_pending: false,
     });
   }
   return out.sort((x, y) => (y.pay_date ?? '').localeCompare(x.pay_date ?? ''));
@@ -3112,6 +3114,7 @@ function incomeLedger(a: Record<string, unknown>): IncomeLedger {
       unexpected: 0,
       fixes: fixes.length,
       unofficial_missing: missing.filter((e) => !e.official).length,
+      cash_pending: 0,
     },
     auto: incomeAuto != null,
     auto_since: incomeAuto,
@@ -3675,6 +3678,13 @@ registerMockHandlers({
     requireUnlocked();
     incomeAuto = a.enabled === true ? (incomeAuto ?? mockToday()) : null;
     return { auto: incomeAuto != null };
+  },
+
+  // The mock ledger never has a distribution waiting for its credit; the command only answers.
+  'portfolio.income_cash': (a) => {
+    requireUnlocked();
+    const ids = Array.isArray(a.ids) ? (a.ids as string[]) : [];
+    return { created: ids.length, change_set_id: null };
   },
 
   'portfolio.delete_income': (a) => {

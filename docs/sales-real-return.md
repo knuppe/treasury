@@ -20,6 +20,15 @@ For each sale, `portfolio.sales` returns:
 | dividends and "with dividends" | the dividends received on the units sold and the result added to them (see below) |
 | IRR | annual rate of the sale ([cost-method.md](cost-method.md)) |
 
+**What is not a sale.** A trade that only aligns the recorded quantity with what the institution
+shows, with no money moved, is a **position adjustment**: the difference booked by the position
+on a date (`portfolio.bulk`), or a trade marked with `adjustment` (`portfolio.create_trade`,
+`portfolio.update_trade`; `record_trade` and `update_trade` for the agent). It moves the quantity
+and the cost like any trade, shows as "Position adjustment" in the lists, has no cash effect and
+stays out of the ledger and of its totals. A real sale recorded without a cash entry (the
+statement comes later) is still a sale. The mark is kept in the trade's `external_id`
+(`posicao:…` or `ajuste:…`), without a column of its own.
+
 **How the cost is adjusted.** At average price, each sale takes the same fraction of all
 the purchases that formed the position. The ledger keeps those layers (date and cost of each purchase)
 and, at each sale, takes the sold fraction from each one. The adjusted cost is the sum of each

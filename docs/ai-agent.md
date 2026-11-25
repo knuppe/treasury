@@ -87,10 +87,10 @@ The full catalog, with the descriptions that clients receive, comes from `crates
 - `create_transaction`, `update_transaction`, `split_transaction`, `categorize_transactions` (batch)
 - `create_rule` (categorization rule), `create_recurrence`
 - `set_budget`, `create_goal`
-- `record_trade`, `record_income_event`
+- `record_trade` (with `adjustment: true` when it only aligns the quantity with the institution's balance, no money moved), `record_income_event`
 - **In bulk, a single proposal** (data read from pages, internet banking, aggregators or attachments):
   - `import_transactions` (`import.rows`): up to 500 transactions from a statement or card statement into one account, with the same deduplication and rules as the statement import; it becomes a batch in Imports (undoable) and the report says what was left out.
-  - `import_investments` (`portfolio.bulk`): account by id or by name (reuses or creates it, with the institution by exact name), assets (reused by ticker), trades, **position on a date** (quantity and average price: it books only the difference from what is recorded, with no cash; it never sells on its own) and dividends. Nothing is duplicated; the report comes back together with the proposal (`report`).
+  - `import_investments` (`portfolio.bulk`): account by id or by name (reuses or creates it, with the institution by exact name), assets (reused by ticker), trades, **position on a date** (quantity and average price: it books only the difference from what is recorded, with no cash, as a position adjustment: the trade is marked `adjustment`, has no cash effect and is not a sale in the sales ledger; only a fixed-income cash box is ever reduced this way) and dividends. Nothing is duplicated; the report comes back together with the proposal (`report`).
 - `remember`: saves a note in the manager's memory (see below)
 - Procedure memory, **app agent only** and **no proposal**: `remember_procedure` (saves or updates a note) and `record_procedure_outcome` (worked/failed, with a remark)
 - Feedback to the developer, **developer mode only** and **no proposal** (except delete and discard): `list_dev_feedback`, `get_dev_feedback`, `add_dev_feedback`, `bump_dev_feedback`, `resolve_dev_feedback`, `update_dev_feedback`, `set_dev_feedback_status`, `set_dev_feedback_priority`, `link_dev_feedback`, `delete_dev_feedback` and `export_dev_feedback`; see [Agent feedback to the developer](#agent-feedback-to-the-developer-developer-mode)

@@ -1169,8 +1169,16 @@ fn closed_plan_is_valued_by_the_reported_balance() {
             })
             .collect()
     };
+    // Without a balance the plan is worth the unit value of its last contribution, long ago:
+    // it asks for the balance.
     let s = summary();
-    assert_eq!(due(&s), [("Plano Fechado Exemplo".to_string(), None)]);
+    assert_eq!(
+        due(&s),
+        [(
+            "Plano Fechado Exemplo".to_string(),
+            Some("2025-01-10".to_string())
+        )]
+    );
     assert!(
         !s["missing_prices"].to_string().contains("Plano Fechado"),
         "{}",
@@ -1215,4 +1223,175 @@ fn closed_plan_is_valued_by_the_reported_balance() {
         )
         .is_err()
     );
+}
+
+/// Feedback 01a184bb: a pension fund plan whose contributions were recorded as trades had no
+/// price at all and stayed valued at cost.
+#[test]
+fn contributions_of_a_closed_plan_become_its_price_points() {
+    let (_d, api, _) = setup();
+    let acc = api
+        .call(
+            "accounts.create",
+            json!({"name": "Cooperativa", "kind": "other"}),
+        )
+        .unwrap()["id"]
+        .as_str()
+        .unwrap()
+        .to_string();
+    let create = |name: &str, pension: Value| {
+        api.call(
+            "assets.create",
+            json!({"name": name, "class": "pension", "price_provider": "cvm",
+                   "cnpj": "11.444.777/0001-61", "pension": pension}),
+        )
+        .unwrap()["id"]
+            .as_str()
+            .unwrap()
+            .to_string()
+    };
+    let buy = |asset: &str, date: &str, qty: &str, price: &str| {
+        api.call(
+            "portfolio.create_trade",
+            json!({"asset_id": asset, "account_id": acc, "date": date, "side": "buy",
+                   "quantity": qty, "price": price, "cash_movement": false}),
+        )
+        .unwrap();
+    };
+    let prices = |asset: &str| -> Vec<(String, String)> {
+        api.call(
+            "market.prices",
+            json!({"asset_id": asset, "from": "2020-01-01", "to": "2026-12-31"}),
+        )
+        .unwrap()
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|p| {
+            (
+                p["date"].as_str().unwrap().to_string(),
+                p["close"].as_str().unwrap().to_string(),
+            )
+        })
+        .collect()
+    };
+    let plan = create(
+        "Plano Fechado Exemplo",
+        json!({"plan_type": "efpc", "tax_regime": "regressive"}),
+    );
+    buy(&plan, "2026-08-10", "100", "1.40");
+    // Participant and employer on the same day: one point.
+    buy(&plan, "2026-09-10", "100", "1.45");
+    buy(&plan, "2026-09-10", "50", "1.45");
+    assert_eq!(
+        prices(&plan),
+        [
+            ("2026-08-10".to_string(), "1.4".to_string()),
+            ("2026-09-10".to_string(), "1.45".to_string())
+        ]
+    );
+    // The position is worth the last unit value, not the cost.
+    let pos = api
+        .call(
+            "portfolio.position",
+            json!({"asset_id": plan, "as_of": "2026-10-01", "deflator": "none"}),
+        )
+        .unwrap();
+    assert_eq!(pos["cost_base"], 14_000 + 14_500 + 7_250, "{pos}");
+    assert_eq!(pos["market_value_base"], 36_250, "{pos}");
+    assert_ne!(pos["valuation"], "missing", "{pos}");
+    // A reported balance on the day of a contribution wins and is not overwritten by the next one.
+    api.call(
+        "pension.set_balance",
+        json!({"asset_id": plan, "date": "2026-10-10", "balance": 40_000}),
+    )
+    .unwrap();
+    buy(&plan, "2026-10-10", "100", "1.50");
+    assert_eq!(
+        prices(&plan)[2],
+        ("2026-10-10".to_string(), "1.6".to_string())
+    );
+
+    // An open plan (PGBL/VGBL) has the fund's public quote: its contributions add nothing.
+    let vgbl = create(
+        "VGBL Exemplo",
+        json!({"plan_type": "vgbl", "tax_regime": "regressive"}),
+    );
+    buy(&vgbl, "2026-08-10", "100", "1.40");
+    assert!(prices(&vgbl).is_empty());
+    // A plan that turns out to be a pension fund gets the points of the contributions it
+    // already had the next time the vault is opened.
+    api.call(
+        "pension.set_plan",
+        json!({"asset_id": vgbl, "plan_type": "efpc", "tax_regime": "regressive"}),
+    )
+    .unwrap();
+    assert!(prices(&vgbl).is_empty());
+    api.call("vault.lock", Value::Null).unwrap();
+    api.call("vault.unlock", json!({"password": "senha-mestra-forte"}))
+        .unwrap();
+    assert_eq!(
+        prices(&vgbl),
+        [("2026-08-10".to_string(), "1.4".to_string())]
+    );
+}
+
+/// Feedback 01a1a3fe: a statement of a few months lists only that period, and its balance is the
+/// whole position.
+#[test]
+fn a_statement_of_a_period_adds_up_with_what_is_already_recorded() {
+    let (_d, api, _) = setup();
+    let acc = api
+        .call(
+            "accounts.create",
+            json!({"name": "Previdência Quanta", "kind": "brokerage"}),
+        )
+        .unwrap()["id"]
+        .as_str()
+        .unwrap()
+        .to_string();
+    api.call(
+        "pension.statement_import",
+        json!({"text": QUANTA, "account_id": acc}),
+    )
+    .unwrap();
+    // The next statement: one contribution already recorded, a new one, the balance of everything.
+    let window = QUANTA
+        .lines()
+        .filter(|l| !l.contains("03/2022 15/03/2022") && !l.contains("07/2022 12/08/2022"))
+        .map(|l| {
+            if l.contains("TOTAL - CONTRIBUIÇÕES PARA APOSENTADORIA") {
+                " 09/2026 15/09/2026 15/09/2026 Contribuição Mensal para Aposentadoria 180,00 180,00 180,43 0,43 0,24% 110,50000000 0,00 0,00 0,00\n TOTAL - CONTRIBUIÇÕES PARA APOSENTADORIA 1.080,00".to_string()
+            } else {
+                l.replace("SALDO DE COTAS 951,615432", "SALDO DE COTAS 1.062,115432")
+                    .replace("SALDO PARTICIPANTE 1.553,84", "SALDO PARTICIPANTE 1.734,26")
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    let p = api
+        .call("pension.statement_preview", json!({"text": window}))
+        .unwrap();
+    let status: Vec<&str> = p["rows"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|r| r["status"].as_str().unwrap())
+        .collect();
+    assert_eq!(status, ["duplicate", "new"], "{p}");
+    assert_eq!(p["warnings"], json!([]), "{p}");
+    let t = &p["totals"];
+    assert_eq!(t["quotas"], "761.48765432");
+    assert_eq!(t["accounted_quotas"], "1062.11543219");
+    assert_eq!(
+        (t["balance"].as_i64(), t["computed_balance"].as_i64()),
+        (Some(173426), Some(173426))
+    );
+    // A statement that leaves a recorded period short still warns.
+    let short = window.replace("SALDO DE COTAS 1.062,115432", "SALDO DE COTAS 1.500,000000");
+    let p = api
+        .call("pension.statement_preview", json!({"text": short}))
+        .unwrap();
+    let w = p["warnings"].to_string();
+    assert!(w.contains("pode faltar um período anterior"), "{w}");
 }

@@ -7,6 +7,7 @@
 ## Datas, valores, PDF e banco de dados
 
 nucleo-base-erro-data = data inválida: { $valor }
+nucleo-base-erro-data-improvavel = data fora do intervalo aceito: { $valor } (confira o ano)
 nucleo-base-erro-mes = mês inválido (use AAAA-MM): { $valor }
 nucleo-base-erro-moeda = moeda inválida: { $valor }
 nucleo-base-erro-valor = valor inválido: { $valor }

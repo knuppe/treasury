@@ -2576,6 +2576,7 @@ export interface Messages {
   'ativos-extrato-montando': never;
   'ativos-extrato-origem': never;
   'ativos-extrato-posicao-depois': never;
+  'ativos-extrato-qtd-registrada': { qtd: string | number };
   'ativos-extrato-tabela': never;
   'ativos-extrato-vazio': never;
   'ativos-fechamento': never;
@@ -3674,6 +3675,7 @@ export interface Messages {
   };
   'carteira-agente-pedido': never;
   'carteira-agrupar': never;
+  'carteira-ajuste-de-posicao': never;
   'carteira-alocacao-aria': never;
   'carteira-alocacao-classe': never;
   'carteira-alocacao-fonte': { moeda: string | number };
@@ -4340,11 +4342,13 @@ export interface Messages {
   'carteira-razao-col-situacao': never;
   'carteira-razao-col-tipo': never;
   'carteira-razao-conferir': { n: string | number };
+  'carteira-razao-credito-lancado': { n: string | number };
   'carteira-razao-estado-a-receber': never;
   'carteira-razao-estado-confere': never;
   'carteira-razao-estado-faltando': never;
   'carteira-razao-estado-ir': never;
   'carteira-razao-estado-repetido': never;
+  'carteira-razao-estado-sem-credito': never;
   'carteira-razao-estado-sem-fonte': never;
   'carteira-razao-estado-valor': never;
   'carteira-razao-feito': {
@@ -4353,6 +4357,7 @@ export interface Messages {
     lancados: string | number;
   };
   'carteira-razao-lancado': never;
+  'carteira-razao-lancar-credito': never;
   'carteira-razao-marcar': { acao: string | number; ativo: string | number };
   'carteira-razao-na-carteira': { valor: string | number };
   'carteira-razao-nada': never;
@@ -4370,6 +4375,8 @@ export interface Messages {
   'carteira-razao-revisar-texto': never;
   'carteira-razao-revisar-titulo': never;
   'carteira-razao-sem-aviso-tag': { fonte: string | number };
+  'carteira-razao-sem-credito': { n: string | number };
+  'carteira-razao-sem-credito-texto': never;
   'carteira-razao-tabela': never;
   'carteira-razao-titulo': never;
   'carteira-razao-vazio': never;
@@ -11244,6 +11251,7 @@ export interface Messages {
   'mcp-servidor-socket-tempo': never;
   'mcp-so-interface': never;
   'mcp-valida-acao': never;
+  'mcp-valida-ajuste-sem-caixa': never;
   'mcp-valida-anexo-nao-encontrado': never;
   'mcp-valida-ano': never;
   'mcp-valida-aporte-negativo': never;
@@ -12018,6 +12026,7 @@ export interface Messages {
   'nucleo-base-erro-cofre-so-interface': never;
   'nucleo-base-erro-comando-leitura': { comando: string | number };
   'nucleo-base-erro-data': { valor: string | number };
+  'nucleo-base-erro-data-improvavel': { valor: string | number };
   'nucleo-base-erro-demo-com-senha': never;
   'nucleo-base-erro-esquema-antigo': never;
   'nucleo-base-erro-esquema-diferente': { objeto: string | number };
@@ -12205,6 +12214,8 @@ export interface Messages {
   'nucleo-carteira-custo-nota-alternativa': { taxa: string | number };
   'nucleo-carteira-custo-nota-performance': never;
   'nucleo-carteira-custo-nota-retorno': { retorno: string | number };
+  'nucleo-carteira-erro-ajuste-com-caixa': never;
+  'nucleo-carteira-erro-ajuste-importada': never;
   'nucleo-carteira-erro-alvo': never;
   'nucleo-carteira-erro-alvos-escopo': never;
   'nucleo-carteira-erro-alvos-soma': never;
@@ -12234,6 +12245,7 @@ export interface Messages {
   'nucleo-carteira-erro-quantidade': never;
   'nucleo-carteira-erro-sem-proventos': never;
   'nucleo-carteira-erro-venda-maior': { posicao: string | number; quantidade: string | number };
+  'nucleo-carteira-extrato-ajuste': never;
   'nucleo-carteira-extrato-aviso-bonificacao-dupla': never;
   'nucleo-carteira-extrato-aviso-desdobramento-duplo': never;
   'nucleo-carteira-extrato-bonificacao': never;
@@ -12414,13 +12426,18 @@ export interface Messages {
   'nucleo-carteira-rapido-nota-sem-anuncio': { data: string | number; tipo: string | number };
   'nucleo-carteira-rapido-nota-sem-posicao': { ticker: string | number };
   'nucleo-carteira-rapido-repetido': never;
+  'nucleo-carteira-razao-erro-caixa-anunciado': never;
+  'nucleo-carteira-razao-erro-caixa-ja-lancado': never;
   'nucleo-carteira-razao-erro-so-usuario': never;
   'nucleo-carteira-razao-motivo-automatico': { n: string | number };
+  'nucleo-carteira-razao-motivo-caixa': { n: string | number };
   'nucleo-carteira-razao-motivo-reconstruir': { n: string | number };
   'nucleo-carteira-razao-nota-creditado': never;
   'nucleo-carteira-razao-nota-data-improvavel': never;
+  'nucleo-carteira-razao-nota-historico-sem-caixa': never;
   'nucleo-carteira-razao-nota-pagamento-estimado': never;
   'nucleo-carteira-razao-nota-repete': { data: string | number };
+  'nucleo-carteira-razao-nota-sem-caixa': never;
   'nucleo-carteira-razao-nota-sem-fonte': never;
   'nucleo-carteira-rebalanceamento-aviso': never;
   'nucleo-carteira-risco-erro-meses': never;
@@ -13269,6 +13286,7 @@ export interface Messages {
   'nucleo-geral-referencias-quebradas': { n: string | number };
   'nucleo-geral-segredos-ocultos': never;
   'nucleo-geral-tabela': { tabela: string | number };
+  'nucleo-geral-tarefa-cofre-bloqueado': never;
   'nucleo-geral-tarefa-nao-cancelavel': never;
   'nucleo-geral-tarefa-nao-encontrada': never;
   'nucleo-geral-termos-1-0': never;
@@ -13698,6 +13716,7 @@ export interface Messages {
   'nucleo-importacao-n43-tarjeta': never;
   'nucleo-importacao-n43-transferencia': never;
   'nucleo-importacao-nada-novo': never;
+  'nucleo-importacao-nota-caixa-de-operacao': { descricao: string | number };
   'nucleo-importacao-nota-descricao-original': { descricao: string | number };
   'nucleo-importacao-nota-documento': { numero: string | number };
   'nucleo-importacao-nota-efetiva-previsto': { data: string | number; descricao: string | number };
@@ -21498,6 +21517,7 @@ export const KEYS: readonly MessageKey[] = [
   'ativos-extrato-montando',
   'ativos-extrato-origem',
   'ativos-extrato-posicao-depois',
+  'ativos-extrato-qtd-registrada',
   'ativos-extrato-tabela',
   'ativos-extrato-vazio',
   'ativos-fechamento',
@@ -22547,6 +22567,7 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-agente-item',
   'carteira-agente-pedido',
   'carteira-agrupar',
+  'carteira-ajuste-de-posicao',
   'carteira-alocacao-aria',
   'carteira-alocacao-classe',
   'carteira-alocacao-fonte',
@@ -23180,15 +23201,18 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-col-situacao',
   'carteira-razao-col-tipo',
   'carteira-razao-conferir',
+  'carteira-razao-credito-lancado',
   'carteira-razao-estado-a-receber',
   'carteira-razao-estado-confere',
   'carteira-razao-estado-faltando',
   'carteira-razao-estado-ir',
   'carteira-razao-estado-repetido',
+  'carteira-razao-estado-sem-credito',
   'carteira-razao-estado-sem-fonte',
   'carteira-razao-estado-valor',
   'carteira-razao-feito',
   'carteira-razao-lancado',
+  'carteira-razao-lancar-credito',
   'carteira-razao-marcar',
   'carteira-razao-na-carteira',
   'carteira-razao-nada',
@@ -23206,6 +23230,8 @@ export const KEYS: readonly MessageKey[] = [
   'carteira-razao-revisar-texto',
   'carteira-razao-revisar-titulo',
   'carteira-razao-sem-aviso-tag',
+  'carteira-razao-sem-credito',
+  'carteira-razao-sem-credito-texto',
   'carteira-razao-tabela',
   'carteira-razao-titulo',
   'carteira-razao-vazio',
@@ -29438,6 +29464,7 @@ export const KEYS: readonly MessageKey[] = [
   'mcp-servidor-socket-tempo',
   'mcp-so-interface',
   'mcp-valida-acao',
+  'mcp-valida-ajuste-sem-caixa',
   'mcp-valida-anexo-nao-encontrado',
   'mcp-valida-ano',
   'mcp-valida-aporte-negativo',
@@ -30198,6 +30225,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-base-erro-cofre-so-interface',
   'nucleo-base-erro-comando-leitura',
   'nucleo-base-erro-data',
+  'nucleo-base-erro-data-improvavel',
   'nucleo-base-erro-demo-com-senha',
   'nucleo-base-erro-esquema-antigo',
   'nucleo-base-erro-esquema-diferente',
@@ -30347,6 +30375,8 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-custo-nota-alternativa',
   'nucleo-carteira-custo-nota-performance',
   'nucleo-carteira-custo-nota-retorno',
+  'nucleo-carteira-erro-ajuste-com-caixa',
+  'nucleo-carteira-erro-ajuste-importada',
   'nucleo-carteira-erro-alvo',
   'nucleo-carteira-erro-alvos-escopo',
   'nucleo-carteira-erro-alvos-soma',
@@ -30376,6 +30406,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-erro-quantidade',
   'nucleo-carteira-erro-sem-proventos',
   'nucleo-carteira-erro-venda-maior',
+  'nucleo-carteira-extrato-ajuste',
   'nucleo-carteira-extrato-aviso-bonificacao-dupla',
   'nucleo-carteira-extrato-aviso-desdobramento-duplo',
   'nucleo-carteira-extrato-bonificacao',
@@ -30506,13 +30537,18 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-carteira-rapido-nota-sem-anuncio',
   'nucleo-carteira-rapido-nota-sem-posicao',
   'nucleo-carteira-rapido-repetido',
+  'nucleo-carteira-razao-erro-caixa-anunciado',
+  'nucleo-carteira-razao-erro-caixa-ja-lancado',
   'nucleo-carteira-razao-erro-so-usuario',
   'nucleo-carteira-razao-motivo-automatico',
+  'nucleo-carteira-razao-motivo-caixa',
   'nucleo-carteira-razao-motivo-reconstruir',
   'nucleo-carteira-razao-nota-creditado',
   'nucleo-carteira-razao-nota-data-improvavel',
+  'nucleo-carteira-razao-nota-historico-sem-caixa',
   'nucleo-carteira-razao-nota-pagamento-estimado',
   'nucleo-carteira-razao-nota-repete',
+  'nucleo-carteira-razao-nota-sem-caixa',
   'nucleo-carteira-razao-nota-sem-fonte',
   'nucleo-carteira-rebalanceamento-aviso',
   'nucleo-carteira-risco-erro-meses',
@@ -31298,6 +31334,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-geral-referencias-quebradas',
   'nucleo-geral-segredos-ocultos',
   'nucleo-geral-tabela',
+  'nucleo-geral-tarefa-cofre-bloqueado',
   'nucleo-geral-tarefa-nao-cancelavel',
   'nucleo-geral-tarefa-nao-encontrada',
   'nucleo-geral-termos-1-0',
@@ -31679,6 +31716,7 @@ export const KEYS: readonly MessageKey[] = [
   'nucleo-importacao-n43-tarjeta',
   'nucleo-importacao-n43-transferencia',
   'nucleo-importacao-nada-novo',
+  'nucleo-importacao-nota-caixa-de-operacao',
   'nucleo-importacao-nota-descricao-original',
   'nucleo-importacao-nota-documento',
   'nucleo-importacao-nota-efetiva-previsto',

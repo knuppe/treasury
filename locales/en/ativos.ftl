@@ -378,12 +378,13 @@ ativos-come-cotas-descontos = { $n ->
    *[other] { $n } deductions, total income tax { $total }
 }
 ativos-extrato-montando = Building the statement
-ativos-extrato-confira = Check the splits
+ativos-extrato-confira = Check these lines
 ativos-extrato-aviso = { $n ->
     [one] { $aviso } ({ $n } line flagged).
    *[other] { $aviso } ({ $n } lines flagged).
 }
 ativos-extrato-ajuda = In calculation order: corporate actions on a date apply before trades on the same day. Quantity and average price are the ones after each line.
+ativos-extrato-qtd-registrada = (trade of { $qtd })
 ativos-extrato-tabela = Asset statement
 ativos-extrato-vazio = No trades or corporate actions.
 ativos-extrato-lancamento = Entry

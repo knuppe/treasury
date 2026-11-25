@@ -22,4 +22,9 @@ gross: number,
 /**
  * Efeito no caixa da corretora: compra = −(bruto + custos), venda = bruto − custos.
  */
-cash_amount: number, txn_id: string | null, note_number: string | null, notes: string | null, import_id: string | null, };
+cash_amount: number, txn_id: string | null, note_number: string | null, notes: string | null, import_id: string | null, 
+/**
+ * Position adjustment (the quantity aligned with a reported position, no money moved): it
+ * is not a sale or a purchase to report, and `cash_amount` is 0.
+ */
+adjustment?: boolean, };

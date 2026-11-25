@@ -26,7 +26,8 @@ pub struct TxnRowInput {
     /// Date `YYYY-MM-DD`.
     #[schemars(pattern(DATE_PATTERN))]
     pub date: String,
-    /// Signed amount in cents: negative = outflow (purchase, payment), positive = inflow.
+    /// Signed amount in cents, in the account's currency (a row has no currency of its own):
+    /// negative = outflow (purchase, payment), positive = inflow.
     pub amount: i64,
     /// Description as it appears on the statement.
     #[schemars(length(min = 1, max = 300))]
@@ -62,7 +63,7 @@ pub struct ImportTransactionsInput {
     /// Where they came from, e.g. "Itaú statement Sep/2026, internet banking".
     #[schemars(length(min = 1, max = 120))]
     pub source: String,
-    /// Transactions (up to 500 per call).
+    /// Transactions, one per statement line (up to 500 per call).
     #[schemars(length(min = 1, max = 500))]
     pub rows: Vec<TxnRowInput>,
     /// Also save the possible duplicates (default: no; only if the user confirms).

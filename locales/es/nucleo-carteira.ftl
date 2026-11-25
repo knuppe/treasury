@@ -46,6 +46,8 @@ nucleo-carteira-erro-preco = el precio no puede ser negativo
 nucleo-carteira-erro-custos = los costos e impuestos no pueden ser negativos
 nucleo-carteira-erro-cambio = el tipo de cambio debe ser positivo
 nucleo-carteira-erro-venda-maior = venta de { $quantidade } mayor que la posición de { $posicao } en esta cuenta en la fecha
+nucleo-carteira-erro-ajuste-com-caixa = un ajuste de posición no mueve la caja: quita el movimiento de caja de la operación (cash_movement falso)
+nucleo-carteira-erro-ajuste-importada = esta operación vino de la corredora con su propio identificador: es una operación real, no un ajuste de posición
 nucleo-carteira-erro-desdobramento = un desdoblamiento necesita un factor mayor que 1 (p. ej.: 2 para 1→2)
 nucleo-carteira-erro-grupamento = una agrupación necesita un factor entre 0 y 1 (p. ej.: 0,1 para 10→1)
 nucleo-carteira-erro-bonificacao = una bonificación necesita el factor (acciones nuevas por acción, p. ej.: 0,1 = 10%)
@@ -243,6 +245,7 @@ nucleo-carteira-extrato-herdada = Posición heredada (cambio de ticker o absorci
 nucleo-carteira-extrato-entrada-sem-custo = Entrada sin costo (desdoblamiento o bonificación registrado como compra)
 nucleo-carteira-extrato-compra = Compra
 nucleo-carteira-extrato-venda = Venta
+nucleo-carteira-extrato-ajuste = Ajuste de posición
 nucleo-carteira-extrato-come-cotas =
     { $cotas ->
         [one] Come-cotas: { $cotas } cuota rescatada para el IR
@@ -430,6 +433,11 @@ nucleo-carteira-razao-nota-pagamento-estimado = ninguna fuente informó la fecha
 nucleo-carteira-razao-nota-repete = repite el dividendo pagado el { $data }
 nucleo-carteira-razao-nota-data-improvavel = fecha de pago muy en el futuro: revisa si el año está bien escrito
 nucleo-carteira-razao-nota-sem-fonte = ninguna fuente describe este dividendo: revísalo en el extracto de la corredora
+nucleo-carteira-razao-nota-sem-caixa = registrado como recibido, sin el abono en la cuenta: revisa el extracto de la corredora y registra el abono
+nucleo-carteira-razao-nota-historico-sem-caixa = historial: registrado sin mover la caja de la corredora
+nucleo-carteira-razao-erro-caixa-ja-lancado = este dividendo ya tiene su abono en la cuenta
+nucleo-carteira-razao-erro-caixa-anunciado = dividendo aún no recibido: no hay abono que registrar
+nucleo-carteira-razao-motivo-caixa = Abono de { $n } dividendo(s) registrado en la cuenta
 nucleo-carteira-razao-motivo-reconstruir =
     { $n ->
         [one] Dividendos reconstruidos con los avisos oficiales ({ $n } corrección)

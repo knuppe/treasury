@@ -67,8 +67,8 @@ nucleo-planejamento-previdencia-erro-sem-arquivo = send the statement PDF or its
 nucleo-planejamento-previdencia-erro-extrato-classe = the pension statement goes into an asset in the Pension plans class
 nucleo-planejamento-previdencia-erro-conta = choose the account for the pension units
 nucleo-planejamento-previdencia-erro-interno = pension statement: { $erro }
-nucleo-planejamento-previdencia-aviso-cotas = the sum of the contribution units ({ $soma }) doesn't match the unit balance on the statement ({ $saldo }): check whether a row was left out
-nucleo-planejamento-previdencia-aviso-saldo = the balance from the units ({ $calculado }) differs from the participant balance on the statement ({ $extrato })
+nucleo-planejamento-previdencia-aviso-cotas = the units already recorded plus the new ones on this statement ({ $soma }) don't match the unit balance on the statement ({ $saldo }): an earlier period or a row may be missing
+nucleo-planejamento-previdencia-aviso-saldo = the balance from the recorded units plus the ones on this statement ({ $calculado }) differs from the participant balance on the statement ({ $extrato })
 nucleo-planejamento-previdencia-aviso-sem-cnpj = couldn't find the plan's CNPJ on the statement
 # Name of the asset created by the statement when it doesn't include the plan name.
 nucleo-planejamento-previdencia-ativo-padrao = Pension (pension fund)

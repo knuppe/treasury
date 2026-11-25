@@ -243,11 +243,17 @@ function SelectionLine({
   );
 }
 
-function SideBadge({ side }: { side: Trade['side'] }) {
+function SideBadge({ side, adjustment }: { side: Trade['side']; adjustment?: boolean }) {
+  // A position adjustment moved no money: it is not a purchase or a sale.
+  const tone = adjustment ? 'text-dim' : side === 'buy' ? 'text-positive' : 'text-negative';
   return (
-    <span className={cx('whitespace-nowrap', side === 'buy' ? 'text-positive' : 'text-negative')}>
+    <span className={cx('whitespace-nowrap', tone)}>
       <span aria-hidden>{side === 'buy' ? '▲ ' : '▼ '}</span>
-      {side === 'buy' ? t('carteira-compra') : t('carteira-venda')}
+      {adjustment
+        ? t('carteira-ajuste-de-posicao')
+        : side === 'buy'
+          ? t('carteira-compra')
+          : t('carteira-venda')}
     </span>
   );
 }
@@ -319,7 +325,11 @@ export function TradesTable({ assetId, compact = false }: { assetId?: string; co
               sortValue: (tr: Trade) => tr.ticker ?? tr.asset_name,
             },
           ]),
-      { key: 'side', header: t('carteira-col-tipo'), cell: (tr) => <SideBadge side={tr.side} /> },
+      {
+        key: 'side',
+        header: t('carteira-col-tipo'),
+        cell: (tr) => <SideBadge side={tr.side} adjustment={tr.adjustment === true} />,
+      },
       {
         key: 'qty',
         header: t('carteira-col-qtd'),
@@ -461,7 +471,7 @@ export function TradesTable({ assetId, compact = false }: { assetId?: string; co
                   {
                     label: t('carteira-compras'),
                     value: total(
-                      rows.filter((tr) => tr.side === 'buy'),
+                      rows.filter((tr) => tr.side === 'buy' && !tr.adjustment),
                       (tr) => tr.currency,
                       (tr) => tr.gross,
                     ),
@@ -469,7 +479,7 @@ export function TradesTable({ assetId, compact = false }: { assetId?: string; co
                   {
                     label: t('carteira-vendas'),
                     value: total(
-                      rows.filter((tr) => tr.side === 'sell'),
+                      rows.filter((tr) => tr.side === 'sell' && !tr.adjustment),
                       (tr) => tr.currency,
                       (tr) => tr.gross,
                     ),

@@ -47,4 +47,10 @@ net_base: number,
 /**
  * Upcoming amount (base currency).
  */
-upcoming_base: number, };
+upcoming_base: number, 
+/**
+ * Recorded as received without a cash entry in the account, paid after the history cut: the
+ * amounts may match the source, and the credit is still to be checked in the statement
+ * (`portfolio.income_cash` records it).
+ */
+cash_pending: boolean, };

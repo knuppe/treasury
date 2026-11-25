@@ -68,8 +68,8 @@ nucleo-planejamento-previdencia-erro-sem-arquivo = envía el PDF del extracto o 
 nucleo-planejamento-previdencia-erro-extrato-classe = el extracto de previsión va en un activo de la clase Planes de pensiones
 nucleo-planejamento-previdencia-erro-conta = elige la cuenta de las cuotas de la previsión
 nucleo-planejamento-previdencia-erro-interno = extracto de previsión: { $erro }
-nucleo-planejamento-previdencia-aviso-cotas = la suma de las cuotas de las contribuciones ({ $soma }) no coincide con el saldo de cuotas del extracto ({ $saldo }): revisa si quedó fuera alguna línea
-nucleo-planejamento-previdencia-aviso-saldo = el saldo por las cuotas ({ $calculado }) difiere del saldo del participante en el extracto ({ $extrato })
+nucleo-planejamento-previdencia-aviso-cotas = las cuotas ya registradas más las nuevas de este extracto ({ $soma }) no coinciden con el saldo de cuotas del extracto ({ $saldo }): puede faltar un período anterior o alguna línea
+nucleo-planejamento-previdencia-aviso-saldo = el saldo por las cuotas registradas más las de este extracto ({ $calculado }) difiere del saldo del participante en el extracto ({ $extrato })
 nucleo-planejamento-previdencia-aviso-sem-cnpj = no encontré el CNPJ del plan en el extracto
 # Nombre del activo creado por el extracto cuando no trae el nombre del plan.
 nucleo-planejamento-previdencia-ativo-padrao = Previsión (fondo de pensión)

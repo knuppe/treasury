@@ -274,7 +274,7 @@ fn require_nonzero(amount: i64) -> Result<()> {
 /// Cria um lançamento simples (receita, despesa, ajuste ou aporte de uma perna só).
 pub fn create(tx: &Transaction<'_>, input: &TxnInput, today: NaiveDate) -> Result<Id> {
     let (currency, _) = currency_and_kind(tx, &input.account_id)?;
-    crate::time::parse_date(&input.date)?;
+    crate::time::parse_record_date(&input.date)?;
     require_nonzero(input.amount)?;
     let kind = input.kind.unwrap_or_else(|| infer_kind(input.amount));
     if kind == TxnKind::CardPayment {
@@ -366,7 +366,7 @@ pub fn update(tx: &Transaction<'_>, patch: &TxnPatch, today: NaiveDate) -> Resul
         new.account_id = a.clone();
     }
     if let Some(d) = &patch.date {
-        crate::time::parse_date(d)?;
+        crate::time::parse_record_date(d)?;
         new.date = d.clone();
     }
     if let Some(a) = patch.amount {
@@ -664,7 +664,7 @@ pub fn create_transfer_with(
     }
     let (from_cur, from_kind) = currency_and_kind(tx, &input.from_account_id)?;
     let (to_cur, to_kind) = currency_and_kind(tx, &input.to_account_id)?;
-    crate::time::parse_date(&input.date)?;
+    crate::time::parse_record_date(&input.date)?;
     if input.amount <= 0 {
         return Err(Error::invalid(t(
             "nucleo-lancamentos-erro-transferencia-valor",

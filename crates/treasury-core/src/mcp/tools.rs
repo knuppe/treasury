@@ -1016,7 +1016,10 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         title: "Trades",
         description: "Recorded buys and sells (most recent first): date, asset, account, side, \
             quantity and price (decimal strings), costs and taxes (cents), exchange rate, effect \
-            on the brokerage cash (`cash_amount`).",
+            on the brokerage cash (`cash_amount`; `txn_id` is the cash entry, when there is one). \
+            `adjustment`: the trade only aligned the quantity with a reported position \
+            (`import_investments`, position on a date): no money moved, `cash_amount` is 0 and it \
+            is not a sale in `list_sales`.",
         command: "portfolio.list_trades",
         list_key: Some("trades"),
         schema: schema::<ListTradesInput>,
@@ -1074,7 +1077,9 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             `get_fundamentus`. `asset_warning`: asset with no new quote for months and no trading \
             (delisted or merged?). Yahoo and Fundamentus with different types for the same \
             distribution become a single suggestion (type and payment from Fundamentus). To fix, \
-            propose with `record_income_event` (correct amount and dates) — the user approves.",
+            propose with `record_income_event` (correct amount and dates) — the user approves. \
+            A distribution already recorded as received whose credit never reached the account \
+            is not here: it is `cash_pending` in `get_income_ledger`.",
         command: "portfolio.pending_income",
         list_key: None,
         schema: schema::<PendingIncomeInput>,
@@ -1093,7 +1098,12 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             `fix` is what the rebuild in Portfolio would do. Totals by asset, year and month in \
             cents of the base currency (`received_base`: what the sources say was paid). Amounts \
             per share as decimal strings. `auto`: the official distributions are recorded \
-            automatically after each collection.",
+            automatically after each collection. `cash_pending` (and `counts.cash_pending`): the \
+            distribution is recorded as received without a cash entry in the account \
+            (`recorded.cash` false), so the brokerage balance does not have it yet, even when \
+            the amounts match; the user records the credit in Portfolio. History from before the \
+            automatic recording has no cash entry on purpose and only carries a `note`. With \
+            `only_problems`, the entries with `cash_pending` stay.",
         command: "portfolio.income_ledger",
         list_key: None,
         schema: schema::<IncomeLedgerInput>,
@@ -1964,7 +1974,9 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             average price after each line and the origin (brokerage note, import, agent, Yahoo \
             collection, manual). Lines with `warning` point to a split or bonus counted twice \
             (corporate action and, a few days apart, a zero-cost entry or a buy with the quantity \
-            of the new shares). Deleting an event collected from Yahoo prevents it from coming \
+            of the new shares) or to a sale larger than the position on its date (the position \
+            takes only what it had: `quantity_change` is what left and `recorded_quantity` what \
+            the trade says). Deleting an event collected from Yahoo prevents it from coming \
             back. Use it before fixing a position.",
         command: "portfolio.statement",
         list_key: Some("lines"),
@@ -2141,7 +2153,8 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             Financeiro do Participante\", e.g. Quanta Previdência): plan, CNPJ, enrollment, fees \
             and regime; each contribution (participant's, employer's extra, disability and death \
             risk insurance) with units and unit price; unit balance, unit value and participant \
-            balance, with the sums checked. App agent: the attached PDF in `attachments`; external \
+            balance, with the sums checked against the units already recorded plus the new ones \
+            (`accounted_quotas`: a statement of a few months lists only that period). App agent: the attached PDF in `attachments`; external \
             clients: `files` (base64) or the text in `text`. Says which asset receives it (the one \
             with the same CNPJ) or whether it will be created.",
         command: "pension.statement_preview",
@@ -2690,7 +2703,8 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             the sold units between purchase and sale, and `total_result`/`real_total_result` \
             add them to the price result; income tax stays on `result` (the capital gain). \
             Amounts in cents in the base currency; `real_*` is null when the index has no data \
-            for the period.",
+            for the period. A sale recorded without a cash entry counts (the statement may come \
+            later); a position adjustment (`adjustment` in `list_trades`) does not.",
         command: "portfolio.sales",
         list_key: Some("rows"),
         schema: schema::<SalesInput>,
@@ -3206,7 +3220,9 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         title: "Propose investment trade",
         description: "Proposes recording a buy or sell (quantity and price as decimal strings, \
             costs and taxes in cents). Sensitive write: the user approves one by one. Recording is \
-            not recommending: only record trades the user said they made.",
+            not recommending: only record trades the user said they made. To only align the \
+            quantity with the institution's balance, with no money moved, pass `adjustment: \
+            true` (or use the position on a date of `import_investments`).",
         command: "portfolio.create_trade",
         list_key: None,
         schema: schema::<RecordTradeInput>,
@@ -3698,8 +3714,9 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         name: "import_transactions",
         title: "Import transactions in a batch",
         description: "Imports transactions read from a statement or card statement (page, internet \
-            banking or attachment) into an account: up to 500 per call, date, amount in signed \
-            cents (negative = outflow) and description. Deduplicates like the statement import \
+            banking or attachment) into an account: `account_id`, `source` and `rows` (up to 500 \
+            per call), each with `date`, `amount` in signed cents in the account's currency \
+            (negative = outflow; a row has no currency field) and `description`. Deduplicates like the statement import \
             (same identifier, same date and amount with a similar description) and applies the \
             category rules; the report says what was left out. A single proposal for the whole \
             batch. Card: `statement_due_date` (batch or per row) puts the purchases in the \
@@ -3747,8 +3764,8 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
         name: "update_trade",
         title: "Propose changing a trade",
         description: "Proposes correcting a buy or sell (date, side, quantity, price, costs, \
-            note) or linking/unlinking its cash movement in the account (`cash_movement`). \
-            Sensitive: one-by-one approval.",
+            note), linking/unlinking its cash movement in the account (`cash_movement`) or \
+            marking it as a position adjustment (`adjustment`). Sensitive: one-by-one approval.",
         command: "portfolio.update_trade",
         list_key: None,
         schema: schema::<UpdateTradeInput>,
@@ -3959,8 +3976,10 @@ pub(crate) static TOOLS: &[ToolSpec] = &[
             correction and the bank's outstanding balance; extra prepayments are detected from the \
             jump in the balance; the future schedule then starts from the last balance, with the \
             remaining term. Use it when the user sends the image or PDF of the statement: \
-            transcribe the lines into `rows` (cents). Warn if the interest implies a different \
-            rate. Becomes a proposal.",
+            transcribe the lines into `rows` (cents). Every row is an installment already paid, with \
+            its amortization and interest: an installment still open (the contract summary with \
+            the next amount and due date) is not a row, and `paid` is the amount paid in cents, \
+            not a yes/no flag. Warn if the interest implies a different rate. Becomes a proposal.",
         command: "debt.import_statement",
         list_key: None,
         schema: schema::<LoanStatementInput>,

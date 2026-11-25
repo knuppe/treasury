@@ -6,4 +6,9 @@ export type TradePatch = { id: string, date?: string, side?: TradeSide, quantity
  * Lançar no caixa da conta: `true` cria o lançamento ligado (se não houver), `false` o
  * remove. Ausente mantém como está.
  */
-cash_movement?: boolean, };
+cash_movement?: boolean, 
+/**
+ * Mark the trade as a position adjustment (`true`) or as a real trade again (`false`). An
+ * adjustment has no cash entry: pass `cash_movement: false` with it when the trade has one.
+ */
+adjustment?: boolean, };

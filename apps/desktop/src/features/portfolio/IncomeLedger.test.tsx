@@ -4,6 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import type { IncomeLedger } from '@/api/generated/IncomeLedger';
 import { mockCall } from '@/api/mock';
+import { extraMockHandler, registerMockHandlers } from '@/api/mockRegistry';
 import { renderApp } from '@/test/renderApp';
 
 import { fixToday, quietCanvas } from './testing';
@@ -47,5 +48,52 @@ describe('income ledger', () => {
       missing.length - official.length,
     );
     expect(await screen.findByText(/Proventos oficiais entram sozinhos desde/)).toBeTruthy();
+  });
+
+  it('offers to record the credit of a distribution received without one', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime.bind(vi) });
+    // The mock ledger never leaves a credit pending: one recorded distribution is marked here.
+    const original = extraMockHandler('portfolio.income_ledger')!;
+    let credited: string[] | null = null;
+    registerMockHandlers({
+      'portfolio.income_ledger': (a) => {
+        const all = original({ ...a, only_problems: false }) as IncomeLedger;
+        const target = all.entries.find((e) => e.recorded && e.state === 'matches')!;
+        const l = original(a) as IncomeLedger;
+        const pending = credited == null;
+        const marked = { ...target, cash_pending: pending };
+        return {
+          ...l,
+          entries: l.entries.some((e) => e.key === target.key)
+            ? l.entries.map((e) => (e.key === target.key ? marked : e))
+            : pending
+              ? [marked, ...l.entries]
+              : l.entries,
+          counts: { ...l.counts, cash_pending: pending ? 1 : 0 },
+        };
+      },
+      'portfolio.income_cash': (a) => {
+        credited = a.ids as string[];
+        return { created: credited.length, change_set_id: null };
+      },
+    });
+    try {
+      renderApp('unlocked', {}, '#/carteira?aba=proventos');
+      const summary = await screen.findByRole('region', {
+        name: 'Proventos pelas fontes oficiais',
+      });
+      expect(
+        await within(summary).findByText('1 provento recebido sem o crédito na conta'),
+      ).toBeTruthy();
+      await user.click(within(summary).getByRole('button', { name: 'Lançar o crédito' }));
+      await waitFor(() => expect(credited).toHaveLength(1));
+      const ledger = (await mockCall('portfolio.income_ledger', {})) as IncomeLedger;
+      expect(ledger.counts.cash_pending).toBe(0);
+      await waitFor(() =>
+        expect(screen.queryByText('1 provento recebido sem o crédito na conta')).toBeNull(),
+      );
+    } finally {
+      registerMockHandlers({ 'portfolio.income_ledger': original });
+    }
   });
 });

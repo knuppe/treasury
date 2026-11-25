@@ -79,6 +79,11 @@ pub struct Trade {
     pub note_number: Option<String>,
     pub notes: Option<String>,
     pub import_id: Option<Id>,
+    /// Position adjustment (the quantity aligned with a reported position, no money moved): it
+    /// is not a sale or a purchase to report, and `cash_amount` is 0.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub adjustment: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -142,6 +147,11 @@ pub struct TradePatch {
     /// remove. Ausente mantém como está.
     #[ts(optional)]
     pub cash_movement: Option<bool>,
+    /// Mark the trade as a position adjustment (`true`) or as a real trade again (`false`). An
+    /// adjustment has no cash entry: pass `cash_movement: false` with it when the trade has one.
+    #[serde(default)]
+    #[ts(optional)]
+    pub adjustment: Option<bool>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, TS)]

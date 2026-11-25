@@ -1060,6 +1060,12 @@ fn open_session(api: &Api, mut db: Db) -> Result<()> {
     {
         tracing::warn!("produtos dos cupons: {e}");
     }
+    // Pension fund plans recorded before the contributions became price points: fills the gaps.
+    if !db.is_read_only()
+        && let Err(e) = crate::pension::contribution_prices(db.conn(), None)
+    {
+        tracing::warn!("pension contribution prices: {e}");
+    }
     // Rotinas ao desbloquear (ex.: gerar lançamentos previstos de recorrências).
     if let Err(e) = crate::recurrence::on_unlock(&mut db) {
         tracing::warn!("recorrências: {e}");

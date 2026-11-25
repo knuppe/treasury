@@ -1638,7 +1638,9 @@ fn fii_declared_12m(d: &Data) -> Option<(Decimal, NaiveDate)> {
         .max_by_key(|f| f.end)
         .map(|f| f.value)
         .filter(|v| *v > Decimal::ZERO)?;
-    consecutive.then(|| (four.iter().map(|f| f.value).sum::<Decimal>() / shares, last))
+    // A quarter with a negative amount (rounding residue in the report) declared nothing.
+    let declared: Decimal = four.iter().map(|f| f.value.max(Decimal::ZERO)).sum();
+    consecutive.then(|| (declared / shares, last))
 }
 
 /// Rendimento por cota de um informe mensal dentro do plausível (até

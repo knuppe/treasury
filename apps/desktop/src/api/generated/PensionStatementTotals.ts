@@ -6,10 +6,15 @@ export type PensionStatementTotals = { participant: number, employer: number, ri
  */
 quotas: string, 
 /**
+ * Units the statement accounts for: the ones already recorded in the plan plus the new rows
+ * of this statement (a statement of a few months only lists that period).
+ */
+accounted_quotas?: string, 
+/**
  * Saldo de cotas, valor e data da cota e saldo do participante, como no rodapé.
  */
 quota_balance: string | null, quota_value: string | null, quota_date: string | null, balance: number | null, 
 /**
- * Saldo pelas cotas das linhas × valor da cota.
+ * Balance from the units (the recorded ones plus the new rows) × the unit value.
  */
 computed_balance: number | null, };

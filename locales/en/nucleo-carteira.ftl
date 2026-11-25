@@ -45,6 +45,8 @@ nucleo-carteira-erro-preco = the price can't be negative
 nucleo-carteira-erro-custos = costs and taxes can't be negative
 nucleo-carteira-erro-cambio = the exchange rate must be positive
 nucleo-carteira-erro-venda-maior = sale of { $quantidade } is larger than the position of { $posicao } in this account on that date
+nucleo-carteira-erro-ajuste-com-caixa = a position adjustment does not move cash: remove the cash entry of the trade (cash_movement false)
+nucleo-carteira-erro-ajuste-importada = this trade came from the brokerage with its own identifier: it is a real trade, not a position adjustment
 nucleo-carteira-erro-desdobramento = a split needs a factor greater than 1 (e.g. 2 for 1→2)
 nucleo-carteira-erro-grupamento = a reverse split needs a factor between 0 and 1 (e.g. 0.1 for 10→1)
 nucleo-carteira-erro-bonificacao = a stock bonus needs the factor (new shares per share, e.g. 0.1 = 10%)
@@ -238,6 +240,7 @@ nucleo-carteira-extrato-herdada = Inherited position (ticker change or merger)
 nucleo-carteira-extrato-entrada-sem-custo = Zero-cost entry (split or stock bonus recorded as a buy)
 nucleo-carteira-extrato-compra = Buy
 nucleo-carteira-extrato-venda = Sell
+nucleo-carteira-extrato-ajuste = Position adjustment
 nucleo-carteira-extrato-come-cotas =
     { $cotas ->
         [one] Come-cotas: { $cotas } share redeemed for IR
@@ -425,6 +428,11 @@ nucleo-carteira-razao-nota-pagamento-estimado = no source gave the payment date:
 nucleo-carteira-razao-nota-repete = repeats the distribution paid on { $data }
 nucleo-carteira-razao-nota-data-improvavel = payment date far in the future: check the year
 nucleo-carteira-razao-nota-sem-fonte = no source describes this distribution: check your brokerage statement
+nucleo-carteira-razao-nota-sem-caixa = recorded as received, without the credit in the account: check the brokerage statement and record the credit
+nucleo-carteira-razao-nota-historico-sem-caixa = history: recorded without moving the brokerage cash
+nucleo-carteira-razao-erro-caixa-ja-lancado = this distribution already has its credit in the account
+nucleo-carteira-razao-erro-caixa-anunciado = distribution not received yet: there is no credit to record
+nucleo-carteira-razao-motivo-caixa = Credit of { $n } distribution(s) recorded in the account
 nucleo-carteira-razao-motivo-reconstruir =
     { $n ->
         [one] Distributions rebuilt from the official notices ({ $n } fix)

@@ -43,6 +43,8 @@ nucleo-carteira-erro-preco = o preço não pode ser negativo
 nucleo-carteira-erro-custos = custos e impostos não podem ser negativos
 nucleo-carteira-erro-cambio = o câmbio deve ser positivo
 nucleo-carteira-erro-venda-maior = venda de { $quantidade } maior que a posição de { $posicao } nesta conta na data
+nucleo-carteira-erro-ajuste-com-caixa = um ajuste de posição não movimenta o caixa: tire o lançamento de caixa da operação (cash_movement falso)
+nucleo-carteira-erro-ajuste-importada = esta operação veio da corretora com identificador próprio: é uma operação de verdade, não um ajuste de posição
 nucleo-carteira-erro-desdobramento = desdobramento precisa de fator maior que 1 (ex.: 2 para 1→2)
 nucleo-carteira-erro-grupamento = grupamento precisa de fator entre 0 e 1 (ex.: 0,1 para 10→1)
 nucleo-carteira-erro-bonificacao = bonificação precisa do fator (ações novas por ação, ex.: 0,1 = 10%)
@@ -238,6 +240,7 @@ nucleo-carteira-extrato-herdada = Posição herdada (troca de ticker ou incorpor
 nucleo-carteira-extrato-entrada-sem-custo = Entrada sem custo (desdobramento ou bonificação lançado como compra)
 nucleo-carteira-extrato-compra = Compra
 nucleo-carteira-extrato-venda = Venda
+nucleo-carteira-extrato-ajuste = Ajuste de posição
 nucleo-carteira-extrato-come-cotas =
     { $cotas ->
         [one] Come-cotas: { $cotas } cota resgatada para o IR
@@ -419,6 +422,11 @@ nucleo-carteira-razao-nota-pagamento-estimado = nenhuma fonte informou a data de
 nucleo-carteira-razao-nota-repete = repete o provento pago em { $data }
 nucleo-carteira-razao-nota-data-improvavel = data de pagamento muito no futuro: confira se o ano foi digitado certo
 nucleo-carteira-razao-nota-sem-fonte = nenhuma fonte descreve este provento: confira no extrato da corretora
+nucleo-carteira-razao-nota-sem-caixa = lançado como recebido, sem o crédito na conta: confira no extrato da corretora e lance o crédito
+nucleo-carteira-razao-nota-historico-sem-caixa = histórico: lançado sem movimentar o caixa da corretora
+nucleo-carteira-razao-erro-caixa-ja-lancado = este provento já tem o crédito na conta
+nucleo-carteira-razao-erro-caixa-anunciado = provento ainda não recebido: não há crédito para lançar
+nucleo-carteira-razao-motivo-caixa = Crédito de { $n } provento(s) lançado na conta
 nucleo-carteira-razao-motivo-reconstruir =
     { $n ->
         [one] Proventos reconstruídos pelos avisos oficiais ({ $n } correção)

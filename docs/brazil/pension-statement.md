@@ -19,9 +19,11 @@ proposal). Core in `crates/treasury-core/src/pension/statement.rs`; commands
 - **Line type**: retirement > 0 is a contribution (the participant's, if the description says
   monthly; otherwise an extra one from the employer); only disability or only survivor pension
   are risk insurance.
-- **Footer**: share balance, share value and date, and the participant's balance. The preview
-  checks the sum of the shares against the share balance, and the balance by shares against the
-  statement's balance, and warns if they do not match.
+- **Footer**: share balance, share value and date, and the participant's balance. The balance is
+  the whole position and the rows may be only a period (a statement of the last months), so the
+  preview checks the shares already recorded in the plan plus the new rows against the share
+  balance, and the balance by those shares against the statement's balance, and warns if they do
+  not match (an earlier period or a row may be missing).
 
 ## What is saved
 
@@ -31,6 +33,11 @@ proposal). Core in `crates/treasury-core/src/pension/statement.rs`; commands
 - Each contribution becomes a share purchase in the chosen account (without touching cash), by
   the payment date and the share price (retirement ÷ shares), with external id
   `prev:<competência>:<pagamento>:<tipo>:<valor>:<cotas>`: importing again does not duplicate.
-- The share value of each contribution and that of the statement become quotes of the asset.
+- The share value of each contribution and that of the statement become quotes of the asset (the
+  statement's on its date or, when the date is not printed, on the day of the import).
+- A pension fund plan has no public quote, so the share value of every contribution is a quote on
+  its date however it was recorded (statement, typed, by the agent), where the day has none;
+  plans recorded before this get those quotes when the vault is opened. Without a newer balance or
+  statement the plan is worth the last one, and after 90 days it asks for the balance.
 - Risk insurance (disability and death) is a cost, not shares: it becomes an expense (Insurance ›
   Life insurance) only if an account is chosen.

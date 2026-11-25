@@ -257,10 +257,37 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
             }))
         }
         "create_trade" => {
-            let t: TradeInput = parse_args(args)?;
+            // `adjustment`: the trade only aligns the quantity with what the institution shows
+            // (no money moved): recorded without cash and marked, so it is not a sale to report.
+            #[derive(Deserialize)]
+            struct A {
+                #[serde(flatten)]
+                trade: TradeInput,
+                #[serde(default)]
+                adjustment: Option<bool>,
+            }
+            let A {
+                trade: mut t,
+                adjustment,
+            } = parse_args(args)?;
+            let adjustment = adjustment.unwrap_or(false);
+            if adjustment {
+                if t.cash_movement == Some(true) {
+                    return Err(Error::invalid(i18n::t(
+                        "nucleo-carteira-erro-ajuste-com-caixa",
+                    )));
+                }
+                t.cash_movement = Some(false);
+            }
             let r = ctx.write(
                 &i18n::t("nucleo-carteira-motivo-operacao-registrada"),
-                |tx| records::create_trade(tx, &t),
+                |tx| {
+                    let id = records::create_trade(tx, &t)?;
+                    if adjustment {
+                        records::set_adjustment(tx, &id, true)?;
+                    }
+                    Ok(id)
+                },
             )?;
             to_value(records::get_trade(ctx.conn(), &r.value)?)
         }
@@ -480,6 +507,33 @@ pub fn handle(ctx: &mut Ctx<'_>, action: &str, args: Value) -> Result<Value> {
                 "status": "applied",
                 "change_set_id": r.change_set_id,
                 "report": r.value,
+            }))
+        }
+        // The credit of distributions recorded as received without a cash entry (the ledger's
+        // `cash_pending`), in one change set.
+        "income_cash" => {
+            #[derive(Deserialize)]
+            struct A {
+                ids: Vec<Id>,
+            }
+            let a: A = parse_args(args)?;
+            income_ledger::ensure_user(ctx)?;
+            if a.ids.is_empty() {
+                return Err(Error::invalid(t("nucleo-carteira-erro-sem-proventos")));
+            }
+            let reason = crate::i18n::t_args(
+                "nucleo-carteira-razao-motivo-caixa",
+                &i18n::args(&[("n", (a.ids.len() as i64).into())]),
+            );
+            let r = ctx.write(&reason, |tx| {
+                for id in &a.ids {
+                    records::add_income_cash(tx, id)?;
+                }
+                Ok(())
+            })?;
+            Ok(serde_json::json!({
+                "created": a.ids.len(),
+                "change_set_id": r.change_set_id,
             }))
         }
         "delete_income" => {

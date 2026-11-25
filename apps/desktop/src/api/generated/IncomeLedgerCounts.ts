@@ -8,4 +8,8 @@ fixes: number,
 /**
  * Missing entries without an official source (they wait for the family's confirmation).
  */
-unofficial_missing: number, };
+unofficial_missing: number, 
+/**
+ * Recorded as received without a cash entry in the account (after the history cut).
+ */
+cash_pending: number, };

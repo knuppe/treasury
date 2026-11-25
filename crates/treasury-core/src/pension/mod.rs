@@ -694,6 +694,33 @@ pub fn simulate_withdrawal(
     Ok(simulate(&lots, price, plan.as_ref(), w.amount, at))
 }
 
+/// Unit value of each contribution of a pension fund plan (EFPC) as a price point on its date,
+/// where there is none: such a plan has no public quote, and the contribution itself says what
+/// the unit was worth that day. Without it the position stays valued at cost. Only fills gaps
+/// (a balance or a statement of the same day wins). Returns how many points were added.
+pub fn contribution_prices(conn: &Connection, asset_id: Option<&str>) -> Result<usize> {
+    let assets: Vec<String> = conn
+        .prepare("SELECT id FROM asset WHERE class = 'pension' AND (?1 IS NULL OR id = ?1)")?
+        .query_map([asset_id], |r| r.get(0))?
+        .collect::<rusqlite::Result<_>>()?;
+    let mut n = 0;
+    for id in assets {
+        if !is_efpc(conn, &id)? {
+            continue;
+        }
+        n += conn.execute(
+            "INSERT INTO price (asset_id, date, close, source, fetched_at)
+             SELECT t.asset_id, t.date, MAX(t.price), 'manual', ?2
+               FROM trade t
+              WHERE t.asset_id = ?1 AND t.side = 'buy' AND CAST(t.price AS REAL) > 0
+                AND NOT EXISTS (SELECT 1 FROM price p WHERE p.asset_id = t.asset_id AND p.date = t.date)
+              GROUP BY t.asset_id, t.date",
+            rusqlite::params![id, crate::time::now_utc()],
+        )?;
+    }
+    Ok(n)
+}
+
 /// Saldo informado de um plano numa data (o que a seguradora ou o fundo de pensão mostra):
 /// vira a cota do dia (saldo ÷ cotas), para planos sem cota pública, como a previdência
 /// fechada. O rendimento fica sendo o saldo menos os aportes. Devolve a cota gravada.

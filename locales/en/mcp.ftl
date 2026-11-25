@@ -145,6 +145,7 @@ mcp-valida-valores-absolutos = `amount_min` and `amount_max` are absolute values
 mcp-valida-minimo-maior = `amount_min` can't be greater than `amount_max`
 mcp-valida-row-id = `row_id` requires `table_name`
 mcp-valida-rows-1-500 = `rows`: 1 to 500 transactions per call
+mcp-valida-ajuste-sem-caixa = `adjustment` and `cash_movement` cannot both be true: a position adjustment does not move cash
 mcp-valida-rows-vazio = provide at least one row in `rows`
 mcp-valida-notas-files = provide the notes in `files` (or the message's attachments)
 mcp-valida-notas-max = at most 50 notes per call

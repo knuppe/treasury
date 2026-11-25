@@ -626,6 +626,22 @@ fn fii_dy_sources_and_vacancy() {
             .unwrap()
             .contains("trimestrais")
     );
+    // Quarters that declare nothing, one of them with a negative residue: the yield is zero,
+    // never negative (feedback 01a20a8b, "dy = -0.0000").
+    let mut none = q.clone();
+    for f in none
+        .facts
+        .iter_mut()
+        .filter(|f| f.item == items::FII_DECLARED_INCOME)
+    {
+        f.value = if f.end == d("2026-06-30") {
+            dec!(-0.001)
+        } else {
+            Decimal::ZERO
+        };
+    }
+    let v = compute(&none, BazinParams::default());
+    assert_eq!(ind(&v, "dy").value, Some(0.0));
     // Missing a quarter in the middle: goes back to the monthly reports.
     q.facts
         .retain(|f| !(f.item == items::FII_DECLARED_INCOME && f.end == d("2025-12-31")));

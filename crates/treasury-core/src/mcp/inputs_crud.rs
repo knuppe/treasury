@@ -140,6 +140,10 @@ pub struct UpdateTradeInput {
     /// none), `false` removes it. Omit to keep it as is. Before `true`, check that the
     /// brokerage statement did not already bring that debit or credit (it would count twice).
     pub cash_movement: Option<bool>,
+    /// `true` marks the trade as a position adjustment (no money moved: out of the sales
+    /// ledger, no cash effect), `false` makes it a real trade again. A trade with a cash entry
+    /// needs `cash_movement: false` in the same call.
+    pub adjustment: Option<bool>,
 }
 
 impl ToolInput for UpdateTradeInput {

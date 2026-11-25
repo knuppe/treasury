@@ -384,6 +384,7 @@ carteira-calculando-alocacao = Calculando alocação
 
 carteira-compra = Compra
 carteira-venda = Venda
+carteira-ajuste-de-posicao = Ajuste de posição
 carteira-compras = Compras
 carteira-vendas = Vendas
 carteira-compra-de = Compra de { $qtd } { $ativo } em { $data }
@@ -1219,6 +1220,17 @@ carteira-razao-estado-valor = Valor diferente
 carteira-razao-estado-ir = IR diferente
 carteira-razao-estado-repetido = Repetido
 carteira-razao-estado-sem-fonte = Sem fonte
+carteira-razao-estado-sem-credito = Sem crédito na conta
+carteira-razao-sem-credito = { $n ->
+    [1] 1 provento recebido sem o crédito na conta
+   *[other] { $n } proventos recebidos sem o crédito na conta
+}
+carteira-razao-sem-credito-texto = O provento está lançado, mas o dinheiro não entrou no saldo da corretora aqui no app. Confira no extrato da corretora: se o crédito caiu, lance-o. Se o extrato que você importa já traz esse crédito, não precisa.
+carteira-razao-lancar-credito = Lançar o crédito
+carteira-razao-credito-lancado = { $n ->
+    [1] Crédito de 1 provento lançado na conta
+   *[other] Crédito de { $n } proventos lançado na conta
+}
 carteira-razao-tabela = Proventos, um por pagamento
 carteira-razao-ativos-tabela = Proventos por ativo desde a compra
 carteira-razao-col-data-com = Data-com

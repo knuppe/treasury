@@ -448,7 +448,9 @@ pub fn sales(conn: &Connection, args: &SalesArgs) -> Result<SalesReport> {
             }
             pool.retain(|p| !p.1.is_zero());
             let out = take(&mut layers, s);
-            let wanted = from.is_none_or(|f| s.date >= f)
+            // A position adjustment leaves the position like a sale and is not one to report.
+            let wanted = !t.adjustment
+                && from.is_none_or(|f| s.date >= f)
                 && args
                     .account_ids
                     .as_ref()

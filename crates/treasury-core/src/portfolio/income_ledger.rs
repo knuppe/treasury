@@ -19,6 +19,12 @@
 //!   B3 statement, whose credited amount wins); `missing` (record it); `duplicate` (delete it);
 //!   `upcoming` (paid after today); `unexpected` (nothing to propose).
 //!
+//! - **Cash**: a record made as received without a cash entry in the account did not move the
+//!   brokerage balance. Paid after the history cut (the start of the automatic recording, or the
+//!   last [`CASH_PENDING_DAYS`] days while it is off), it is `cash_pending`: the amounts may match
+//!   the source and the credit still has to be checked in the statement. Older ones are history,
+//!   recorded without cash on purpose, and only carry a note.
+//!
 //! Totals count, per payment month and in the family's base currency, the expected amount of the
 //! paid distributions (the recorded one when it came from the B3 statement or nothing official
 //! describes it), so they show what the family received even before the fixes are applied.
@@ -53,6 +59,9 @@ const IMPLAUSIBLE_DAYS: i64 = 400;
 const PAY_WINDOW_DAYS: i64 = 90;
 /// Amount difference treated as the custodian's rounding, in the smallest unit.
 const ROUNDING: i64 = 1;
+/// With the automatic recording off, a record without a cash entry paid up to this many days ago
+/// still waits for its credit; older ones are history.
+const CASH_PENDING_DAYS: i64 = 90;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AutoState {
@@ -163,6 +172,10 @@ pub struct LedgerEntry {
     /// Upcoming amount (base currency).
     #[ts(type = "number")]
     pub upcoming_base: i64,
+    /// Recorded as received without a cash entry in the account, paid after the history cut: the
+    /// amounts may match the source, and the credit is still to be checked in the statement
+    /// (`portfolio.income_cash` records it).
+    pub cash_pending: bool,
 }
 
 impl LedgerEntry {
@@ -174,6 +187,20 @@ impl LedgerEntry {
             .or(self.ex_date.as_deref())
             .or(self.recorded.as_ref().map(|r| r.pay_date.as_str()))?;
         Some(d.get(..7)?.to_string())
+    }
+
+    /// A record that no source describes, dated outside what a payment can be (a typo in the
+    /// year): too far ahead of `today`, or before any record the app accepts.
+    fn implausible(&self, today: NaiveDate) -> bool {
+        self.expected_net.is_none()
+            && self
+                .recorded
+                .as_ref()
+                .and_then(|r| d(&r.pay_date))
+                .is_some_and(|p| {
+                    (p - today).num_days() > IMPLAUSIBLE_DAYS
+                        || p.year() < crate::time::MIN_RECORD_YEAR
+                })
     }
 }
 
@@ -223,6 +250,8 @@ pub struct Counts {
     pub fixes: u32,
     /// Missing entries without an official source (they wait for the family's confirmation).
     pub unofficial_missing: u32,
+    /// Recorded as received without a cash entry in the account (after the history cut).
+    pub cash_pending: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -456,6 +485,34 @@ fn br(d: &str) -> String {
     parse_date(d).map_or_else(|_| d.to_string(), |x| i18n::date(i18n::current(), x))
 }
 
+/// First payment date whose record without a cash entry still waits for the credit: the start
+/// of the automatic recording (what came before is history, recorded without cash on purpose)
+/// or, with it off, the last [`CASH_PENDING_DAYS`] days.
+fn cash_cut(conn: &Connection, today: NaiveDate) -> Result<NaiveDate> {
+    Ok(match auto_state(conn)? {
+        Some(a) => parse_date(&a.since)? - chrono::Duration::days(HISTORY_GRACE_DAYS),
+        None => today - chrono::Duration::days(CASH_PENDING_DAYS),
+    })
+}
+
+/// Cash of a recorded distribution: `(cash_pending, note)`. A typo in the payment date and a
+/// repeated record have their own note and wait for nothing.
+fn cash_of(r: &Recorded, state: EntryState, cut: NaiveDate) -> (bool, Option<String>) {
+    if r.cash || r.status != IncomeStatus::Received || state == EntryState::Duplicate {
+        return (false, None);
+    }
+    match d(&r.pay_date) {
+        Some(p) if p >= cut => (
+            true,
+            Some(note("nucleo-carteira-razao-nota-sem-caixa", &[])),
+        ),
+        _ => (
+            false,
+            Some(note("nucleo-carteira-razao-nota-historico-sem-caixa", &[])),
+        ),
+    }
+}
+
 /// Builds the ledger of one asset in one account.
 #[allow(clippy::too_many_arguments)]
 fn ledger_of(
@@ -464,6 +521,7 @@ fn ledger_of(
     account: &str,
     cands: &[&Candidate],
     today: NaiveDate,
+    cut: NaiveDate,
     base: &str,
     out: &mut Vec<LedgerEntry>,
 ) -> Result<Option<NaiveDate>> {
@@ -538,6 +596,10 @@ fn ledger_of(
             (c.pay_date.is_none() && state != EntryState::Upcoming)
                 .then(|| note("nucleo-carteira-razao-nota-pagamento-estimado", &[]))
         });
+        let (cash_pending, cash_note) = rec
+            .as_ref()
+            .map_or((false, None), |r| cash_of(r, state, cut));
+        let note_text = note_text.or(cash_note);
         let upcoming = if state == EntryState::Upcoming {
             e.net()
         } else {
@@ -568,6 +630,7 @@ fn ledger_of(
             note: note_text,
             net_base: base_of(conn, &ccy, paid_on, counted, base)?,
             upcoming_base: base_of(conn, &ccy, paid_on, upcoming, base)?,
+            cash_pending,
         });
     }
     // Records that pair with nothing expected: a repetition of a paired payment, or unexpected.
@@ -608,6 +671,8 @@ fn ledger_of(
             ),
         };
         let on = d(&r.pay_date).unwrap_or(today);
+        // The typo and the repetition keep their own note; nothing waits for their credit.
+        let cash_pending = !typo && cash_of(r, state, cut).0;
         out.push(LedgerEntry {
             key: format!("rec:{}", r.id),
             asset: brief.clone(),
@@ -633,6 +698,7 @@ fn ledger_of(
             note: note_text,
             net_base: base_of(conn, &ccy, on.min(today), counted, base)?,
             upcoming_base: 0,
+            cash_pending,
         });
     }
     Ok(timeline.first())
@@ -667,6 +733,7 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
     for c in &all {
         by_asset.entry(c.asset_id.as_str()).or_default().push(c);
     }
+    let cut = cash_cut(conn, today)?;
     let mut entries: Vec<LedgerEntry> = vec![];
     let mut first_dates: HashMap<String, NaiveDate> = HashMap::new();
     for asset_id in &assets {
@@ -687,7 +754,8 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
         }
         for acc in accounts {
             let book = load_book(conn, asset_id, Some(std::slice::from_ref(&acc)))?;
-            if let Some(f) = ledger_of(conn, &book, &acc, &cands, today, &base, &mut entries)? {
+            if let Some(f) = ledger_of(conn, &book, &acc, &cands, today, cut, &base, &mut entries)?
+            {
                 first_dates
                     .entry(asset_id.clone())
                     .and_modify(|x| *x = (*x).min(f))
@@ -731,6 +799,9 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
         if e.fix.is_some() && (e.official || e.state != EntryState::Missing) {
             counts.fixes += 1;
         }
+        if e.cash_pending {
+            counts.cash_pending += 1;
+        }
         let rec_base = match &e.recorded {
             Some(r) if r.status == IncomeStatus::Received => {
                 let on = parse_date(&r.pay_date).unwrap_or(today).min(today);
@@ -743,9 +814,29 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
         recorded_total += rec_base;
         let Some(month) = e.month() else { continue };
         let year = month[..4].to_string();
-        for (map, key) in [(&mut years, year.clone()), (&mut months, month.clone())] {
-            let p = map.entry(key.clone()).or_insert_with(|| PeriodTotal {
-                period: key,
+        // A record with an implausible payment date (a typo in the year) counts nothing and
+        // must not open a year or a month of its own.
+        let dated = !e.implausible(today);
+        if dated {
+            for (map, key) in [(&mut years, year.clone()), (&mut months, month.clone())] {
+                let p = map.entry(key.clone()).or_insert_with(|| PeriodTotal {
+                    period: key,
+                    ..Default::default()
+                });
+                p.received_base += e.net_base;
+                p.upcoming_base += e.upcoming_base;
+                p.recorded_base += rec_base;
+                if e.net_base != 0 || e.upcoming_base != 0 {
+                    p.count += 1;
+                }
+            }
+        }
+        let a = per_asset
+            .entry(e.asset.id.clone())
+            .or_insert_with(|| (e.asset.clone(), BTreeMap::new(), 0));
+        if dated {
+            let p = a.1.entry(year.clone()).or_insert_with(|| PeriodTotal {
+                period: year,
                 ..Default::default()
             });
             p.received_base += e.net_base;
@@ -754,19 +845,6 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
             if e.net_base != 0 || e.upcoming_base != 0 {
                 p.count += 1;
             }
-        }
-        let a = per_asset
-            .entry(e.asset.id.clone())
-            .or_insert_with(|| (e.asset.clone(), BTreeMap::new(), 0));
-        let p = a.1.entry(year.clone()).or_insert_with(|| PeriodTotal {
-            period: year,
-            ..Default::default()
-        });
-        p.received_base += e.net_base;
-        p.upcoming_base += e.upcoming_base;
-        p.recorded_base += rec_base;
-        if e.net_base != 0 || e.upcoming_base != 0 {
-            p.count += 1;
         }
         // Everything to check, including distributions without an official notice.
         if e.fix.is_some() {
@@ -801,7 +879,7 @@ pub fn build_on(conn: &Connection, args: &LedgerArgs, today: NaiveDate) -> Resul
             .then(a.key.cmp(&b.key))
     });
     if args.only_problems.unwrap_or(false) {
-        entries.retain(|e| e.state != EntryState::Matches);
+        entries.retain(|e| e.state != EntryState::Matches || e.cash_pending);
     }
     let auto = auto_state(conn)?;
     Ok(Ledger {

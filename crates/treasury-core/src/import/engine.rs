@@ -873,6 +873,17 @@ fn dedupe(
         "SELECT id, description FROM txn WHERE account_id = ?1 AND date = ?2 AND amount = ?3 AND status <> 'planned'
           ORDER BY created_at, id",
     )?;
+    // The cash entry the app created for a portfolio operation (the sale or purchase of an asset,
+    // a distribution received): the statement brings the same money under the bank's own text
+    // ("Resgate RDB"), so the descriptions never look alike.
+    let mut by_operation = conn.prepare_cached(
+        "SELECT t.id, t.description FROM txn t
+          WHERE t.account_id = ?1 AND t.date = ?2 AND t.amount = ?3 AND t.status <> 'planned'
+            AND t.external_id IS NULL
+            AND (EXISTS (SELECT 1 FROM trade tr WHERE tr.txn_id = t.id)
+              OR EXISTS (SELECT 1 FROM income_event ie WHERE ie.txn_id = t.id))
+          ORDER BY t.created_at, t.id",
+    )?;
     for r in rows.iter_mut().filter(|r| r.status == RowStatus::New) {
         let (Some(date), Some(amount)) = (r.date.as_deref(), r.amount) else {
             continue;
@@ -898,6 +909,24 @@ fn dedupe(
             r.status = RowStatus::PossibleDuplicate;
             r.duplicate_of = Some(id);
             r.note = Some(t("nucleo-importacao-nota-possivel-duplicado"));
+            continue;
+        }
+        let operations: Vec<(Id, String)> = by_operation
+            .query_map(params![account_id, date, amount], |x| {
+                Ok((x.get(0)?, x.get(1)?))
+            })?
+            .collect::<rusqlite::Result<_>>()?;
+        if let Some((id, description)) = operations
+            .into_iter()
+            .find(|(id, _)| !consumed.contains(id))
+        {
+            consumed.insert(id.clone());
+            r.status = RowStatus::PossibleDuplicate;
+            r.duplicate_of = Some(id);
+            r.note = Some(t_args(
+                "nucleo-importacao-nota-caixa-de-operacao",
+                &args(&[("descricao", description.into())]),
+            ));
         }
     }
     Ok(())
@@ -1048,6 +1077,20 @@ fn build_rows(
     parsed: &mut Parsed,
     account_kind: AccountKind,
 ) -> Result<Vec<PendingRow>> {
+    // A valid calendar date outside the plausible range (a typo in the year) is a row error:
+    // it would be refused when recorded.
+    let today = crate::time::today_local();
+    for r in parsed.rows.iter_mut().filter(|r| r.error.is_none()) {
+        if let Some(date) = &r.date
+            && crate::time::parse_date(date)
+                .is_ok_and(|d| !crate::time::plausible_record_date(d, today))
+        {
+            r.error = Some(t_args(
+                "nucleo-base-erro-data-improvavel",
+                &args(&[("valor", date.clone().into())]),
+            ));
+        }
+    }
     let classified = classify(&mut parsed.rows, account_kind, &mut parsed.warnings);
     let mut rows: Vec<PreviewRow> = parsed
         .rows

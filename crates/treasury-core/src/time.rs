@@ -23,6 +23,32 @@ pub fn parse_date(s: &str) -> Result<NaiveDate> {
     })
 }
 
+/// Oldest year a record (transaction, trade, corporate action, distribution) may carry.
+pub const MIN_RECORD_YEAR: i32 = 1900;
+/// How far ahead of today a record may be dated, in years: room for installments and announced
+/// payments, not for a mistyped year (2926 for 2026).
+pub const MAX_RECORD_YEARS_AHEAD: i32 = 10;
+
+/// Whether a record may carry `d`: from [`MIN_RECORD_YEAR`] to [`MAX_RECORD_YEARS_AHEAD`] years
+/// after `today`.
+pub fn plausible_record_date(d: NaiveDate, today: NaiveDate) -> bool {
+    d.year() >= MIN_RECORD_YEAR && d <= add_months(today, 12 * MAX_RECORD_YEARS_AHEAD)
+}
+
+/// [`parse_date`] for a date about to be recorded: a valid calendar date outside the plausible
+/// range (a typo in the century) is refused too. Dates only read (filters, simulations, contract
+/// terms) keep using [`parse_date`].
+pub fn parse_record_date(s: &str) -> Result<NaiveDate> {
+    let d = parse_date(s)?;
+    if !plausible_record_date(d, today_local()) {
+        return Err(Error::invalid(t_args(
+            "nucleo-base-erro-data-improvavel",
+            &args(&[("valor", s.to_string().into())]),
+        )));
+    }
+    Ok(d)
+}
+
 pub fn fmt_date(d: NaiveDate) -> String {
     d.format("%Y-%m-%d").to_string()
 }
@@ -116,6 +142,28 @@ mod tests {
         assert_eq!(month, "invalid month (use YYYY-MM): 2026-13");
         assert_eq!(amount, "invalid amount: abc");
         assert_eq!(parse_date("x").unwrap_err().message(), "data inválida: x");
+    }
+
+    #[test]
+    fn record_dates_stay_in_a_plausible_range() {
+        let today = parse_date("2026-11-24").unwrap();
+        let ok = |s: &str| plausible_record_date(parse_date(s).unwrap(), today);
+        assert!(ok("1900-01-01"));
+        assert!(ok("2026-11-24"));
+        // Installments and announced payments a few years ahead.
+        assert!(ok("2036-11-24"));
+        // A typo in the year.
+        assert!(!ok("2036-11-25"));
+        assert!(!ok("2926-03-19"));
+        assert!(!ok("1026-03-19"));
+        assert!(!ok("0206-03-19"));
+        let e = parse_record_date("2926-03-19").unwrap_err().message();
+        assert_eq!(
+            e,
+            "data fora do intervalo aceito: 2926-03-19 (confira o ano)"
+        );
+        assert!(parse_record_date("19/03/2026").is_err());
+        assert!(parse_record_date(&fmt_date(today_local())).is_ok());
     }
 
     #[test]

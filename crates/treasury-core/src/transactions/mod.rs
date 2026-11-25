@@ -770,7 +770,7 @@ pub fn reinherit_one(tx: &Transaction<'_>, txn_id: &str) -> Result<()> {
 /// Insere um lançamento (sem passar por regras). Calcula `fingerprint` e, para
 /// contas de cartão, associa a fatura pela data da compra quando `statement_id` vier vazio.
 pub fn insert(tx: &Transaction<'_>, t: &NewTxn) -> Result<Id> {
-    crate::time::parse_date(&t.date)?;
+    crate::time::parse_record_date(&t.date)?;
     let id = new_id();
     let now = now_utc();
     let statement_id = match &t.statement_id {

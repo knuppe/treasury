@@ -511,12 +511,20 @@ pub struct RecordTradeInput {
     pub notes: Option<String>,
     /// Post the movement to the brokerage's cash balance (default: yes).
     pub cash_movement: Option<bool>,
+    /// `true` when the trade only aligns the recorded quantity with what the institution shows
+    /// and no money moved (not a real purchase or sale): it is recorded without cash, marked as
+    /// a position adjustment and left out of the sales ledger. A real sale whose money is not in
+    /// the statement yet is NOT an adjustment: use `cash_movement: false` alone.
+    pub adjustment: Option<bool>,
 }
 
 impl ToolInput for RecordTradeInput {
     fn to_api_args(&self) -> Result<Value, String> {
         check_non_empty("asset_id", &self.asset_id)?;
         check_non_empty("account_id", &self.account_id)?;
+        if self.adjustment == Some(true) && self.cash_movement == Some(true) {
+            return Err(tx("mcp-valida-ajuste-sem-caixa"));
+        }
         check_date("date", &Some(self.date.clone()))?;
         check_decimal("quantity", &self.quantity)?;
         check_decimal("price", &self.price)?;
@@ -796,6 +804,7 @@ mod tests {
             note_number: None,
             notes: None,
             cash_movement: None,
+            adjustment: None,
         };
         let _: crate::portfolio::TradeInput =
             serde_json::from_value(tr.to_api_args().unwrap()).unwrap();

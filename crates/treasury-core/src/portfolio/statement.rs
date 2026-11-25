@@ -54,6 +54,11 @@ pub struct StatementLine {
     pub notes: Option<String>,
     /// Aviso desta linha (ex.: desdobramento possivelmente contado duas vezes).
     pub warning: Option<String>,
+    /// Quantity of the trade as recorded, only when the position could not cover it (a sale
+    /// larger than the position): `quantity_change` then shows what was actually taken out.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub recorded_quantity: Option<String>,
 }
 
 fn kind_name(k: CorporateActionKind) -> &'static str {
@@ -234,7 +239,8 @@ pub fn statement(conn: &Connection, args: &StatementArgs) -> Result<Vec<Statemen
         let st = replay(conn, &book.prefix(ti, ai, date), date)?;
         let qty = st.quantity();
         let avg = (!qty.is_zero()).then(|| (st.cost() / qty).round_dp(6).normalize().to_string());
-        let change = (qty - prev_qty).normalize().to_string();
+        let applied = qty - prev_qty;
+        let change = applied.normalize().to_string();
         prev_qty = qty;
         let mut l = StatementLine {
             date: fmt_date(date),
@@ -250,6 +256,7 @@ pub fn statement(conn: &Connection, args: &StatementArgs) -> Result<Vec<Statemen
             action_id: None,
             notes: None,
             warning: None,
+            recorded_quantity: None,
         };
         match line {
             Some(true) => {
@@ -262,6 +269,7 @@ pub fn statement(conn: &Connection, args: &StatementArgs) -> Result<Vec<Statemen
                 }
                 .into();
                 l.label = i18n::t(match (tr.side, tr.price.is_zero()) {
+                    _ if tr.adjustment => "nucleo-carteira-extrato-ajuste",
                     (TradeSide::Buy, true) => "nucleo-carteira-extrato-entrada-sem-custo",
                     (TradeSide::Buy, false) => "nucleo-carteira-extrato-compra",
                     (TradeSide::Sell, _) => "nucleo-carteira-extrato-venda",
@@ -278,6 +286,15 @@ pub fn statement(conn: &Connection, args: &StatementArgs) -> Result<Vec<Statemen
                     && split_dates.iter().any(|d| days_apart(*d, tr.date) <= 10)
                 {
                     l.warning = Some(double.clone());
+                }
+                // The engine caps a sale at the position and warns in the portfolio; the
+                // statement repeats that warning on the line and keeps the recorded quantity.
+                if tr.side == TradeSide::Sell && tr.qty > -applied {
+                    l.warning = Some(t_args(
+                        "nucleo-carteira-aviso-venda-maior",
+                        &i18n::args(&[("data", fmt_date(tr.date).into())]),
+                    ));
+                    l.recorded_quantity = Some((-tr.qty).normalize().to_string());
                 }
             }
             Some(false) => {
@@ -438,6 +455,66 @@ mod tests {
         assert_eq!(l[0]["average_price_after"], "120");
         assert_eq!(l[2]["origin"], "manual");
         assert!(l[3]["warning"].is_null());
+    }
+
+    #[test]
+    fn sale_larger_than_the_position_keeps_the_warning_and_the_recorded_quantity() {
+        let dir = tempfile::tempdir().unwrap();
+        let api = Api::new(TreasuryPaths::with_root(dir.path().join(".t")).unwrap()).unwrap();
+        api.call(
+            "vault.create",
+            json!({"password": "senha-mestra-forte", "household_name": "C"}),
+        )
+        .unwrap();
+        let acc = api
+            .call(
+                "accounts.create",
+                json!({"name": "Corretora", "kind": "brokerage"}),
+            )
+            .unwrap()["id"]
+            .clone();
+        let a = api
+            .call(
+                "assets.create",
+                json!({"ticker": "ABCD3", "name": "Empresa de teste", "class": "stock_br"}),
+            )
+            .unwrap()["id"]
+            .clone();
+        let trade = |date: &str, side: &str, q: &str| {
+            api.call(
+                "portfolio.create_trade",
+                json!({"asset_id": a, "account_id": acc, "date": date, "side": side,
+                       "quantity": q, "price": "10", "cash_movement": false}),
+            )
+            .unwrap()["id"]
+                .clone()
+        };
+        trade("2024-01-02", "buy", "300");
+        let later_removed = trade("2024-01-03", "buy", "700");
+        trade("2024-02-01", "sell", "100");
+        trade("2024-03-01", "sell", "800");
+        // The purchase that covered the second sale goes away (as when a brokerage note is
+        // imported before the older history): the sale is now larger than the position.
+        api.call("portfolio.delete_trade", json!({"id": later_removed}))
+            .unwrap();
+        let lines = api
+            .call("portfolio.statement", json!({"asset_id": a}))
+            .unwrap();
+        let l = lines.as_array().unwrap();
+        // A sale the position covers: no warning, no extra field.
+        assert!(l[1]["warning"].is_null(), "{lines}");
+        assert!(l[1].get("recorded_quantity").is_none(), "{lines}");
+        // The oversold one: capped in the position, flagged, recorded quantity kept.
+        assert_eq!(l[2]["quantity_change"], "-200");
+        assert_eq!(l[2]["quantity_after"], "0");
+        assert_eq!(l[2]["recorded_quantity"], "-800");
+        let warning = l[2]["warning"].as_str().unwrap();
+        assert!(warning.contains("venda maior que a posição"), "{warning}");
+        // Same text the portfolio shows for the closed position.
+        let pf = api
+            .call("portfolio.summary", json!({"include_closed": true}))
+            .unwrap();
+        assert!(pf.to_string().contains(warning), "{pf}");
     }
 
     #[test]

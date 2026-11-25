@@ -291,7 +291,18 @@ export function AssetStatement({
                   key: 'change',
                   header: t('ativos-qtd'),
                   numeric: true,
-                  cell: (l: StatementLine) => <Private>{signed(l.quantity_change)}</Private>,
+                  cell: (l: StatementLine) => (
+                    <Private>
+                      {signed(l.quantity_change)}
+                      {l.recorded_quantity ? (
+                        <span className="ml-1 text-[11px] text-warning">
+                          {t('ativos-extrato-qtd-registrada', {
+                            qtd: formatQuantity(String(Math.abs(Number(l.recorded_quantity)))),
+                          })}
+                        </span>
+                      ) : null}
+                    </Private>
+                  ),
                 },
                 {
                   key: 'price',

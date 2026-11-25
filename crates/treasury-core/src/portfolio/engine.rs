@@ -38,6 +38,9 @@ pub(crate) struct TradeRow {
     /// IRRF retido ("dedo-duro"), unidade maior.
     pub(crate) irrf: Decimal,
     pub(crate) fx: Option<Decimal>,
+    /// Position adjustment ([`super::records::is_position_adjustment`]): it moves the quantity
+    /// and the cost like any trade, and stays out of the sales book.
+    pub(crate) adjustment: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -144,7 +147,7 @@ fn load_trades(
     before: Option<NaiveDate>,
 ) -> Result<Vec<TradeRow>> {
     let mut stmt = conn.prepare(
-        "SELECT account_id, date, side, quantity, price, fees, taxes, currency, fx_rate, id
+        "SELECT account_id, date, side, quantity, price, fees, taxes, currency, fx_rate, id, external_id
          FROM trade WHERE asset_id = ?1 ORDER BY date, created_at",
     )?;
     let mut rows = stmt.query([asset_id])?;
@@ -175,6 +178,9 @@ fn load_trades(
             fees: from_minor(fees, &cur),
             irrf: from_minor(taxes, &cur),
             fx: parse_opt(r.get(8)?, "nucleo-carteira-campo-cambio")?,
+            adjustment: super::records::is_position_adjustment(
+                r.get::<_, Option<String>>(10)?.as_deref(),
+            ),
         });
     }
     Ok(out)

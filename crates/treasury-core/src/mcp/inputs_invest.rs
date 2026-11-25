@@ -925,7 +925,8 @@ impl ToolInput for LoanLinkInput {
     }
 }
 
-/// Row of the contract statement (amounts in cents).
+/// Row of the contract statement: one installment already paid, as the bank lists it (amounts in
+/// cents). An installment still open does not go here.
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct LoanStatementRowInput {
@@ -946,7 +947,8 @@ pub struct LoanStatementRowInput {
     pub adjustment: Option<i64>,
     /// Outstanding balance after the installment, in cents.
     pub balance_after: i64,
-    /// Amount paid, in cents (if omitted, the installment).
+    /// Amount actually paid, in cents, when it differs from `total` (an amount, not a yes/no
+    /// flag: every row is a paid installment). If omitted, the installment.
     pub paid: Option<i64>,
 }
 
@@ -955,7 +957,8 @@ pub struct LoanStatementRowInput {
 pub struct LoanStatementInput {
     /// Contract id (see `list_loans`).
     pub loan_id: String,
-    /// Statement rows, in date order (transcribed from the bank's image or PDF).
+    /// Statement rows, in date order (transcribed from the bank's image or PDF): only the
+    /// installments already paid.
     pub rows: Option<Vec<LoanStatementRowInput>>,
     /// Or the statement text with a header row (columns separated by tab or `;`).
     pub text: Option<String>,

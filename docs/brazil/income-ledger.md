@@ -80,6 +80,24 @@ back. The automatic recording can be turned off on the same screen.
 The B3 statement import (Investor Area, movements) recognizes a credit already recorded from the
 official notice (payment up to three days apart, net within a cent) and does not import it again.
 
+## Credit in the account
+
+A distribution recorded as received without a cash entry did not move the brokerage balance in the
+app, even when its amounts match the source. The ledger tells the two cases apart:
+
+- **Pending credit** (`cash_pending`): paid from the start of the automatic recording on (or in the
+  last 90 days while it is off). The line shows "No credit in the account", the header counts
+  them and **Record the credit** creates the income transaction of each one on its payment date
+  (`portfolio.income_cash`, one change set, with Undo). When the account's statement is imported
+  instead, the row with the same date and amount as a credit the portfolio recorded is a possible
+  duplicate and stays out by default.
+- **History**: older payments, recorded without cash on purpose (the rebuild). They only carry a
+  note and wait for nothing.
+
+A record whose payment date is implausible (a typo in the year, from before the app refused such
+dates) is listed as repeated or without a source, counts nothing and opens no year or month in the
+totals.
+
 ## Totals
 
 By year, by month and by asset, in the family's base currency: what the sources say was paid
@@ -97,8 +115,8 @@ what is recorded today and what is still to be paid. Until the fixes are applied
 - `portfolio/income_ledger.rs`: the ledger (`portfolio.income_ledger`), the rebuild
   (`portfolio.income_rebuild`), the switch (`portfolio.income_auto`) and the automatic recording
   at the end of `research.sync`.
-- `portfolio/records.rs`: `withholding` (tax by kind, exemption and date) and
-  `update_income_values`.
+- `portfolio/records.rs`: `withholding` (tax by kind, exemption and date),
+  `update_income_values` and `add_income_cash` (the credit of a record made without one).
 - `portfolio.pending_income` is built on the ledger: with the automatic recording on, only the
   distributions without an official source wait there.
 - MCP: `get_income_ledger` (read only).

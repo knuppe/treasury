@@ -65,8 +65,8 @@ nucleo-planejamento-previdencia-erro-sem-arquivo = envie o PDF do extrato ou o t
 nucleo-planejamento-previdencia-erro-extrato-classe = o extrato de previdência vai num ativo da classe Previdência
 nucleo-planejamento-previdencia-erro-conta = escolha a conta das cotas da previdência
 nucleo-planejamento-previdencia-erro-interno = extrato de previdência: { $erro }
-nucleo-planejamento-previdencia-aviso-cotas = a soma das cotas das contribuições ({ $soma }) não bate com o saldo de cotas do extrato ({ $saldo }): confira se alguma linha ficou de fora
-nucleo-planejamento-previdencia-aviso-saldo = o saldo pelas cotas ({ $calculado }) difere do saldo do participante no extrato ({ $extrato })
+nucleo-planejamento-previdencia-aviso-cotas = as cotas já registradas mais as novas deste extrato ({ $soma }) não batem com o saldo de cotas do extrato ({ $saldo }): pode faltar um período anterior ou alguma linha
+nucleo-planejamento-previdencia-aviso-saldo = o saldo pelas cotas registradas mais as deste extrato ({ $calculado }) difere do saldo do participante no extrato ({ $extrato })
 nucleo-planejamento-previdencia-aviso-sem-cnpj = não achei o CNPJ do plano no extrato
 # Nome do ativo criado pelo extrato quando ele não traz o nome do plano.
 nucleo-planejamento-previdencia-ativo-padrao = Previdência (fundo de pensão)

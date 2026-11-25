@@ -13,7 +13,7 @@ use crate::error::{Error, Result};
 use crate::i18n::{self, t, t_args};
 use crate::ids::new_id;
 use crate::money::minor_units;
-use crate::time::{now_utc, parse_date};
+use crate::time::{now_utc, parse_date, parse_record_date};
 use crate::transactions::{self, NewTxn, TxnKind};
 
 /// Decimal de um campo; `what` é a chave do nome do campo (`nucleo-carteira-campo-…`) ou o
@@ -100,6 +100,60 @@ pub fn asset_brief(conn: &Connection, asset_id: &str) -> Result<AssetBrief> {
     brief(conn, asset_id)
 }
 
+/// Start of the `external_id` of a trade that only aligns the recorded quantity with a reported
+/// position (`portfolio.bulk`, "position on a date"): `posicao:<date>:<asset>:<quantity>`.
+pub const POSITION_EXTERNAL_PREFIX: &str = "posicao:";
+/// Start of the `external_id` of a trade marked as an adjustment by hand
+/// ([`set_adjustment`]): `ajuste:<trade id>`.
+pub const ADJUSTMENT_EXTERNAL_PREFIX: &str = "ajuste:";
+
+/// The trade is a position adjustment: no money moved because of it (the difference came from
+/// history the app does not have), so it is not a sale to report and has no cash effect. The
+/// mark lives in the `external_id`, which such a trade has no other use for.
+pub fn is_position_adjustment(external_id: Option<&str>) -> bool {
+    external_id.is_some_and(|e| {
+        e.starts_with(POSITION_EXTERNAL_PREFIX) || e.starts_with(ADJUSTMENT_EXTERNAL_PREFIX)
+    })
+}
+
+/// Marks a trade as a position adjustment or takes the mark off. An adjustment has no cash
+/// entry (unlink it first), and a trade that came with the brokerage's own identifier is a real
+/// trade.
+pub fn set_adjustment(tx: &Transaction<'_>, id: &str, on: bool) -> Result<()> {
+    let (external_id, txn_id): (Option<String>, Option<String>) = tx
+        .query_row(
+            "SELECT external_id, txn_id FROM trade WHERE id = ?1",
+            [id],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )
+        .optional()?
+        .ok_or_else(|| Error::not_found(trade_ref(id)))?;
+    let marked = is_position_adjustment(external_id.as_deref());
+    if on == marked {
+        return Ok(());
+    }
+    let new = if on {
+        if txn_id.is_some() {
+            return Err(Error::invalid(i18n::t(
+                "nucleo-carteira-erro-ajuste-com-caixa",
+            )));
+        }
+        if external_id.is_some() {
+            return Err(Error::invalid(i18n::t(
+                "nucleo-carteira-erro-ajuste-importada",
+            )));
+        }
+        Some(format!("{ADJUSTMENT_EXTERNAL_PREFIX}{id}"))
+    } else {
+        None
+    };
+    tx.execute(
+        "UPDATE trade SET external_id = ?2, updated_at = ?3 WHERE id = ?1",
+        params![id, new, now_utc()],
+    )?;
+    Ok(())
+}
+
 fn row_to_trade(r: &Row<'_>) -> rusqlite::Result<Trade> {
     let side: String = r.get("side")?;
     let qty: String = r.get("quantity")?;
@@ -116,7 +170,9 @@ fn row_to_trade(r: &Row<'_>) -> rusqlite::Result<Trade> {
     } else {
         TradeSide::Buy
     };
+    let adjustment = is_position_adjustment(r.get::<_, Option<String>>("external_id")?.as_deref());
     let cash_amount = match side {
+        _ if adjustment => 0,
         TradeSide::Buy => -(gross + fees + taxes),
         TradeSide::Sell => gross - fees - taxes,
     };
@@ -143,6 +199,7 @@ fn row_to_trade(r: &Row<'_>) -> rusqlite::Result<Trade> {
         note_number: r.get("note_number")?,
         notes: r.get("notes")?,
         import_id: r.get("import_id")?,
+        adjustment: adjustment.then_some(true),
     })
 }
 
@@ -209,7 +266,7 @@ fn validate_trade(
     conn: &Connection,
     t: &TradeInput,
 ) -> Result<(crate::assets::Asset, Decimal, Decimal, Option<Decimal>)> {
-    parse_date(&t.date)?;
+    parse_record_date(&t.date)?;
     let asset = crate::assets::get(conn, &t.asset_id)?;
     crate::accounts::currency_and_kind(conn, &t.account_id)?;
     let qty = dec(&t.quantity, "nucleo-carteira-campo-quantidade")?;
@@ -343,6 +400,10 @@ pub fn create_trade_with(tx: &Transaction<'_>, t: &TradeInput, allow_oversell: b
             now
         ],
     )?;
+    // A pension fund plan has no public quote: the unit value of the contribution is one.
+    if asset.class == crate::assets::AssetClass::Pension && t.side == TradeSide::Buy {
+        crate::pension::contribution_prices(tx, Some(&t.asset_id))?;
+    }
     Ok(id)
 }
 
@@ -364,13 +425,22 @@ pub fn update_trade(tx: &Transaction<'_>, p: &TradePatch) -> Result<()> {
         cash_movement: Some(p.cash_movement.unwrap_or(cur.txn_id.is_some())),
         external_id: None,
     };
+    // The identifier the trade came with (brokerage id, position adjustment) survives the edit.
+    let external_id: Option<String> = tx.query_row(
+        "SELECT external_id FROM trade WHERE id = ?1",
+        [&p.id],
+        |r| r.get(0),
+    )?;
     // Regrava a operação (e o lançamento de caixa ligado) com os novos valores.
     delete_trade(tx, &p.id)?;
     let new_id = create_trade(tx, &input)?;
     tx.execute(
-        "UPDATE trade SET id = ?1, import_id = ?3 WHERE id = ?2",
-        params![p.id, new_id, cur.import_id],
+        "UPDATE trade SET id = ?1, import_id = ?3, external_id = ?4 WHERE id = ?2",
+        params![p.id, new_id, cur.import_id, external_id],
     )?;
+    if let Some(on) = p.adjustment {
+        set_adjustment(tx, &p.id, on)?;
+    }
     Ok(())
 }
 
@@ -427,7 +497,7 @@ pub fn list_actions(conn: &Connection, asset_id: Option<&str>) -> Result<Vec<Cor
 }
 
 pub fn create_action(tx: &Transaction<'_>, a: &CorporateActionInput) -> Result<Id> {
-    parse_date(&a.date)?;
+    parse_record_date(&a.date)?;
     crate::assets::get(tx, &a.asset_id)?;
     let factor = a
         .factor
@@ -607,6 +677,99 @@ pub fn withholding(
     }
 }
 
+/// The credit of a distribution in the brokerage account (an income transaction on the payment
+/// date, in the account's currency).
+fn income_cash(
+    tx: &Transaction<'_>,
+    asset: &crate::assets::Asset,
+    account_id: &str,
+    kind: IncomeKind,
+    pay_date: &str,
+    net: i64,
+    fx: Option<Decimal>,
+) -> Result<Id> {
+    let (acc_cur, _) = crate::accounts::currency_and_kind(tx, account_id)?;
+    let fx_for_cash = fx.or_else(|| {
+        crate::fx::rate(tx, &asset.currency, &acc_cur, pay_date)
+            .ok()
+            .flatten()
+            .map(|(r, ..)| r)
+    });
+    let amount = cash_in_account(&acc_cur, &asset.currency, net, fx_for_cash)?;
+    let label = asset.ticker.clone().unwrap_or_else(|| asset.name.clone());
+    let mut n = NewTxn::new(
+        account_id,
+        pay_date,
+        amount,
+        &acc_cur,
+        TxnKind::Income,
+        &t_args(
+            "nucleo-carteira-provento-lancamento",
+            &i18n::args(&[("tipo", kind.label().into()), ("ativo", label.into())]),
+        ),
+    );
+    n.category_id = income_category(tx, kind)?;
+    transactions::insert(tx, &n)
+}
+
+/// Records the credit of a distribution that was recorded as received without one (history
+/// rebuilt from the official notices, or typed without the cash entry): the brokerage balance
+/// then includes it. Returns the transaction.
+pub fn add_income_cash(tx: &Transaction<'_>, id: &str) -> Result<Id> {
+    type Row = (
+        String,
+        String,
+        String,
+        String,
+        i64,
+        Option<String>,
+        String,
+        Option<String>,
+    );
+    let (asset_id, account_id, kind, pay_date, net, fx, status, txn_id): Row = tx
+        .query_row(
+            "SELECT asset_id, account_id, kind, pay_date, net, fx_rate, status, txn_id FROM income_event WHERE id = ?1",
+            [id],
+            |r| {
+                Ok((
+                    r.get(0)?,
+                    r.get(1)?,
+                    r.get(2)?,
+                    r.get(3)?,
+                    r.get(4)?,
+                    r.get(5)?,
+                    r.get(6)?,
+                    r.get(7)?,
+                ))
+            },
+        )
+        .optional()?
+        .ok_or_else(|| Error::not_found(format!("provento {id}")))?;
+    if txn_id.is_some() {
+        return Err(Error::invalid(t(
+            "nucleo-carteira-razao-erro-caixa-ja-lancado",
+        )));
+    }
+    if status != "received" {
+        return Err(Error::invalid(t(
+            "nucleo-carteira-razao-erro-caixa-anunciado",
+        )));
+    }
+    let asset = crate::assets::get(tx, &asset_id)?;
+    let kind: IncomeKind =
+        serde_json::from_value(serde_json::Value::String(kind)).unwrap_or(IncomeKind::Other);
+    let fx = fx
+        .as_deref()
+        .map(|s| dec(s, "nucleo-carteira-campo-cambio"))
+        .transpose()?;
+    let txn = income_cash(tx, &asset, &account_id, kind, &pay_date, net, fx)?;
+    tx.execute(
+        "UPDATE income_event SET txn_id = ?2, updated_at = ?3 WHERE id = ?1",
+        params![id, txn, now_utc()],
+    )?;
+    Ok(txn)
+}
+
 pub fn create_income(tx: &Transaction<'_>, i: &IncomeInput) -> Result<Id> {
     create_income_with(tx, i, "manual", None)
 }
@@ -619,9 +782,9 @@ pub fn create_income_with(
     source: &str,
     external_id: Option<&str>,
 ) -> Result<Id> {
-    parse_date(&i.pay_date)?;
+    parse_record_date(&i.pay_date)?;
     if let Some(d) = &i.ex_date {
-        parse_date(d)?;
+        parse_record_date(d)?;
     }
     let asset = crate::assets::get(tx, &i.asset_id)?;
     if i.gross <= 0 {
@@ -643,28 +806,15 @@ pub fn create_income_with(
         .map(|s| dec(s, "nucleo-carteira-campo-cambio"))
         .transpose()?;
     let txn_id = if status == IncomeStatus::Received && i.cash_movement.unwrap_or(true) {
-        let (acc_cur, _) = crate::accounts::currency_and_kind(tx, &i.account_id)?;
-        let fx_for_cash = fx.or_else(|| {
-            crate::fx::rate(tx, &asset.currency, &acc_cur, &i.pay_date)
-                .ok()
-                .flatten()
-                .map(|(r, ..)| r)
-        });
-        let amount = cash_in_account(&acc_cur, &asset.currency, net, fx_for_cash)?;
-        let label = asset.ticker.clone().unwrap_or_else(|| asset.name.clone());
-        let mut n = NewTxn::new(
+        Some(income_cash(
+            tx,
+            &asset,
             &i.account_id,
+            i.kind,
             &i.pay_date,
-            amount,
-            &acc_cur,
-            TxnKind::Income,
-            &t_args(
-                "nucleo-carteira-provento-lancamento",
-                &i18n::args(&[("tipo", i.kind.label().into()), ("ativo", label.into())]),
-            ),
-        );
-        n.category_id = income_category(tx, i.kind)?;
-        Some(transactions::insert(tx, &n)?)
+            net,
+            fx,
+        )?)
     } else {
         None
     };

@@ -1302,3 +1302,167 @@ fn imported_row_settles_the_planned_one() {
     );
     assert_eq!(env.count("SELECT count(*) FROM txn"), 3);
 }
+
+/// Feedback 01a2103b-a17a: the sale of an asset already put its money in the account; the
+/// statement brings the same credit under the bank's text and must not count twice.
+#[test]
+fn statement_row_of_a_redemption_already_recorded_by_the_portfolio_is_not_added_again() {
+    use crate::portfolio::{IncomeInput, IncomeKind, TradeInput, TradeSide, records};
+    let mut env = TestEnv::new();
+    let conta = env.add_account("Banco Exemplo", "checking");
+    let asset: crate::assets::AssetInput = serde_json::from_value(json!({
+        "name": "RDB Banco Exemplo", "class": "fixed_income",
+        "fixed_income": {"kind": "rdb", "indexer": "cdi", "rate": "100",
+                         "issue_date": "2026-01-02", "liquidity": "daily", "ir_exempt": false}
+    }))
+    .unwrap();
+    let trade = |side: TradeSide, date: &str, qty: &str, asset_id: &str| TradeInput {
+        asset_id: asset_id.into(),
+        account_id: conta.clone(),
+        date: date.into(),
+        side,
+        quantity: qty.into(),
+        price: "1".into(),
+        fees: None,
+        taxes: None,
+        fx_rate: None,
+        day_trade: None,
+        note_number: None,
+        notes: None,
+        cash_movement: None,
+        external_id: None,
+    };
+    let asset_id = changes::record(env.db.conn_mut(), &changes::Author::user(), "rdb", |tx| {
+        let id = crate::assets::create(tx, &asset)?;
+        records::create_trade(tx, &trade(TradeSide::Buy, "2026-09-01", "5000", &id))?;
+        // The redemption, with its cash entry in the account.
+        records::create_trade(tx, &trade(TradeSide::Sell, "2026-10-05", "1234.56", &id))?;
+        // Interest paid by the same asset, also with its cash entry.
+        records::create_income(
+            tx,
+            &IncomeInput {
+                asset_id: id.clone(),
+                account_id: conta.clone(),
+                kind: IncomeKind::Interest,
+                ex_date: None,
+                pay_date: "2026-10-06".into(),
+                quantity: None,
+                gross: 4321,
+                tax_withheld: Some(0),
+                fx_rate: None,
+                status: None,
+                cash_movement: None,
+            },
+        )?;
+        Ok(id)
+    })
+    .unwrap()
+    .value;
+    let balance = |env: &TestEnv| {
+        crate::accounts::balance(env.db.conn(), &conta, "2026-12-31", false).unwrap()
+    };
+    let before = balance(&env);
+    assert_eq!(before, -500_000 + 123_456 + 4321);
+
+    let row = |date: &str, amount: i64, description: &str, id: &str| RowInput {
+        date: date.into(),
+        amount,
+        description: description.into(),
+        payee: None,
+        external_id: Some(id.into()),
+        notes: None,
+        statement_due_date: None,
+        card_last4: None,
+        orig_amount: None,
+        orig_currency: None,
+    };
+    let rows = RowsImportArgs {
+        account_id: conta.clone(),
+        source: "extrato de outubro".into(),
+        rows: vec![
+            row("2026-10-05", 123_456, "Resgate RDB", "f1"),
+            row("2026-10-06", 4321, "CRED JUROS", "f2"),
+            // Same day and amount as the redemption, once more: another credit, it goes in.
+            row("2026-10-05", 123_456, "PIX RECEBIDO LOJA EXEMPLO", "f3"),
+            row("2026-10-07", -9900, "Mercado", "f4"),
+        ],
+        include_possible_duplicates: None,
+        statement_due_date: None,
+        card_last4: None,
+    };
+    let p = preview_rows(&mut env.ctx(), &rows).unwrap();
+    use RowStatus::*;
+    assert_eq!(
+        statuses(&p),
+        vec![PossibleDuplicate, PossibleDuplicate, New, New]
+    );
+    let note = p.rows[0].note.as_deref().unwrap();
+    assert!(note.contains("caixa que a carteira já lançou"), "{note}");
+    let cash_of_sale: String = env
+        .db
+        .conn()
+        .query_row(
+            "SELECT txn_id FROM trade WHERE asset_id = ?1 AND side = 'sell'",
+            [&asset_id],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(
+        p.rows[0].duplicate_of.as_deref(),
+        Some(cash_of_sale.as_str())
+    );
+
+    let r = commit_all(&mut env, &p);
+    assert_eq!(r.inserted, 2);
+    // The redemption and the interest entered the balance once.
+    assert_eq!(balance(&env), before + 123_456 - 9900);
+}
+
+#[test]
+fn a_row_with_a_typo_in_the_year_is_an_error_row() {
+    let mut env = TestEnv::new();
+    let conta = env.add_account("Banco Exemplo", "checking");
+    let row = |date: &str| RowInput {
+        date: date.into(),
+        amount: -1000,
+        description: "Padaria".into(),
+        payee: None,
+        external_id: None,
+        notes: None,
+        statement_due_date: None,
+        card_last4: None,
+        orig_amount: None,
+        orig_currency: None,
+    };
+    let p = preview_rows(
+        &mut env.ctx(),
+        &RowsImportArgs {
+            account_id: conta.clone(),
+            source: "extrato".into(),
+            rows: vec![row("2026-10-05"), row("2926-10-05"), row("0206-10-05")],
+            include_possible_duplicates: None,
+            statement_due_date: None,
+            card_last4: None,
+        },
+    )
+    .unwrap();
+    use RowStatus::*;
+    assert_eq!(statuses(&p), vec![New, Error, Error]);
+    let e = p.rows[1].error.as_deref().unwrap();
+    assert!(e.contains("fora do intervalo aceito"), "{e}");
+    assert_eq!(commit_all(&mut env, &p).inserted, 1);
+    // Typed by hand, the same date is refused.
+    let mut t = crate::transactions::NewTxn::new(
+        &conta,
+        "2926-10-05",
+        -1000,
+        "BRL",
+        crate::transactions::TxnKind::Expense,
+        "Padaria",
+    );
+    t.notes = None;
+    let err = changes::record(env.db.conn_mut(), &changes::Author::user(), "x", |tx| {
+        crate::transactions::insert(tx, &t)
+    });
+    assert!(err.is_err());
+}

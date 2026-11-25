@@ -739,4 +739,134 @@ fn smaller_position_redeems_fixed_income_and_skips_stocks() {
         "SELECT count(*) FROM trade WHERE side = 'sell' AND quantity = '400' AND txn_id IS NULL",
     );
     assert_eq!(sells, 1);
+
+    // The adjustment is marked as one, shows no cash effect and stays out of the sales book
+    // (feedback 01a2103b-a12e). A real redemption recorded without cash (the statement was not
+    // imported yet) is still a sale.
+    api.call(
+        "portfolio.create_trade",
+        json!({"asset_id": rdb, "account_id": acc, "date": "2026-11-10", "side": "sell",
+               "quantity": "100", "price": "1", "cash_movement": false}),
+    )
+    .unwrap();
+    let trades = api
+        .call("portfolio.list_trades", json!({"asset_id": rdb}))
+        .unwrap();
+    let by_qty = |q: &str| {
+        trades
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|t| t["side"] == "sell" && t["quantity"] == q)
+            .unwrap_or_else(|| panic!("{trades}"))
+            .clone()
+    };
+    let adjustment = by_qty("400");
+    assert_eq!(adjustment["adjustment"], true, "{adjustment}");
+    assert_eq!(adjustment["cash_amount"], 0);
+    let redemption = by_qty("100");
+    assert!(redemption.get("adjustment").is_none(), "{redemption}");
+    assert_eq!(redemption["cash_amount"], 10_000);
+    let sales = api
+        .call(
+            "portfolio.sales",
+            json!({"asset_id": rdb, "to": "2026-12-31"}),
+        )
+        .unwrap();
+    assert_eq!(sales["totals"]["count"], 1, "{sales}");
+    assert_eq!(sales["totals"]["proceeds"], 10_000, "{sales}");
+    assert_eq!(sales["rows"][0]["trade_id"], redemption["id"]);
+    // The position left by both: 1000 − 400 − 100.
+    let statement = api
+        .call("portfolio.statement", json!({"asset_id": rdb}))
+        .unwrap();
+    let last = statement.as_array().unwrap().last().unwrap().clone();
+    assert_eq!(last["quantity_after"], "500", "{statement}");
+    let labels: Vec<&str> = statement
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|l| l["label"].as_str().unwrap())
+        .collect();
+    assert_eq!(labels, vec!["Compra", "Ajuste de posição", "Venda"]);
+    // Editing the adjustment keeps it one.
+    let (p, _) = run(
+        &api,
+        "update_trade",
+        json!({"id": adjustment["id"], "notes": "conferido"}),
+    );
+    approve(&api, &p);
+    let again = api
+        .call("portfolio.get_trade", json!({"id": adjustment["id"]}))
+        .unwrap();
+    assert_eq!(again["adjustment"], true, "{again}");
+
+    // An adjustment recorded by hand: no cash entry, marked, out of the ledger.
+    let (p, _) = run(
+        &api,
+        "record_trade",
+        json!({"asset_id": rdb, "account_id": acc, "date": "2026-11-12", "side": "sell",
+               "quantity": "50", "price": "1", "adjustment": true}),
+    );
+    approve(&api, &p);
+    let by_hand = count(
+        &api,
+        "SELECT count(*) FROM trade WHERE quantity = '50' AND txn_id IS NULL AND external_id LIKE 'ajuste:%'",
+    );
+    assert_eq!(by_hand, 1);
+    // With cash it is refused before becoming a proposal.
+    let refused = inproc::call_tool(
+        &api,
+        &agent(),
+        "record_trade",
+        json!({"asset_id": rdb, "account_id": acc, "date": "2026-11-12", "side": "sell",
+               "quantity": "10", "price": "1", "adjustment": true, "cash_movement": true}),
+        inproc::AGENT_ACCESS,
+    );
+    assert!(
+        refused.is_error && refused.content.contains("adjustment"),
+        "{}",
+        refused.content
+    );
+    // The redemption recorded as a sale turns out to be an adjustment too: marking it takes it
+    // out of the ledger; unmarking brings it back.
+    let mark = |on: bool| {
+        let (p, _) = run(
+            &api,
+            "update_trade",
+            json!({"id": redemption["id"], "adjustment": on}),
+        );
+        approve(&api, &p);
+        api.call(
+            "portfolio.sales",
+            json!({"asset_id": rdb, "to": "2026-12-31"}),
+        )
+        .unwrap()["totals"]["count"]
+            .clone()
+    };
+    assert_eq!(mark(true), 0);
+    assert_eq!(mark(false), 1);
+    // A trade with a cash entry is a real one: the mark asks for the cash to go first.
+    let cash = api
+        .call(
+            "portfolio.create_trade",
+            json!({"asset_id": rdb, "account_id": acc, "date": "2026-11-13", "side": "sell",
+                   "quantity": "20", "price": "1"}),
+        )
+        .unwrap();
+    let err = api
+        .call(
+            "portfolio.update_trade",
+            json!({"id": cash["id"], "adjustment": true}),
+        )
+        .unwrap_err();
+    assert!(err.to_string().contains("não movimenta o caixa"), "{err}");
+    let ok = api
+        .call(
+            "portfolio.update_trade",
+            json!({"id": cash["id"], "adjustment": true, "cash_movement": false}),
+        )
+        .unwrap();
+    assert_eq!(ok["adjustment"], true, "{ok}");
+    assert!(ok["txn_id"].is_null(), "{ok}");
 }

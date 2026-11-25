@@ -385,6 +385,7 @@ carteira-calculando-alocacao = Calculando la asignación
 
 carteira-compra = Compra
 carteira-venda = Venta
+carteira-ajuste-de-posicao = Ajuste de posición
 carteira-compras = Compras
 carteira-vendas = Ventas
 carteira-compra-de = Compra de { $qtd } { $ativo } el { $data }
@@ -1268,6 +1269,17 @@ carteira-razao-estado-valor = Valor distinto
 carteira-razao-estado-ir = Impuesto distinto
 carteira-razao-estado-repetido = Repetido
 carteira-razao-estado-sem-fonte = Sin fuente
+carteira-razao-estado-sem-credito = Sin abono en la cuenta
+carteira-razao-sem-credito = { $n ->
+    [one] 1 dividendo recibido sin el abono en la cuenta
+   *[other] { $n } dividendos recibidos sin el abono en la cuenta
+}
+carteira-razao-sem-credito-texto = El dividendo está registrado, pero el dinero no entró en el saldo de la corredora aquí en la app. Revisa el extracto de la corredora: si el abono llegó, regístralo. Si el extracto que importas ya trae ese abono, no hace falta.
+carteira-razao-lancar-credito = Registrar el abono
+carteira-razao-credito-lancado = { $n ->
+    [one] Abono de 1 dividendo registrado en la cuenta
+   *[other] Abono de { $n } dividendos registrado en la cuenta
+}
 carteira-razao-tabela = Rendimientos, uno por pago
 carteira-razao-ativos-tabela = Rendimientos por activo desde la compra
 carteira-razao-col-data-com = Fecha de corte

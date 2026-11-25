@@ -40,6 +40,7 @@ nucleo-importacao-nota-ja-importado = já importado (mesmo identificador)
 nucleo-importacao-nota-em-outra-conta = já está em { $conta } (mesmo identificador do banco)
 nucleo-importacao-nota-efetiva-previsto = efetiva o previsto “{ $descricao }” de { $data }
 nucleo-importacao-nota-possivel-duplicado = mesma data e valor de um lançamento existente, com descrição igual ou parecida
+nucleo-importacao-nota-caixa-de-operacao = mesma data e valor do caixa que a carteira já lançou nesta conta ({ $descricao }): parece o mesmo dinheiro
 # Notas gravadas no lançamento.
 nucleo-importacao-nota-descricao-original = Descrição no extrato: { $descricao }
 nucleo-importacao-nota-documento = Documento nº { $numero }

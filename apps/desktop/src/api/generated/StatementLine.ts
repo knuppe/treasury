@@ -29,4 +29,9 @@ origin: string, trade_id: string | null, action_id: string | null, notes: string
 /**
  * Aviso desta linha (ex.: desdobramento possivelmente contado duas vezes).
  */
-warning: string | null, };
+warning: string | null, 
+/**
+ * Quantity of the trade as recorded, only when the position could not cover it (a sale
+ * larger than the position): `quantity_change` then shows what was actually taken out.
+ */
+recorded_quantity?: string, };

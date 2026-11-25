@@ -41,6 +41,7 @@ nucleo-importacao-nota-ja-importado = already imported (same identifier)
 nucleo-importacao-nota-em-outra-conta = already in { $conta } (same bank identifier)
 nucleo-importacao-nota-efetiva-previsto = settles the planned “{ $descricao }” of { $data }
 nucleo-importacao-nota-possivel-duplicado = same date and amount as an existing transaction, with the same or a similar description
+nucleo-importacao-nota-caixa-de-operacao = same date and amount as the cash entry the portfolio already recorded in this account ({ $descricao }): it looks like the same money
 # Notes saved on the transaction.
 nucleo-importacao-nota-descricao-original = Statement description: { $descricao }
 nucleo-importacao-nota-documento = Document no. { $numero }

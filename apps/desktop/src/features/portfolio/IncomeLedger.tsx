@@ -14,6 +14,7 @@ import type { IncomeLedgerFix } from '@/api/generated/IncomeLedgerFix';
 import type { IncomeLedgerState } from '@/api/generated/IncomeLedgerState';
 import {
   useIncomeAuto,
+  useIncomeCash,
   useIncomeLedger,
   useIncomeRebuild,
   useInvestmentAccounts,
@@ -91,9 +92,11 @@ export function proposable(e: IncomeLedgerEntry): boolean {
 }
 
 function StateBadge({ e }: { e: IncomeLedgerEntry }) {
-  const text = stateLabel(e.state);
+  // The amounts may match and the credit still be missing from the account.
+  const noCash = e.cash_pending && e.state === 'matches';
+  const text = noCash ? t('carteira-razao-estado-sem-credito') : stateLabel(e.state);
   const badge = (
-    <span className={cx('text-[12px]', STATE_TONE[e.state])}>
+    <span className={cx('text-[12px]', noCash ? 'text-warning' : STATE_TONE[e.state])}>
       {text}
       {e.note ? ' *' : ''}
     </span>
@@ -252,6 +255,7 @@ const toCheck = (e: IncomeLedgerEntry) => e.fix != null;
 export function IncomeLedgerHeader({ assetId }: { assetId?: string }) {
   const q = useIncomeLedger(assetId ? { asset_id: assetId } : { only_problems: true });
   const auto = useIncomeAuto();
+  const cash = useIncomeCash();
   const [open, setOpen] = useState(false);
   if (q.isPending) return <LoadingBlock label={t('carteira-razao-calculando')} />;
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
@@ -317,6 +321,38 @@ export function IncomeLedgerHeader({ assetId }: { assetId?: string }) {
           {!l.auto ? (
             <span className="block text-dim">{t('carteira-razao-automatico-depois')}</span>
           ) : null}
+        </Notice>
+      ) : null}
+      {c.cash_pending > 0 ? (
+        <Notice
+          tone="warning"
+          title={t('carteira-razao-sem-credito', { n: c.cash_pending })}
+          actions={
+            <Button
+              size="sm"
+              loading={cash.isPending}
+              onClick={() =>
+                cash.mutate(
+                  {
+                    ids: l.entries
+                      .filter((e) => e.cash_pending && e.recorded)
+                      .map((e) => e.recorded!.id),
+                  },
+                  {
+                    onSuccess: (r) =>
+                      toast({
+                        title: t('carteira-razao-credito-lancado', { n: r.created }),
+                        tone: 'success',
+                      }),
+                  },
+                )
+              }
+            >
+              {t('carteira-razao-lancar-credito')}
+            </Button>
+          }
+        >
+          {t('carteira-razao-sem-credito-texto')}
         </Notice>
       ) : null}
       {l.auto ? (

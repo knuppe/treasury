@@ -142,13 +142,18 @@ pub struct PensionStatementTotals {
     pub risk: i64,
     /// Soma das cotas das linhas.
     pub quotas: String,
+    /// Units the statement accounts for: the ones already recorded in the plan plus the new rows
+    /// of this statement (a statement of a few months only lists that period).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub accounted_quotas: Option<String>,
     /// Saldo de cotas, valor e data da cota e saldo do participante, como no rodapé.
     pub quota_balance: Option<String>,
     pub quota_value: Option<String>,
     pub quota_date: Option<String>,
     #[ts(type = "number | null")]
     pub balance: Option<i64>,
-    /// Saldo pelas cotas das linhas × valor da cota.
+    /// Balance from the units (the recorded ones plus the new rows) × the unit value.
     #[ts(type = "number | null")]
     pub computed_balance: Option<i64>,
 }
@@ -596,7 +601,7 @@ fn existing_ids(conn: &Connection, asset_id: Option<&str>) -> Result<HashSet<Str
 
 pub fn preview(conn: &Connection, a: &PensionStatementArgs) -> Result<PensionStatementPreview> {
     let text = text_of(a)?;
-    let (layout, header, mut rows, totals) = parse_with_layout(&text)?;
+    let (layout, header, mut rows, mut totals) = parse_with_layout(&text)?;
     let target = target_asset(conn, a, &header)?;
     let seen = existing_ids(conn, target.as_ref().map(|t| t.0.as_str()))?;
     for r in &mut rows {
@@ -610,17 +615,52 @@ pub fn preview(conn: &Connection, a: &PensionStatementArgs) -> Result<PensionSta
             _ => PensionRowStatus::New,
         };
     }
+    // The statement's balance is the whole position and its rows may be only a period (the last
+    // months): what must add up to it is what the plan already has plus the new rows.
+    let held = match &target {
+        Some((id, _)) => crate::portfolio::engine::quantity_held(
+            conn,
+            id,
+            None,
+            &crate::time::fmt_date(crate::time::today_local()),
+        )?,
+        None => Decimal::ZERO,
+    };
+    let new_quotas: Decimal = rows
+        .iter()
+        .filter(|r| {
+            r.status == PensionRowStatus::New
+                && matches!(
+                    r.kind,
+                    PensionRowKind::Participant | PensionRowKind::Employer
+                )
+        })
+        .filter_map(|r| r.quotas.parse::<Decimal>().ok())
+        .sum();
+    let accounted = held + new_quotas;
+    totals.accounted_quotas = Some(accounted.normalize().to_string());
+    totals.computed_balance = totals
+        .quota_value
+        .as_deref()
+        .and_then(|v| v.parse::<Decimal>().ok())
+        .map(|v| {
+            (accounted * v * Decimal::from(100))
+                .round()
+                .try_into()
+                .unwrap_or(0)
+        });
     let mut warnings = vec![];
-    if let (Some(b), Some(t)) = (
-        totals.quota_balance.as_deref(),
-        Some(totals.quotas.as_str()),
-    ) && let (Ok(b), Ok(t)) = (b.parse::<Decimal>(), t.parse::<Decimal>())
-        && (b - t).abs() > Decimal::new(1, 4)
+    if let Some(b) = totals.quota_balance.as_deref()
+        && let Ok(b) = b.parse::<Decimal>()
+        && (b - accounted).abs() > Decimal::new(1, 4)
     {
         warnings.push(t_args(
             "nucleo-planejamento-previdencia-aviso-cotas",
             &args(&[
-                ("soma", decimal_label(&t.to_string()).into()),
+                (
+                    "soma",
+                    decimal_label(&accounted.normalize().to_string()).into(),
+                ),
                 ("saldo", decimal_label(&b.to_string()).into()),
             ]),
         ));
@@ -821,9 +861,15 @@ pub fn import(
             }
         }
     }
-    if let (Some(v), Some(d)) = (&p.totals.quota_value, &p.totals.quota_date)
-        && let (Ok(v), Ok(d)) = (v.parse(), crate::time::parse_date(d))
-    {
+    // The unit value printed on the statement, on its date (or today: the statement is the
+    // newest thing the family has when the date did not come).
+    if let Some(Ok(v)) = p.totals.quota_value.as_deref().map(str::parse) {
+        let d = p
+            .totals
+            .quota_date
+            .as_deref()
+            .and_then(|d| crate::time::parse_date(d).ok())
+            .unwrap_or(today);
         prices.push((d, v));
     }
     let rows: Vec<crate::market::PriceRow> = prices

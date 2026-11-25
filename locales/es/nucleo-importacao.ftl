@@ -41,6 +41,7 @@ nucleo-importacao-nota-ja-importado = ya importado (mismo identificador)
 nucleo-importacao-nota-em-outra-conta = ya está en { $conta } (mismo identificador del banco)
 nucleo-importacao-nota-efetiva-previsto = cumple el previsto “{ $descricao }” del { $data }
 nucleo-importacao-nota-possivel-duplicado = misma fecha e importe que un movimiento existente, con descripción igual o parecida
+nucleo-importacao-nota-caixa-de-operacao = misma fecha e importe que el movimiento de caja que la cartera ya registró en esta cuenta ({ $descricao }): parece el mismo dinero
 # Notas guardadas en el movimiento.
 nucleo-importacao-nota-descricao-original = Descripción en el extracto: { $descricao }
 nucleo-importacao-nota-documento = Documento n.º { $numero }

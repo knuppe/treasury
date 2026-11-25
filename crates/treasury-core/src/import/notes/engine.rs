@@ -1063,6 +1063,7 @@ pub fn commit(ctx: &mut Ctx<'_>, args: &NoteCommitArgs) -> Result<NoteCommitResu
                                 note_number: Some(it.input.note_number.clone()),
                                 notes: None,
                                 cash_movement: None,
+                                adjustment: None,
                             },
                         )?;
                         updated += 1;

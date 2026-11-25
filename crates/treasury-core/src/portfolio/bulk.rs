@@ -587,7 +587,8 @@ pub fn apply(tx: &Transaction<'_>, a: &BulkArgs, today: chrono::NaiveDate) -> Re
                 )),
                 cash_movement: Some(false),
                 external_id: Some(format!(
-                    "posicao:{}:{}:{}",
+                    "{}{}:{}:{}",
+                    super::records::POSITION_EXTERNAL_PREFIX,
                     p.date,
                     item.asset.trim(),
                     target.normalize()

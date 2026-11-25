@@ -178,9 +178,10 @@ brokerage account that received it. Repeating does not duplicate in either case.
         body: "\
 - With the bank's file (OFX or CSV), `import_statement_file`: same deduplication and same \
 category rules. Without a file, the whole period (a month or 90 days) at once.
-- `import_transactions` with the account (`account_id`), `source` (bank and period) and the \
-lines: date `YYYY-MM-DD`, signed amount in cents (debit negative, credit positive), \
-description as it is on the statement. Up to 500 per call.
+- `import_transactions` with the account (`account_id`), `source` (bank and period) and \
+`rows` (that name, not `transactions`), one per statement line: `date` `YYYY-MM-DD`, `amount` \
+in signed cents (debit negative, credit positive) and `description` as it is on the statement. \
+A row has no currency: the amounts are in the account's currency. Up to 500 per call.
 - Do not include balance lines (\"SALDO ANTERIOR\", \"SALDO DO DIA\") or future \
 transactions as if they had happened.
 - Treasury deduplicates (same day, amount and similar description) and applies the category \
@@ -198,8 +199,9 @@ approval before importing.",
 negative, refunds and the statement payment positive.
 - Installments: description as it is (\"LOJA X 02/10\") and `notes` with \"installment \
 2/10\".
-- Purchases in a foreign currency: the amount charged on the statement in the card's \
-currency; the original amount in `notes`.
+- Purchases in a foreign currency: `amount` is what the statement charged, in the card's \
+currency; the original amount goes in `orig_amount` (positive cents) and `orig_currency` \
+(`USD`).
 - The statement's due date (`statement_due_date`, for the batch or per row) puts the \
 purchases in the statement the issuer shows, even when the issuer moved one to the next \
 statement; without it, the card's closing day decides.

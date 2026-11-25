@@ -7,6 +7,7 @@
 ## Dates, amounts, PDF and database
 
 nucleo-base-erro-data = invalid date: { $valor }
+nucleo-base-erro-data-improvavel = date outside the accepted range: { $valor } (check the year)
 nucleo-base-erro-mes = invalid month (use YYYY-MM): { $valor }
 nucleo-base-erro-moeda = invalid currency: { $valor }
 nucleo-base-erro-valor = invalid amount: { $valor }

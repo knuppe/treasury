@@ -267,16 +267,23 @@ fn fund_scenario() -> (tempfile::TempDir, Db, String) {
         1100,
         0,
     );
-    // January again, with the year typed wrong.
-    income(
+    // January again, with the year typed wrong: a record from before the app refused such a
+    // date (it can no longer be created).
+    let typo = income(
         &mut db,
         &f,
         IncomeKind::Dividend,
         None,
-        "2125-02-14",
+        "2025-02-14",
         1000,
         0,
     );
+    db.conn()
+        .execute(
+            "UPDATE income_event SET pay_date = '2125-02-14' WHERE id = ?1",
+            [&typo],
+        )
+        .unwrap();
     // Something no source describes.
     income(
         &mut db,
@@ -372,6 +379,187 @@ fn the_ledger_pairs_each_record_with_the_official_notice() {
     assert_eq!(l.upcoming_base, 1650 + 4958);
     assert_eq!(l.counts.fixes, 4);
     assert!(!l.auto);
+    // The typo in the year opens no year and no month of its own.
+    let periods: Vec<&str> = l
+        .years
+        .iter()
+        .chain(&l.months)
+        .map(|p| p.period.as_str())
+        .collect();
+    assert!(periods.iter().all(|p| p.starts_with("2025")), "{periods:?}");
+    assert!(
+        l.assets[0].years.iter().all(|y| y.period == "2025"),
+        "{:?}",
+        l.assets[0].years
+    );
+}
+
+#[test]
+fn an_implausible_date_is_refused_when_recording() {
+    let (_d, mut db) = db();
+    let f = asset(&mut db, "FUND11", AssetClass::Fii);
+    trade(&mut db, &f, "2025-01-10", TradeSide::Buy, "100", "9");
+    let input = |pay: &str, ex: Option<&str>| IncomeInput {
+        asset_id: f.clone(),
+        account_id: "xp".into(),
+        kind: IncomeKind::FiiIncome,
+        ex_date: ex.map(str::to_string),
+        pay_date: pay.into(),
+        quantity: None,
+        gross: 1000,
+        tax_withheld: Some(0),
+        fx_rate: None,
+        status: None,
+        cash_movement: Some(false),
+    };
+    for (pay, ex) in [
+        ("2926-03-19", None),
+        ("2025-03-19", Some("1025-03-10")),
+        ("0206-03-19", None),
+    ] {
+        let e = record(db.conn_mut(), &Author::user(), "provento", |tx| {
+            records::create_income(tx, &input(pay, ex))
+        })
+        .unwrap_err()
+        .message();
+        assert!(e.contains("fora do intervalo aceito"), "{pay}: {e}");
+    }
+    // A trade and a corporate action with such a date are refused too.
+    let t = TradeInput {
+        asset_id: f.clone(),
+        account_id: "xp".into(),
+        date: "2926-01-10".into(),
+        side: TradeSide::Buy,
+        quantity: "1".into(),
+        price: "9".into(),
+        fees: None,
+        taxes: None,
+        fx_rate: None,
+        day_trade: None,
+        note_number: None,
+        notes: None,
+        cash_movement: Some(false),
+        external_id: None,
+    };
+    let e = record(db.conn_mut(), &Author::user(), "op", |tx| {
+        records::create_trade(tx, &t)
+    })
+    .unwrap_err()
+    .message();
+    assert!(e.contains("fora do intervalo aceito"), "{e}");
+    let n: i64 = db
+        .conn()
+        .query_row(
+            "SELECT (SELECT count(*) FROM income_event) + (SELECT count(*) FROM trade)",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(n, 1, "only the first purchase");
+}
+
+#[test]
+fn a_received_record_without_cash_waits_for_its_credit() {
+    let (_d, mut db, _) = fund_scenario();
+    let pending = |l: &income_ledger::Ledger| l.entries.iter().filter(|e| e.cash_pending).count();
+    let l = ledger(&db, "2025-05-10");
+    // The amounts match the notice, and the brokerage balance never got the money.
+    let jan = entry(&l, "2025-01-31", IncomeKind::FiiIncome, EntryState::Matches);
+    assert!(jan.cash_pending);
+    assert!(!jan.recorded.as_ref().unwrap().cash);
+    let note = jan.note.as_deref().unwrap();
+    assert!(note.contains("sem o crédito na conta"), "{note}");
+    // January, February, March (to fix) and the record no source describes; the repetitions
+    // wait for nothing.
+    assert_eq!(pending(&l), 4);
+    assert_eq!(l.counts.cash_pending, 4);
+    assert!(
+        l.entries
+            .iter()
+            .filter(|e| e.state == EntryState::Duplicate)
+            .all(|e| !e.cash_pending)
+    );
+    // "Only problems" keeps what matches and still waits for the credit.
+    let problems = income_ledger::build_on(
+        db.conn(),
+        &LedgerArgs {
+            only_problems: Some(true),
+            ..Default::default()
+        },
+        day("2025-05-10"),
+    )
+    .unwrap();
+    assert!(
+        problems
+            .entries
+            .iter()
+            .any(|e| e.state == EntryState::Matches && e.cash_pending)
+    );
+    // Months later, with the automatic recording off, the same records are history.
+    let later = ledger(&db, "2025-12-01");
+    let jan_later = entry(
+        &later,
+        "2025-01-31",
+        IncomeKind::FiiIncome,
+        EntryState::Matches,
+    );
+    assert!(!jan_later.cash_pending);
+    assert!(jan_later.note.as_deref().unwrap().contains("histórico"));
+    assert_eq!(later.counts.cash_pending, 0);
+
+    // Recording the credit: the balance gets it once and the entry is settled.
+    let id = jan.recorded.as_ref().unwrap().id.clone();
+    let before = crate::accounts::balance(db.conn(), "xp", "2025-12-31", false).unwrap();
+    record(db.conn_mut(), &Author::user(), "crédito", |tx| {
+        records::add_income_cash(tx, &id)
+    })
+    .unwrap();
+    let after = crate::accounts::balance(db.conn(), "xp", "2025-12-31", false).unwrap();
+    assert_eq!(after - before, 1000);
+    let l = ledger(&db, "2025-05-10");
+    let jan = entry(&l, "2025-01-31", IncomeKind::FiiIncome, EntryState::Matches);
+    assert!(!jan.cash_pending);
+    assert!(jan.recorded.as_ref().unwrap().cash);
+    assert_eq!(jan.note, None);
+    assert_eq!(l.counts.cash_pending, 3);
+    let again = record(db.conn_mut(), &Author::user(), "crédito", |tx| {
+        records::add_income_cash(tx, &id)
+    });
+    assert!(again.is_err());
+}
+
+#[test]
+fn history_rebuilt_without_cash_is_not_a_pending_credit() {
+    let (_d, mut db, _) = fund_scenario();
+    // The rebuild records the missing official distributions without cash and starts the
+    // automatic recording: everything paid before it is history.
+    income_ledger::rebuild_as(
+        db.conn_mut(),
+        &Author::user(),
+        &RebuildArgs::default(),
+        day("2025-05-10"),
+    )
+    .unwrap();
+    let l = ledger(&db, "2025-05-10");
+    assert!(l.auto);
+    assert_eq!(l.counts.cash_pending, 0, "{:#?}", l.entries);
+    let jan = entry(&l, "2025-01-31", IncomeKind::FiiIncome, EntryState::Matches);
+    assert!(jan.note.as_deref().unwrap().contains("histórico"));
+    // A record made later without cash, paid after the start, waits for its credit.
+    let f = jan.asset.id.clone();
+    income(
+        &mut db,
+        &f,
+        IncomeKind::FiiIncome,
+        Some("2025-04-30"),
+        "2025-05-15",
+        1650,
+        0,
+    );
+    let l = ledger(&db, "2025-05-20");
+    let apr = entry(&l, "2025-04-30", IncomeKind::FiiIncome, EntryState::Matches);
+    assert!(apr.cash_pending);
+    assert_eq!(l.counts.cash_pending, 1);
 }
 
 #[test]
